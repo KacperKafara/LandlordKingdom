@@ -10,7 +10,10 @@
     <name>ssbd02</name>
 
     <developers>
-
+        <developer>
+            <name>Wiktoria Płonka</name>
+            <id>236627</id>
+        </developer>
     </developers>
 
     <properties>
