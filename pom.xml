@@ -30,6 +30,10 @@
             <name>Konrad Koza</name>
             <id>242436</id>
         </developer>
+        <developer>
+            <name>Bartosz Wiśniewski</name>
+            <id>242561</id>
+        </developer>
     </developers>
 
     <properties>
