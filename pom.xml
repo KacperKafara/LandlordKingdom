@@ -10,7 +10,10 @@
     <name>ssbd02</name>
 
     <developers>
-
+        <developer>
+            <name>Adam Czerwonka</name>
+            <id>242374</id>
+        </developer>
     </developers>
 
     <properties>
