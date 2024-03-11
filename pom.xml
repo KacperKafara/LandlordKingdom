@@ -10,7 +10,10 @@
     <name>ssbd02</name>
 
     <developers>
-
+        <developer>
+            <name>Bartosz Wiśniewski</name>
+            <id>242561</id>
+        </developer>
     </developers>
 
     <properties>
