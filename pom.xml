@@ -10,7 +10,10 @@
     <name>ssbd02</name>
 
     <developers>
-
+        <developer>
+            <name>Jakub Górski</name>
+            <id>242396</id>>
+        </developer>
     </developers>
 
     <properties>
