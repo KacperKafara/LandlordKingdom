@@ -11,6 +11,11 @@
 
     <developers>
 
+        <developer>
+            <name>Konrad Koza</name>
+            <id>242436</id>
+
+        </developer>
     </developers>
 
     <properties>
