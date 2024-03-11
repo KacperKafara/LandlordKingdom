@@ -10,7 +10,10 @@
     <name>ssbd02</name>
 
     <developers>
-
+        <developer>
+            <name>Kacper Kafara</name>
+            <id>242412</id>
+        </developer>
     </developers>
 
     <properties>
