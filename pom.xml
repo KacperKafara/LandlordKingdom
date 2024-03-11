@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.lodz.p.it.ssbd2024</groupId>
@@ -13,6 +13,18 @@
         <developer>
             <name>Jakub Górski</name>
             <id>242396</id>>
+        </developer>
+        <developer>
+            <name>Marcel Badek</name>
+            <id>242352</id>
+        </developer>
+        <developer>
+            <name>Adam Czerwonka</name>
+            <id>242374</id>
+        </developer>
+        <developer>
+            <name>Konrad Koza</name>
+            <id>242436</id>
         </developer>
     </developers>
 
