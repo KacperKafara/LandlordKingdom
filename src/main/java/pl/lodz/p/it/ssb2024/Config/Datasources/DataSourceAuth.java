@@ -11,12 +11,12 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import java.util.Properties;
 
 @Configuration
-public class DataSourceAdmin {
+public class DataSourceAuth {
 
     private final JpaVendorAdapter jpaVendorAdapter;
 
     @Autowired
-    public DataSourceAdmin(JpaVendorAdapter jpaVendorAdapter) {
+    public DataSourceAuth(JpaVendorAdapter jpaVendorAdapter) {
         this.jpaVendorAdapter = jpaVendorAdapter;
     }
 
@@ -24,11 +24,8 @@ public class DataSourceAdmin {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUrl("jdbc:postgresql://localhost:5432/ssbd02");
-        dataSource.setUsername("ssbd02admin");
-        dataSource.setPassword("admin");
-        dataSource.setInitialSize(1);
-        dataSource.setMaxActive(1);
-        dataSource.setMaxIdle(10);
+        dataSource.setUsername("ssbd02auth");
+        dataSource.setPassword("auth");
         dataSource.setDefaultTransactionIsolation(2);
         return dataSource;
     }
@@ -36,18 +33,14 @@ public class DataSourceAdmin {
     @Bean
     public EntityManagerFactory entityManagerFactory() {
         DataSource dataSource = dataSource();
-
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
-        em.setPersistenceUnitName("ssbd02admin");
+        em.setPersistenceUnitName("ssbd02auth");
         em.setPackagesToScan("pl.lodz.p.it.ssb2024.Model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
-        properties.put("hibernate.hbm2ddl.auto", "create-drop");
-        properties.put("javax.persistence.sql-load-script-source", "init.sql");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
-
         return em.getObject();
     }
 }

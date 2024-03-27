@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.Model;
+package pl.lodz.p.it.ssb2024.Model.DomainModel;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -33,10 +33,10 @@ public class Local {
 
     @Enumerated(EnumType.STRING)
     @Setter
-    private LocalState state;
+    private LocalState state = LocalState.UNAPPROVED;
 
     @OneToOne
-    @Setter
+    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false, updatable = false)
     private Address address;
 
     @Setter
@@ -44,17 +44,16 @@ public class Local {
     private Owner owner;
 
     @Setter
-    @Column(name = "margin_fee", nullable = false)
+    @Column(name = "margin_fee", nullable = false, precision = 10, scale = 2)
     private BigDecimal marginFee;
 
     @Setter
-    @Column(name = "rental_fee", nullable = false)
+    @Column(name = "rental_fee", nullable = false, precision = 10, scale = 2)
     private BigDecimal rentalFee;
 
     public Local(String name,
                  String description,
                  int size,
-                 LocalState state,
                  Address address,
                  Owner owner,
                  BigDecimal marginFee,
@@ -62,7 +61,6 @@ public class Local {
         this.name = name;
         this.description = description;
         this.size = size;
-        this.state = state;
         this.address = address;
         this.owner = owner;
         this.marginFee = marginFee;

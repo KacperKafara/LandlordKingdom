@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.Model;
+package pl.lodz.p.it.ssb2024.Model.DomainModel;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,9 +20,14 @@ public class Address {
     @Column(columnDefinition = "uuid", name = "id")
     private UUID id;
 
+    @Column(nullable = false)
     private String number;
+    @Column(nullable = false)
     private String street;
+    @Column(nullable = false)
     private String city;
+    @Column(nullable = false)
     private String zip;
+    @Column(nullable = false)
     private String country;
 }

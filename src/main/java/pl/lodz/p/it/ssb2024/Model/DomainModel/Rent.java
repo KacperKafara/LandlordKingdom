@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.Model;
+package pl.lodz.p.it.ssb2024.Model.DomainModel;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,37 +13,38 @@ import java.util.UUID;
 @Entity
 @Table(name = "rents")
 @NoArgsConstructor
+@Getter
 public class Rent {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(columnDefinition = "uuid", name = "id")
-    @Getter
     private UUID id;
 
-    @OneToOne
-    @Column(name = "local_id", nullable = false, updatable = false)
-    @Getter
+    @ManyToOne
+    @JoinColumn(nullable = false, updatable = false)
     private Local local;
 
-    @OneToOne
-    @Column(name = "tenant_id", nullable = false, updatable = false)
-    @Getter
+    @ManyToOne
+    @JoinColumn(nullable = false, updatable = false)
     private Tenant tenant;
 
     @Column(name = "start_date", nullable = false, updatable = false)
-    @Getter
     private LocalDate startDate;
 
     @Column(name = "end_date", nullable = false)
-    @Getter @Setter
+    @Setter
     private LocalDate endDate;
 
-    @Column(nullable = false)
-    @Getter @Setter
+    @Column(nullable = false, precision = 10, scale = 2)
+    @Setter
     private BigDecimal balance;
 
-    public Rent(Local local, Tenant tenant, LocalDate startDate, LocalDate endDate, BigDecimal balance) {
+    public Rent(Local local,
+                Tenant tenant,
+                LocalDate startDate,
+                LocalDate endDate,
+                BigDecimal balance) {
         this.local = local;
         this.tenant = tenant;
         this.startDate = startDate;

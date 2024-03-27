@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.Model;
+package pl.lodz.p.it.ssb2024.Model.DomainModel;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,6 +22,12 @@ public class RoleRequest {
     @Column(nullable = false, updatable = false)
     LocalDate requestDate;
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(nullable = false, updatable = false)
     Tenant tenant;
+
+    public RoleRequest(LocalDate requestDate, Tenant tenant) {
+        this.requestDate = requestDate;
+        this.tenant = tenant;
+    }
 }

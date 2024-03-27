@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.Model;
+package pl.lodz.p.it.ssb2024.Model.DomainModel;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -19,13 +19,14 @@ public class Payment {
     @Column(columnDefinition = "uuid", name = "id")
     private UUID id;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
     @Column(nullable = false, updatable = false)
     private LocalDate date;
 
     @ManyToOne
+    @JoinColumn(nullable = false, updatable = false)
     private Rent rent;
 
     public Payment(BigDecimal amount, LocalDate date, Rent rent) {
