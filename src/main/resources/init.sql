@@ -1,0 +1,5 @@
+
+GRANT SELECT,INSERT,DELETE,UPDATE ON TABLE public.account TO ssbd02mok;
+GRANT SELECT ON TABLE public.account TO ssbd02auth;
+
+INSERT INTO public.account (id) VALUES ('00000000-0000-0000-0000-000000000011');
