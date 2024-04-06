@@ -26,8 +26,6 @@ services:
       - my_network
     depends_on:
       - db
-    volumes:
-      - ../target/ssbd02-0.0.3.war:/usr/local/tomcat/webapps/ssbd02.war
 
 networks:
   my_network:
