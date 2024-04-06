@@ -27,9 +27,9 @@ public class DataSourceMok {
     private DataSource dataSource() {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/ssbd02");
+        dataSource.setUrl("jdbc:postgresql://db:5432/ssbd02");
         dataSource.setUsername("ssbd02mok");
-        dataSource.setPassword("mok");
+        dataSource.setPassword("mokP@ssw0rd");
         dataSource.setDefaultTransactionIsolation(2);
         return dataSource;
     }

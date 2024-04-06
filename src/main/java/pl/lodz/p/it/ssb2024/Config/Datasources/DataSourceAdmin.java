@@ -23,9 +23,9 @@ public class DataSourceAdmin {
     private DataSource dataSource() {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/ssbd02");
+        dataSource.setUrl("jdbc:postgresql://db:5432/ssbd02");
         dataSource.setUsername("ssbd02admin");
-        dataSource.setPassword("admin");
+        dataSource.setPassword("adminP@ssw0rd");
         dataSource.setInitialSize(1);
         dataSource.setMaxActive(1);
         dataSource.setMaxIdle(10);
