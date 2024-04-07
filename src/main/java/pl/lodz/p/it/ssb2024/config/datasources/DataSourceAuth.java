@@ -1,8 +1,9 @@
 package pl.lodz.p.it.ssb2024.config.datasources;
 
 import jakarta.persistence.EntityManagerFactory;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.jdbc.pool.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -11,22 +12,33 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import java.util.Properties;
 
 @Configuration
+@RequiredArgsConstructor
 public class DataSourceAuth {
 
     private final JpaVendorAdapter jpaVendorAdapter;
 
-    @Autowired
-    public DataSourceAuth(JpaVendorAdapter jpaVendorAdapter) {
-        this.jpaVendorAdapter = jpaVendorAdapter;
-    }
+    @Value("${driver_classname}")
+    private String driverClassName;
+
+    @Value("${url}")
+    private String url;
+
+    @Value("${transaction_isolation}")
+    private int transactionIsolation;
+
+    @Value("${db.auth.username}")
+    private String username;
+
+    @Value("${db.auth.password}")
+    private String password;
 
     private DataSource dataSource() {
         DataSource dataSource = new DataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/ssbd02");
-        dataSource.setUsername("ssbd02auth");
-        dataSource.setPassword("auth");
-        dataSource.setDefaultTransactionIsolation(2);
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        dataSource.setDefaultTransactionIsolation(transactionIsolation);
         return dataSource;
     }
 

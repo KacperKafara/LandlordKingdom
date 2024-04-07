@@ -1,8 +1,9 @@
 package pl.lodz.p.it.ssb2024.config.datasources;
 
 import jakarta.persistence.EntityManagerFactory;
+import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.jdbc.pool.DataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -11,26 +12,37 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import java.util.Properties;
 
 @Configuration
+@RequiredArgsConstructor
 public class DataSourceAdmin {
 
     private final JpaVendorAdapter jpaVendorAdapter;
 
-    @Autowired
-    public DataSourceAdmin(JpaVendorAdapter jpaVendorAdapter) {
-        this.jpaVendorAdapter = jpaVendorAdapter;
-    }
+    @Value("${driver_classname}")
+    private String driverClassName;
+
+    @Value("${url}")
+    private String url;
+
+    @Value("${transaction_isolation}")
+    private int transactionIsolation;
+
+    @Value("${db.admin.username}")
+    private String username;
+
+    @Value("${db.admin.password}")
+    private String password;
 
     private DataSource dataSource() {
-        DataSource dataSource = new DataSource();
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/ssbd02");
-        dataSource.setUsername("ssbd02admin");
-        dataSource.setPassword("admin");
-        dataSource.setInitialSize(1);
-        dataSource.setMaxActive(1);
-        dataSource.setMaxIdle(10);
-        dataSource.setDefaultTransactionIsolation(2);
-        return dataSource;
+            DataSource dataSource = new DataSource();
+            dataSource.setDriverClassName(driverClassName);
+            dataSource.setUrl(url);
+            dataSource.setUsername(username);
+            dataSource.setPassword(password);
+            dataSource.setInitialSize(1);
+            dataSource.setMaxActive(1);
+            dataSource.setMaxIdle(10);
+            dataSource.setDefaultTransactionIsolation(transactionIsolation);
+            return dataSource;
     }
 
     @Bean
