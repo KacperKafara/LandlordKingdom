@@ -27,7 +27,7 @@ public class DataSourceMol {
     @Value("${url}")
     private String url;
 
-    @Value("${transaction_isolation}")
+    @Value("${default_transaction_isolation}")
     private int transactionIsolation;
 
     @Value("${db.mol.username}")
@@ -52,7 +52,7 @@ public class DataSourceMol {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02mol");
-        em.setPackagesToScan("pl.lodz.p.it.ssb2024.Model");
+        em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
         em.setJpaProperties(properties);
