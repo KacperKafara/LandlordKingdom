@@ -1,10 +1,9 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.lodz.p.it.ssb2024.model.users.Owner;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,13 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "locals")
 @Getter
-public class Local {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
+public class Local extends AbstractEntity {
     @Setter
     @Column(nullable = false)
     private String name;

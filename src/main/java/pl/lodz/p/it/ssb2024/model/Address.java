@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,13 +13,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
+public class Address extends AbstractEntity {
     @Column(nullable = false)
     private String number;
     @Column(nullable = false)

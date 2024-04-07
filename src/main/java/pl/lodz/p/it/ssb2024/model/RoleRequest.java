@@ -1,9 +1,8 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.lodz.p.it.ssb2024.model.users.Tenant;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -12,13 +11,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "role_requests")
 @Getter
-public class RoleRequest {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
+public class RoleRequest extends AbstractEntity {
     @Column(nullable = false, updatable = false)
     LocalDate requestDate;
 

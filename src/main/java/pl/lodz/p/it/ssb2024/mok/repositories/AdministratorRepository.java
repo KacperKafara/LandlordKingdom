@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssb2024.mok.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.lodz.p.it.ssb2024.model.users.Administrator;
+import pl.lodz.p.it.ssb2024.model.Administrator;
 
 import java.util.UUID;
 

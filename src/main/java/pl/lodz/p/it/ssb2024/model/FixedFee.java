@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,13 +12,7 @@ import java.util.UUID;
 @Table(name = "fixed_fees")
 @Getter
 @NoArgsConstructor
-public class FixedFee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
+public class FixedFee extends AbstractEntity {
     @Column(name = "rental_fee", nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal rentalFee;
 

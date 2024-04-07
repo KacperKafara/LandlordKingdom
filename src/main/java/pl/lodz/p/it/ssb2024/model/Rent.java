@@ -1,10 +1,9 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.lodz.p.it.ssb2024.model.users.Tenant;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -14,13 +13,7 @@ import java.util.UUID;
 @Table(name = "rents")
 @NoArgsConstructor
 @Getter
-public class Rent {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
+public class Rent extends AbstractEntity {
     @ManyToOne
     @JoinColumn(nullable = false, updatable = false)
     private Local local;

@@ -1,9 +1,9 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.lodz.p.it.ssb2024.model.users.Tenant;
 
 import java.util.UUID;
 
@@ -11,13 +11,7 @@ import java.util.UUID;
 @Table(name = "applications")
 @NoArgsConstructor
 @Getter
-public class Application {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
+public class Application extends AbstractEntity {
     @Column(name = "order_number", nullable = false, updatable = false)
     private Long order;
 
