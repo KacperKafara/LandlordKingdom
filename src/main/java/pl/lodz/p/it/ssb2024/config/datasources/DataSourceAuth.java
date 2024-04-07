@@ -23,7 +23,7 @@ public class DataSourceAuth {
     @Value("${url}")
     private String url;
 
-    @Value("${transaction_isolation}")
+    @Value("${default_transaction_isolation}")
     private int transactionIsolation;
 
     @Value("${db.auth.username}")
@@ -48,7 +48,7 @@ public class DataSourceAuth {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02auth");
-        em.setPackagesToScan("pl.lodz.p.it.ssb2024.Model");
+        em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
         em.setJpaProperties(properties);

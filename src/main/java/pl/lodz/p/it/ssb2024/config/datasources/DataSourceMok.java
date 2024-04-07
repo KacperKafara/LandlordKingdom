@@ -27,7 +27,7 @@ public class DataSourceMok {
     @Value("${url}")
     private String url;
 
-    @Value("${transaction_isolation}")
+    @Value("${default_transaction_isolation}")
     private int transactionIsolation;
 
     @Value("${db.mok.username}")
@@ -52,7 +52,7 @@ public class DataSourceMok {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02mok");
-        em.setPackagesToScan("pl.lodz.p.it.ssb2024.Model.Users");
+        em.setPackagesToScan("pl.lodz.p.it.ssb2024.model.users");
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
         em.setJpaProperties(properties);

@@ -23,7 +23,7 @@ public class DataSourceAdmin {
     @Value("${url}")
     private String url;
 
-    @Value("${transaction_isolation}")
+    @Value("${default_transaction_isolation}")
     private int transactionIsolation;
 
     @Value("${db.admin.username}")
@@ -52,7 +52,7 @@ public class DataSourceAdmin {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02admin");
-        em.setPackagesToScan("pl.lodz.p.it.ssb2024.Model");
+        em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
         properties.put("hibernate.hbm2ddl.auto", "create-drop");
