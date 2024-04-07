@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>pl.lodz.p.it.ssbd2024</groupId>
@@ -46,6 +46,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>6.1.5</spring.version>
+        <spring.security.version>6.2.3</spring.security.version>
         <jackson.version>2.17.0</jackson.version>
         <jakarta.version>6.0.0</jakarta.version>
         <postgresql.version>42.7.3</postgresql.version>
@@ -57,7 +58,7 @@
     </properties>
 
     <dependencies>
-<!--        WEB-->
+        <!--        WEB-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -69,7 +70,25 @@
             <version>${jakarta.version}</version>
             <scope>provided</scope>
         </dependency>
-<!--        JDBC, JPA, JTA-->
+
+        <!--SECURITY-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+
+        <!--        JDBC, JPA, JTA-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -101,7 +120,7 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring.data.jpa.version}</version>
         </dependency>
-<!--        OTHER-->
+        <!--        OTHER-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
