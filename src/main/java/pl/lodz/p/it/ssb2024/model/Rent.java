@@ -22,6 +22,10 @@ public class Rent extends AbstractEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Tenant tenant;
 
+    @ManyToOne
+    @JoinColumn(nullable = false, updatable = false)
+    private Owner owner;
+
     @Column(name = "start_date", nullable = false, updatable = false)
     private LocalDate startDate;
 
@@ -35,11 +39,13 @@ public class Rent extends AbstractEntity {
 
     public Rent(Local local,
                 Tenant tenant,
+                Owner owner,
                 LocalDate startDate,
                 LocalDate endDate,
                 BigDecimal balance) {
         this.local = local;
         this.tenant = tenant;
+        this.owner = owner;
         this.startDate = startDate;
         this.endDate = endDate;
         this.balance = balance;

@@ -3,15 +3,14 @@ package pl.lodz.p.it.ssb2024.model;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.io.Serial;
+import java.io.Serializable;
 
 @Entity
-@AllArgsConstructor
 @DiscriminatorValue("ADMINISTRATOR")
 @Table(name = "administrators")
-public class Administrator extends AccessLevel {
-
+public class Administrator extends AccessLevel implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 1L;
 }
