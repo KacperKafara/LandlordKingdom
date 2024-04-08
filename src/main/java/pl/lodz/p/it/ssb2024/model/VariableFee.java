@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -12,21 +12,15 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @Table(name = "variable_fees")
-public class VariableFee {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
-    @Column(nullable = false, updatable = false, precision = 10, scale = 2)
+public class VariableFee extends AbstractEntity {
+    @Column(name = "amount", nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(nullable = false, updatable = false, precision = 10, scale = 2)
+    @Column(name = "date", nullable = false, updatable = false, precision = 10, scale = 2)
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "rent_id", nullable = false, updatable = false)
     private Rent rent;
 
     public VariableFee(BigDecimal amount, LocalDate date, Rent rent) {

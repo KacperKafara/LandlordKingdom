@@ -52,7 +52,7 @@ public class DataSourceMok {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02mok");
-        em.setPackagesToScan("pl.lodz.p.it.ssb2024.model.users");
+        em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
         em.setJpaProperties(properties);

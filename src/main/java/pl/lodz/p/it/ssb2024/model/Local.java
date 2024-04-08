@@ -1,10 +1,9 @@
-package pl.lodz.p.it.ssb2024.model.domainmodel;
+package pl.lodz.p.it.ssb2024.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.lodz.p.it.ssb2024.model.users.Owner;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,34 +12,31 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "locals")
 @Getter
-public class Local {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id")
-    private UUID id;
-
+public class Local extends AbstractEntity {
     @Setter
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false, length = 200)
     private String name;
 
     @Setter
+    @Column(name = "description", nullable = false, length = 5000)
     private String description;
 
     @Setter
-    @Column(nullable = false)
+    @Column(name = "size", nullable = false)
     private int size;
 
     @Enumerated(EnumType.STRING)
     @Setter
+    @Column(name = "state", nullable = false)
     private LocalState state = LocalState.UNAPPROVED;
 
     @OneToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false, updatable = false)
+    @JoinColumn(name = "address_id", nullable = false, updatable = false)
     private Address address;
 
     @Setter
     @ManyToOne
+    @JoinColumn(name = "owner_id")
     private Owner owner;
 
     @Setter
