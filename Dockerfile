@@ -1,6 +1,7 @@
 FROM maven:3.9.6-amazoncorretto-21 as BUILD
 WORKDIR /app
 COPY pom.xml pom.xml
+RUN mvn clean package -Dmaven.test.skip -Dmaven.main.skip && rm -rf target/
 COPY src src
 RUN mvn clean package
 
