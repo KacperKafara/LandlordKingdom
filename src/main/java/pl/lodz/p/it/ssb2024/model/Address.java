@@ -13,15 +13,16 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "addresses", uniqueConstraints = {@UniqueConstraint(columnNames = {"number", "street", "city", "zip", "country"})})
 public class Address extends AbstractEntity {
-    @Column(nullable = false)
+    @Column(name = "number", nullable = false, length = 10)
     private String number;
-    @Column(nullable = false)
+    @Column(name = "street", nullable = false, length = 100)
     private String street;
-    @Column(nullable = false)
+    @Column(name = "city", nullable = false, length = 100)
     private String city;
-    @Column(nullable = false)
+    @Column(name = "zip", nullable = false, length = 10)
     private String zip;
-    @Column(nullable = false)
+    @Column(name = "country", nullable = false, length = 100)
     private String country;
 }

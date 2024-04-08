@@ -15,15 +15,15 @@ import java.util.UUID;
 @Getter
 public class Rent extends AbstractEntity {
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "local_id", nullable = false, updatable = false)
     private Local local;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "tenant_id", nullable = false, updatable = false)
     private Tenant tenant;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "owner_id", nullable = false, updatable = false)
     private Owner owner;
 
     @Column(name = "start_date", nullable = false, updatable = false)
@@ -33,7 +33,7 @@ public class Rent extends AbstractEntity {
     @Setter
     private LocalDate endDate;
 
-    @Column(nullable = false, precision = 10, scale = 2)
+    @Column(name = "balance", nullable = false, precision = 10, scale = 2)
     @Setter
     private BigDecimal balance;
 

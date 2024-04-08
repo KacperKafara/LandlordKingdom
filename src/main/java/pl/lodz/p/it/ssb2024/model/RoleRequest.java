@@ -12,11 +12,11 @@ import java.util.UUID;
 @Table(name = "role_requests")
 @Getter
 public class RoleRequest extends AbstractEntity {
-    @Column(nullable = false, updatable = false)
+    @Column(name = "request_date", nullable = false, updatable = false)
     LocalDate requestDate;
 
     @OneToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "tenant_id", nullable = false, updatable = false, unique = true)
     Tenant tenant;
 
     public RoleRequest(LocalDate requestDate, Tenant tenant) {

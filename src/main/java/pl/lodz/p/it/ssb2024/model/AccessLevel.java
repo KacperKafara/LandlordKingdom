@@ -8,6 +8,7 @@ import lombok.Setter;
 import java.io.Serial;
 import java.io.Serializable;
 
+@Setter
 @Entity
 @Getter
 @NoArgsConstructor
@@ -18,12 +19,10 @@ public abstract class AccessLevel extends AbstractEntity implements Serializable
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Setter
     @Column(name = "active", nullable = false)
     private boolean active;
 
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false, updatable = false)
     @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
-    @Setter
     private User user;
 }

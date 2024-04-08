@@ -13,14 +13,14 @@ import java.util.UUID;
 @Table(name = "payments")
 @Getter
 public class Payment extends AbstractEntity {
-    @Column(nullable = false, updatable = false, precision = 10, scale = 2)
+    @Column(name = "amount", nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "date", nullable = false, updatable = false)
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "rent_id", nullable = false, updatable = false)
     private Rent rent;
 
     public Payment(BigDecimal amount, LocalDate date, Rent rent) {

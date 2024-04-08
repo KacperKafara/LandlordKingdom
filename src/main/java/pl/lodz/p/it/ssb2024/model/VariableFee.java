@@ -13,14 +13,14 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "variable_fees")
 public class VariableFee extends AbstractEntity {
-    @Column(nullable = false, updatable = false, precision = 10, scale = 2)
+    @Column(name = "amount", nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(nullable = false, updatable = false, precision = 10, scale = 2)
+    @Column(name = "date", nullable = false, updatable = false, precision = 10, scale = 2)
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(nullable = false, updatable = false)
+    @JoinColumn(name = "rent_id", nullable = false, updatable = false)
     private Rent rent;
 
     public VariableFee(BigDecimal amount, LocalDate date, Rent rent) {

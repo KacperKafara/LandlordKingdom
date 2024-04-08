@@ -14,26 +14,29 @@ import java.util.UUID;
 @Getter
 public class Local extends AbstractEntity {
     @Setter
-    @Column(nullable = false)
+    @Column(name = "name", nullable = false, length = 200)
     private String name;
 
     @Setter
+    @Column(name = "description", nullable = false, length = 5000)
     private String description;
 
     @Setter
-    @Column(nullable = false)
+    @Column(name = "size", nullable = false)
     private int size;
 
     @Enumerated(EnumType.STRING)
     @Setter
+    @Column(name = "state", nullable = false)
     private LocalState state = LocalState.UNAPPROVED;
 
     @OneToOne
-    @JoinColumn(name = "address_id", referencedColumnName = "id", nullable = false, updatable = false)
+    @JoinColumn(name = "address_id", nullable = false, updatable = false)
     private Address address;
 
     @Setter
     @ManyToOne
+    @JoinColumn(name = "owner_id")
     private Owner owner;
 
     @Setter

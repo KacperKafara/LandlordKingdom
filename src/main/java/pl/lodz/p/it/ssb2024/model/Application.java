@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "applications")
+@Table(name = "applications", uniqueConstraints = {@UniqueConstraint(columnNames = {"interested_tenant_id", "local_id"})})
 @NoArgsConstructor
 @Getter
 public class Application extends AbstractEntity {

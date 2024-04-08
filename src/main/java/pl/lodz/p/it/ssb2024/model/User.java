@@ -16,21 +16,21 @@ import java.util.UUID;
 @NoArgsConstructor
 public class User extends AbstractEntity {
     @Setter
-    @Column(name = "first_name", table = "personal_data", nullable = false)
+    @Column(name = "first_name", table = "personal_data", nullable = false, length = 50)
     private String firstName;
     @Setter
-    @Column(name = "last_name", table = "personal_data", nullable = false)
+    @Column(name = "last_name", table = "personal_data", nullable = false, length = 50)
     private String lastName;
     @Setter
-    @Column(name = "email", table = "personal_data", nullable = false, unique = true)
+    @Column(name = "email", table = "personal_data", nullable = false, unique = true, length = 50)
     private String email;
 
 
-    @Column(nullable = false, updatable = false, unique = true)
+    @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
     private String login;
 
     @Setter
-    @Column(nullable = false)
+    @Column(name = "password", nullable = false, length = 64)
     private String password;
 
     @Setter

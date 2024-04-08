@@ -19,7 +19,7 @@ public class FixedFee extends AbstractEntity {
     @Column(name = "margin_fee", nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal marginFee;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "date", nullable = false, updatable = false)
     private LocalDate date;
 
     @ManyToOne
