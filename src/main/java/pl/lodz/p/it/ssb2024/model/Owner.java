@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
 @DiscriminatorValue("OWNER")
 @Table(name = "owners")
