@@ -11,6 +11,6 @@ import pl.lodz.p.it.ssb2024.config.datasources.DataSourceMol;
 
 @PropertySource("classpath:config.properties")
 @Configuration
-@Import({DataSourceAdmin.class, DataSourceAuth.class, DataSourceMok.class, DataSourceMol.class, AtomikosConfig.class, SecurityConfig.class})
+@PropertySource("classpath:app.properties")
 public class RootConfig {
 }
