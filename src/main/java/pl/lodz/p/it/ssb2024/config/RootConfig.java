@@ -8,7 +8,6 @@ import pl.lodz.p.it.ssb2024.config.datasources.DataSourceAdmin;
 import pl.lodz.p.it.ssb2024.config.datasources.DataSourceAuth;
 import pl.lodz.p.it.ssb2024.config.datasources.DataSourceMok;
 import pl.lodz.p.it.ssb2024.config.datasources.DataSourceMol;
-import pl.lodz.p.it.ssb2024.config.security.SecurityConfig;
 
 @PropertySource("classpath:config.properties")
 @Configuration
