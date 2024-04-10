@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.mok.controllers.impl;
+package pl.lodz.p.it.ssb2024.mok.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

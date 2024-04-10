@@ -5,6 +5,9 @@ import pl.lodz.p.it.ssb2024.model.User;
 import java.util.UUID;
 
 public interface UserService {
-    User getUser(UUID id) throws Exception;
+    User getUser(UUID id);
+
     void registerUser(User newUser);
+
+    void blockUser(UUID id);
 }
