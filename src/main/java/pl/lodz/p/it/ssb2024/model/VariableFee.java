@@ -16,7 +16,7 @@ public class VariableFee extends AbstractEntity {
     @Column(name = "amount", nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "date", nullable = false, updatable = false, precision = 10, scale = 2)
+    @Column(name = "date", nullable = false, updatable = false)
     private LocalDate date;
 
     @ManyToOne
