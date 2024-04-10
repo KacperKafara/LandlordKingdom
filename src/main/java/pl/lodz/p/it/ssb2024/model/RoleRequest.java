@@ -9,7 +9,11 @@ import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "role_requests")
+@Table(
+        name = "role_requests",
+        indexes = {
+                @Index(name = "idx_role_request_tenant_id", columnList = "tenant_id")
+        })
 @Getter
 public class RoleRequest extends AbstractEntity {
     @Column(name = "request_date", nullable = false, updatable = false)

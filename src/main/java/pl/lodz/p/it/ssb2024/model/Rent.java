@@ -10,7 +10,13 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "rents")
+@Table(
+        name = "rents",
+        indexes = {
+                @Index(name = "idx_rent_local_id", columnList = "local_id"),
+                @Index(name = "idx_rent_tenant_id", columnList = "tenant_id"),
+                @Index(name = "idx_rent_owner_id", columnList = "owner_id"),
+        })
 @NoArgsConstructor
 @Getter
 public class Rent extends AbstractEntity {

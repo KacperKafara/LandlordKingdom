@@ -10,7 +10,12 @@ import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "locals")
+@Table(
+        name = "locals",
+        indexes = {
+                @Index(name = "idx_local_address", columnList = "address_id"),
+                @Index(name = "idx_local_owner", columnList = "owner_id")
+        })
 @Getter
 public class Local extends AbstractEntity {
     @Setter
