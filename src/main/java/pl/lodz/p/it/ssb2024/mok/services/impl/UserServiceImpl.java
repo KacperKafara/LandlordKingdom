@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.it.ssb2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssb2024.exceptions.UserAlreadyBlockedException;
+import pl.lodz.p.it.ssb2024.exceptions.UserAlreadyUnblockedException;
 import pl.lodz.p.it.ssb2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssb2024.model.User;
 import pl.lodz.p.it.ssb2024.mok.repositories.UserRepository;
@@ -43,13 +44,23 @@ public class UserServiceImpl implements UserService {
     public void blockUser(UUID id) {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
-        if (user.isBlocked() && user.getLoginAttempts() < maxLoginAttempts) {
+        if (user.isBlocked()) {
             throw new UserAlreadyBlockedException(UserExceptionMessages.ALREADY_BLOCKED);
         }
 
         user.setBlocked(true);
-        user.setLoginAttempts(0);
         repository.saveAndFlush(user);
     }
 
+    @Override
+    public void unblockUser(UUID id) {
+        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+
+        if (!user.isBlocked()) {
+            throw new UserAlreadyUnblockedException(UserExceptionMessages.ALREADY_UNBLOCKED);
+        }
+
+        user.setBlocked(false);
+        repository.saveAndFlush(user);
+    }
 }

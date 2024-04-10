@@ -10,4 +10,6 @@ public interface UserService {
     void registerUser(User newUser);
 
     void blockUser(UUID id);
+
+    void unblockUser(UUID id);
 }

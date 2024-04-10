@@ -25,4 +25,11 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body("User blocked");
     }
+
+    @PostMapping("/unblock")
+    public ResponseEntity<String> unblockUser(@RequestBody UUID id) {
+        userService.unblockUser(id);
+
+        return ResponseEntity.status(HttpStatus.OK).body("User unblocked");
+    }
 }
