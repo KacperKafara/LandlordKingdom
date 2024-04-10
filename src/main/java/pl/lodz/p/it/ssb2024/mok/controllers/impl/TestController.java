@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.controllers;
+package pl.lodz.p.it.ssb2024.mok.controllers.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,8 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssb2024.model.User;
-import pl.lodz.p.it.ssb2024.services.JwtService;
-import pl.lodz.p.it.ssb2024.services.UserService;
+import pl.lodz.p.it.ssb2024.mok.services.impl.JwtService;
+import pl.lodz.p.it.ssb2024.mok.services.impl.UserServiceImpl;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,12 +17,12 @@ import java.util.UUID;
 @RestController
 public class TestController {
 
-    UserService userService;
+    UserServiceImpl userService;
 
     JwtService jwtService;
 
     @Autowired
-    public TestController(UserService service, JwtService jwtService) {
+    public TestController(UserServiceImpl service, JwtService jwtService) {
         this.userService = service;
         this.jwtService = jwtService;
     }

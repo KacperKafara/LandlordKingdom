@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssb2024.services;
+package pl.lodz.p.it.ssb2024.mok.services.impl;
 
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
