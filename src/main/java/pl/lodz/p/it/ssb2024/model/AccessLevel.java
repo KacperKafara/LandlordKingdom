@@ -12,7 +12,14 @@ import java.io.Serializable;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "access_levels", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "level"})})
+@Table(
+        name = "access_levels",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"user_id", "level"})
+        },
+        indexes = {
+                @Index(name = "idx_access_level_user_id", columnList = "user_id")
+        })
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(discriminatorType = DiscriminatorType.STRING, name = "level")
 public abstract class AccessLevel extends AbstractEntity implements Serializable {

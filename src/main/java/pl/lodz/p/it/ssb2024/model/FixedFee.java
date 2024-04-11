@@ -9,7 +9,11 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
-@Table(name = "fixed_fees")
+@Table(
+        name = "fixed_fees",
+        indexes = {
+                @Index(name = "idx_fixed_fee_rent_id", columnList = "rent_id")
+        })
 @Getter
 @NoArgsConstructor
 public class FixedFee extends AbstractEntity {

@@ -61,7 +61,7 @@ public class SecurityConfig {
     @Bean
     public JwtEncoder jwtEncoder() {
         byte[] bytes = jwtSecret.getBytes();
-        return new NimbusJwtEncoder(new ImmutableSecret<>( new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA512")));
+        return new NimbusJwtEncoder(new ImmutableSecret<>(new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA512")));
     }
 
     @Bean
@@ -78,6 +78,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }

@@ -10,7 +10,11 @@ import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
-@Table(name = "payments")
+@Table(
+        name = "payments",
+        indexes = {
+                @Index(name = "idx_payment_rent", columnList = "rent_id")
+        })
 @Getter
 public class Payment extends AbstractEntity {
     @Column(name = "amount", nullable = false, updatable = false, precision = 10, scale = 2)

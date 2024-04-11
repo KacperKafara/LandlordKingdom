@@ -11,7 +11,12 @@ import java.util.UUID;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "variable_fees")
+@Table(
+        name = "variable_fees",
+        indexes = {
+                @Index(name = "idx_variable_fee_rent_id", columnList = "rent_id")
+        })
+
 public class VariableFee extends AbstractEntity {
     @Column(name = "amount", nullable = false, updatable = false, precision = 10, scale = 2)
     private BigDecimal amount;
