@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import pl.lodz.p.it.ssb2024.model.User;
 import pl.lodz.p.it.ssb2024.mok.services.UserService;
 
 import java.util.UUID;
@@ -31,5 +32,12 @@ public class UserController {
         userService.unblockUser(id);
 
         return ResponseEntity.status(HttpStatus.OK).body("User unblocked");
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<String> registerUser(@RequestBody User newUser) {
+        userService.registerUser(newUser);
+
+        return ResponseEntity.status(HttpStatus.OK).body("User registered");
     }
 }
