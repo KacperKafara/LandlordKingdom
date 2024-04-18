@@ -55,6 +55,8 @@
         <atomikos.version>6.0.0</atomikos.version>
         <tomcat.version>10.1.19</tomcat.version>
         <spring.data.jpa.version>3.2.4</spring.data.jpa.version>
+        <spring.context.support.version>6.1.6</spring.context.support.version>
+        <jakarta.mail.version>2.0.1</jakarta.mail.version>
     </properties>
 
     <dependencies>
@@ -137,6 +139,16 @@
             <artifactId>logback-classic</artifactId>
             <version>1.5.4</version>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.context.support.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>jakarta.mail</artifactId>
+            <version>${jakarta.mail.version}</version>
         </dependency>
     </dependencies>
 
