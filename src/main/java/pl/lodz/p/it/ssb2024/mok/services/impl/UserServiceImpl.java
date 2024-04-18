@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssb2024.mok.services.impl;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -40,15 +41,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void registerUser(User newUser) {
-        String encodedPassword = passwordEncoder.encode(newUser.getPassword());
-        newUser.setPassword(encodedPassword);
-        User test = repository.saveAndFlush(newUser);
-        Tenant newTenant = new Tenant();
-        newTenant.setActive(true);
-        newTenant.setUser(test);
-        tenantRepository.saveAndFlush(newTenant);
+    @Transactional(rollbackFor = ConstraintViolationException.class)
+    public void registerUser(User newUser, String password) {
+        try {
+            String encodedPassword = passwordEncoder.encode(password);
+            newUser.setPassword(encodedPassword);
+            Tenant newTenant = new Tenant();
+            newTenant.setActive(true);
+            newTenant.setUser(newUser);
+            tenantRepository.saveAndFlush(newTenant);
+        } catch (ConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

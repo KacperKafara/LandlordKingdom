@@ -7,7 +7,7 @@ import java.util.UUID;
 public interface UserService {
     User getUser(UUID id);
 
-    void registerUser(User newUser);
+    void registerUser(User newUser, String password);
 
     void blockUser(UUID id);
 

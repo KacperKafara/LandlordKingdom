@@ -44,7 +44,7 @@ public class SecurityConfig {
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/token").permitAll()
                                 .requestMatchers("/authorized").hasAuthority("ROLE_user")
-                                .requestMatchers(HttpMethod.POST,"/signup").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .build();
