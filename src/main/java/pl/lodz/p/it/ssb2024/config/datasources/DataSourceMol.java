@@ -14,7 +14,8 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "pl.lodz.p.it.ssb2024.mol.repositories"
+        entityManagerFactoryRef = "entityManagerFactoryMol",
+        basePackages = {"pl.lodz.p.it.ssb2024.mol.repositories"}
 )
 @RequiredArgsConstructor
 public class DataSourceMol {
@@ -47,10 +48,10 @@ public class DataSourceMol {
     }
 
     @Bean
-    public EntityManagerFactory entityManagerFactory() {
+    public EntityManagerFactory entityManagerFactoryMol() {
         DataSource dataSource = dataSource();
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
+        em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02mol");
         em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
