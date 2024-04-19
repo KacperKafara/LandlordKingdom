@@ -63,4 +63,8 @@ public class UserServiceImpl implements UserService {
         user.setBlocked(false);
         repository.saveAndFlush(user);
     }
+
+    public String test() {
+        return "test";
+    }
 }
