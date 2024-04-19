@@ -28,8 +28,8 @@ public class TestController {
     }
 
     @GetMapping
-    public String test() {
-        return "Test1";
+    public ResponseEntity<String> test(){
+        return ResponseEntity.ok("test");
     }
 
     @PostMapping(value = "/token",consumes = {"application/json"},  produces = {"text/plain"})
