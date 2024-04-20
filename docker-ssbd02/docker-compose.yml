@@ -15,7 +15,6 @@ services:
     volumes:
       - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
 
-
   tomcat:
     build:
       context: ..

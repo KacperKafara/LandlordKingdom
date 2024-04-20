@@ -35,7 +35,9 @@ public class DataSourceAuth {
     private DataSource dataSource() {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(url);
+        if(System.getenv("DATABASE_URL") != null) {
+            url = System.getenv("DATABASE_URL");
+        }
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setDefaultTransactionIsolation(transactionIsolation);

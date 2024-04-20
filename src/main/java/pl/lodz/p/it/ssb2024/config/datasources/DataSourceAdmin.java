@@ -36,6 +36,9 @@ public class DataSourceAdmin {
     private DataSource dataSource() {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName(driverClassName);
+        if(System.getenv("DATABASE_URL") != null) {
+            url = System.getenv("DATABASE_URL");
+        }
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);

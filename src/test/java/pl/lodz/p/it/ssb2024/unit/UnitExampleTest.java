@@ -5,9 +5,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import pl.lodz.p.it.ssb2024.config.ToolConfig;
+import pl.lodz.p.it.ssb2024.exceptions.UserAlreadyBlockedException;
+import pl.lodz.p.it.ssb2024.model.User;
+import pl.lodz.p.it.ssb2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssb2024.mok.services.impl.UserServiceImpl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 @ActiveProfiles("unit")
 @SpringJUnitConfig({ToolConfig.class, MockConfig.class})
@@ -16,8 +23,17 @@ public class UnitExampleTest {
     @Autowired
     private UserServiceImpl userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
-    public void test() {
-        assertEquals("test", userService.test());
+    public void BlockUser_UserIsBlocked_ThrowException_Test() {
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        user.setBlocked(true);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        user.setBlocked(true);
+        assertThrows(UserAlreadyBlockedException.class, () -> userService.blockUser(userId));
     }
 }
