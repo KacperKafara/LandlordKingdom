@@ -43,6 +43,8 @@ public class SecurityConfig {
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/token").permitAll()
                                 .requestMatchers("/authorized").hasAuthority("ROLE_user")
+                                .requestMatchers("/owners/*/role").hasAuthority("ROLE_ADMINISTRATOR")
+                                .requestMatchers("/admins/*/role").hasAuthority("ROLE_ADMINISTRATOR")
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .build();
