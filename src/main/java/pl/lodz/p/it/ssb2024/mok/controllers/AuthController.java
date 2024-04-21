@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssb2024.mok.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.lodz.p.it.ssb2024.model.User;
+import pl.lodz.p.it.ssb2024.mok.dto.AuthenticationRequest;
+import pl.lodz.p.it.ssb2024.mok.dto.AuthenticationResponse;
 import pl.lodz.p.it.ssb2024.mok.dto.UserCreateRequest;
+import pl.lodz.p.it.ssb2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssb2024.mok.services.UserService;
 
 import java.net.URI;
@@ -18,7 +21,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
-    private final AuthenticationServiceImpl authenticationService;
+    private final AuthenticationService authenticationService;
 
 
     @PostMapping("/signup")
@@ -38,13 +41,11 @@ public class AuthController {
                 .toUri();
         return ResponseEntity.created(userLocation).build();
     }
-}
 
-    
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request
-    ){
+    ) {
         return ResponseEntity.ok(authenticationService.authenticate(request.getLogin(), request.getPassword()));
     }
 }
