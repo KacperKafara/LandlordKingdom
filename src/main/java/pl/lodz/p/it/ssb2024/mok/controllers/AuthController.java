@@ -23,8 +23,9 @@ public class AuthController {
         this.userService = userService;
     }
 
+
     @PostMapping("/signup")
-    public ResponseEntity.BodyBuilder registerUser(@RequestBody UserCreateRequest newUserData) {
+    public ResponseEntity<Void> registerUser(@RequestBody UserCreateRequest newUserData) {
         User newUser = new User(
                 newUserData.firstName(),
                 newUserData.lastName(),
@@ -38,6 +39,6 @@ public class AuthController {
                 .path("/auth/")
                 .buildAndExpand(newUser.getId())
                 .toUri();
-        return ResponseEntity.created(userLocation);
+        return ResponseEntity.created(userLocation).build();
     }
 }
