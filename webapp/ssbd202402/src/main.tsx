@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 import { ProtectedRoutes, UnprotectedRoutes } from "./routes";
 import AuthGuard from "./AuthGuard";
+import "@/i18n";
 
 const router = createBrowserRouter([
   ...UnprotectedRoutes,
