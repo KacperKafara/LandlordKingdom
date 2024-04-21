@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssb2024.mok.services;
 
 import pl.lodz.p.it.ssb2024.model.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
@@ -12,4 +13,5 @@ public interface UserService {
     void blockUser(UUID id);
 
     void unblockUser(UUID id);
+
 }
