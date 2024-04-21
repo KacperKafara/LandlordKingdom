@@ -6,10 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
@@ -26,7 +22,6 @@ public class User extends AbstractEntity {
     @Setter
     @Column(name = "email", table = "personal_data", nullable = false, unique = true, length = 50)
     private String email;
-
 
     @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
     private String login;
@@ -54,10 +49,6 @@ public class User extends AbstractEntity {
     @Setter
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
-
-    @Transient
-    @Setter
-    private List<String> roles = new ArrayList<>();
 
     public User(String firstName,
                 String lastName,
