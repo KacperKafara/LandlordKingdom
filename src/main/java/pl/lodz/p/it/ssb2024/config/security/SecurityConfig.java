@@ -11,14 +11,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import pl.lodz.p.it.ssb2024.mok.services.UserService;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -44,6 +44,8 @@ public class SecurityConfig {
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/token").permitAll()
                                 .requestMatchers("/authorized").hasAuthority("ROLE_user")
+                                .requestMatchers("/owners/*/role").hasAuthority("ROLE_ADMINISTRATOR")
+                                .requestMatchers("/admins/*/role").hasAuthority("ROLE_ADMINISTRATOR")
                                 .requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
@@ -51,13 +53,17 @@ public class SecurityConfig {
     }
 
     @Bean
-    public JwtDecoder jwtDecoder() {
+    public JwtDecoder jwtDecoder(UserService userService) {
         byte[] bytes = jwtSecret.getBytes();
         SecretKey key = new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA512");
-        return NimbusJwtDecoder
+        NimbusJwtDecoder decoder = NimbusJwtDecoder
                 .withSecretKey(key)
                 .macAlgorithm(MacAlgorithm.HS512)
                 .build();
+        OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefault();
+        OAuth2TokenValidator<Jwt> withOperation = new BlockedUserValidator(userService);
+        decoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(withIssuer, withOperation));
+        return decoder;
     }
 
     @Bean
