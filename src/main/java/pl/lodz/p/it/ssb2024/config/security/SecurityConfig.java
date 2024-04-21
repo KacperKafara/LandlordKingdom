@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -45,6 +46,7 @@ public class SecurityConfig {
                                 .requestMatchers("/authorized").hasAuthority("ROLE_user")
                                 .requestMatchers("/owners/*/role").hasAuthority("ROLE_ADMINISTRATOR")
                                 .requestMatchers("/admins/*/role").hasAuthority("ROLE_ADMINISTRATOR")
+                                .requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .build();
