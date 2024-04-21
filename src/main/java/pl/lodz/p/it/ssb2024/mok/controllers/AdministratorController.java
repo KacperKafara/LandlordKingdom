@@ -23,7 +23,7 @@ public class AdministratorController {
         this.administratorService = administratorService;
     }
 
-    @PutMapping(path = "/role/{id}")
+    @PutMapping(path = "/{id}/role")
     public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id){
         Administrator administrator;
         try {

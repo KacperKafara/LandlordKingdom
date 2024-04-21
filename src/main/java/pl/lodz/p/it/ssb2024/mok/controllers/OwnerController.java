@@ -28,7 +28,7 @@ public class OwnerController {
         this.ownerService = ownerService;
     }
 
-    @PutMapping(path = "/role/{id}")
+    @PutMapping(path = "/{id}/role")
     public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id){
         Owner owner;
         try {
