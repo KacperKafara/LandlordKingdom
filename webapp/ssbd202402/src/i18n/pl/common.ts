@@ -1,3 +1,9 @@
+const navLinks = {
+  account: "Moje konto",
+};
+
 export default {
-  hello: "test",
+  navLinks,
+  footer: "Landlord Kingdom - SSBD202402",
+  logoPlaceholder: "Landlord Kingdom",
 };
