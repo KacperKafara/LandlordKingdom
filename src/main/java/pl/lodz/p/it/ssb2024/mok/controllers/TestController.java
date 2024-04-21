@@ -36,14 +36,15 @@ public class TestController {
     public ResponseEntity<String > jwt(@RequestBody UUID id) throws Exception {
         User user = userService.getUser(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("user")));
+
+        return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("ADMINISTRATOR", "USER")));
     }
 
     @GetMapping("/authorized")
     public ResponseEntity<String> auth(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        return ResponseEntity.ok(jwt.getSubject());
+        return ResponseEntity.ok(authentication.getAuthorities().toString());
     }
 
 
