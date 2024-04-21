@@ -1,18 +1,22 @@
 package pl.lodz.p.it.ssb2024.mok.services.impl;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssb2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssb2024.exceptions.UserAlreadyBlockedException;
 import pl.lodz.p.it.ssb2024.exceptions.UserAlreadyUnblockedException;
 import pl.lodz.p.it.ssb2024.messages.UserExceptionMessages;
+import pl.lodz.p.it.ssb2024.model.Tenant;
 import pl.lodz.p.it.ssb2024.model.User;
 import pl.lodz.p.it.ssb2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssb2024.mok.dto.AuthenticationResponse;
 import pl.lodz.p.it.ssb2024.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.ssb2024.mok.repositories.OwnerRepository;
+import pl.lodz.p.it.ssb2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssb2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssb2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssb2024.mok.services.UserService;
@@ -28,11 +32,14 @@ public class UserServiceImpl implements UserService {
 
     @Value("${login_max_attempts:3}")
     private int maxLoginAttempts;
+    private final TenantRepository tenantRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder,
+                           TenantRepository tenantRepository) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.tenantRepository = tenantRepository;
     }
 
     @Override
@@ -41,10 +48,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(User newUser) {
-        String encodedPassword = passwordEncoder.encode(newUser.getPassword());
-        newUser.setPassword(encodedPassword);
-        repository.saveAndFlush(newUser);
+    @Transactional(rollbackFor = ConstraintViolationException.class)
+    public void registerUser(User newUser, String password) {
+        try {
+            String encodedPassword = passwordEncoder.encode(password);
+            newUser.setPassword(encodedPassword);
+            Tenant newTenant = new Tenant();
+            newTenant.setActive(true);
+            newTenant.setUser(newUser);
+            tenantRepository.saveAndFlush(newTenant);
+        } catch (ConstraintViolationException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
@@ -71,4 +86,7 @@ public class UserServiceImpl implements UserService {
         repository.saveAndFlush(user);
     }
 
+    public String test() {
+        return "test";
+    }
 }
