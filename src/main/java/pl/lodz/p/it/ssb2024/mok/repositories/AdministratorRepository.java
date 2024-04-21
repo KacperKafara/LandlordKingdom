@@ -10,4 +10,6 @@ public interface AdministratorRepository extends JpaRepository<Administrator, UU
 
     Optional<Administrator> findByUserId(UUID id);
 
+    Optional<Administrator> findByUserIdAndActive(UUID id, boolean active );
+
 }

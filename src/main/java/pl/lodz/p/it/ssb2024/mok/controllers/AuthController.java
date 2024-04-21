@@ -15,13 +15,10 @@ import java.net.URI;
 
 @RestController()
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthController {
     private final UserService userService;
-
-    @Autowired
-    public AuthController(UserService userService) {
-        this.userService = userService;
-    }
+    private final AuthenticationServiceImpl authenticationService;
 
 
     @PostMapping("/signup")
@@ -40,5 +37,14 @@ public class AuthController {
                 .buildAndExpand(newUser.getId())
                 .toUri();
         return ResponseEntity.created(userLocation).build();
+    }
+}
+
+    
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody AuthenticationRequest request
+    ){
+        return ResponseEntity.ok(authenticationService.authenticate(request.getLogin(), request.getPassword()));
     }
 }

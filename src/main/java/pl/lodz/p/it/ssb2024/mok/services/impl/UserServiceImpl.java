@@ -12,10 +12,17 @@ import pl.lodz.p.it.ssb2024.exceptions.UserAlreadyUnblockedException;
 import pl.lodz.p.it.ssb2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssb2024.model.Tenant;
 import pl.lodz.p.it.ssb2024.model.User;
+import pl.lodz.p.it.ssb2024.mok.dto.AuthenticationRequest;
+import pl.lodz.p.it.ssb2024.mok.dto.AuthenticationResponse;
+import pl.lodz.p.it.ssb2024.mok.repositories.AdministratorRepository;
+import pl.lodz.p.it.ssb2024.mok.repositories.OwnerRepository;
+import pl.lodz.p.it.ssb2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssb2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssb2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssb2024.mok.services.UserService;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
