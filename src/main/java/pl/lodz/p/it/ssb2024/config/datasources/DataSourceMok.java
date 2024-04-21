@@ -14,7 +14,8 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "pl.lodz.p.it.ssb2024.mok.repositories"
+        entityManagerFactoryRef = "entityManagerFactoryMok",
+        basePackages = {"pl.lodz.p.it.ssb2024.mok.repositories"}
 )
 @RequiredArgsConstructor
 public class DataSourceMok {
@@ -39,7 +40,9 @@ public class DataSourceMok {
     private DataSource dataSource() {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(url);
+        if(System.getenv("DATABASE_URL") != null) {
+            url = System.getenv("DATABASE_URL");
+        }
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setDefaultTransactionIsolation(transactionIsolation);
@@ -47,10 +50,10 @@ public class DataSourceMok {
     }
 
     @Bean
-    public EntityManagerFactory entityManagerFactory() {
+    public EntityManagerFactory entityManagerFactoryMok() {
         DataSource dataSource = dataSource();
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
+        em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02mok");
         em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);

@@ -35,7 +35,9 @@ public class DataSourceAuth {
     private DataSource dataSource() {
         DataSource dataSource = new DataSource();
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(url);
+        if(System.getenv("DATABASE_URL") != null) {
+            url = System.getenv("DATABASE_URL");
+        }
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setDefaultTransactionIsolation(transactionIsolation);
@@ -43,10 +45,10 @@ public class DataSourceAuth {
     }
 
     @Bean
-    public EntityManagerFactory entityManagerFactory() {
+    public EntityManagerFactory entityManagerFactoryAuth() {
         DataSource dataSource = dataSource();
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
+        em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02auth");
         em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);

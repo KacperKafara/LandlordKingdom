@@ -34,24 +34,27 @@ public class DataSourceAdmin {
     private String password;
 
     private DataSource dataSource() {
-            DataSource dataSource = new DataSource();
-            dataSource.setDriverClassName(driverClassName);
-            dataSource.setUrl(url);
-            dataSource.setUsername(username);
-            dataSource.setPassword(password);
-            dataSource.setInitialSize(1);
-            dataSource.setMaxActive(1);
-            dataSource.setMaxIdle(10);
-            dataSource.setDefaultTransactionIsolation(transactionIsolation);
-            return dataSource;
+        DataSource dataSource = new DataSource();
+        dataSource.setDriverClassName(driverClassName);
+        if(System.getenv("DATABASE_URL") != null) {
+            url = System.getenv("DATABASE_URL");
+        }
+        dataSource.setUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        dataSource.setInitialSize(1);
+        dataSource.setMaxActive(1);
+        dataSource.setMaxIdle(10);
+        dataSource.setDefaultTransactionIsolation(transactionIsolation);
+        return dataSource;
     }
 
     @Bean
-    public EntityManagerFactory entityManagerFactory() {
+    public EntityManagerFactory entityManagerFactoryAdmin() {
         DataSource dataSource = dataSource();
 
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(dataSource);
+        em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02admin");
         em.setPackagesToScan("pl.lodz.p.it.ssb2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
