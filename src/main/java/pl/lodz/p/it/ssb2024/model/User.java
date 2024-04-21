@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -73,5 +72,21 @@ public class User extends AbstractEntity {
         this.lastFailedLogin = lastFailedLogin;
         this.blocked = blocked;
         this.verified = verified;
+    }
+
+    public User(String firstName,
+                String lastName,
+                String email,
+                String login) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.login = login;
+        this.password = "";
+        this.loginAttempts = 0;
+        this.lastSuccessfulLogin = null;
+        this.lastFailedLogin = null;
+        this.blocked = false;
+        this.verified = false;
     }
 }

@@ -14,7 +14,7 @@ foreach ($containerName in $requiredContainers) {
 if (-not $containersRunning) {
     Write-Host "Error: Required containers are not running. Starting the containers..."
 
-    docker-compose -f docker-ssbd02/docker-compose.yml up -d
+    docker-compose -f docker-ssbd02/prod.docker-compose.yml up -d
 
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Error: Failed to start the containers. Exiting..."

@@ -22,17 +22,12 @@ public class JwtService {
 
     public String generateToken(UUID id, List<String> roles) {
         Instant now = Instant.now();
-        StringBuilder authorities = new StringBuilder();
-        for ( String role:
-             roles) {
-            authorities.append(" ").append(role);
-        }
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("team-2.proj-sum.it.p.lodz.pl")
                 .issuedAt(now)
                 .expiresAt(now.plus(1, ChronoUnit.HOURS))
                 .subject(id.toString())
-                .claim("authorities",  authorities)
+                .claim("authorities",  roles)
                 .build();
 
         var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS512).build(), claims);
