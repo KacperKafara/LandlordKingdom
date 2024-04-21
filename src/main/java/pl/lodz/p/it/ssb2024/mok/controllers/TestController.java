@@ -36,7 +36,7 @@ public class TestController {
     public ResponseEntity<String > jwt(@RequestBody UUID id) throws Exception {
         User user = userService.getUser(id);
 
-        return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("user")));
+        return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("ADMINISTRATOR")));
     }
 
     @GetMapping("/authorized")
