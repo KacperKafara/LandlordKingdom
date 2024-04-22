@@ -34,26 +34,23 @@ public class DataSourceAuth {
     @Value("${db.auth.password}")
     private String password;
 
-    private AtomikosDataSourceBean dataSource() {
-        PGXADataSource PGDataSource = new PGXADataSource();
+    private AtomikosNonXADataSourceBean dataSource() {
+        AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
+        dataSource.setDriverClassName(driverClassName);
         if(System.getenv("DATABASE_URL") != null) {
             url = System.getenv("DATABASE_URL");
         }
-        PGDataSource.setUrl(url);
-        PGDataSource.setUser(username);
-        PGDataSource.setPassword(password);
-
-        AtomikosDataSourceBean dataSource = new AtomikosDataSourceBean();
-        dataSource.setXaDataSource(PGDataSource);
         dataSource.setUniqueResourceName("auth");
-        dataSource.setTestQuery("SELECT 1");
+        dataSource.setUrl(url);
+        dataSource.setUser(username);
+        dataSource.setPassword(password);
         dataSource.setDefaultIsolationLevel(transactionIsolation);
         return dataSource;
     }
 
     @Bean
     public EntityManagerFactory entityManagerFactoryAuth() {
-        AtomikosDataSourceBean dataSource = dataSource();
+        AtomikosNonXADataSourceBean dataSource = dataSource();
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02auth");
