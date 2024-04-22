@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -26,6 +27,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
     @Value("${jwt.secret}")
     private String jwtSecret;
@@ -36,18 +38,6 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(
                         sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().permitAll()
-                                .requestMatchers("/").permitAll()
-                                .requestMatchers("/test").permitAll()
-                                .requestMatchers("/token").permitAll()
-                                .requestMatchers("/authorized").hasAuthority("ROLE_user")
-                                .requestMatchers("/owners/*/role").hasAuthority("ROLE_ADMINISTRATOR")
-                                .requestMatchers("/admins/*/role").hasAuthority("ROLE_ADMINISTRATOR")
-                                .requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
-                                .requestMatchers("/owners/{id}/role").hasAuthority("ROLE_ADMINISTRATOR")
-                                .requestMatchers("/admins/{id}/role").hasAuthority("ROLE_ADMINISTRATOR")
-                )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .build();
     }
