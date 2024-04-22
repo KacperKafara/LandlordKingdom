@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
@@ -36,11 +38,11 @@ public class User extends AbstractEntity {
 
     @Setter
     @Column(name = "last_successful_login")
-    private LocalDate lastSuccessfulLogin;
+    private LocalDateTime lastSuccessfulLogin;
 
     @Setter
     @Column(name = "last_failed_login")
-    private LocalDate lastFailedLogin;
+    private LocalDateTime lastFailedLogin;
 
     @Setter
     @Column(name = "blocked", nullable = false)
@@ -60,8 +62,8 @@ public class User extends AbstractEntity {
                 String login,
                 String password,
                 int loginAttempts,
-                LocalDate lastSuccessfulLogin,
-                LocalDate lastFailedLogin,
+                LocalDateTime lastSuccessfulLogin,
+                LocalDateTime lastFailedLogin,
                 boolean blocked,
                 boolean verified) {
         this.firstName = firstName;

@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,19 +23,22 @@ public class TestController {
 
     private final JwtService jwtService;
 
+    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<String> test(){
         return ResponseEntity.ok("test");
     }
 
+    @PreAuthorize("permitAll()")
     @PostMapping(value = "/token",consumes = {"application/json"},  produces = {"text/plain"})
     public ResponseEntity<String > jwt(@RequestBody UUID id) throws Exception {
-        User user = userService.getUser(id);
+        User user = userService.getUserById(id);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("ADMINISTRATOR", "USER")));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/authorized")
     public ResponseEntity<String> auth(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

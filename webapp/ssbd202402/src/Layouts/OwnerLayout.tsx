@@ -1,10 +1,22 @@
 import { FC } from "react";
-import BaseLayout from "./BaseLayout";
-import { Outlet } from "react-router-dom";
+import BaseLayout, { NavigationLink } from "./BaseLayout";
+import { Navigate, Outlet } from "react-router-dom";
+import { useUserStore } from "@/store/userStore";
+
+const links: NavigationLink[] = [
+  { label: "test1", path: "test1" },
+  { label: "test2", path: "test1" },
+  { label: "test3", path: "test1" },
+];
 
 const OwnerLayout: FC = () => {
+  const { roles } = useUserStore();
+  if (!roles?.includes("owner")) {
+    return <Navigate to={"/error"} />;
+  }
+
   return (
-    <BaseLayout type="owner">
+    <BaseLayout type="owner" links={links}>
       <Outlet />
     </BaseLayout>
   );
