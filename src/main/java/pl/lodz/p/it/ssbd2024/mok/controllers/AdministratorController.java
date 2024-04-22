@@ -23,6 +23,7 @@ public class AdministratorController {
     }
 
     @PutMapping(path = "/{id}/role")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id){
         Administrator administrator;
         try {

@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ public class OwnerController {
     }
 
     @PutMapping(path = "/{id}/role")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id){
         Owner owner;
         try {

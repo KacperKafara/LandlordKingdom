@@ -13,7 +13,7 @@ type LayoutType = "admin" | "tenant" | "owner";
 type BaseLayoutProps = {
   type: LayoutType;
   children: React.ReactElement;
-  links: NavigationLink[];
+  links?: NavigationLink[];
 };
 
 const config = {
@@ -40,7 +40,7 @@ const fixedLinks: (t: TFunction) => NavigationLink[] = (t) => [
   { path: "/account", label: t("navLinks.account") },
 ];
 
-const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links }) => {
+const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { t } = useTranslation();
   const colors = config[type];
   return (
@@ -53,8 +53,9 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links }) => {
       >
         <div className="text-2xl font-bold">{t("logoPlaceholder")}</div>
         <div className="flex flex-row gap-5">
-          {[...links, ...fixedLinks(t)].map((link) => (
+          {[...links, ...fixedLinks(t)].map((link, idx) => (
             <NavLink
+              key={link.path + idx}
               to={link.path}
               className={cn("px-2 py-1 rounded-md", colors.hover)}
             >
