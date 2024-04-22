@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +15,10 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/admins")
+@RequiredArgsConstructor
 public class AdministratorController {
 
     private final AdministratorService administratorService;
-
-    @Autowired
-    public AdministratorController(AdministratorService administratorService) {
-        this.administratorService = administratorService;
-    }
 
     @PutMapping(path = "/{id}/role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")

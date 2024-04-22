@@ -42,9 +42,6 @@ public class DataSourceMok {
     private AtomikosNonXADataSourceBean dataSource() {
         AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
         dataSource.setDriverClassName(driverClassName);
-        if(System.getenv("DATABASE_URL") != null) {
-            url = System.getenv("DATABASE_URL");
-        }
         dataSource.setUniqueResourceName("mok");
         dataSource.setUrl(url);
         dataSource.setUser(username);

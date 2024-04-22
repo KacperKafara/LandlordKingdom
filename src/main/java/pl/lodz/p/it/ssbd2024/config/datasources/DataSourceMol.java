@@ -42,9 +42,6 @@ public class DataSourceMol {
     private AtomikosNonXADataSourceBean dataSource() {
         AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
         dataSource.setDriverClassName(driverClassName);
-        if(System.getenv("DATABASE_URL") != null) {
-            url = System.getenv("DATABASE_URL");
-        }
         dataSource.setUniqueResourceName("mol");
         dataSource.setUrl(url);
         dataSource.setUser(username);

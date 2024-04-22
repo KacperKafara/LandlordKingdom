@@ -52,6 +52,10 @@ public class User extends AbstractEntity {
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
 
+    @Setter
+    @Column(name = "language", nullable = false)
+    private String language = "en-US";
+
     public User(String firstName,
                 String lastName,
                 String email,

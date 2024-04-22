@@ -12,5 +12,6 @@ public interface UserService {
 
     void blockUser(UUID id) throws NotFoundException;
 
+    User updateUserData(UUID id, User user);
     void unblockUser(UUID id) throws NotFoundException;
 }

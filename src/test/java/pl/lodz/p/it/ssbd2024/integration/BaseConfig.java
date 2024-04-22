@@ -29,7 +29,7 @@ public class BaseConfig {
     static {
         postgres = new PostgreSQLContainer<>("postgres:16.2")
                 .withNetwork(network)
-                .withNetworkAliases("db")
+                .withNetworkAliases("testdb")
                 .waitingFor(Wait.defaultWaitStrategy())
                 .withExposedPorts(5432)
                 .withUsername("postgres")
@@ -43,7 +43,7 @@ public class BaseConfig {
                 .withExposedPorts(8080)
                 .withLogConsumer(outputFrame -> System.out.println(outputFrame.getUtf8String()))
                 .dependsOn(postgres)
-                .withEnv("DATABASE_URL", "jdbc:postgresql://db:5432/ssbd02")
+                .withEnv("URL", "jdbc:postgresql://testdb:5432/ssbd02")
                 .withCopyToContainer(war, "/usr/local/tomcat/webapps/ssbd02.war")
                 .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080))
                 .withReuse(true);

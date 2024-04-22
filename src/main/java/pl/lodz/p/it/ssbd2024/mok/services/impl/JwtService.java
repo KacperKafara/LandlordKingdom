@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -13,12 +14,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
+@RequiredArgsConstructor
 public class JwtService {
     private final JwtEncoder encoder;
-
-    public JwtService(JwtEncoder encoder) {
-        this.encoder = encoder;
-    }
 
     public String generateToken(UUID id, List<String> roles) {
         Instant now = Instant.now();
