@@ -1,8 +1,10 @@
 package pl.lodz.p.it.ssbd2024.config.datasources;
 
+import com.atomikos.jdbc.AtomikosDataSourceBean;
+import com.atomikos.jdbc.AtomikosNonXADataSourceBean;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jdbc.pool.DataSource;
+import org.postgresql.xa.PGXADataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,21 +39,26 @@ public class DataSourceMok {
     @Value("${db.mok.password}")
     private String password;
 
-    private DataSource dataSource() {
-        DataSource dataSource = new DataSource();
-        dataSource.setDriverClassName(driverClassName);
+    private AtomikosDataSourceBean dataSource() {
+        PGXADataSource PGDataSource = new PGXADataSource();
         if(System.getenv("DATABASE_URL") != null) {
             url = System.getenv("DATABASE_URL");
         }
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        dataSource.setDefaultTransactionIsolation(transactionIsolation);
+        PGDataSource.setUrl(url);
+        PGDataSource.setUser(username);
+        PGDataSource.setPassword(password);
+
+        AtomikosDataSourceBean dataSource = new AtomikosDataSourceBean();
+        dataSource.setXaDataSource(PGDataSource);
+        dataSource.setUniqueResourceName("mok");
+        dataSource.setTestQuery("SELECT 1");
+        dataSource.setDefaultIsolationLevel(transactionIsolation);
         return dataSource;
     }
 
     @Bean
     public EntityManagerFactory entityManagerFactoryMok() {
-        DataSource dataSource = dataSource();
+        AtomikosDataSourceBean dataSource = dataSource();
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02mok");
