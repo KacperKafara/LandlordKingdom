@@ -7,6 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:app.properties")
 @ComponentScan({
         "pl.lodz.p.it.ssbd2024.util",
+        "pl.lodz.p.it.ssbd2024.services",
         "pl.lodz.p.it.ssbd2024.mok.services",
         "pl.lodz.p.it.ssbd2024.mol.repositories",
         "pl.lodz.p.it.ssbd2024.mok.repositories",

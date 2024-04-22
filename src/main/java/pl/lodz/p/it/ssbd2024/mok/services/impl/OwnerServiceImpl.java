@@ -21,7 +21,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Owner removeOwnerAccessLevel(UUID id) throws AccessLevelAlreadyRemovedException {
+    public Owner removeOwnerAccessLevel(UUID id) throws AccessLevelAlreadyRemovedException, NotFoundException {
         Owner owner = ownerRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         if(!owner.isActive()){
             throw new AccessLevelAlreadyRemovedException(UserExceptionMessages.ACCESS_LEVEL_REMOVED);

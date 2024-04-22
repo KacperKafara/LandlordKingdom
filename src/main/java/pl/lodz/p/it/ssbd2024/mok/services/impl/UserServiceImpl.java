@@ -2,7 +2,6 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,9 +21,6 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-
-    @Value("${login_max_attempts:3}")
-    private int maxLoginAttempts;
     private final TenantRepository tenantRepository;
 
     @Autowired
@@ -36,7 +32,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUser(UUID id) {
+    public User getUserById(UUID id) throws NotFoundException {
         return repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
     }
 
@@ -56,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void blockUser(UUID id) {
+    public void blockUser(UUID id) throws NotFoundException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
         if (user.isBlocked()) {
@@ -68,7 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void unblockUser(UUID id) {
+    public void unblockUser(UUID id) throws NotFoundException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
         if (!user.isBlocked()) {

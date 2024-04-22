@@ -34,7 +34,7 @@ public class TestController {
 
     @PostMapping(value = "/token",consumes = {"application/json"},  produces = {"text/plain"})
     public ResponseEntity<String > jwt(@RequestBody UUID id) throws Exception {
-        User user = userService.getUser(id);
+        User user = userService.getUserById(id);
 
 
         return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("ADMINISTRATOR", "USER")));
