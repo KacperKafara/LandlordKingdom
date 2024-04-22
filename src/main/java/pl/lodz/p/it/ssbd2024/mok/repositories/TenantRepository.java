@@ -8,4 +8,5 @@ import java.util.UUID;
 
 public interface TenantRepository extends JpaRepository<Tenant, UUID>{
     Optional<Tenant> findByUserIdAndActive(UUID user_id, boolean active);
+    Optional<Tenant> findByUserId(UUID id);
 }

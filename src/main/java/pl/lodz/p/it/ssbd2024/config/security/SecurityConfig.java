@@ -3,7 +3,6 @@ package pl.lodz.p.it.ssbd2024.config.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -37,16 +36,16 @@ public class SecurityConfig {
                 .sessionManagement(
                         sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().permitAll()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/test").permitAll()
                                 .requestMatchers("/token").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
                                 .requestMatchers("/authorized").hasAuthority("ROLE_user")
                                 .requestMatchers("/owners/*/role").hasAuthority("ROLE_ADMINISTRATOR")
                                 .requestMatchers("/admins/*/role").hasAuthority("ROLE_ADMINISTRATOR")
-                                .requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
-                                .requestMatchers("/owners/{id}/role").hasAuthority("ROLE_ADMINISTRATOR")
-                                .requestMatchers("/admins/{id}/role").hasAuthority("ROLE_ADMINISTRATOR")
+                                .requestMatchers("/tenants/*/add-role").hasAuthority("ROLE_ADMINISTRATOR")
+                                .requestMatchers("/owners/*/add-role").hasAuthority("ROLE_ADMINISTRATOR")
+                                .requestMatchers("/admins/*/add-role").hasAuthority("ROLE_ADMINISTRATOR")
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()))
                 .build();
