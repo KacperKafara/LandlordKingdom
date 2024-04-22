@@ -3,18 +3,21 @@ import AdminLayout from "./Layouts/AdminLayout";
 import OwnerLayout from "./Layouts/OwnerLayout";
 import TenantLayout from "./Layouts/TenantLayout";
 import AccountLayout from "./Layouts/AccountLayout";
-import AdminTestPage from "./pages/AdminTest";
+import AdminTestPage from "./pages/Admin/Test";
 import LoginPage from "./pages/Login";
-import PATHS from "./paths";
 import RegisterPage from "./pages/Register";
+import OwnerTestPage from "./pages/Owner/Test";
+import TenantTestPage from "./pages/Tenant/Test";
 
 const AdminRoutes: RouteObject[] = [{ path: "test", Component: AdminTestPage }];
-const OwnerRoutes: RouteObject[] = [];
-const TenantRoutes: RouteObject[] = [];
+const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
+const TenantRoutes: RouteObject[] = [
+  { path: "test", Component: TenantTestPage },
+];
 const AccountRoutes: RouteObject[] = [];
 
 export const UnprotectedRoutes: RouteObject[] = [
-  { path: PATHS.login, Component: LoginPage },
+  { path: "/login", Component: LoginPage },
   { path: "/register", Component: RegisterPage },
 ];
 
