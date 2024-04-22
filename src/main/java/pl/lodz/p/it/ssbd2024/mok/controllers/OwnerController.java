@@ -18,7 +18,6 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/owners")
-@Transactional(Transactional.TxType.REQUIRES_NEW)
 public class OwnerController {
 
     private final OwnerService ownerService;
