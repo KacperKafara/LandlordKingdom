@@ -33,4 +33,12 @@ public class AdministratorController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping(path = "/{id}/add-role")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id){
+        Administrator administrator = administratorService.addAdministratorAccessLevel(id);
+
+        return ResponseEntity.ok().build();
+    }
 }

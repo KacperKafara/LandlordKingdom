@@ -39,4 +39,12 @@ public class OwnerController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @PutMapping(path = "/{id}/add-role")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id){
+        Owner owner = ownerService.addOwnerAccessLevel(id);
+
+        return ResponseEntity.ok().build();
+    }
 }
