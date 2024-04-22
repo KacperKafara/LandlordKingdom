@@ -1,10 +1,8 @@
 package pl.lodz.p.it.ssbd2024.config.datasources;
 
-import com.atomikos.jdbc.AtomikosDataSourceBean;
 import com.atomikos.jdbc.AtomikosNonXADataSourceBean;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
-import org.postgresql.xa.PGXADataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,9 +35,6 @@ public class DataSourceAdmin {
     private AtomikosNonXADataSourceBean dataSource() {
         AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
         dataSource.setDriverClassName(driverClassName);
-        if(System.getenv("DATABASE_URL") != null) {
-            url = System.getenv("DATABASE_URL");
-        }
         dataSource.setUniqueResourceName("admin");
         dataSource.setUrl(url);
         dataSource.setUser(username);

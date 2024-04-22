@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,21 +20,14 @@ import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final TenantRepository tenantRepository;
 
     @Value("${login_max_attempts:3}")
     private int maxLoginAttempts;
-    private final TenantRepository tenantRepository;
-
-    @Autowired
-    public UserServiceImpl(UserRepository repository, PasswordEncoder passwordEncoder,
-                           TenantRepository tenantRepository) {
-        this.repository = repository;
-        this.passwordEncoder = passwordEncoder;
-        this.tenantRepository = tenantRepository;
-    }
 
     @Override
     public User getUser(UUID id) {
@@ -79,7 +73,12 @@ public class UserServiceImpl implements UserService {
         repository.saveAndFlush(user);
     }
 
-    public String test() {
-        return "test";
+    @Override
+    @Transactional
+    public User updateUserData(UUID id, User user) {
+        User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        userToUpdate.setFirstName(user.getFirstName());
+        userToUpdate.setLastName(user.getLastName());
+        return repository.saveAndFlush(userToUpdate);
     }
 }

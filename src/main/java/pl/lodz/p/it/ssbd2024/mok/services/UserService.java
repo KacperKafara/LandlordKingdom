@@ -12,4 +12,6 @@ public interface UserService {
     void blockUser(UUID id);
 
     void unblockUser(UUID id);
+
+    User updateUserData(UUID id, User user);
 }

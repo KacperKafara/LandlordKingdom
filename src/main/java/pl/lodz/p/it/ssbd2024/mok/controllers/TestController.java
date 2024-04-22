@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -15,17 +15,12 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
 public class TestController {
 
-    UserService userService;
+    private final UserService userService;
 
-    JwtService jwtService;
-
-    @Autowired
-    public TestController(UserService service, JwtService jwtService) {
-        this.userService = service;
-        this.jwtService = jwtService;
-    }
+    private final JwtService jwtService;
 
     @GetMapping
     public ResponseEntity<String> test(){
