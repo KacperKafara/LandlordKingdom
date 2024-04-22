@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface OwnerService {
 
+    Owner addOwnerAccessLevel(UUID id);
     Owner removeOwnerAccessLevel(UUID id) throws AccessLevelAlreadyRemovedException, NotFoundException;
 }

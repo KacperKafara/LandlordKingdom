@@ -8,5 +8,6 @@ import java.util.UUID;
 
 public interface AdministratorService {
 
+    Administrator addAdministratorAccessLevel(UUID id);
     Administrator removeAdministratorAccessLevel(UUID id) throws AccessLevelAlreadyRemovedException, NotFoundException;
 }

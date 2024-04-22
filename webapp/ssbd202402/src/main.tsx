@@ -5,6 +5,7 @@ import "./index.css";
 import { ProtectedRoutes, UnprotectedRoutes } from "./routes";
 import AuthGuard from "./AuthGuard";
 import "@/i18n";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([
   ...UnprotectedRoutes,
@@ -15,8 +16,12 @@ const router = createBrowserRouter([
   },
 ]);
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router}></RouterProvider>
+    </QueryClientProvider>
   </React.StrictMode>
 );
