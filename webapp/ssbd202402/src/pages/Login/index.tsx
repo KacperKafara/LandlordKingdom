@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useAuthenticate } from "@/data/useAuthenticate";
 import { useUserStore } from "@/store/userStore";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   login: z.string(),
@@ -26,7 +26,7 @@ type LoginSchema = z.infer<typeof loginSchema>;
 
 const LoginPage: FC = () => {
   const { t } = useTranslation();
-  const { setToken } = useUserStore();
+  const { setToken, token } = useUserStore();
   const { authenticate } = useAuthenticate();
   const navigate = useNavigate();
   const form = useForm<LoginSchema>({
@@ -42,6 +42,11 @@ const LoginPage: FC = () => {
     setToken(result.token);
     navigate("/admin/test");
   });
+
+  if (token) {
+    return <Navigate to={"/admin/test"} />;
+  }
+
   return (
     <div className="flex items-center justify-center min-h-screen">
       <Form {...form}>
