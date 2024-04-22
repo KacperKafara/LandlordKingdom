@@ -29,7 +29,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
-    public Administrator removeAdministratorAccessLevel(UUID id) throws AccessLevelAlreadyRemovedException {
+    public Administrator removeAdministratorAccessLevel(UUID id) throws AccessLevelAlreadyRemovedException, NotFoundException {
         Administrator administrator = administratorRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         if(!administrator.isActive()){
             throw new AccessLevelAlreadyRemovedException(UserExceptionMessages.ACCESS_LEVEL_REMOVED);
