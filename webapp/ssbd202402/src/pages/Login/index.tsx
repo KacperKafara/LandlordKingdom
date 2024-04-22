@@ -13,6 +13,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { useAuthenticate } from "@/data/useAuthenticate";
+import { useUserStore } from "@/store/userStore";
+import { useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   login: z.string(),
@@ -23,6 +26,9 @@ type LoginSchema = z.infer<typeof loginSchema>;
 
 const LoginPage: FC = () => {
   const { t } = useTranslation();
+  const { setToken } = useUserStore();
+  const { authenticate } = useAuthenticate();
+  const navigate = useNavigate();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     values: {
@@ -31,8 +37,10 @@ const LoginPage: FC = () => {
     },
   });
 
-  const onSubmit = form.handleSubmit((values) => {
-    console.log(values);
+  const onSubmit = form.handleSubmit(async (values) => {
+    const result = await authenticate(values);
+    setToken(result.token);
+    navigate("/admin/test");
   });
   return (
     <div className="flex items-center justify-center min-h-screen">
