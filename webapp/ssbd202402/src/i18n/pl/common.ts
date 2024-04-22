@@ -3,6 +3,10 @@ const loginPage = {
   loginButton: "Zaloguj się",
   login: "Login",
   password: "Hasło",
+  loginHeader: "Zaloguj się",
+  register: "Zarejestruj się",
+  loginRequired: "Login jest wymagany",
+  passwordRequired: "Hasło jest wymagane",
 };
 
 const navLinks = {
