@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.jta.JtaTransactionManager;
 
 @Configuration
-@EnableTransactionManagement
+@EnableTransactionManagement(order = 0)
 public class AtomikosConfig {
 
     @Bean

@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,6 +29,7 @@ public class AuthController {
 
 
     @PostMapping("/signup")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> registerUser(@RequestBody UserCreateRequest newUserData) {
         User newUser = new User(
                 newUserData.firstName(),
