@@ -26,7 +26,7 @@ public class OwnerController {
 
     @PutMapping(path = "/{id}/role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id){
+    public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id) {
         Owner owner;
         try {
             owner = ownerService.removeOwnerAccessLevel(id);
@@ -40,7 +40,7 @@ public class OwnerController {
 
     @PutMapping(path = "/{id}/add-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id){
+    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id) throws NotFoundException {
         Owner owner = ownerService.addOwnerAccessLevel(id);
 
         return ResponseEntity.ok().build();

@@ -27,15 +27,17 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
-    public Tenant addTenantAccessLevel(UUID id) {
+    public Tenant addTenantAccessLevel(UUID id) throws NotFoundException {
         Optional<Tenant> tenantOptional = tenantRepository.findByUserId(id);
 
-        Tenant tenant = tenantOptional.orElseGet(() -> {
+        Tenant tenant;
+        if (tenantOptional.isPresent()) {
+            tenant = tenantOptional.get();
+        } else {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-            Tenant newTenant = new Tenant();
-            newTenant.setUser(user);
-            return newTenant;
-        });
+            tenant = new Tenant();
+            tenant.setUser(user);
+        }
 
         if (tenant.isActive()) {
             return tenant;

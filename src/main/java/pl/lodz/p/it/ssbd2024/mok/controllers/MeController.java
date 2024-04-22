@@ -40,7 +40,7 @@ public class MeController {
     }
 
     @PutMapping
-    public ResponseEntity<UserResponse> updateUserData(@Validated @RequestBody UpdateUserDataRequest request) {
+    public ResponseEntity<UserResponse> updateUserData(@Validated @RequestBody UpdateUserDataRequest request) throws NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());

@@ -22,11 +22,11 @@ public class AdministratorController {
 
     @PutMapping(path = "/{id}/role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id){
+    public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id) {
         Administrator administrator;
         try {
             administrator = administratorService.removeAdministratorAccessLevel(id);
-        } catch (AccessLevelAlreadyRemovedException  e) {
+        } catch (AccessLevelAlreadyRemovedException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -36,7 +36,7 @@ public class AdministratorController {
 
     @PutMapping(path = "/{id}/add-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id){
+    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id) throws NotFoundException {
         Administrator administrator = administratorService.addAdministratorAccessLevel(id);
 
         return ResponseEntity.ok().build();

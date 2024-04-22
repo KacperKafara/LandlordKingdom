@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
 
@@ -27,7 +28,7 @@ public class TenantController {
 
     @PutMapping(path = "/{id}/add-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id){
+    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id) throws NotFoundException {
        Tenant tenant = tenantService.addTenantAccessLevel(id);
 
         return ResponseEntity.ok().build();
