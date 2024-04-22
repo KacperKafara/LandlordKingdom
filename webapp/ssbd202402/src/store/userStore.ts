@@ -9,16 +9,19 @@ type UserStore = {
   clear: () => void;
 };
 
+const LSToken = localStorage.getItem("token");
+
 export const useUserStore = create<UserStore>((set) => ({
-  token: undefined,
-  id: undefined,
-  roles: undefined,
+  token: LSToken === null ? undefined : LSToken,
+  id: LSToken === null ? undefined : decodeJwt(LSToken).sub,
+  roles: LSToken === null ? undefined : decodeJwt(LSToken).authorities,
   setToken: (token: string) =>
     set(() => {
       const payload = decodeJwt(token);
+      localStorage.setItem("token", token);
       return {
         token,
-        id: payload.iss,
+        id: payload.sub,
         roles: payload.authorities,
       };
     }),

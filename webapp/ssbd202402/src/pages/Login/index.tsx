@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useAuthenticate } from "@/data/useAuthenticate";
 import { useUserStore } from "@/store/userStore";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const loginSchema = z.object({
   login: z.string(),
@@ -81,6 +81,7 @@ const LoginPage: FC = () => {
           <div className="text-sm text-slate-600">
             {t("loginPage.forgotPassword")}
           </div>
+          <NavLink to={"/register"}>Register</NavLink>
           <Button type="submit" className="self-end">
             {t("loginPage.loginButton")}
           </Button>

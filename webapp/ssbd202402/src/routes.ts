@@ -6,6 +6,7 @@ import AccountLayout from "./Layouts/AccountLayout";
 import AdminTestPage from "./pages/AdminTest";
 import LoginPage from "./pages/Login";
 import PATHS from "./paths";
+import RegisterPage from "./pages/Register";
 
 const AdminRoutes: RouteObject[] = [{ path: "test", Component: AdminTestPage }];
 const OwnerRoutes: RouteObject[] = [];
@@ -14,6 +15,7 @@ const AccountRoutes: RouteObject[] = [];
 
 export const UnprotectedRoutes: RouteObject[] = [
   { path: PATHS.login, Component: LoginPage },
+  { path: "/register", Component: RegisterPage },
 ];
 
 export const ProtectedRoutes: RouteObject[] = [
