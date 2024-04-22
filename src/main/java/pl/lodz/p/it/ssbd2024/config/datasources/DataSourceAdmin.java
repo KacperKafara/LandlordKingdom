@@ -1,8 +1,10 @@
 package pl.lodz.p.it.ssbd2024.config.datasources;
 
+import com.atomikos.jdbc.AtomikosDataSourceBean;
+import com.atomikos.jdbc.AtomikosNonXADataSourceBean;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jdbc.pool.DataSource;
+import org.postgresql.xa.PGXADataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,25 +34,27 @@ public class DataSourceAdmin {
     @Value("${db.admin.password}")
     private String password;
 
-    private DataSource dataSource() {
-        DataSource dataSource = new DataSource();
+    private AtomikosNonXADataSourceBean dataSource() {
+        AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
         dataSource.setDriverClassName(driverClassName);
         if(System.getenv("DATABASE_URL") != null) {
             url = System.getenv("DATABASE_URL");
         }
+        dataSource.setUniqueResourceName("admin");
         dataSource.setUrl(url);
-        dataSource.setUsername(username);
+        dataSource.setUser(username);
         dataSource.setPassword(password);
-        dataSource.setInitialSize(1);
-        dataSource.setMaxActive(1);
-        dataSource.setMaxIdle(10);
-        dataSource.setDefaultTransactionIsolation(transactionIsolation);
+        dataSource.setDefaultIsolationLevel(transactionIsolation);
+        dataSource.setMaxIdleTime(10);
+        dataSource.setMinPoolSize(0);
+        dataSource.setMaxPoolSize(1);
+        dataSource.setLocalTransactionMode(true);
         return dataSource;
     }
 
     @Bean
     public EntityManagerFactory entityManagerFactoryAdmin() {
-        DataSource dataSource = dataSource();
+        AtomikosNonXADataSourceBean dataSource = dataSource();
 
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJtaDataSource(dataSource);
@@ -62,7 +66,6 @@ public class DataSourceAdmin {
         properties.put("javax.persistence.sql-load-script-source", "init.sql");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();
-
         return em.getObject();
     }
 }

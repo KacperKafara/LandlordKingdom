@@ -1,8 +1,10 @@
 package pl.lodz.p.it.ssbd2024.config.datasources;
 
+import com.atomikos.jdbc.AtomikosDataSourceBean;
+import com.atomikos.jdbc.AtomikosNonXADataSourceBean;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jdbc.pool.DataSource;
+import org.postgresql.xa.PGXADataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,21 +34,23 @@ public class DataSourceAuth {
     @Value("${db.auth.password}")
     private String password;
 
-    private DataSource dataSource() {
-        DataSource dataSource = new DataSource();
+    private AtomikosNonXADataSourceBean dataSource() {
+        AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
         dataSource.setDriverClassName(driverClassName);
         if(System.getenv("DATABASE_URL") != null) {
             url = System.getenv("DATABASE_URL");
         }
-        dataSource.setUsername(username);
+        dataSource.setUniqueResourceName("auth");
+        dataSource.setUrl(url);
+        dataSource.setUser(username);
         dataSource.setPassword(password);
-        dataSource.setDefaultTransactionIsolation(transactionIsolation);
+        dataSource.setDefaultIsolationLevel(transactionIsolation);
         return dataSource;
     }
 
     @Bean
     public EntityManagerFactory entityManagerFactoryAuth() {
-        DataSource dataSource = dataSource();
+        AtomikosNonXADataSourceBean dataSource = dataSource();
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02auth");

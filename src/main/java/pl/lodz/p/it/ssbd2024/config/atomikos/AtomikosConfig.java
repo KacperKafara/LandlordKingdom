@@ -20,7 +20,7 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 public class AtomikosConfig {
 
     @Bean
-    public JpaVendorAdapter jpaVendorAdaper() {
+    public JpaVendorAdapter jpaVendorAdapter() {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(false);
         vendorAdapter.setDatabase(Database.POSTGRESQL);
