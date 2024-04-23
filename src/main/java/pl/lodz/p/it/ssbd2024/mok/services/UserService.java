@@ -3,9 +3,12 @@ package pl.lodz.p.it.ssbd2024.mok.services;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.User;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface UserService {
+    List<User> getAll();
+
     User getUserById(UUID id) throws NotFoundException;
 
     void registerUser(User newUser, String password);

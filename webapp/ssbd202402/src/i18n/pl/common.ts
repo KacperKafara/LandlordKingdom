@@ -9,6 +9,14 @@ const loginPage = {
   passwordRequired: "Hasło jest wymagane",
 };
 
+const userListPage = {
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  login: "Login",
+  email: "Email",
+  actions: "Akcje",
+};
+
 const navLinks = {
   account: "Moje konto",
 };
@@ -16,6 +24,7 @@ const navLinks = {
 export default {
   navLinks,
   loginPage,
+  userListPage,
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
 };

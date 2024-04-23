@@ -11,6 +11,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
+import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
 import java.util.UUID;
@@ -28,15 +29,7 @@ public class MeController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());
         User user = userService.getUserById(id);
-        return ResponseEntity.ok(
-                new UserResponse(
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        user.getLogin(),
-                        user.getLanguage()
-                )
-        );
+        return ResponseEntity.ok(UserMapper.toUserResponse(user));
     }
 
     @PutMapping
@@ -46,14 +39,6 @@ public class MeController {
         UUID id = UUID.fromString(jwt.getSubject());
 
         User user = userService.updateUserData(id, request.toUser());
-        return ResponseEntity.ok(
-                new UserResponse(
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getEmail(),
-                        user.getLogin(),
-                        user.getLanguage()
-                )
-        );
+        return ResponseEntity.ok(UserMapper.toUserResponse(user));
     }
 }
