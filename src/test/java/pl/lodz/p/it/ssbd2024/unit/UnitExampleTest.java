@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2024.config.ToolConfig;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyBlockedException;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
+import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.UserServiceImpl;
 
 import java.util.Optional;
@@ -21,7 +22,7 @@ import static org.mockito.Mockito.when;
 public class UnitExampleTest {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
