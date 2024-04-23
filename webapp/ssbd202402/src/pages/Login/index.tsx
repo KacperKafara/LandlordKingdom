@@ -55,7 +55,7 @@ const LoginPage: FC = () => {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-2 rounded-md border-black p-7 w-[450px] flex flex-col"
+          className="border-2 rounded-md border-black p-7 w-1/4 flex flex-col"
         >
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
