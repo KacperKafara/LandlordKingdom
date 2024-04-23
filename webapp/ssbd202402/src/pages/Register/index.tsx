@@ -88,9 +88,9 @@ const RegisterPage: FC = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Form {...form}>
-        <form onSubmit={onSubmit} className="border-2 rounded-md border-black p-7 w-6/12 flex flex-col">
+        <form onSubmit={onSubmit} className="border-1 bg-white rounded-md border-black p-7 w-6/12 flex flex-col shadow-2xl">
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
           </h1>
@@ -181,7 +181,7 @@ const RegisterPage: FC = () => {
             />
             </div>
           </div>
-          <Button type="submit" className="mt-3 p-2 w-5/12 self-center">{t("registerPage.registerButton")}</Button>
+          <Button type="submit" className="mt-5 p-2 w-5/12 self-center">{t("registerPage.registerButton")}</Button>
           <Button variant="link" asChild className="w-fit self-center">
             <NavLink to={"/login"}>{t("loginPage.loginButton")}</NavLink>
           </Button>
