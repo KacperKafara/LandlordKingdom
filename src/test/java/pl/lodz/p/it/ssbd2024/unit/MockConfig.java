@@ -1,14 +1,12 @@
 package pl.lodz.p.it.ssbd2024.unit;
 
+import jakarta.validation.constraints.Email;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
-import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
+import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
 
@@ -48,6 +46,20 @@ public class MockConfig {
     @Bean
     TenantRepository tenantRepository() {
         return Mockito.mock(TenantRepository.class);
+    }
+
+    @Bean
+    AccountVerificationTokenRepository accountVerificationTokenRepository() {
+        return Mockito.mock(AccountVerificationTokenRepository.class);
+    }
+
+    @Bean
+    EmailVerificationTokenRepository emailVerificationTokenRepository() {
+        return Mockito.mock(EmailVerificationTokenRepository.class);
+    }
+    @Bean
+    PasswordVerificationTokenRepository passwordVerificationTokenRepository() {
+        return Mockito.mock(PasswordVerificationTokenRepository.class);
     }
 
     //TODO: mol repositories
