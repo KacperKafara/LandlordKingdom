@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFunction } from "i18next";
@@ -8,6 +9,10 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
+import { useMutation } from "react-query";
+import { api } from "@/data/api";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@radix-ui/react-toast";
 
 const getRegistrationSchema = (t: TFunction) =>
   z.object({
@@ -25,9 +30,29 @@ const getRegistrationSchema = (t: TFunction) =>
 
 type RegistrationSchema = z.infer<ReturnType<typeof getRegistrationSchema>>;
 
+interface RegistrationRequest {
+  firstName: string,
+  lastName: string,
+  email: string,
+  login: string,
+  password: string,
+}
+
 const RegisterPage: FC = () => {
   const { t } = useTranslation();
+  const { toast } = useToast();
   const navigate = useNavigate();
+
+  const { mutateAsync: registerAsync } = useMutation({
+    mutationFn: async (data: RegistrationRequest) => {
+      const response = await api.post(
+        "/auth/signup",
+        data
+      );
+      return response.data;
+    },
+  });
+
   const form = useForm<RegistrationSchema>({
     resolver: zodResolver(getRegistrationSchema(t)),
     values: {
@@ -41,8 +66,25 @@ const RegisterPage: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    console.log(values);
-    navigate("/login");
+    try{
+      await registerAsync({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        login: values.login,
+        password: values.password,
+      });
+      toast({
+        description: t("registerPage.registerSuccess"),
+      });
+      navigate("/login");
+    } catch (e) {
+      toast({
+        variant: "destructive",
+        title: t("registerPage.registerError"),
+        action: <ToastAction altText={t("registerPage.tryAgain")}>{t("registerPage.tryAgain")}</ToastAction>,
+      })
+    }
   });
 
   return (
@@ -145,6 +187,7 @@ const RegisterPage: FC = () => {
           </Button>
         </form>
       </Form>
+      <Toaster />
     </div>
   );
 };

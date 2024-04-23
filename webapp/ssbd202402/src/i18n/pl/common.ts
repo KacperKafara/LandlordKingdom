@@ -24,6 +24,9 @@ const registerPage = {
   password: "Hasło*",
   confirmPassword: "Powtórz hasło*",
   registerButton: "Zarejestruj się",
+  registerSuccess: "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
+  registerError: "Wystąpił błąd podczas rejestracji.",
+  tryAgain: "Spróbuj ponownie",
 };
 
 const navLinks = {

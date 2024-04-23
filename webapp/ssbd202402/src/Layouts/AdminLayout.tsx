@@ -11,7 +11,7 @@ const links: NavigationLink[] = [
 
 const AdminLayout: FC = () => {
   const { roles } = useUserStore();
-  if (!roles?.includes("administrator")) {
+  if (!roles?.includes("ADMINISTRATOR")) {
     return <Navigate to={"/error"} />;
   }
 
