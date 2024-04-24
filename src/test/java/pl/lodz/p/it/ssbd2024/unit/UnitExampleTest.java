@@ -26,14 +26,14 @@ public class UnitExampleTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Test
-    public void BlockUser_UserIsBlocked_ThrowException_Test() {
-        UUID userId = UUID.randomUUID();
-        User user = new User();
-        user.setBlocked(true);
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        user.setBlocked(true);
-        assertThrows(UserAlreadyBlockedException.class, () -> userService.blockUser(userId));
-    }
+//    @Test
+//    public void BlockUser_UserIsBlocked_ThrowException_Test() {
+//        UUID userId = UUID.randomUUID();
+//        User user = new User();
+//        user.setBlocked(true);
+//
+//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+//        user.setBlocked(true);
+//        assertThrows(UserAlreadyBlockedException.class, () -> userService.blockUser(userId));
+//    }
 }

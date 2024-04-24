@@ -47,6 +47,7 @@ public class DataSourceMok {
         dataSource.setUser(username);
         dataSource.setPassword(password);
         dataSource.setDefaultIsolationLevel(transactionIsolation);
+        dataSource.setPoolSize(10);
         return dataSource;
     }
 
