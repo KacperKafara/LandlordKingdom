@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class AuthController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<Void> registerUser(@RequestBody UserCreateRequest newUserData) {
+    public ResponseEntity<Void> registerUser(@RequestBody @Valid UserCreateRequest newUserData) {
         User newUser = new User(
                 newUserData.firstName(),
                 newUserData.lastName(),
