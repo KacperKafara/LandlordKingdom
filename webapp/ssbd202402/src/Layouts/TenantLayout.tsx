@@ -11,7 +11,7 @@ const links: NavigationLink[] = [
 
 const TenantLayout: FC = () => {
   const { roles } = useUserStore();
-  if (!roles?.includes("tenant")) {
+  if (!roles?.includes("TENANT")) {
     return <Navigate to={"/error"} />;
   }
 

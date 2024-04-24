@@ -14,7 +14,7 @@ export const useAuthenticate = () => {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: AuthenticateRequest) => {
       const response = await api.post<AuthenticateResponse>(
-        "/auth/authenticate",
+        "/auth/signin",
         data
       );
       return response.data;
