@@ -8,8 +8,12 @@ import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
+import UserListPage from "./pages/Admin/UserListPage";
 
-const AdminRoutes: RouteObject[] = [{ path: "test", Component: AdminTestPage }];
+const AdminRoutes: RouteObject[] = [
+  { path: "test", Component: AdminTestPage },
+  { path: "users", Component: UserListPage },
+];
 const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },

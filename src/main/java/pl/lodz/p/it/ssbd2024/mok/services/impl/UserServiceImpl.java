@@ -16,6 +16,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -24,6 +25,11 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final TenantRepository tenantRepository;
+
+    @Override
+    public List<User> getAll() {
+        return repository.findAll();
+    }
 
     @Override
     public User getUserById(UUID id) throws NotFoundException {
