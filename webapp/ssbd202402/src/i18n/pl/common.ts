@@ -17,6 +17,10 @@ const userListPage = {
   actions: "Akcje",
 };
 
+const userDetailsPage = {
+  goBack: "<-- Wróć",
+};
+
 const registerPage = {
   firstNameRequired: "Imię jest wymagane",
   lastNameRequired: "Nazwisko jest wymagane",
@@ -35,6 +39,7 @@ const registerPage = {
   registerSuccess: "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
   registerError: "Wystąpił błąd podczas rejestracji.",
   tryAgain: "Spróbuj ponownie",
+  viewDetails: "Szczegóły",
 };
 
 const navLinks = {
@@ -45,6 +50,7 @@ export default {
   navLinks,
   loginPage,
   userListPage,
+  userDetailsPage,
   registerPage,
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",

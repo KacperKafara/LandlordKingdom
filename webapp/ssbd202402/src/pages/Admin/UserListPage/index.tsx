@@ -19,6 +19,7 @@ import { fetchUsers } from "@/data/fetchUsers";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "react-query";
+import { NavLink } from "react-router-dom";
 
 const UserListPage: FC = () => {
   const { t } = useTranslation();
@@ -56,8 +57,11 @@ const UserListPage: FC = () => {
                           <DropdownMenuLabel>
                             {t("userListPage.actions")}
                           </DropdownMenuLabel>
-                          <DropdownMenuItem>test</DropdownMenuItem>
-                          <DropdownMenuItem>test</DropdownMenuItem>
+                            <DropdownMenuItem> 
+                              <NavLink to={`/admin/users/user/${user.id}`}>
+                                {t("userListPage.viewDetails")}
+                              </NavLink>
+                            </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>test</DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
