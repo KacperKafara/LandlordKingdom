@@ -18,7 +18,7 @@ import {
 import { fetchUsers } from "@/data/fetchUsers";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 
 const UserListPage: FC = () => {
   const { t } = useTranslation();

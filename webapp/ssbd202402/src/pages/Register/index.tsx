@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { api } from "@/data/api";
 import { Toaster } from "@/components/ui/toaster";
 import { ToastAction } from "@radix-ui/react-toast";
