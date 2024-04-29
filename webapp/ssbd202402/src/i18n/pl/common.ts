@@ -15,11 +15,23 @@ const userListPage = {
   login: "Login",
   email: "Email",
   actions: "Akcje",
+  viewDetails: "Szczegóły",
 };
 
 const userDetailsPage = {
-  goBack: "<-- Wróć",
+  goBack: "<-- Wróć placeholder",
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  login: "Login",
+  email: "Email",
+  language: "Język",
+  lastSuccessfulLogin: "Ostatnie udane logowanie",
+  lastFailedLogin: "Ostatnie nieudane logowanie",
+  blocked: "Zablokowany",
+  verified: "Zweryfikowany",
+  actions: "Akcje",
 };
+
 
 const registerPage = {
   firstNameRequired: "Imię jest wymagane",
@@ -39,14 +51,19 @@ const registerPage = {
   registerSuccess: "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
   registerError: "Wystąpił błąd podczas rejestracji.",
   tryAgain: "Spróbuj ponownie",
-  viewDetails: "Szczegóły",
 };
+
+const common = {
+  yes: "tak",
+  no: "nie",
+}
 
 const navLinks = {
   account: "Moje konto",
 };
 
 export default {
+  common,
   navLinks,
   loginPage,
   userListPage,
