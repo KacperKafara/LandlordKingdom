@@ -15,7 +15,23 @@ const userListPage = {
   login: "Login",
   email: "Email",
   actions: "Akcje",
+  viewDetails: "Szczegóły",
 };
+
+const userDetailsPage = {
+  goBack: "<-- Wróć placeholder",
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  login: "Login",
+  email: "Email",
+  language: "Język",
+  lastSuccessfulLogin: "Ostatnie udane logowanie",
+  lastFailedLogin: "Ostatnie nieudane logowanie",
+  blocked: "Zablokowany",
+  verified: "Zweryfikowany",
+  actions: "Akcje",
+};
+
 
 const registerPage = {
   firstNameRequired: "Imię jest wymagane",
@@ -37,14 +53,21 @@ const registerPage = {
   tryAgain: "Spróbuj ponownie",
 };
 
+const common = {
+  yes: "tak",
+  no: "nie",
+}
+
 const navLinks = {
   account: "Moje konto",
 };
 
 export default {
+  common,
   navLinks,
   loginPage,
   userListPage,
+  userDetailsPage,
   registerPage,
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",

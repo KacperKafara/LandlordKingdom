@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UserServiceImpl implements UserService {
