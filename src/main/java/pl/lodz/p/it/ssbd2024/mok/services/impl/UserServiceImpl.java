@@ -97,7 +97,10 @@ public class UserServiceImpl implements UserService {
     public void sendUpdateEmail(UUID id) throws NotFoundException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         String token =  verificationTokenService.generateEmailVerificationToken(user);
-        emailService.sendEmail(user.getEmail(),"Email address update", "http://localhost:3000/account/change-email/" + token);
+        URI uri = URI.create(appUrl + "/account/change-email/" + token);
+        Map<String, Object> templateModel = Map.of("name", user.getFirstName(), "url", uri);
+        emailService.sendHtmlEmail(user.getEmail(),"Email address change", "email", templateModel);
+//        emailService.sendEmail(user.getEmail(),"Email address update", "http://localhost:3000/account/change-email/" + token);
     }
 
     @Override
