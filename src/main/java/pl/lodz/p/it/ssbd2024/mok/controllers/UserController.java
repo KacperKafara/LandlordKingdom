@@ -7,6 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -46,5 +49,19 @@ public class UserController {
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+    }
+
+    @PostMapping("/email-update-request")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<String> sendUpdateEmail(@RequestBody UUID id) throws NotFoundException {
+        userService.sendUpdateEmail(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PatchMapping("/update-email")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<String> updateUserEmail(@RequestBody UserEmailUpdateRequest request) throws VerificationTokenUsedException, NotFoundException, VerificationTokenExpiredException {
+        userService.changeUserEmail(request.token(), request.email());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

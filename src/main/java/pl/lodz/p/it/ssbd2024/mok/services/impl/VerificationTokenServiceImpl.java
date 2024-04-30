@@ -18,7 +18,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.MANDATORY)
 public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final AccountVerificationTokenRepository accountTokenRepository;
     private final EmailVerificationTokenRepository emailTokenRepository;
