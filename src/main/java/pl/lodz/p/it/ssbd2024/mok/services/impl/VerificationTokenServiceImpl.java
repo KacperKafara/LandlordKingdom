@@ -42,8 +42,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
     @Override
     public VerificationToken validateAccountVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
-        VerificationToken verificationToken = accountTokenRepository.findByToken(token).orElseThrow(()  ->  new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
-        if (verificationToken.getExpirationDate().isBefore(Instant.now())){
+        VerificationToken verificationToken = accountTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
+        if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
             throw new VerificationTokenExpiredException(VerificationTokenMessages.VERIFICATION_TOKEN_EXPIRED);
         }
         accountTokenRepository.deleteById(verificationToken.getId());
@@ -61,8 +61,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
     @Override
     public VerificationToken validateEmailVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
-        EmailVerificationToken verificationToken = emailTokenRepository.findByToken(token).orElseThrow(()  ->  new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
-        if (verificationToken.getExpirationDate().isBefore(Instant.now())){
+        EmailVerificationToken verificationToken = emailTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
+        if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
             throw new VerificationTokenExpiredException(VerificationTokenMessages.VERIFICATION_TOKEN_EXPIRED);
         }
         emailTokenRepository.deleteById(verificationToken.getId());
@@ -80,8 +80,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
     @Override
     public VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
-        PasswordVerificationToken verificationToken = passwordTokenRepository.findByToken(token).orElseThrow(()  ->  new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
-        if (verificationToken.getExpirationDate().isBefore(Instant.now())){
+        PasswordVerificationToken verificationToken = passwordTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
+        if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
             throw new VerificationTokenExpiredException(VerificationTokenMessages.VERIFICATION_TOKEN_EXPIRED);
         }
         passwordTokenRepository.deleteById(verificationToken.getId());
