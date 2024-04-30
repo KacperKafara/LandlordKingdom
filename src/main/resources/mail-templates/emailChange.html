@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html th:lang="#{lang}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1 th:text="#{hello}  + ' ' + ${name} + '.'"/>
+<p th:text="#{emailChange.information} + '.'"/>
+<a th:text="#{emailChange.link} + '.'" th:href="@{${url}}"/>
+</body>
+</html>

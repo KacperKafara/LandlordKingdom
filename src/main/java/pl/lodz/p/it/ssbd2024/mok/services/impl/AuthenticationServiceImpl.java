@@ -83,13 +83,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             return jwtService.generateToken(user.getId(), getUserRoles(user));
         } else {
-            if (user.getLoginAttempts() + 1 >= maxLoginAttempts) {
-                emailService.sendEmail(user.getEmail(), "Your account has been blocked", "You reached max login attempts so your account is blocked.");
-            }
             user.setLoginAttempts(user.getLoginAttempts() + 1);
             user.setLastFailedLogin(LocalDateTime.now());
             userRepository.saveAndFlush(user);
 
+            if (user.getLoginAttempts() >= maxLoginAttempts) {
+                LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
+                emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLanguage());
+            }
             throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA);
         }
     }

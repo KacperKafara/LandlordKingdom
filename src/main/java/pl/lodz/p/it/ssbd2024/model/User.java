@@ -54,7 +54,7 @@ public class User extends AbstractEntity {
 
     @Setter
     @Column(name = "language", nullable = false)
-    private String language = "en-US";
+    private String language = "en";
 
     public User(String firstName,
                 String lastName,
