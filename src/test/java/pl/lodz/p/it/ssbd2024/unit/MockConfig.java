@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
@@ -21,6 +23,16 @@ public class MockConfig {
     @Bean
     EmailService emailService() {
         return Mockito.mock(EmailService.class);
+    }
+
+    @Bean
+    SpringTemplateEngine templateEngine() {
+        return Mockito.mock(SpringTemplateEngine.class);
+    }
+
+    @Bean
+    ITemplateResolver templateResolver() {
+        return Mockito.mock(ITemplateResolver.class);
     }
 
     @Bean
@@ -57,6 +69,7 @@ public class MockConfig {
     EmailVerificationTokenRepository emailVerificationTokenRepository() {
         return Mockito.mock(EmailVerificationTokenRepository.class);
     }
+
     @Bean
     PasswordVerificationTokenRepository passwordVerificationTokenRepository() {
         return Mockito.mock(PasswordVerificationTokenRepository.class);

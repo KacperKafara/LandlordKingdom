@@ -11,10 +11,11 @@ public interface UserService {
 
     User getUserById(UUID id) throws NotFoundException;
 
-    void registerUser(User newUser, String password);
+    void createUser(User newUser, String password);
 
     void blockUser(UUID id) throws NotFoundException;
 
     User updateUserData(UUID id, User user) throws NotFoundException;
+
     void unblockUser(UUID id) throws NotFoundException;
 }
