@@ -12,7 +12,7 @@ public interface EmailService {
 
     void sendAccountActivationEmail(String to, String name, String uri, String lang);
 
-    void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String lang);
+    void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String ip, String lang);
 
     void sendAccountBlockEmail(String to, String name, String lang);
 
