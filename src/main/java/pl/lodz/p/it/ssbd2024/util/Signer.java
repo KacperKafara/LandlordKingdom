@@ -34,7 +34,7 @@ public class Signer {
             jwsObject.sign(signer);
             return jwsObject.serialize();
         } catch (JOSEException e) {
-            throw new RuntimeException("Error while generating signature");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, OptimisticLockExceptionMessages.PROBLEM_WITH_ETAG_HEADER);
         }
     }
 
@@ -51,7 +51,7 @@ public class Signer {
             Map<String, Object> claims = jwsObject.getPayload().toJSONObject();
             return id.equals(UUID.fromString((String) claims.get("id"))) && version.equals(claims.get("version"));
         } catch (ParseException | JOSEException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, OptimisticLockExceptionMessages.PROBLEM_WITH_ETAG_HEADER);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, OptimisticLockExceptionMessages.PROBLEM_WITH_IF_MATCH_HEADER);
         }
     }
 
