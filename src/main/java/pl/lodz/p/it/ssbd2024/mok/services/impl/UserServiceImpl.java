@@ -81,6 +81,7 @@ public class UserServiceImpl implements UserService {
         User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
+        userToUpdate.setLanguage(user.getLanguage());
         return repository.saveAndFlush(userToUpdate);
     }
 }
