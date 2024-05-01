@@ -60,6 +60,7 @@
         <testcontainers.version>1.19.7</testcontainers.version>
         <spring.data.jpa.version>3.2.4</spring.data.jpa.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
+        <nimbus-jose-jwt.version>9.37.3</nimbus-jose-jwt.version>
     </properties>
 
     <dependencies>
@@ -206,6 +207,12 @@
             <artifactId>jakarta.mail</artifactId>
             <version>${jakarta.mail.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${nimbus-jose-jwt.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
