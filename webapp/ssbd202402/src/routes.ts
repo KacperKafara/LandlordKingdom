@@ -9,6 +9,8 @@ import RegisterPage from "./pages/Register";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
 import UserListPage from "./pages/Admin/UserListPage";
+import MePage from "@/pages/Me";
+import UserDataPage from "@/pages/Me/UserData";
 import UserDetailsPage from "./pages/Admin/UserDetailsPage";
 import ResetPasswordPage from "./pages/User/ResetPasswordPage";
 
@@ -21,7 +23,10 @@ const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
 ];
-const AccountRoutes: RouteObject[] = [];
+const AccountRoutes: RouteObject[] = [
+    {path: "", Component: MePage},
+    {path: "info", Component: UserDataPage},
+];
 
 export const UnprotectedRoutes: RouteObject[] = [
   { path: "/login", Component: LoginPage },
