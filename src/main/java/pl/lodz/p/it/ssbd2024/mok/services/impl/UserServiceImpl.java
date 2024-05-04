@@ -30,7 +30,6 @@ import java.util.UUID;
 @Service
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -71,8 +70,7 @@ public class UserServiceImpl implements UserService {
         String token = verificationTokenService.generateAccountVerificationToken(newUser);
 
         URI uri = URI.create(appUrl + "/auth/verify/" + token);
-        Map<String, Object> templateModel = Map.of("name", newUser.getFirstName(), "url", uri);
-        emailService.sendHtmlEmail(newUser.getEmail(), "Rejestracja", "register", templateModel);
+        emailService.sendAccountActivationEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
     }
 
     @Override

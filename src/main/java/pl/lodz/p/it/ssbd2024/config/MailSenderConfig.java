@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -63,9 +64,10 @@ public class MailSenderConfig {
     }
 
     @Bean
-    public SpringTemplateEngine thymeLeafTemplateEngine(ITemplateResolver templateResolver) {
+    public SpringTemplateEngine thymeLeafTemplateEngine(ITemplateResolver templateResolver, ResourceBundleMessageSource mailMessageSource) {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
+        templateEngine.setTemplateEngineMessageSource(mailMessageSource);
         return templateEngine;
     }
 }

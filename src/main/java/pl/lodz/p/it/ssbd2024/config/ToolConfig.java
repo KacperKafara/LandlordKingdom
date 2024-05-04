@@ -1,7 +1,9 @@
 package pl.lodz.p.it.ssbd2024.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 @PropertySource("classpath:config.properties")
 @PropertySource("classpath:app.properties")
@@ -13,4 +15,10 @@ import org.springframework.context.annotation.PropertySource;
         "pl.lodz.p.it.ssbd2024.mok.repositories",
 })
 public class ToolConfig {
+    @Bean
+    public ResourceBundleMessageSource mailMessageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("i18n/mail/messages");
+        return messageSource;
+    }
 }
