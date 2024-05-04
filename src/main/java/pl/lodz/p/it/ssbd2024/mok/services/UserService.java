@@ -27,6 +27,10 @@ public interface UserService {
 
     void unblockUser(UUID id) throws NotFoundException;
 
+    public void sendUpdateEmail(UUID id) throws NotFoundException;
+    
+    public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException;
+
     void resetUserPassword(String login) throws NotFoundException;
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException;
