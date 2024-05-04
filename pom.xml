@@ -61,6 +61,7 @@
         <spring.data.jpa.version>3.2.4</spring.data.jpa.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
         <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
+        <nimbus-jose-jwt.version>9.37.3</nimbus-jose-jwt.version>
     </properties>
 
     <dependencies>
@@ -208,6 +209,11 @@
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
             <version>${jakarta.mail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${nimbus-jose-jwt.version}</version>
         </dependency>
         <dependency>
             <groupId>org.thymeleaf</groupId>
