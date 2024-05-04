@@ -1,14 +1,20 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.mok.dto.RequestChangePassword;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
@@ -40,5 +46,15 @@ public class MeController {
 
         User user = userService.updateUserData(id, request.toUser());
         return ResponseEntity.ok(UserMapper.toUserResponse(user));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity changePassword(@RequestBody RequestChangePassword request) {
+        try {
+            userService.changePasswordWithToken(request.password(), request.token());
+            return ResponseEntity.ok().build();
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

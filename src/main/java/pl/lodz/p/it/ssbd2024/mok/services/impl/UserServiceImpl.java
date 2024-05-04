@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UserServiceImpl implements UserService {
@@ -36,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final TenantRepository tenantRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
+    private final UserRepository userRepository;
 
 
     @Value("${app.url}")
@@ -53,6 +55,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByLogin(String login) throws NotFoundException {
+        return repository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+    }
+    
+    @Override
     public void createUser(User newUser, String password) {
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
@@ -69,6 +76,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public User updateUserData(UUID id, User user) throws NotFoundException {
+        User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        userToUpdate.setFirstName(user.getFirstName());
+        userToUpdate.setLastName(user.getLastName());
+        return repository.saveAndFlush(userToUpdate);
+    }
+
+    @Override
     public void blockUser(UUID id) throws NotFoundException {
         User user = getUserById(id);
 
@@ -82,6 +98,16 @@ public class UserServiceImpl implements UserService {
 
         user.setBlocked(false);
         repository.saveAndFlush(user);
+    }
+
+    @Override
+    @Transactional
+    public void resetUserPassword(String login) throws NotFoundException {
+        User user = getUserByLogin(login);
+        String token = verificationTokenService.generatePasswordVerificationToken(user);
+
+        String link = "http://localhost:3000/reset-password?token=" + token;
+        emailService.sendEmail(user.getEmail(), "Change password", link);
     }
 
     @Override
@@ -110,5 +136,14 @@ public class UserServiceImpl implements UserService {
         user.setEmail(email);
         repository.saveAndFlush(user);
 
+    }
+
+    @Override
+    @Transactional
+    public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+        VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
+        User user = verificationToken.getUser();
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.saveAndFlush(user);
     }
 }
