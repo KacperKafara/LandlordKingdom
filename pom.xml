@@ -60,11 +60,12 @@
         <testcontainers.version>1.19.7</testcontainers.version>
         <spring.data.jpa.version>3.2.4</spring.data.jpa.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
+        <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
         <nimbus-jose-jwt.version>9.37.3</nimbus-jose-jwt.version>
     </properties>
 
     <dependencies>
-        <!--        WEB-->
+        <!--WEB-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -75,6 +76,11 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <version>${jakarta.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
         <!--SECURITY-->
@@ -94,7 +100,7 @@
             <version>${spring.security.version}</version>
         </dependency>
 
-        <!--        JDBC, JPA, JTA-->
+        <!--JDBC, JPA, JTA-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -131,7 +137,8 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring.data.jpa.version}</version>
         </dependency>
-        <!--        TEST-->
+
+        <!--TEST-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -179,7 +186,8 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--        OTHER-->
+
+        <!--OTHER-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -198,11 +206,6 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
             <version>${jakarta.mail.version}</version>
@@ -212,7 +215,16 @@
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>${nimbus-jose-jwt.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${thymeleaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring6</artifactId>
+            <version>${thymeleaf.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -235,7 +247,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
