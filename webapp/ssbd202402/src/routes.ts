@@ -9,11 +9,13 @@ import RegisterPage from "./pages/Register";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
 import UserListPage from "./pages/Admin/UserListPage";
+import UserDetailsPage from "./pages/Admin/UserDetailsPage";
 import ResetPasswordPage from "./pages/User/ResetPasswordPage";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
+  { path: "users/user/:id", Component: UserDetailsPage }
 ];
 const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [

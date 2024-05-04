@@ -32,6 +32,7 @@ import { useQuery } from "react-query";
 import { resetOtherUserPassword } from "@/data/resetOtherUserPassword";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
+import { NavLink } from "react-router-dom";
 
 const UserListPage: FC = () => {
   const { toast } = useToast();
@@ -128,6 +129,11 @@ const UserListPage: FC = () => {
                             {t("userListPage.resetUserPasswordAction")}
                           </DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
+                            <DropdownMenuItem> 
+                              <NavLink to={`/admin/users/user/${user.id}`}>
+                                {t("userListPage.viewDetails")}
+                              </NavLink>
+                            </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>test</DropdownMenuItem>
                         </DropdownMenuContent>
