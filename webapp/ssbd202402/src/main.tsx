@@ -5,7 +5,7 @@ import "./index.css";
 import { ProtectedRoutes, UnprotectedRoutes } from "./routes";
 import AuthGuard from "./AuthGuard";
 import "@/i18n";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const router = createBrowserRouter([
   ...UnprotectedRoutes,
