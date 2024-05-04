@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByLogin(String login) throws NotFoundException {
         return repository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
     }
-    
+
     @Override
     public void createUser(User newUser, String password) {
         String encodedPassword = passwordEncoder.encode(password);
@@ -110,28 +110,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public User updateUserData(UUID id, User user) throws NotFoundException {
-        User userToUpdate = getUserById(id);
-        userToUpdate.setFirstName(user.getFirstName());
-        userToUpdate.setLastName(user.getLastName());
-        return repository.saveAndFlush(userToUpdate);
-    }
-
-    @Override
     public void sendUpdateEmail(UUID id) throws NotFoundException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        String token =  verificationTokenService.generateEmailVerificationToken(user);
+        String token = verificationTokenService.generateEmailVerificationToken(user);
         URI uri = URI.create(appUrl + "/account/change-email/" + token);
         Map<String, Object> templateModel = Map.of("name", user.getFirstName(), "url", uri);
-        emailService.sendHtmlEmail(user.getEmail(),"Email address change", "email", templateModel);
+        emailService.sendHtmlEmail(user.getEmail(), "Email address change", "email", templateModel, "en");
 //        emailService.sendEmail(user.getEmail(),"Email address update", "http://localhost:3000/account/change-email/" + token);
     }
 
     @Override
     public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
-        VerificationToken verificationToken =  verificationTokenService.validateEmailVerificationToken(token);
-        User user =  repository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
+        User user = repository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setEmail(email);
         repository.saveAndFlush(user);
 
