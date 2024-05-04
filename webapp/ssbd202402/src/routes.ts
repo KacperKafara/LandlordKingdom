@@ -10,6 +10,7 @@ import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
 import UserListPage from "./pages/Admin/UserListPage";
 import UserDetailsPage from "./pages/Admin/UserDetailsPage";
+import ResetPasswordPage from "./pages/User/ResetPasswordPage";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
@@ -25,6 +26,7 @@ const AccountRoutes: RouteObject[] = [];
 export const UnprotectedRoutes: RouteObject[] = [
   { path: "/login", Component: LoginPage },
   { path: "/register", Component: RegisterPage },
+  { path: "/reset-password", Component: ResetPasswordPage },
 ];
 
 export const ProtectedRoutes: RouteObject[] = [

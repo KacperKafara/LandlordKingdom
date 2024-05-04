@@ -53,4 +53,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+
+    @PostMapping("/reset-password")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity resetPassword(@RequestParam String login) {
+        try {
+            userService.resetUserPassword(login);
+        } catch (NotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.noContent().build();
+    }
 }

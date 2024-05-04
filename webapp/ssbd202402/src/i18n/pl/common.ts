@@ -48,9 +48,39 @@ const registerPage = {
   password: "Hasło*",
   confirmPassword: "Powtórz hasło*",
   registerButton: "Zarejestruj się",
-  registerSuccess: "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
+  registerSuccess:
+    "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
   registerError: "Wystąpił błąd podczas rejestracji.",
   tryAgain: "Spróbuj ponownie",
+};
+
+const resetPasswordPage = {
+  header: "Zresetuj hasło",
+  password: "Hasło*",
+  confirmPassword: "Powtórz hasło*",
+  confirmButton: "Zresetuj hasło",
+  homeButton: "Powrót",
+  changePasswordToastTitleSuccess: "Operacja powiodła się",
+  changePasswordToastDescriptionSuccess: "Twoje hasło zostało zmienione",
+  changePasswordToastTitleFail: "Operacja nie powiodła się",
+  changePasswordToastDescriptionFail: "Coś poszło nie tak...",
+};
+
+const userListPage = {
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  login: "Login",
+  email: "Email",
+  actions: "Akcje",
+  resetUserPasswordAction: "Zresetuj hasło",
+  resetUserPasswordTitle: "Zresetuj hasło użytkownika",
+  resetUserPasswordDescription:
+    "Czy na pewno chcesz zresetować hasło użytkownika ",
+  resetUserPasswordToastTitleSuccess: "Operacja powiodła się",
+  resetUserPasswordToastDescriptionSuccess:
+    "Do użytkownika została wysłana wiadomość email",
+  resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
+  resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
 };
 
 const common = {
@@ -66,9 +96,13 @@ export default {
   common,
   navLinks,
   loginPage,
+  registerPage,
+  resetPasswordPage,
   userListPage,
   userDetailsPage,
   registerPage,
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
+  confirm: "Potwierdź",
+  cancel: "Anuluj",
 };
