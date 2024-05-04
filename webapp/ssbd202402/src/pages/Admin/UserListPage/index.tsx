@@ -1,3 +1,13 @@
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -16,19 +26,76 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { fetchUsers } from "@/data/fetchUsers";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
+import { resetOtherUserPassword } from "@/data/resetOtherUserPassword";
+import { Toaster } from "@/components/ui/toaster";
+import { useToast } from "@/components/ui/use-toast";
+import { NavLink } from "react-router-dom";
 
 const UserListPage: FC = () => {
+  const { toast } = useToast();
   const { t } = useTranslation();
   const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
+  const { resetPassword } = resetOtherUserPassword();
+
+  const [openPaswordResetDialog, setOpenPasswordResetDialog] =
+    useState<boolean>(false);
+
+  const [userLogin, setUserLogin] = useState<string>();
+
+  const handlePasswordResetClick = (login: string) => {
+    setUserLogin(login);
+    setOpenPasswordResetDialog(true);
+  };
+
+  const handlePasswordReset = async () => {
+    const result = await resetPassword(userLogin!);
+
+    if (result === 204) {
+      toast({
+        title: t("userListPage.resetUserPasswordToastTitleSuccess"),
+        description: t("userListPage.resetUserPasswordToastDescriptionSuccess"),
+      });
+    } else {
+      toast({
+        title: t("userListPage.resetUserPasswordToastTitleFail"),
+        description: t("userListPage.resetUserPasswordToastDescriptionFail"),
+      });
+    }
+
+    setOpenPasswordResetDialog(false);
+  };
 
   return (
     <>
       <div className="text-center m-10">!!! THERE SHOULD BE FILTER !!!</div>
       <div className="flex justify-center">
         <div className="w-3/5">
+          <AlertDialog open={openPaswordResetDialog}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>
+                  {t("userListPage.resetUserPasswordTitle")}
+                </AlertDialogTitle>
+                <AlertDialogDescription>
+                  {t("userListPage.resetUserPasswordDescription")}
+                  <span className="font-bold">{userLogin}</span>?
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel
+                  onClick={() => setOpenPasswordResetDialog(false)}
+                >
+                  {t("cancel")}
+                </AlertDialogCancel>
+                <AlertDialogAction onClick={() => handlePasswordReset()}>
+                  {t("confirm")}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-white">
@@ -56,11 +123,18 @@ const UserListPage: FC = () => {
                           <DropdownMenuLabel>
                             {t("userListPage.actions")}
                           </DropdownMenuLabel>
+                          <DropdownMenuItem
+                            onClick={() => handlePasswordResetClick(user.login)}
+                          >
+                            {t("userListPage.resetUserPasswordAction")}
+                          </DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
-                          <DropdownMenuItem>test</DropdownMenuItem>
+                            <DropdownMenuItem> 
+                              <NavLink to={`/admin/users/user/${user.id}`}>
+                                {t("userListPage.viewDetails")}
+                              </NavLink>
+                            </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>test</DropdownMenuItem>
-                          <DropdownMenuItem>test</DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -71,6 +145,7 @@ const UserListPage: FC = () => {
           </Table>
         </div>
       </div>
+      <Toaster />
     </>
   );
 };

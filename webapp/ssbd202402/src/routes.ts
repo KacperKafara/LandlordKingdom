@@ -11,10 +11,13 @@ import TenantTestPage from "./pages/Tenant/Test";
 import UserListPage from "./pages/Admin/UserListPage";
 import MePage from "@/pages/Me";
 import UserDataPage from "@/pages/Me/UserData";
+import UserDetailsPage from "./pages/Admin/UserDetailsPage";
+import ResetPasswordPage from "./pages/User/ResetPasswordPage";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
+  { path: "users/user/:id", Component: UserDetailsPage }
 ];
 const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [
@@ -28,6 +31,7 @@ const AccountRoutes: RouteObject[] = [
 export const UnprotectedRoutes: RouteObject[] = [
   { path: "/login", Component: LoginPage },
   { path: "/register", Component: RegisterPage },
+  { path: "/reset-password", Component: ResetPasswordPage },
 ];
 
 export const ProtectedRoutes: RouteObject[] = [
