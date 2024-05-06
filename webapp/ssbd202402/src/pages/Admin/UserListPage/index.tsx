@@ -29,7 +29,7 @@ import { fetchUsers } from "@/data/fetchUsers";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { resetOtherUserPassword } from "@/data/resetOtherUserPassword";
+import { useResetOtherUserPassword } from "@/data/useResetOtherUserPassword";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { NavLink } from "react-router-dom";
@@ -38,7 +38,7 @@ const UserListPage: FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
-  const { resetPassword } = resetOtherUserPassword();
+  const { resetPassword } = useResetOtherUserPassword();
 
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
@@ -129,11 +129,11 @@ const UserListPage: FC = () => {
                             {t("userListPage.resetUserPasswordAction")}
                           </DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
-                            <DropdownMenuItem> 
-                              <NavLink to={`/admin/users/user/${user.id}`}>
-                                {t("userListPage.viewDetails")}
-                              </NavLink>
-                            </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <NavLink to={`/admin/users/user/${user.id}`}>
+                              {t("userListPage.viewDetails")}
+                            </NavLink>
+                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
                           <DropdownMenuItem>test</DropdownMenuItem>
                         </DropdownMenuContent>

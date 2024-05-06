@@ -17,8 +17,7 @@ import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { Toaster } from "@/components/ui/toaster";
-import { ToastAction } from "@radix-ui/react-toast";
-import { changeUserPassword } from "@/data/changeUserPassword";
+import { useChangeUserPassword } from "@/data/useChangeUserPassword";
 
 const getPasswordResetSchema = (t: TFunction) =>
   z
@@ -37,7 +36,7 @@ const ResetPasswordPage: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { changePassword } = changeUserPassword();
+  const { changePassword } = useChangeUserPassword();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
@@ -45,7 +44,7 @@ const ResetPasswordPage: FC = () => {
     if (token === null || token === undefined || token === "") {
       navigate("/");
     }
-  }, []);
+  }, [navigate, token]);
 
   const form = useForm<PasswordResetSchema>({
     resolver: zodResolver(getPasswordResetSchema(t)),
@@ -58,7 +57,7 @@ const ResetPasswordPage: FC = () => {
   const onSubmit = form.handleSubmit(async (values) => {
     const result = await changePassword({
       password: values.password,
-      token: token,
+      token: token || "",
     });
 
     if (result === 200) {

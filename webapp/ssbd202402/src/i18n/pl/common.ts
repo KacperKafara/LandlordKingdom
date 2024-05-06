@@ -9,15 +9,6 @@ const loginPage = {
   passwordRequired: "Hasło jest wymagane",
 };
 
-const userListPage = {
-  firstName: "Imię",
-  lastName: "Nazwisko",
-  login: "Login",
-  email: "Email",
-  actions: "Akcje",
-  viewDetails: "Szczegóły",
-};
-
 const userDetailsPage = {
   goBack: "<-- Wróć placeholder",
   firstName: "Imię",
@@ -31,7 +22,6 @@ const userDetailsPage = {
   verified: "Zweryfikowany",
   actions: "Akcje",
 };
-
 
 const registerPage = {
   firstNameRequired: "Imię jest wymagane",
@@ -72,6 +62,7 @@ const userListPage = {
   login: "Login",
   email: "Email",
   actions: "Akcje",
+  viewDetails: "Szczegóły",
   resetUserPasswordAction: "Zresetuj hasło",
   resetUserPasswordTitle: "Zresetuj hasło użytkownika",
   resetUserPasswordDescription:
@@ -86,7 +77,7 @@ const userListPage = {
 const common = {
   yes: "tak",
   no: "nie",
-}
+};
 
 const navLinks = {
   account: "Moje konto",
@@ -100,12 +91,11 @@ const userDataPage = {
   language: "Język*",
   error: "Błąd",
   success: "Dane zaktualizowane",
-
-}
+};
 
 const mePage = {
   accountInfo: "Dane użytkownika",
-}
+};
 
 export default {
   common,
@@ -115,7 +105,6 @@ export default {
   resetPasswordPage,
   userListPage,
   userDetailsPage,
-  registerPage,
   mePage,
   userDataPage,
   footer: "Landlord Kingdom - SSBD202402",
@@ -123,5 +112,3 @@ export default {
   confirm: "Potwierdź",
   cancel: "Anuluj",
 };
-
-
