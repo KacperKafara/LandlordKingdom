@@ -10,6 +10,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
+import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -52,6 +54,18 @@ public class UserController {
         try {
             userService.unblockUser(id);
             return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
+
+    @PutMapping("/{id}/update-data")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<UserResponse> updateUserData(@PathVariable UUID id,
+                                                       @RequestBody UpdateUserDataRequest request) {
+        try {
+            User user = userService.updateUserData(id, UserMapper.toUser(request));
+            return ResponseEntity.ok(UserMapper.toUserResponse(user));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
