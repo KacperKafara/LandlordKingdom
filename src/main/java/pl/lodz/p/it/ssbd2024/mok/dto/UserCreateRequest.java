@@ -1,3 +1,11 @@
 package pl.lodz.p.it.ssbd2024.mok.dto;
 
-public record UserCreateRequest (String login, String email, String firstName, String lastName, String password) {}
+import jakarta.validation.constraints.*;
+
+public record UserCreateRequest(
+        @NotBlank String login,
+        @Email String email,
+        @NotNull @Size(min = 1) String firstName,
+        @NotNull @Size(min = 1) String lastName,
+        @NotBlank @Size(min = 8) String password) {
+}

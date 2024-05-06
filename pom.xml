@@ -46,7 +46,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring.version>6.1.6</spring.version>
-        <spring.security.version>6.2.3</spring.security.version>
+        <spring.security.version>6.2.4</spring.security.version>
         <jackson.version>2.17.0</jackson.version>
         <jakarta.version>6.0.0</jakarta.version>
         <postgresql.version>42.7.3</postgresql.version>
@@ -60,10 +60,16 @@
         <testcontainers.version>1.19.7</testcontainers.version>
         <spring.data.jpa.version>3.2.4</spring.data.jpa.version>
         <jakarta.mail.version>2.0.1</jakarta.mail.version>
+        <thymeleaf.version>3.1.2.RELEASE</thymeleaf.version>
+        <nimbus-jose-jwt.version>9.37.3</nimbus-jose-jwt.version>
+        <dbunit.version>2.7.3</dbunit.version>
+        <aspectj.version>1.9.22</aspectj.version>
+        <logback.version>1.5.4</logback.version>
+        <slf4j.version>2.0.12</slf4j.version>
     </properties>
 
     <dependencies>
-        <!--        WEB-->
+        <!--WEB-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -74,6 +80,11 @@
             <artifactId>jakarta.servlet-api</artifactId>
             <version>${jakarta.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
         </dependency>
 
         <!--SECURITY-->
@@ -93,7 +104,7 @@
             <version>${spring.security.version}</version>
         </dependency>
 
-        <!--        JDBC, JPA, JTA-->
+        <!--JDBC, JPA, JTA-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -130,7 +141,8 @@
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring.data.jpa.version}</version>
         </dependency>
-        <!--        TEST-->
+
+        <!--TEST-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
@@ -178,7 +190,14 @@
             <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
-        <!--        OTHER-->
+        <dependency>
+            <groupId>org.dbunit</groupId>
+            <artifactId>dbunit</artifactId>
+            <version>${dbunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--OTHER-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -188,23 +207,38 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>2.0.12</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.5.4</version>
+            <version>${logback.version}</version>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
             <version>${jakarta.mail.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>${nimbus-jose-jwt.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${thymeleaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf-spring6</artifactId>
+            <version>${thymeleaf.version}</version>
         </dependency>
     </dependencies>
 
@@ -228,7 +262,6 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

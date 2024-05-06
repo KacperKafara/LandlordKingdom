@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html th:lang="#{lang}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<body>
+<h1 th:text="#{loginBlock.blockInfo} + '.'"/>
+<p th:text="#{loginBlock.attemptsReach} + ' - ' + ${loginNumber} + '.'"/>
+<p th:text="#{loginBlock.lastFailed} + ' - ' + ${failedLoginTime} + '.'"/>
+<p th:text="#{loginBlock.unblockTime} + ' - ' + ${unblockTime} + '.'"/>
+<p th:text="#{loginBlock.ip} + ' - ' + ${ip} + '.'"/>
+</body>
+</html>

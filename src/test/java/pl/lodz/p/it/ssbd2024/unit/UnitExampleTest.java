@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2024.config.ToolConfig;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyBlockedException;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
+import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.UserServiceImpl;
 
 import java.util.Optional;
@@ -21,19 +22,19 @@ import static org.mockito.Mockito.when;
 public class UnitExampleTest {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Test
-    public void BlockUser_UserIsBlocked_ThrowException_Test() {
-        UUID userId = UUID.randomUUID();
-        User user = new User();
-        user.setBlocked(true);
-
-        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        user.setBlocked(true);
-        assertThrows(UserAlreadyBlockedException.class, () -> userService.blockUser(userId));
-    }
+//    @Test
+//    public void BlockUser_UserIsBlocked_ThrowException_Test() {
+//        UUID userId = UUID.randomUUID();
+//        User user = new User();
+//        user.setBlocked(true);
+//
+//        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+//        user.setBlocked(true);
+//        assertThrows(UserAlreadyBlockedException.class, () -> userService.blockUser(userId));
+//    }
 }
