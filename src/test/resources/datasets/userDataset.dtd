@@ -1,0 +1,41 @@
+<!ELEMENT dataset (users*, personal_data*, access_levels*, administrators*, owners*, tenants*)>
+        <!ELEMENT users EMPTY>
+        <!ATTLIST users
+                id CDATA #REQUIRED
+                login CDATA #REQUIRED
+                password CDATA #REQUIRED
+                login_attempts CDATA #REQUIRED
+                last_successful_login CDATA #IMPLIED
+                last_failed_login CDATA #IMPLIED
+                blocked (true|false) #REQUIRED
+                verified (true|false) #REQUIRED
+                language CDATA #REQUIRED
+                version CDATA #REQUIRED
+                >
+        <!ELEMENT personal_data EMPTY>
+        <!ATTLIST personal_data
+                user_id CDATA #REQUIRED
+                email CDATA #REQUIRED
+                first_name CDATA #REQUIRED
+                last_name CDATA #REQUIRED
+                >
+        <!ELEMENT access_levels EMPTY>
+        <!ATTLIST access_levels
+                id CDATA #REQUIRED
+                user_id CDATA #REQUIRED
+                level CDATA #REQUIRED
+                active (true|false) #REQUIRED
+                version CDATA #REQUIRED
+                >
+        <!ELEMENT administrators EMPTY>
+        <!ATTLIST administrators
+                id CDATA #REQUIRED
+                >
+        <!ELEMENT owners EMPTY>
+        <!ATTLIST owners
+                id CDATA #REQUIRED
+                >
+        <!ELEMENT tenants EMPTY>
+        <!ATTLIST tenants
+                id CDATA #REQUIRED
+                >

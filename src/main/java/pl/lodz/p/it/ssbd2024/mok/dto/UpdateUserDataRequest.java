@@ -4,7 +4,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import pl.lodz.p.it.ssbd2024.model.User;
 
 public record UpdateUserDataRequest(
         @NotNull(message = "First name cannot be null.")
@@ -20,11 +19,4 @@ public record UpdateUserDataRequest(
         @Pattern(regexp = "^(en-US|pl)$", message = "Language name must be 'en-US' or 'pl'.")
         String language
 ) {
-    public User toUser() {
-        User user = new User();
-        user.setFirstName(firstName);
-        user.setLastName(lastName);
-        user.setLanguage(language);
-        return user;
-    }
 }
