@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { api } from "./api";
 
 type ChangePasswordType = {
@@ -6,7 +6,7 @@ type ChangePasswordType = {
   token: string;
 };
 
-export const changeUserPassword = () => {
+export const useChangeUserPassword = () => {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: ChangePasswordType) => {
       const response = await api.post("/me/change-password", data);
