@@ -1,6 +1,15 @@
 package pl.lodz.p.it.ssbd2024.integration;
 
+import org.dbunit.database.DatabaseConfig;
+import org.dbunit.database.DatabaseConnection;
+import org.dbunit.database.IDatabaseConnection;
+import org.dbunit.dataset.IDataSet;
+import org.dbunit.dataset.ReplacementDataSet;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.dbunit.ext.postgresql.PostgresqlDataTypeFactory;
+import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.PostgreSQLContainer;
@@ -9,7 +18,9 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.MountableFile;
 
+import java.io.FileInputStream;
 import java.nio.file.Paths;
+import java.sql.*;
 
 @Testcontainers
 public class BaseConfig {
@@ -25,6 +36,8 @@ public class BaseConfig {
 
     @Container
     static final GenericContainer<?> tomcat;
+
+    public static IDatabaseConnection connection;
 
     static {
         postgres = new PostgreSQLContainer<>("postgres:16.2")
@@ -52,9 +65,49 @@ public class BaseConfig {
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
     }
 
+    @BeforeEach
+    public void setup() throws Exception {
+        int postgresPort = postgres.getMappedPort(5432);
+
+        String jdbcUrl = String.format("jdbc:postgresql://localhost:%d/ssbd02?loggerLevel=OFF", postgresPort);
+        Connection jdbcConnection = DriverManager.getConnection(jdbcUrl, postgres.getUsername(), postgres.getPassword());
+
+        connection = new DatabaseConnection(jdbcConnection);
+
+        DatabaseConfig dbConfig = connection.getConfig();
+        dbConfig.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
+        dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new PostgresqlDataTypeFactory());
+    }
+
     @AfterAll
-    public static void teardown() {
+    public static void teardown() throws Exception {
         tomcat.stop();
         postgres.stop();
+
+        if (connection != null) {
+            connection.close();
+        }
+    }
+
+    protected void loadDataSet(String filePath) {
+        try {
+            IDataSet dataSet = new FlatXmlDataSetBuilder().build(new FileInputStream(filePath));
+
+            ReplacementDataSet replacementDataSet = new ReplacementDataSet(dataSet);
+            replacementDataSet.addReplacementObject("[NULL]", null);
+
+            DatabaseOperation.REFRESH.execute(connection, replacementDataSet);
+        } catch (Exception e) {
+            System.err.println("Error executing DBUnit operation: " + e.getMessage());
+        }
+    }
+
+    protected ReplacementDataSet createDataSetFromDb() throws Exception {
+        IDataSet actualDataSet = connection.createDataSet();
+
+        ReplacementDataSet replacementDataSet = new ReplacementDataSet(actualDataSet);
+        replacementDataSet.addReplacementObject(null, "[NULL]");
+
+        return replacementDataSet;
     }
 }
