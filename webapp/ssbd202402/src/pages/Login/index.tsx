@@ -18,6 +18,7 @@ import { useUserStore } from "@/store/userStore";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { isTokenValid } from "@/utils/jwt";
 import { TFunction } from "i18next";
+import { Toaster } from "@/components/ui/toaster";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -51,11 +52,11 @@ const LoginPage: FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-2 rounded-md border-black p-7 w-[450px] flex flex-col"
+          className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl"
         >
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
@@ -80,7 +81,7 @@ const LoginPage: FC = () => {
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="mb-2">
                 <FormLabel>{t("loginPage.password")}</FormLabel>
                 <FormControl>
                   <Input
@@ -105,6 +106,7 @@ const LoginPage: FC = () => {
           </Button>
         </form>
       </Form>
+      <Toaster />
     </div>
   );
 };

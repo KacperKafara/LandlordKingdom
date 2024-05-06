@@ -1,8 +1,9 @@
 package pl.lodz.p.it.ssbd2024.config;
 
-import org.springframework.beans.factory.config.CustomScopeConfigurer;
-import org.springframework.context.annotation.*;
-import org.springframework.transaction.support.SimpleTransactionScope;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 import java.util.Map;
 
@@ -20,10 +21,9 @@ import java.util.Map;
 @EnableAspectJAutoProxy
 public class ToolConfig {
     @Bean
-    public CustomScopeConfigurer customScope() {
-        CustomScopeConfigurer customScopeConfigurer = new CustomScopeConfigurer();
-        Map<String, Object> scopes = Map.of("transaction", new SimpleTransactionScope());
-        customScopeConfigurer.setScopes(scopes);
-        return customScopeConfigurer;
+    public ResourceBundleMessageSource mailMessageSource() {
+        ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+        messageSource.setBasename("i18n/mail/messages");
+        return messageSource;
     }
 }

@@ -1,4 +1,4 @@
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { api } from "./api";
 
 type AuthenticateRequest = {
@@ -14,7 +14,7 @@ export const useAuthenticate = () => {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: AuthenticateRequest) => {
       const response = await api.post<AuthenticateResponse>(
-        "/auth/authenticate",
+        "/auth/signin",
         data
       );
       return response.data;

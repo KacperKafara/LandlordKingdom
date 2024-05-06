@@ -18,7 +18,7 @@ type BaseLayoutProps = {
 
 const config = {
   admin: {
-    color: "bg-orange-500",
+    color: "border-b-4 border-orange-500",
     hover: "hover:bg-orange-300",
   },
   tenant: {

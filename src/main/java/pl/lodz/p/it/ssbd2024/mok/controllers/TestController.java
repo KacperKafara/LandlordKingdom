@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
+import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 
 import java.util.List;
@@ -22,6 +23,8 @@ public class TestController {
     private final UserService userService;
 
     private final JwtService jwtService;
+
+    private final VerificationTokenService tokenService;
 
     @PreAuthorize("permitAll()")
     @GetMapping
@@ -36,6 +39,33 @@ public class TestController {
 
 
         return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("ADMINISTRATOR", "USER")));
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping(value = "/verification-token",consumes = {"application/json"},  produces = {"text/plain"})
+    public ResponseEntity<String > verificationToken(@RequestBody UUID id) throws Exception {
+//        User user = userService.getUserById(id);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(tokenService.generateAccountVerificationToken(userService.getUserById(id)));
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping(value = "/verification-token2",consumes = {"application/json"},  produces = {"text/plain"})
+    public ResponseEntity<String > verificationToken2(@RequestBody UUID id) throws Exception {
+//        User user = userService.getUserById(id);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(tokenService.generateEmailVerificationToken(userService.getUserById(id)));
+    }
+
+    @PreAuthorize("permitAll()")
+    @PostMapping(value = "/verify-token/{token}",  produces = {"text/plain"})
+    public ResponseEntity<String > verifyToken(@PathVariable String token) throws Exception {
+//        User user = userService.getUserById(id);
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(tokenService.validateAccountVerificationToken(token).getUser().getLogin());
     }
 
     @PreAuthorize("hasRole('USER')")
