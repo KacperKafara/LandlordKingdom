@@ -18,7 +18,6 @@ import { useUserStore } from "@/store/userStore";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { isTokenValid } from "@/utils/jwt";
 import { TFunction } from "i18next";
-import { Toaster } from "@/components/ui/toaster";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -106,7 +105,6 @@ const LoginPage: FC = () => {
           </Button>
         </form>
       </Form>
-      <Toaster />
     </div>
   );
 };

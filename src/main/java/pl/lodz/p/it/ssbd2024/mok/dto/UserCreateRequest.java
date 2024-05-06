@@ -7,5 +7,5 @@ public record UserCreateRequest(
         @Email String email,
         @NotNull @Size(min = 1) String firstName,
         @NotNull @Size(min = 1) String lastName,
-        @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$") String password) {
+        @NotBlank @Size(min = 8) String password) {
 }
