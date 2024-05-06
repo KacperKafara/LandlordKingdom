@@ -1,28 +1,32 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.model.VerificationToken;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
+import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
@@ -35,23 +39,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
+    private final VerificationTokenService verificationTokenService;
+
     @Value("${login_max_attempts:3}")
     private int maxLoginAttempts;
 
     @Value("${login_time_out:86400}")
     private int loginTimeOut;
-
-    @Autowired
-    public AuthenticationServiceImpl(JwtService jwtService, OwnerRepository ownerRepository, TenantRepository tenantRepository, AdministratorRepository administratorRepository, PasswordEncoder passwordEncoder, UserRepository userRepository, EmailService emailService) {
-        this.jwtService = jwtService;
-        this.ownerRepository = ownerRepository;
-        this.tenantRepository = tenantRepository;
-        this.administratorRepository = administratorRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-        this.emailService = emailService;
-    }
-
 
     @Override
     public List<String> getUserRoles(User user) {
@@ -65,7 +59,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    @Transactional
     public String authenticate(String login, String password) throws NotFoundException, UserNotVerifiedException, UserBlockedException, InvalidLoginDataException, SignInBlockedException {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
@@ -88,17 +81,25 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setLoginAttempts(0);
             userRepository.saveAndFlush(user);
 
-            String jwtToken = jwtService.generateToken(user.getId(), getUserRoles(user));
-            return jwtToken;
+            return jwtService.generateToken(user.getId(), getUserRoles(user));
         } else {
-            if (user.getLoginAttempts() + 1 >= maxLoginAttempts) {
-                emailService.sendEmail(user.getEmail(), "Your account has been blocked", "You reached max login attempts so your account is blocked.");
-            }
             user.setLoginAttempts(user.getLoginAttempts() + 1);
             user.setLastFailedLogin(LocalDateTime.now());
             userRepository.saveAndFlush(user);
 
+            if (user.getLoginAttempts() >= maxLoginAttempts) {
+                LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
+                emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLanguage());
+            }
             throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA);
         }
+    }
+
+    @Override
+    public void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException {
+        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
+        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setVerified(true);
+        userRepository.saveAndFlush(user);
     }
 }

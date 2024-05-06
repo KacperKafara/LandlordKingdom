@@ -41,12 +41,14 @@ public class DataSourceMok {
 
     private AtomikosNonXADataSourceBean dataSource() {
         AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
+        dataSource.setPoolSize(10);
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUniqueResourceName("mok");
         dataSource.setUrl(url);
         dataSource.setUser(username);
         dataSource.setPassword(password);
         dataSource.setDefaultIsolationLevel(transactionIsolation);
+        dataSource.setPoolSize(10);
         return dataSource;
     }
 
