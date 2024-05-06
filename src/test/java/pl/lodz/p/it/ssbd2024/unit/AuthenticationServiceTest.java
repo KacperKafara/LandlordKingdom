@@ -15,6 +15,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
+import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.AuthenticationServiceImpl;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
@@ -29,7 +30,7 @@ import static org.mockito.Mockito.when;
 @SpringJUnitConfig({ToolConfig.class, MockConfig.class})
 public class AuthenticationServiceTest {
     @Autowired
-    private AuthenticationServiceImpl authenticationService;
+    private AuthenticationService authenticationService;
 
     @Autowired
     private JwtService jwtService;
