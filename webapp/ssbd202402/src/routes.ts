@@ -13,25 +13,29 @@ import MePage from "@/pages/Me";
 import UserDataPage from "@/pages/Me/UserData";
 import UserDetailsPage from "./pages/Admin/UserDetailsPage";
 import ResetPasswordPage from "./pages/User/ResetPasswordPage";
+import VerifyAccountPage from "./pages/VerifyAccount";
+import RegistrationSuccessPage from "./pages/RegistrationSuccess";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
-  { path: "users/user/:id", Component: UserDetailsPage }
+  { path: "users/user/:id", Component: UserDetailsPage },
 ];
 const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
 ];
 const AccountRoutes: RouteObject[] = [
-    {path: "", Component: MePage},
-    {path: "info", Component: UserDataPage},
+  { path: "", Component: MePage },
+  { path: "info", Component: UserDataPage },
 ];
 
 export const UnprotectedRoutes: RouteObject[] = [
   { path: "/login", Component: LoginPage },
   { path: "/register", Component: RegisterPage },
+  { path: "/register-success", Component: RegistrationSuccessPage },
   { path: "/reset-password", Component: ResetPasswordPage },
+  { path: "/verify/:token", Component: VerifyAccountPage },
 ];
 
 export const ProtectedRoutes: RouteObject[] = [
