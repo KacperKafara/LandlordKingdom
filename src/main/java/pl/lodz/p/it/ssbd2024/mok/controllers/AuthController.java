@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,7 @@ import java.net.URI;
 public class AuthController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
+    private final HttpServletRequest servletRequest;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> registerUser(@RequestBody @Valid UserCreateRequest newUserData) {
@@ -52,7 +54,7 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
-            String token = authenticationService.authenticate(request.getLogin(), request.getPassword());
+            String token = authenticationService.authenticate(request.getLogin(), request.getPassword(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

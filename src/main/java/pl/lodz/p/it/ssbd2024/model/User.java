@@ -45,6 +45,14 @@ public class User extends AbstractEntity {
     private LocalDateTime lastFailedLogin;
 
     @Setter
+    @Column(name = "last_successful_login_ip")
+    private String lastSuccessfulLoginIp;
+
+    @Setter
+    @Column(name = "last_failed_login_ip")
+    private String lastFailedLoginIp;
+
+    @Setter
     @Column(name = "blocked", nullable = false)
     private boolean blocked = false;
 

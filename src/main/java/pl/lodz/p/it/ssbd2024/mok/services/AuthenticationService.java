@@ -9,7 +9,7 @@ import java.util.List;
 public interface AuthenticationService {
     List<String> getUserRoles(User user);
 
-    String authenticate(String login, String password) throws NotFoundException, UserNotVerifiedException, UserBlockedException, InvalidLoginDataException, SignInBlockedException;
+    String authenticate(String login, String password, String ip) throws NotFoundException, UserNotVerifiedException, UserBlockedException, InvalidLoginDataException, SignInBlockedException;
 
     void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException;
 }

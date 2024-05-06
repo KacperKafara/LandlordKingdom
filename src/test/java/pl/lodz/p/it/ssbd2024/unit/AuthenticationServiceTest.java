@@ -63,6 +63,7 @@ public class AuthenticationServiceTest {
     String lastName;
     String email;
     User user;
+    String ip;
 
     @BeforeEach
     public void initData() {
@@ -79,12 +80,13 @@ public class AuthenticationServiceTest {
         user.setLoginAttempts(0);
         user.setLastFailedLogin(LocalDateTime.now().minusMonths(5));
         user.setLastSuccessfulLogin(LocalDateTime.now().minusDays(3));
+        ip = "1.1.1.1";
     }
 
     @Test
     public void Authenticate_CredentialsCorrect_ReturnToken_Test() {
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertDoesNotThrow(() -> authenticationService.authenticate(login, password));
+        assertDoesNotThrow(() -> authenticationService.authenticate(login, password, ip));
     }
 
     @Test
@@ -92,7 +94,7 @@ public class AuthenticationServiceTest {
         user.setVerified(false);
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertThrows(UserNotVerifiedException.class, () -> authenticationService.authenticate(login, password));
+        assertThrows(UserNotVerifiedException.class, () -> authenticationService.authenticate(login, password, ip));
     }
 
     @Test
@@ -100,7 +102,7 @@ public class AuthenticationServiceTest {
         user.setBlocked(true);
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertThrows(UserBlockedException.class, () -> authenticationService.authenticate(login, password));
+        assertThrows(UserBlockedException.class, () -> authenticationService.authenticate(login, password, ip));
     }
 
     @Test
@@ -109,7 +111,7 @@ public class AuthenticationServiceTest {
         user.setLastFailedLogin(LocalDateTime.now().minusSeconds(loginTimeOut / 3));
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertThrows(SignInBlockedException.class, () -> authenticationService.authenticate(login, password));
+        assertThrows(SignInBlockedException.class, () -> authenticationService.authenticate(login, password, ip));
     }
 
     @Test
@@ -118,6 +120,6 @@ public class AuthenticationServiceTest {
         user.setLastFailedLogin(LocalDateTime.now().minusSeconds(loginTimeOut * 10L));
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertDoesNotThrow(() -> authenticationService.authenticate(login, password));
+        assertDoesNotThrow(() -> authenticationService.authenticate(login, password, ip));
     }
 }

@@ -61,8 +61,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String authenticate(String login, String password) throws NotFoundException, UserNotVerifiedException, UserBlockedException, InvalidLoginDataException, SignInBlockedException {
-        log.info("test");
+    public String authenticate(String login, String password, String ip) throws NotFoundException, UserNotVerifiedException, UserBlockedException, InvalidLoginDataException, SignInBlockedException {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
         if (!user.isVerified()) {
@@ -82,17 +81,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (passwordEncoder.matches(password, user.getPassword())) {
             user.setLastSuccessfulLogin(LocalDateTime.now());
             user.setLoginAttempts(0);
+            user.setLastSuccessfulLoginIp(ip);
             userRepository.saveAndFlush(user);
 
             return jwtService.generateToken(user.getId(), getUserRoles(user));
         } else {
             user.setLoginAttempts(user.getLoginAttempts() + 1);
             user.setLastFailedLogin(LocalDateTime.now());
+            user.setLastFailedLoginIp(ip);
             userRepository.saveAndFlush(user);
 
             if (user.getLoginAttempts() >= maxLoginAttempts) {
                 LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
-                emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLanguage());
+                emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
             }
             throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA);
         }

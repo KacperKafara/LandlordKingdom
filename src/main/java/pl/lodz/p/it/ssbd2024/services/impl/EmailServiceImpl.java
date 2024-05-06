@@ -72,11 +72,12 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String lang) {
+    public void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String ip, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "loginNumber", loginNumber,
                 "failedLoginTime", failedLoginTime,
-                "unblockTime", unblockTime);
+                "unblockTime", unblockTime,
+                "ip", ip);
         String subject = mailMessageSource.getMessage("loginBlock.subject", null, Locale.of(lang));
 
         sendHtmlEmail(to, subject, "loginBlock", templateModel, lang);
