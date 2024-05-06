@@ -1,11 +1,7 @@
 package pl.lodz.p.it.ssbd2024.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.ResourceBundleMessageSource;
-
-import java.util.Map;
 
 @Configuration
 @PropertySource("classpath:config.properties")
