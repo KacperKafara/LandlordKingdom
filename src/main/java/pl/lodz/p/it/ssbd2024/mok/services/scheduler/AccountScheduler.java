@@ -8,15 +8,16 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
 @Log
+@Transactional
 public class AccountScheduler {
     private final UserRepository userRepository;
 
-    @Scheduled(fixedRate = 60000)
-    @Transactional
+    @Scheduled(fixedRate = 1, timeUnit = TimeUnit.MINUTES)
     public void removeExpiredAccounts() {
         log.info("Removing expired accounts");
         LocalDateTime time = LocalDateTime.now().minusHours(24);
