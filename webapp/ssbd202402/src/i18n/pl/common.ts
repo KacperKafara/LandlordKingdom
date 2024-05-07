@@ -44,8 +44,15 @@ const registerPage = {
   tryAgain: "Spróbuj ponownie",
 };
 
+const resetPasswordForm = {
+  email: "Podaj email, na który zostanie wysłany link do zresetowania hasła",
+  emailRequired: "Email jest wymagany",
+  resetPasswordHeader: "Zresetuj hasło",
+};
+
 const resetPasswordPage = {
   header: "Zresetuj hasło",
+  email: "Podaj email, na który zostanie wysłany link do zresetowania hasła",
   password: "Hasło*",
   confirmPassword: "Powtórz hasło*",
   confirmButton: "Zresetuj hasło",
@@ -102,6 +109,7 @@ export default {
   navLinks,
   loginPage,
   registerPage,
+  resetPasswordForm,
   resetPasswordPage,
   userListPage,
   userDetailsPage,
