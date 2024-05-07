@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
@@ -13,9 +14,10 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.UUID;
 
 @Service
 @Transactional(propagation = Propagation.MANDATORY)
@@ -32,8 +34,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public String generateAccountVerificationToken(User user) {
-        String tokenVal = UUID.randomUUID().toString();
+    public String generateAccountVerificationToken(User user) throws TokenGenerationException {
+        String tokenVal = generateSafeToken();
         accountTokenRepository.deleteByUserId(user.getId());
         accountTokenRepository.flush();
         AccountVerificationToken token = new AccountVerificationToken(tokenVal, Instant.now().plus(AccountVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
@@ -51,8 +53,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public String generateEmailVerificationToken(User user) {
-        String tokenVal = UUID.randomUUID().toString();
+    public String generateEmailVerificationToken(User user) throws TokenGenerationException {
+        String tokenVal = generateSafeToken();
         emailTokenRepository.deleteEmailVerificationTokenByUserId(user.getId());
         accountTokenRepository.flush();
         EmailVerificationToken token = new EmailVerificationToken(tokenVal, Instant.now().plus(EmailVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
@@ -70,8 +72,8 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    public String generatePasswordVerificationToken(User user) {
-        String tokenVal = UUID.randomUUID().toString();
+    public String generatePasswordVerificationToken(User user) throws TokenGenerationException {
+        String tokenVal = generateSafeToken();
         passwordTokenRepository.deleteByUserId(user.getId());
         accountTokenRepository.flush();
         PasswordVerificationToken token = new PasswordVerificationToken(tokenVal, Instant.now().plus(PasswordVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
@@ -88,5 +90,17 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         return verificationToken;
     }
 
+    private String generateSafeToken() throws TokenGenerationException {
+        String chars = "0123456789abcdefghijklmnopqrstuvwxyz-_ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        try {
+            SecureRandom random = SecureRandom.getInstanceStrong();
+            return random.ints(32, 0, chars.length())
+                    .mapToObj(chars::charAt)
+                    .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
+                    .toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new TokenGenerationException(e.getMessage());
+        }
 
+    }
 }

@@ -14,12 +14,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.RequestChangePassword;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
+import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -84,5 +86,32 @@ public class MeController {
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @PostMapping("/email-update-request")
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'OWNER', 'TENANT')")
+    public ResponseEntity<String> sendUpdateEmail() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID id = UUID.fromString(jwt.getSubject());
+        try {
+            userService.sendUpdateEmail(id);
+        } catch (NotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (TokenGenerationException e) {
+            throw new RuntimeException(e);
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PatchMapping("/update-email")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<String> updateUserEmail(@RequestBody UserEmailUpdateRequest request) {
+        try {
+            userService.changeUserEmail(request.token(), request.email());
+        } catch (NotFoundException | VerificationTokenUsedException | VerificationTokenExpiredException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 }

@@ -6,10 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyBlockedException;
-import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyUnblockedException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.EmailVerificationToken;
@@ -59,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void createUser(User newUser, String password) {
+    public void createUser(User newUser, String password) throws TokenGenerationException {
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
         Tenant newTenant = new Tenant();
@@ -101,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void resetUserPassword(String login) throws NotFoundException {
+    public void resetUserPassword(String login) throws NotFoundException, TokenGenerationException {
         User user = getUserByLogin(login);
         String token = verificationTokenService.generatePasswordVerificationToken(user);
 
@@ -110,10 +107,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendUpdateEmail(UUID id) throws NotFoundException {
+    public void sendUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         String token = verificationTokenService.generateEmailVerificationToken(user);
-        URI uri = URI.create(appUrl + "/account/change-email/" + token);
+        URI uri = URI.create(appUrl + "/update-email/" + token);
         Map<String, Object> templateModel = Map.of("name", user.getFirstName(), "url", uri);
         emailService.sendHtmlEmail(user.getEmail(), "Email address change", "email", templateModel, "en");
 //        emailService.sendEmail(user.getEmail(),"Email address update", "http://localhost:3000/account/change-email/" + token);

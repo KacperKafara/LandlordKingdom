@@ -14,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationResponse;
@@ -35,20 +36,26 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Void> registerUser(@RequestBody @Valid UserCreateRequest newUserData) {
-        User newUser = new User(
-                newUserData.firstName(),
-                newUserData.lastName(),
-                newUserData.email(),
-                newUserData.login()
-        );
-        userService.createUser(newUser, newUserData.password());
 
-        URI userLocation = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/auth/")
-                .buildAndExpand(newUser.getId())
-                .toUri();
-        return ResponseEntity.created(userLocation).build();
+        try {
+            User newUser = new User(
+                    newUserData.firstName(),
+                    newUserData.lastName(),
+                    newUserData.email(),
+                    newUserData.login()
+            );
+            userService.createUser(newUser, newUserData.password());
+            URI userLocation = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/auth/")
+                    .buildAndExpand(newUser.getId())
+                    .toUri();
+            return ResponseEntity.created(userLocation).build();
+        } catch (TokenGenerationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+        }
+
+
     }
 
     @PostMapping("/signin")
