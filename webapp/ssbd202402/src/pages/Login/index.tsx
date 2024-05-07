@@ -16,7 +16,6 @@ import { useTranslation } from "react-i18next";
 import { useAuthenticate } from "@/data/useAuthenticate";
 import { useUserStore } from "@/store/userStore";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
-import { isTokenValid } from "@/utils/jwt";
 import { TFunction } from "i18next";
 
 const getLoginSchema = (t: TFunction) =>
@@ -29,7 +28,7 @@ type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
 const LoginPage: FC = () => {
   const { t } = useTranslation();
-  const { setToken, token } = useUserStore();
+  const { setToken, token, roles } = useUserStore();
   const { authenticate } = useAuthenticate();
   const navigate = useNavigate();
   const form = useForm<LoginSchema>({
@@ -43,11 +42,38 @@ const LoginPage: FC = () => {
   const onSubmit = form.handleSubmit(async (values) => {
     const result = await authenticate(values);
     setToken(result.token);
-    navigate("/admin/test");
+    console.log(roles);
+    if (roles == undefined) {
+      return navigate("/login")
+    } else {
+      switch (roles[0]) {
+        case "ADMINISTRATOR":
+          navigate("/admin/test");
+          break;
+        case "TENANT":
+          navigate("/tenant/test");
+          break;
+        case "OWNER":
+          navigate("/owner/test");
+          break;
+        default:
+          navigate("/login");
+      }
+    }
+
   });
 
-  if (token && isTokenValid(token)) {
-    return <Navigate to={"/admin/test"} />;
+  if (token && roles) {
+    switch (roles[0]) {
+      case "ADMINISTRATOR":
+        return <Navigate to={"/admin/test"} />;
+      case "TENANT":
+        return <Navigate to={"/tenant/test"} />;
+      case "OWNER":
+        return <Navigate to={"/owner/test"} />;
+      default:
+        return <Navigate to={"/login"} />;
+    }
   }
 
   return (
