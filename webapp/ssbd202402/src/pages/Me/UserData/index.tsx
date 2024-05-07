@@ -18,6 +18,9 @@ import { UserUpdateRequestType } from "@/types/user/UserUpdateRequestType.ts";
 import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 import { Toaster } from "@/components/ui/toaster.tsx";
+import { useChangeUserPassword } from "@/data/useChangeUserPassword";
+import { AxiosError } from "axios";
+import { toast } from "@/components/ui/use-toast";
 
 const userDataFormSchema = (t: TFunction) =>
   z.object({
@@ -26,9 +29,23 @@ const userDataFormSchema = (t: TFunction) =>
     language: z.string().regex(/^(en-US|pl)$/),
   });
 
+const passwordChangeSchema = (t: TFunction) =>
+  z
+    .object({
+      oldPassword: z.string().min(8, t("registerPage.passwordRequired")),
+      newPassword: z.string().min(8, t("registerPage.passwordRequired")),
+      confirmPassword: z.string().min(8, t("registerPage.passwordMatch")),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+      message: t("registerPage.passwordMatch"),
+      path: ["confirmPassword"],
+    });
+
 type userDataFormValues = z.infer<ReturnType<typeof userDataFormSchema>>;
+type passwordChangeValues = z.infer<ReturnType<typeof passwordChangeSchema>>;
 
 const UserDataPage: FC = () => {
+  const { changePassword } = useChangeUserPassword();
   const { data } = useMeQuery();
   const putMutation = useMeMutation();
   const { t } = useTranslation();
@@ -41,71 +58,174 @@ const UserDataPage: FC = () => {
     },
   });
 
+  const passwordChangeForm = useForm<passwordChangeValues>({
+    resolver: zodResolver(passwordChangeSchema(t)),
+    values: {
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    },
+  });
+
   const handleUserSubmit: SubmitHandler<UserUpdateRequestType> = (data) => {
     putMutation.mutate(data);
   };
+
+  const handlePasswordChangeSubmit = passwordChangeForm.handleSubmit(
+    async (values) => {
+      try {
+        await changePassword({
+          oldPassword: values.oldPassword,
+          newPassword: values.newPassword,
+        });
+        toast({
+          title: t("changePasswordForm.success"),
+        });
+        passwordChangeForm.reset();
+      } catch (error) {
+        const errorResponse = error as AxiosError;
+        if (errorResponse.response?.status === 404) {
+          toast({
+            variant: "destructive",
+            title: t("changePasswordForm.errorTitle"),
+            description: t("changePasswordForm.errorDescriptionNotFound"),
+          });
+        } else if (errorResponse.response?.status === 400) {
+          toast({
+            variant: "destructive",
+            title: t("changePasswordForm.errorTitle"),
+            description: t("changePasswordForm.errorDescriptionBadRequest"),
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: t("changePasswordForm.errorTitle"),
+          });
+        }
+      }
+    }
+  );
+
   return (
     <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleUserSubmit)}>
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem className="my-3">
-                <FormLabel>{t("userDataPage.firstName")} </FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                {/*<FormDescription> Description </FormDescription>*/}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem className="mb-3">
-                <FormLabel>{t("userDataPage.lastName")} </FormLabel>
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
-                {/*<FormDescription> Description </FormDescription>*/}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="language"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("userDataPage.language")}</FormLabel>
-                <div>
-                  <FormControl>
-                    <select
-                      className={cn(
-                        buttonVariants({ variant: "outline" }),
-                        "w-[200px] appearance-none font-normal"
-                      )}
-                      {...field}
-                    >
-                      <option value="pl">Polski</option>
-                      <option value="en-US">English</option>
-                    </select>
-                  </FormControl>
-                </div>
-                {/*<FormDescription> Description </FormDescription>*/}
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button className="mt-5" type="submit">
-            Update
-          </Button>
-        </form>
-      </Form>
+      <div className="flex flex-col gap-20">
+        <div>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleUserSubmit)}
+              className="flex flex-col gap-3"
+            >
+              <FormField
+                control={form.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem className="my-3">
+                    <FormLabel>{t("userDataPage.firstName")} </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    {/*<FormDescription> Description </FormDescription>*/}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem className="mb-3">
+                    <FormLabel>{t("userDataPage.lastName")} </FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    {/*<FormDescription> Description </FormDescription>*/}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="language"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("userDataPage.language")}</FormLabel>
+                    <div>
+                      <FormControl>
+                        <select
+                          className={cn(
+                            buttonVariants({ variant: "outline" }),
+                            "w-[200px] appearance-none font-normal"
+                          )}
+                          {...field}
+                        >
+                          <option value="pl">Polski</option>
+                          <option value="en-US">English</option>
+                        </select>
+                      </FormControl>
+                    </div>
+                    {/*<FormDescription> Description </FormDescription>*/}
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button className="mt-5" type="submit">
+                Update
+              </Button>
+            </form>
+          </Form>
+        </div>
+        <div>
+          <Form {...passwordChangeForm}>
+            <form
+              onSubmit={handlePasswordChangeSubmit}
+              className="flex flex-col gap-3"
+            >
+              <FormField
+                control={passwordChangeForm.control}
+                name="oldPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("changePasswordForm.oldPassword")}</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="password" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={passwordChangeForm.control}
+                name="newPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{t("changePasswordForm.newPassword")}</FormLabel>
+                    <FormControl>
+                      <Input {...field} type="password" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={passwordChangeForm.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      {t("changePasswordForm.confirmPassword")}
+                    </FormLabel>
+                    <FormControl>
+                      <Input {...field} type="password" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">{t("changePasswordForm.submit")}</Button>
+            </form>
+          </Form>
+        </div>
+      </div>
       <Toaster />
     </>
   );

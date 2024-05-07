@@ -6,10 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyBlockedException;
-import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyUnblockedException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.EmailVerificationToken;
@@ -74,7 +71,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User updateUserData(UUID id, User user) throws NotFoundException {
         User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         userToUpdate.setFirstName(user.getFirstName());
@@ -100,13 +96,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void resetUserPassword(String login) throws NotFoundException {
         User user = getUserByLogin(login);
         String token = verificationTokenService.generatePasswordVerificationToken(user);
 
         String link = "http://localhost:3000/reset-password?token=" + token;
         emailService.sendEmail(user.getEmail(), "Change password", link);
+    }
+
+    @Override
+    public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException {
+        User user = getUserById(id);
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.saveAndFlush(user);
     }
 
     @Override
@@ -129,7 +136,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
         VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
         User user = verificationToken.getUser();

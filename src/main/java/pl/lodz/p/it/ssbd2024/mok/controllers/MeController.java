@@ -3,7 +3,6 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -13,12 +12,14 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidPasswordException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.mok.dto.RequestChangePassword;
+import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticatedChangePasswordRequest;
+import pl.lodz.p.it.ssbd2024.mok.dto.ChangePasswordRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
@@ -77,7 +78,25 @@ public class MeController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity changePassword(@RequestBody RequestChangePassword request) {
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity changePassword(@RequestBody AuthenticatedChangePasswordRequest request) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            UUID id = UUID.fromString(jwt.getSubject());
+
+            userService.changePassword(id, request.oldPassword(), request.newPassword());
+
+            return ResponseEntity.noContent().build();
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidPasswordException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    @PostMapping("/change-password-with-token")
+    public ResponseEntity changePasswordWithToken(@RequestBody ChangePasswordRequest request) {
         try {
             userService.changePasswordWithToken(request.password(), request.token());
             return ResponseEntity.ok().build();

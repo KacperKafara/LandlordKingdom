@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services;
 
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidPasswordException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
@@ -28,6 +29,8 @@ public interface UserService {
     void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException;
 
     void resetUserPassword(String login) throws NotFoundException;
+
+    void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException;
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException;
 }

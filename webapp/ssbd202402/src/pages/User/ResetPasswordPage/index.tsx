@@ -17,7 +17,7 @@ import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
 import { Toaster } from "@/components/ui/toaster";
-import { useChangeUserPassword } from "@/data/useChangeUserPassword";
+import { useChangeUserPasswordWithToken } from "@/data/useChangeUserPasswordWithToken";
 
 const getPasswordResetSchema = (t: TFunction) =>
   z
@@ -36,7 +36,7 @@ const ResetPasswordPage: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const { toast } = useToast();
-  const { changePassword } = useChangeUserPassword();
+  const { changePassword } = useChangeUserPasswordWithToken();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 

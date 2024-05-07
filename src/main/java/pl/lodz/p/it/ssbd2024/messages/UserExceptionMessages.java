@@ -9,4 +9,5 @@ public class UserExceptionMessages {
     public final static String NOT_VERIFIED = "User is not verified";
     public final static String INVALID_LOGIN_DATA = "Invalid login data";
     public final static String SIGN_IN_BLOCKED = "User reached limit of login attempts and account is time blocked";
+    public final static String INVALID_PASSWORD = "Provided incorrect current password";
 }
