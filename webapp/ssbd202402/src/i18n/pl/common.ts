@@ -45,14 +45,23 @@ const registerPage = {
 };
 
 const resetPasswordForm = {
-  email: "Podaj email, na który zostanie wysłany link do zresetowania hasła",
+  description:
+    "Podaj adres email, na który zostanie wysłany link do zresetowania hasła",
+  email: "Email*",
   emailRequired: "Email jest wymagany",
-  resetPasswordHeader: "Zresetuj hasło",
+  resetPassword: "Zresetuj hasło",
+  loginButton: "Wróć do formularza logowania",
+  resetUserPasswordToastTitleSuccess: "Operacja powiodła się",
+  resetUserPasswordToastDescriptionSuccess:
+    "Link został wysłany na podany adres email",
+  resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
+  resetUserPasswordToastDescriptionNotFound:
+    "Użytkownik o podanym adresu email nie istnieje",
+  resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
 };
 
 const resetPasswordPage = {
   header: "Zresetuj hasło",
-  email: "Podaj email, na który zostanie wysłany link do zresetowania hasła",
   password: "Hasło*",
   confirmPassword: "Powtórz hasło*",
   confirmButton: "Zresetuj hasło",
