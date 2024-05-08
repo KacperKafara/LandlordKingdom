@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useResetPassword } from "@/data/useResetOtherUserPassword";
+import { useResetPassword } from "@/data/useUserPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { TFunction } from "i18next";

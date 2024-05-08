@@ -39,7 +39,7 @@ const userDataFormSchema = (t: TFunction) =>
   z.object({
     firstName: z.string().max(50).min(1, t("userDataPage.firstNameNotEmpty")),
     lastName: z.string().max(50).min(1, t("userDataPage.lastNameNotEmpty")),
-    language: z.string().regex(/^(en-US|pl)$/),
+    language: z.string().regex(/^(en|pl)$/),
   });
 
 const passwordChangeSchema = (t: TFunction) =>
@@ -172,7 +172,7 @@ const UserDataPage: FC = () => {
                           {...field}
                         >
                           <option value="pl">Polski</option>
-                          <option value="en-US">English</option>
+                          <option value="en">English</option>
                         </select>
                       </FormControl>
                     </div>

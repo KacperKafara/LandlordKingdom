@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
             tenantRepository.saveAndFlush(newTenant);
             String token = verificationTokenService.generateAccountVerificationToken(newUser);
 
-            URI uri = URI.create(appUrl + "/auth/verify/" + token);
+            URI uri = URI.create(appUrl + "/verify/" + token);
             emailService.sendAccountActivationEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
         } catch (ConstraintViolationException e) {
             String constraintName = e.getConstraintName();
