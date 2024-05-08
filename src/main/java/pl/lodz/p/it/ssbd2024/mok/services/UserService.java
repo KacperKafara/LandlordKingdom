@@ -30,4 +30,6 @@ public interface UserService {
     void resetUserPassword(String login) throws NotFoundException;
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException;
+
+    void deleteNonVerifiedUsers();
 }

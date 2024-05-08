@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import pl.lodz.p.it.ssbd2024.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -15,4 +16,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByLogin(String login);
 
     void deleteUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
+
+    List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
 }

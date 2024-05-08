@@ -21,7 +21,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @EnableAspectJAutoProxy
 @EnableScheduling
 public class ToolConfig {
-    @Value("${threadPool.size}")
+    @Value("${scheduler.threadPool.size}")
     private int threadPoolSize;
 
     @Bean

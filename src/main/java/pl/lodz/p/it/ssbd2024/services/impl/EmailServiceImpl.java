@@ -202,4 +202,13 @@ public class EmailServiceImpl implements EmailService {
 
         sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
+
+    @Override
+    public void sendAccountDeletedEmail(String to, String name, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name);
+        String subject = mailMessageSource.getMessage("accountDelete.subject", null, Locale.of(lang));
+
+        sendHtmlEmail(to, subject, "accountDelete", templateModel, lang);
+    }
 }

@@ -23,6 +23,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,6 +42,9 @@ public class UserServiceImpl implements UserService {
 
     @Value("${app.url}")
     private String appUrl;
+
+    @Value("${account.removeUnverifiedAccountAfterHours:24}")
+    private int removeUnverifiedAccountsAfterHours;
 
 
     @Override
@@ -135,5 +139,15 @@ public class UserServiceImpl implements UserService {
         User user = verificationToken.getUser();
         user.setPassword(passwordEncoder.encode(password));
         userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    public void deleteNonVerifiedUsers() {
+        LocalDateTime beforeTime = LocalDateTime.now().minusHours(removeUnverifiedAccountsAfterHours);
+        List<User> users = repository.getUsersByCreatedAtBeforeAndVerifiedIsFalse(beforeTime);
+        users.forEach(user -> {
+            emailService.sendAccountDeletedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
+            repository.delete(user);
+        });
     }
 }
