@@ -6,7 +6,7 @@ type UserStore = {
   id?: string;
   roles?: string[];
   setToken: (token: string) => void;
-  clear: () => void;
+  clearToken: () => void;
 };
 
 const LSToken = localStorage.getItem("token");
@@ -25,6 +25,9 @@ export const useUserStore = create<UserStore>((set) => ({
         roles: payload.authorities,
       };
     }),
-  clear: () =>
-    set(() => ({ token: undefined, id: undefined, roles: undefined })),
+  clearToken: () =>
+      set(() => {
+          localStorage.removeItem("token");
+          return { token: undefined, id: undefined, roles: undefined };
+      }),
 }));
