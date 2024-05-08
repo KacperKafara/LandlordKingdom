@@ -45,23 +45,23 @@ const LoginPage: FC = () => {
     try {
       const result = await authenticate(values);
       setToken(result.token);
-          if (roles == undefined) {
-      return navigate("/login")
-    } else {
-      switch (roles[0]) {
-        case "ADMINISTRATOR":
-          navigate("/admin/test");
-          break;
-        case "TENANT":
-          navigate("/tenant/test");
-          break;
-        case "OWNER":
-          navigate("/owner/test");
-          break;
-        default:
-          navigate("/login");
+      if (roles == undefined) {
+        return navigate("/login");
+      } else {
+        switch (roles[0]) {
+          case "ADMINISTRATOR":
+            navigate("/admin/test");
+            break;
+          case "TENANT":
+            navigate("/tenant/test");
+            break;
+          case "OWNER":
+            navigate("/owner/test");
+            break;
+          default:
+            navigate("/login");
+        }
       }
-    }
     } catch (error) {
       const responseError = error as AxiosError;
       if (
@@ -87,7 +87,6 @@ const LoginPage: FC = () => {
         });
       }
     }
-
   });
 
   if (token && roles) {
