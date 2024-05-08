@@ -51,7 +51,7 @@ const UserListPage: FC = () => {
   const { blockUser } = useBlockUser();
   const { unblockUser } = useUnblockUser();
 
-  const [openPaswordResetDialog, setOpenPasswordResetDialog] =
+  const [openPasswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
 
   const [userData, setUserData] = useState<UserData>();
@@ -119,7 +119,7 @@ const UserListPage: FC = () => {
       <div className="text-center m-10">!!! THERE SHOULD BE FILTER !!!</div>
       <div className="flex justify-center">
         <div className="w-3/5">
-          <AlertDialog open={openPaswordResetDialog}>
+          <AlertDialog open={openPasswordResetDialog}>
             <AlertDialogContent>
               <AlertDialogHeader>
                 <AlertDialogTitle>
