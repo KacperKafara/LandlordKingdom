@@ -26,7 +26,7 @@ const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
 ];
 const AccountRoutes: RouteObject[] = [
-  { path: "", Component: MePage },
+  { index: true, Component: MePage },
   { path: "info", Component: UserDataPage },
 ];
 
