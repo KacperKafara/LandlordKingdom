@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.model.Administrator;
 import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
 
 import java.util.UUID;

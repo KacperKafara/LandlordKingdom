@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
 
 import java.util.UUID;
