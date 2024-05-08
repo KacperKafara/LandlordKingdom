@@ -34,7 +34,7 @@ import { useUserActions } from "@/data/useUserActions";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { NavLink } from "react-router-dom";
-import {useResetOtherUserEmailAddress} from "@/data/useUpdateEmailAddress.ts";
+import { useResetOtherUserEmailAddress } from "@/data/useUpdateEmailAddress.ts";
 
 interface UserData {
   login: string;
@@ -44,14 +44,12 @@ interface UserData {
 const UserListPage: FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
-  const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
+  const { data, refetch } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
   const { resetPassword } = useResetOtherUserPassword();
-  const {updateEmail} = useResetOtherUserEmailAddress()
+  const { updateEmail } = useResetOtherUserEmailAddress();
   const { handleBlockUser, handleUnblockUser } = useUserActions();
 
-  const [openPasswordResetDialog, setOpenPasswordResetDialog] =
-    useState<boolean>(false);
-
+  const [openPasswordResetDialog, setOpenPasswordResetDialog] = useState<boolean>(false);
   const [userData, setUserData] = useState<UserData>();
 
   const handlePasswordResetClick = (data: UserData) => {
@@ -60,9 +58,8 @@ const UserListPage: FC = () => {
   };
 
   const handleEmailUpdateClick = async (id: string) => {
-    await updateEmail(id)
+    await updateEmail(id);
   };
-
 
   const handlePasswordReset = async () => {
     const result = await resetPassword(userData?.email || "");
@@ -83,103 +80,94 @@ const UserListPage: FC = () => {
   };
 
   return (
-    <>
-      <div className="text-center m-10">!!! THERE SHOULD BE FILTER !!!</div>
-      <div className="flex justify-center">
-        <div className="w-3/5">
-          <AlertDialog open={openPasswordResetDialog}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {t("userListPage.resetUserPasswordTitle")}
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  {t("userListPage.resetUserPasswordDescription")}
-                  <span className="font-bold">{userData?.login}</span>?
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel
-                  onClick={() => setOpenPasswordResetDialog(false)}
-                >
-                  {t("cancel")}
-                </AlertDialogCancel>
-                <AlertDialogAction onClick={() => handlePasswordReset()}>
-                  {t("confirm")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Table>
-            <TableHeader>
-              <TableRow className="hover:bg-white">
-                <TableHead>{t("userListPage.firstName")}</TableHead>
-                <TableHead>{t("userListPage.lastName")}</TableHead>
-                <TableHead>{t("userListPage.login")}</TableHead>
-                <TableHead>{t("userListPage.email")}</TableHead>
-                <TableHead className="w-1"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data &&
-                data.map((user) => (
-                  <TableRow key={user.login}>
-                    <TableCell>{user.firstName}</TableCell>
-                    <TableCell>{user.lastName}</TableCell>
-                    <TableCell>{user.login}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell className="w-1">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost">...</Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuLabel>
-                            {t("userListPage.actions")}
-                          </DropdownMenuLabel>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              handlePasswordResetClick({
-                                login: user.login,
-                                email: user.email,
-                              })
-                            }
-                          >
-                            {t("userListPage.resetUserPasswordAction")}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem
-                              onClick={() => handleEmailUpdateClick(user.id)}
-                          >
-                            {t("userListPage.resetUserEmailAction")}
-                          </DropdownMenuItem>
-                          {user.blocked ? (
-                              <DropdownMenuItem onClick={() => handleUnblockUser(user.id)}>
-                                {t("block.unblockUserAction")}
-                              </DropdownMenuItem>
-                          ) : (
-                              <DropdownMenuItem onClick={() => handleBlockUser(user.id)}>
-                                {t("block.blockUserAction")}
-                              </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem>test</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <NavLink to={`/admin/users/user/${user.id}`}>
-                              {t("userListPage.viewDetails")}
-                            </NavLink>
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem>test</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
+      <>
+        <div className="text-center m-10">!!! THERE SHOULD BE FILTER !!!</div>
+        <div className="flex justify-center">
+          <div className="w-3/5">
+            <AlertDialog open={openPasswordResetDialog}>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>{t("userListPage.resetUserPasswordTitle")}</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    {t("userListPage.resetUserPasswordDescription")}
+                    <span className="font-bold">{userData?.login}</span>?
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel onClick={() => setOpenPasswordResetDialog(false)}>
+                    {t("cancel")}
+                  </AlertDialogCancel>
+                  <AlertDialogAction onClick={() => handlePasswordReset()}>{t("confirm")}</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            <Table>
+              <TableHeader>
+                <TableRow className="hover:bg-white">
+                  <TableHead>{t("userListPage.firstName")}</TableHead>
+                  <TableHead>{t("userListPage.lastName")}</TableHead>
+                  <TableHead>{t("userListPage.login")}</TableHead>
+                  <TableHead>{t("userListPage.email")}</TableHead>
+                  <TableHead className="w-1"></TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data &&
+                    data.map((user) => (
+                        <TableRow key={user.login}>
+                          <TableCell>{user.firstName}</TableCell>
+                          <TableCell>{user.lastName}</TableCell>
+                          <TableCell>{user.login}</TableCell>
+                          <TableCell>{user.email}</TableCell>
+                          <TableCell className="w-1">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="ghost">...</Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent>
+                                <DropdownMenuLabel>{t("userListPage.actions")}</DropdownMenuLabel>
+                                <DropdownMenuItem onClick={() => handlePasswordResetClick({ login: user.login, email: user.email })}>
+                                  {t("userListPage.resetUserPasswordAction")}
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleEmailUpdateClick(user.id)}>
+                                  {t("userListPage.resetUserEmailAction")}
+                                </DropdownMenuItem>
+                                {user.blocked ? (
+                                    <DropdownMenuItem
+                                        onClick={async () => {
+                                          await handleUnblockUser(user.id);
+                                          await refetch();
+                                        }}
+                                    >
+                                      {t("block.unblockUserAction")}
+                                    </DropdownMenuItem>
+                                ) : (
+                                    <DropdownMenuItem
+                                        onClick={async () => {
+                                          await handleBlockUser(user.id);
+                                          await refetch();
+                                        }}
+                                    >
+                                      {t("block.blockUserAction")}
+                                    </DropdownMenuItem>
+                                )}
+                                <DropdownMenuItem>test</DropdownMenuItem>
+                                <DropdownMenuItem>
+                                  <NavLink to={`/admin/users/user/${user.id}`}>{t("userListPage.viewDetails")}</NavLink>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem>test</DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </TableCell>
+                        </TableRow>
+                    ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
-      <Toaster />
-    </>
+        <Toaster />
+      </>
   );
 };
 
