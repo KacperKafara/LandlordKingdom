@@ -2,14 +2,14 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "./api";
 
 type ChangePasswordType = {
-  oldPassword: string;
-  newPassword: string;
+  password: string;
+  token: string;
 };
 
-export const useChangeUserPassword = () => {
+export const useChangeUserPasswordWithToken = () => {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: ChangePasswordType) => {
-      const response = await api.post("/me/change-password", data);
+      const response = await api.post("/me/change-password-with-token", data);
       return response.status;
     },
   });

@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
+import pl.lodz.p.it.ssbd2024.services.EmailService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,12 +19,26 @@ import java.util.UUID;
 @Service
 public class TenantServiceImpl implements TenantService {
 
+    private final EmailService emailService;
     private final TenantRepository tenantRepository;
     private final UserRepository userRepository;
 
-    public TenantServiceImpl(TenantRepository tenantRepository, UserRepository userRepository) {
+    public TenantServiceImpl(EmailService emailService, TenantRepository tenantRepository, UserRepository userRepository) {
+        this.emailService = emailService;
         this.tenantRepository = tenantRepository;
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public Tenant removeTenantAccessLevel(UUID id) throws NotFoundException {
+        Tenant tenant = tenantRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+
+        tenant.setActive(false);
+        User user = tenant.getUser();
+
+        emailService.sendTenantPermissionLostEmail(user.getEmail(), user.getFirstName(), "en");
+
+        return tenantRepository.saveAndFlush(tenant);
     }
 
     @Override
@@ -44,6 +59,10 @@ public class TenantServiceImpl implements TenantService {
         }
 
         tenant.setActive(true);
+        User user = tenant.getUser();
+
+        emailService.sendTenantPermissionGainedEmail(user.getEmail(), user.getFirstName(), "en");
+
         return tenantRepository.saveAndFlush(tenant);
     }
 }

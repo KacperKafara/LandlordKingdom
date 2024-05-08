@@ -1,6 +1,9 @@
 package pl.lodz.p.it.ssbd2024.mok.services;
 
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidPasswordException;
+import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -13,7 +16,7 @@ public interface UserService {
 
     User getUserById(UUID id) throws NotFoundException;
 
-    void createUser(User newUser, String password);
+    void createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException;
 
     User getUserByLogin(String login) throws NotFoundException;
 
@@ -23,11 +26,13 @@ public interface UserService {
 
     void unblockUser(UUID id) throws NotFoundException;
 
-    void sendUpdateEmail(UUID id) throws NotFoundException;
+    void sendUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException;
 
     void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException;
 
-    void resetUserPassword(String login) throws NotFoundException;
+    void resetUserPassword(String login) throws NotFoundException, TokenGenerationException;
+
+    void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException;
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException;
 

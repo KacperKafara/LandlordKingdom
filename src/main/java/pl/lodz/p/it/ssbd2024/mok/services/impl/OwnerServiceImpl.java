@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyRemovedException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Owner;
@@ -12,6 +11,7 @@ import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
+import pl.lodz.p.it.ssbd2024.services.EmailService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -19,22 +19,26 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 @Service
 public class OwnerServiceImpl implements OwnerService {
+    private final EmailService emailService;
     private final OwnerRepository ownerRepository;
     private final UserRepository userRepository;
 
     @Autowired
-    public OwnerServiceImpl(OwnerRepository ownerRepository, UserRepository userRepository) {
+    public OwnerServiceImpl(EmailService emailService, OwnerRepository ownerRepository, UserRepository userRepository) {
+        this.emailService = emailService;
         this.ownerRepository = ownerRepository;
         this.userRepository = userRepository;
     }
 
     @Override
-    public Owner removeOwnerAccessLevel(UUID id) throws AccessLevelAlreadyRemovedException, NotFoundException {
+    public Owner removeOwnerAccessLevel(UUID id) throws NotFoundException {
         Owner owner = ownerRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        if (!owner.isActive()) {
-            throw new AccessLevelAlreadyRemovedException(UserExceptionMessages.ACCESS_LEVEL_REMOVED);
-        }
+
         owner.setActive(false);
+        User user = owner.getUser();
+
+        emailService.sendOwnerPermissionLostEmail(user.getEmail(), user.getFirstName(), "en");
+
         return ownerRepository.saveAndFlush(owner);
     }
 
@@ -56,6 +60,10 @@ public class OwnerServiceImpl implements OwnerService {
         }
 
         owner.setActive(true);
+        User user = owner.getUser();
+
+        emailService.sendOwnerPermissionGainedEmail(user.getEmail(), user.getFirstName(), "en");
+
         return ownerRepository.saveAndFlush(owner);
     }
 }
