@@ -20,6 +20,7 @@ import { useMutation } from "@tanstack/react-query";
 import { api } from "@/data/api";
 import { Toaster } from "@/components/ui/toaster";
 import { ToastAction } from "@radix-ui/react-toast";
+import { AxiosError } from "axios";
 
 const getRegistrationSchema = (t: TFunction) =>
   z
@@ -83,16 +84,31 @@ const RegisterPage: FC = () => {
         description: t("registerPage.registerSuccess"),
       });
       navigate("/register-success");
-    } catch (e) {
-      toast({
-        variant: "destructive",
-        title: t("registerPage.registerError"),
-        action: (
-          <ToastAction altText={t("registerPage.tryAgain")}>
-            {t("registerPage.tryAgain")}
-          </ToastAction>
-        ),
-      });
+    } catch (error) {
+      const errorResponse = error as AxiosError;
+
+      if (errorResponse.response?.status === 422) {
+        toast({
+          variant: "destructive",
+          title: t("registerPage.registerError"),
+          description: t("registerPage.registerErrorIdenticalFields"),
+          action: (
+            <ToastAction altText={t("registerPage.tryAgain")}>
+              {t("registerPage.tryAgain")}
+            </ToastAction>
+          ),
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("registerPage.registerError"),
+          action: (
+            <ToastAction altText={t("registerPage.tryAgain")}>
+              {t("registerPage.tryAgain")}
+            </ToastAction>
+          ),
+        });
+      }
     }
   });
 

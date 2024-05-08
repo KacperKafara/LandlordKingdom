@@ -7,4 +7,5 @@ import java.util.UUID;
 
 public interface TenantService {
     Tenant addTenantAccessLevel(UUID id) throws NotFoundException;
+    Tenant removeTenantAccessLevel(UUID id) throws NotFoundException;
 }
