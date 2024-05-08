@@ -164,6 +164,7 @@ public class UserServiceImpl implements UserService {
         users.forEach(user -> {
             emailService.sendAccountDeletedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
             repository.delete(user);
+            repository.flush();
         });
     }
 }
