@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
 
@@ -26,11 +27,11 @@ public class TenantController {
 
     @PutMapping(path = "/{id}/add-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<?> addAccessLevel(@PathVariable UUID id) {
+    public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) {
         try {
             tenantService.addTenantAccessLevel(id);
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
         return ResponseEntity.ok().build();
@@ -38,11 +39,11 @@ public class TenantController {
 
     @PutMapping(path = "/{id}/remove-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<?> removeAccessLevel(@PathVariable UUID id) {
+    public ResponseEntity<Void> removeAccessLevel(@PathVariable UUID id) {
         try {
             tenantService.removeTenantAccessLevel(id);
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
 
         return ResponseEntity.ok().build();

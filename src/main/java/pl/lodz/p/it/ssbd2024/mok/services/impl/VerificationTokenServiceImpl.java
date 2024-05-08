@@ -1,12 +1,13 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
@@ -20,18 +21,12 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 @Service
-@Transactional(propagation = Propagation.MANDATORY)
+@Transactional(propagation = Propagation.MANDATORY, rollbackFor = TokenGenerationException.class)
+@RequiredArgsConstructor
 public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final AccountVerificationTokenRepository accountTokenRepository;
     private final EmailVerificationTokenRepository emailTokenRepository;
     private final PasswordVerificationTokenRepository passwordTokenRepository;
-
-    @Autowired
-    public VerificationTokenServiceImpl(AccountVerificationTokenRepository tokenRepository, EmailVerificationTokenRepository emailTokenRepository, PasswordVerificationTokenRepository passwordTokenRepository) {
-        this.accountTokenRepository = tokenRepository;
-        this.emailTokenRepository = emailTokenRepository;
-        this.passwordTokenRepository = passwordTokenRepository;
-    }
 
     @Override
     public String generateAccountVerificationToken(User user) throws TokenGenerationException {
@@ -43,6 +38,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validateAccountVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         VerificationToken verificationToken = accountTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
@@ -62,6 +58,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validateEmailVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         EmailVerificationToken verificationToken = emailTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
@@ -81,6 +78,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         PasswordVerificationToken verificationToken = passwordTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
