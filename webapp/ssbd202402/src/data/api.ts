@@ -26,3 +26,12 @@ api.interceptors.response.use((response) => response, (error) => {
   }
   return Promise.reject(error);
 });
+
+
+export const noTokenApi = axios.create({
+  baseURL: "http://localhost:8080/ssbd02/",
+  timeout: 1000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});

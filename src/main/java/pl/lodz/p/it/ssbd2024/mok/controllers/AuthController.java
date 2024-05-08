@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationResponse;
@@ -32,18 +33,22 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Void> registerUser(@RequestBody @Valid UserCreateRequest newUserData) {
-        User newUser = new User(
-                newUserData.firstName(),
-                newUserData.lastName(),
-                newUserData.email(),
-                newUserData.login()
-        );
+
         try {
+            User newUser = new User(
+                    newUserData.firstName(),
+                    newUserData.lastName(),
+                    newUserData.email(),
+                    newUserData.login()
+            );
             userService.createUser(newUser, newUserData.password());
             return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (TokenGenerationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
         } catch (IdenticalFieldValueException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
+            
     }
 
     @PostMapping("/signin")

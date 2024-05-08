@@ -5,9 +5,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -37,8 +40,19 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDetailedUserResponse(userService.getUserById(id)));
     }
 
-    @PostMapping("/{id}/block")
+    
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @GetMapping("/user/login/{login}")
+    public ResponseEntity<DetailedUserResponse> get(@PathVariable String login)  {
+        try {
+            return ResponseEntity.ok(UserMapper.toDetailedUserResponse(userService.getUserByLogin(login)));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @PostMapping("/{id}/block")
     public ResponseEntity<String> blockUser(@PathVariable UUID id) {
         try {
             userService.blockUser(id);
@@ -71,11 +85,17 @@ public class UserController {
         }
     }
 
-    @PostMapping("/email-update-request")
+    @PostMapping("/{id}/email-update-request")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> sendUpdateEmail(@RequestBody UUID id) throws NotFoundException {
-        userService.sendUpdateEmail(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+    public ResponseEntity<String> sendUpdateEmail(@PathVariable UUID id) {
+        try {
+            userService.sendUpdateEmail(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (TokenGenerationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PatchMapping("/update-email")
@@ -85,6 +105,8 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
+
+
     @PostMapping("/reset-password")
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> resetPassword(@RequestParam String email) {
@@ -92,6 +114,8 @@ public class UserController {
             userService.resetUserPassword(email);
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
+        } catch (TokenGenerationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
         }
         return ResponseEntity.noContent().build();
     }

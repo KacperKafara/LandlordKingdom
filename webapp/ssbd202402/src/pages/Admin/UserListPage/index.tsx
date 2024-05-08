@@ -32,7 +32,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { NavLink } from "react-router-dom";
-import { useResetPassword } from "@/data/useResetOtherUserPassword";
+import {useResetOtherUserEmailAddress} from "@/data/useUpdateEmailAddress.ts";
 
 interface UserData {
   login: string;
@@ -43,8 +43,8 @@ const UserListPage: FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
-  const { resetPassword } = useResetPassword();
-
+  const { resetPassword } = useResetOtherUserPassword();
+  const {updateEmail} = useResetOtherUserEmailAddress()
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
 
@@ -54,6 +54,11 @@ const UserListPage: FC = () => {
     setUserData(data);
     setOpenPasswordResetDialog(true);
   };
+
+  const handleEmailUpdateClick = async (id: string) => {
+    await updateEmail(id)
+  };
+
 
   const handlePasswordReset = async () => {
     const result = await resetPassword(userData?.email || "");
@@ -137,6 +142,11 @@ const UserListPage: FC = () => {
                             }
                           >
                             {t("userListPage.resetUserPasswordAction")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                              onClick={() => handleEmailUpdateClick(user.id)}
+                          >
+                            {t("userListPage.resetUserEmailAction")}
                           </DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
                           <DropdownMenuItem>

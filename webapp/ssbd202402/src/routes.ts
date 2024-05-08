@@ -15,6 +15,7 @@ import UserDetailsPage from "./pages/Admin/UserDetailsPage";
 import ResetPasswordPage from "./pages/User/ResetPasswordPage";
 import VerifyAccountPage from "./pages/VerifyAccount";
 import RegistrationSuccessPage from "./pages/RegistrationSuccess";
+import UpdateEmailPage from "./pages/UpdateEmail";
 import ResetPasswordForm from "./pages/ResetPasswordForm";
 
 const AdminRoutes: RouteObject[] = [
@@ -37,6 +38,7 @@ export const UnprotectedRoutes: RouteObject[] = [
   { path: "/register-success", Component: RegistrationSuccessPage },
   { path: "/reset-password", Component: ResetPasswordPage },
   { path: "/verify/:token", Component: VerifyAccountPage },
+  { path: "/update-email/:token", Component: UpdateEmailPage },
   { path: "/reset-password-form", Component: ResetPasswordForm },
 ];
 

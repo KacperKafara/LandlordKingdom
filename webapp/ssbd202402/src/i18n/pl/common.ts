@@ -1,3 +1,4 @@
+
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -25,6 +26,17 @@ const userDetailsPage = {
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
   actions: "Akcje",
+};
+
+const updateEmailPage = {
+  emailNotValid: "Email nie jest poprawny",
+  email: "Email*",
+  updateEmailButton: "Zaktualizuj email",
+  updateEmailSuccess: "Email został zaktualizowany",
+  updateEmailError: "Wystąpił błąd podczas aktualizacji emaila",
+  updateEmailTitle: "Wprowadź nowy adres email",
+  success: "Sukces",
+  error: "Błąd",
 };
 
 const registerPage = {
@@ -94,6 +106,9 @@ const userListPage = {
     "Do użytkownika została wysłana wiadomość email",
   resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
+  resetUserEmailAction: "Zaktualizuj adres email",
+  resetUserEmailSuccess: "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+  resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
 };
 
 const common = {
@@ -117,6 +132,7 @@ const userDataPage = {
 
 const mePage = {
   accountInfo: "Dane użytkownika",
+  updateEmailAddress: "Zaktualizuj adres email",
 };
 
 export default {
@@ -130,6 +146,7 @@ export default {
   userDetailsPage,
   mePage,
   userDataPage,
+  updateEmailPage,
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",
