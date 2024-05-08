@@ -18,10 +18,12 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useUserActions } from "@/data/useUserActions";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const { handleBlockUser, handleUnblockUser } = useUserActions();
 
   const { data, isError } = useQuery({
     queryKey: ["user", id],
@@ -78,8 +80,12 @@ const UserDetailsPage: FC = () => {
                   <DropdownMenuLabel>
                     {t("userDetailsPage.actions")}
                   </DropdownMenuLabel>
-                  <DropdownMenuItem>test</DropdownMenuItem>
-                  <DropdownMenuItem>test</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleBlockUser(data.id)}>
+                    {t("block.blockUserAction")}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleUnblockUser(data.id)}>
+                    {t("block.unblockUserAction")}
+                  </DropdownMenuItem>
                   <DropdownMenuItem>test</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
