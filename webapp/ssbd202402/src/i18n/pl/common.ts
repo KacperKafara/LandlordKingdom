@@ -90,6 +90,21 @@ const resetPasswordPage = {
   changePasswordToastDescriptionFail: "Coś poszło nie tak...",
 };
 
+const changePasswordForm = {
+  oldPassword: "Obecne hasło*",
+  newPassword: "Nowe hasło*",
+  confirmPassword: "Potwierdź nowe hasło*",
+  submit: "Zmień",
+  success: "Hasło zmieniono pomyślnie",
+  errorTitle: "Wystąpił błąd",
+  errorDescriptionNotFound: "Nie znaleziono użytkownika",
+  errorDescriptionBadRequest: "Wprowadzono niepoprawne hasło",
+  alertDialogTitle: "Potwierdzenie zmiany hasła",
+  alertDialogDescription: "Czy na pewno chcesz zmienić hasło?",
+  alertDialogCancel: "Nie",
+  alertDialogAction: "Tak",
+};
+
 const userListPage = {
   firstName: "Imię",
   lastName: "Nazwisko",
@@ -142,6 +157,7 @@ export default {
   registerPage,
   resetPasswordForm,
   resetPasswordPage,
+  changePasswordForm,
   userListPage,
   userDetailsPage,
   mePage,
