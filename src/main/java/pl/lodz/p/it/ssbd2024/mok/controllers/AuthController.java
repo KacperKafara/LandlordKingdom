@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -21,8 +20,6 @@ import pl.lodz.p.it.ssbd2024.mok.dto.UserCreateRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.VerifyUserRequest;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
-
-import java.net.URI;
 
 @RestController()
 @RequestMapping("/auth")
@@ -41,27 +38,25 @@ public class AuthController {
                 newUserData.email(),
                 newUserData.login()
         );
-        userService.createUser(newUser, newUserData.password());
-
-        URI userLocation = ServletUriComponentsBuilder
-                .fromCurrentRequest()
-                .path("/auth/")
-                .buildAndExpand(newUser.getId())
-                .toUri();
-        return ResponseEntity.created(userLocation).build();
+        try {
+            userService.createUser(newUser, newUserData.password());
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (IdenticalFieldValueException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        }
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         try {
             String token = authenticationService.authenticate(request.getLogin(), request.getPassword(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (UserNotVerifiedException | SignInBlockedException | UserBlockedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (InvalidLoginDataException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

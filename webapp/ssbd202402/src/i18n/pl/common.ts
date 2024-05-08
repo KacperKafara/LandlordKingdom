@@ -7,6 +7,10 @@ const loginPage = {
   register: "Zarejestruj się",
   loginRequired: "Login jest wymagany",
   passwordRequired: "Hasło jest wymagane",
+  loginError: "Błąd logowania",
+  invalidCredentials: "Nieprawidłowe dane logowania",
+  loginNotAllowed: "Logowanie jest zablokowane, sprawdź email",
+  tryAgain: "Spróbuj ponownie",
 };
 
 const userDetailsPage = {
@@ -42,6 +46,8 @@ const registerPage = {
     "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
   registerError: "Wystąpił błąd podczas rejestracji.",
   tryAgain: "Spróbuj ponownie",
+  registerErrorIdenticalFields:
+    "Użytkownik o podanym loginie lub emailu już istnieje",
 };
 
 const resetPasswordPage = {
