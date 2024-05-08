@@ -42,6 +42,8 @@ const registerPage = {
     "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
   registerError: "Wystąpił błąd podczas rejestracji.",
   tryAgain: "Spróbuj ponownie",
+  registerErrorIdenticalFields:
+    "Użytkownik o podanym loginie lub emailu już istnieje",
 };
 
 const resetPasswordPage = {
