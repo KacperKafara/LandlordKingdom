@@ -16,11 +16,10 @@ export const useUserActions = () => {
                 title: t("block.blockUserToastTitleSuccess"),
                 description: t("block.blockUserToastDescriptionSuccess"),
             });
-            window.location.reload();
         } else {
             toast({
                 title: t("block.blockUserToastTitleFail"),
-                description: t("block.blockUserToastDescriptionFail"),
+                description: t("block.blockUserToastDescriptionFail")
             });
         }
     };
@@ -32,11 +31,10 @@ export const useUserActions = () => {
                 title: t("block.unblockUserToastTitleSuccess"),
                 description: t("block.unblockUserToastDescriptionSuccess"),
             });
-            window.location.reload();
         } else {
             toast({
                 title: t("block.unblockUserToastTitleFail"),
-                description: t("block.unblockUserToastDescriptionFail"),
+                description: t("block.unblockUserToastDescriptionFail")
             });
         }
     };
