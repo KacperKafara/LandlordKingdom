@@ -1,4 +1,3 @@
-import { error } from "console";
 
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
@@ -85,6 +84,9 @@ const userListPage = {
     "Do użytkownika została wysłana wiadomość email",
   resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
+  resetUserEmailAction: "Zaktualizuj adres email",
+  resetUserEmailSuccess: "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+  resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
 };
 
 const common = {
@@ -108,6 +110,7 @@ const userDataPage = {
 
 const mePage = {
   accountInfo: "Dane użytkownika",
+  updateEmailAddress: "Zaktualizuj adres email",
 };
 
 export default {

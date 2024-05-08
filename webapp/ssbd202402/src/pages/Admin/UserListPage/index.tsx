@@ -33,13 +33,14 @@ import { useResetOtherUserPassword } from "@/data/useResetOtherUserPassword";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { NavLink } from "react-router-dom";
+import {useResetOtherUserEmailAddress} from "@/data/useUpdateEmailAddress.ts";
 
 const UserListPage: FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
   const { resetPassword } = useResetOtherUserPassword();
-
+  const {updateEmail} = useResetOtherUserEmailAddress()
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
 
@@ -49,6 +50,11 @@ const UserListPage: FC = () => {
     setUserLogin(login);
     setOpenPasswordResetDialog(true);
   };
+
+  const handleEmailUpdateClick = async (id: string) => {
+    await updateEmail(id)
+  };
+
 
   const handlePasswordReset = async () => {
     const result = await resetPassword(userLogin!);
@@ -127,6 +133,11 @@ const UserListPage: FC = () => {
                             onClick={() => handlePasswordResetClick(user.login)}
                           >
                             {t("userListPage.resetUserPasswordAction")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                              onClick={() => handleEmailUpdateClick(user.id)}
+                          >
+                            {t("userListPage.resetUserEmailAction")}
                           </DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
                           <DropdownMenuItem>

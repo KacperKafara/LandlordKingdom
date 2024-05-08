@@ -104,7 +104,7 @@ public class MeController {
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
-    @PatchMapping("/update-email")
+    @PostMapping("/update-email")
     @PreAuthorize("permitAll()")
     public ResponseEntity<String> updateUserEmail(@RequestBody UserEmailUpdateRequest request) {
         try {

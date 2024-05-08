@@ -41,6 +41,16 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @GetMapping("/user/login/{login}")
+    public ResponseEntity<DetailedUserResponse> get(@PathVariable String login)  {
+        try {
+            return ResponseEntity.ok(UserMapper.toDetailedUserResponse(userService.getUserByLogin(login)));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/block")
     public ResponseEntity<String> blockUser(@RequestBody UUID id) {
         try {
