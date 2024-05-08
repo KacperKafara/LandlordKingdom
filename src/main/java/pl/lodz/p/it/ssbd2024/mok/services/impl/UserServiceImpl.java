@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = IdenticalFieldValueException.class, propagation = Propagation.REQUIRES_NEW)
-    public void createUser(User newUser, String password) throws IdenticalFieldValueException {
+    public void createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException {
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
         Tenant newTenant = new Tenant();
@@ -104,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void resetUserPassword(String email) throws NotFoundException {
+    public void resetUserPassword(String email) throws NotFoundException, TokenGenerationException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         String token = verificationTokenService.generatePasswordVerificationToken(user);
 
