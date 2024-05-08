@@ -8,6 +8,10 @@ const loginPage = {
   register: "Zarejestruj się",
   loginRequired: "Login jest wymagany",
   passwordRequired: "Hasło jest wymagane",
+  loginError: "Błąd logowania",
+  invalidCredentials: "Nieprawidłowe dane logowania",
+  loginNotAllowed: "Logowanie jest zablokowane, sprawdź email",
+  tryAgain: "Spróbuj ponownie",
 };
 
 const userDetailsPage = {
@@ -54,6 +58,24 @@ const registerPage = {
     "Link do potwierdzenia rejestracji został wysłany na podany adres email.",
   registerError: "Wystąpił błąd podczas rejestracji.",
   tryAgain: "Spróbuj ponownie",
+  registerErrorIdenticalFields:
+    "Użytkownik o podanym loginie lub emailu już istnieje",
+};
+
+const resetPasswordForm = {
+  description:
+    "Podaj adres email, na który zostanie wysłany link do zresetowania hasła",
+  email: "Email*",
+  emailRequired: "Email jest wymagany",
+  resetPassword: "Zresetuj hasło",
+  loginButton: "Wróć do formularza logowania",
+  resetUserPasswordToastTitleSuccess: "Operacja powiodła się",
+  resetUserPasswordToastDescriptionSuccess:
+    "Link został wysłany na podany adres email",
+  resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
+  resetUserPasswordToastDescriptionNotFound:
+    "Użytkownik o podanym adresu email nie istnieje",
+  resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
 };
 
 const resetPasswordPage = {
@@ -118,6 +140,7 @@ export default {
   navLinks,
   loginPage,
   registerPage,
+  resetPasswordForm,
   resetPasswordPage,
   userListPage,
   userDetailsPage,

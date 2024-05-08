@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services;
 
+import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
@@ -14,7 +15,7 @@ public interface UserService {
 
     User getUserById(UUID id) throws NotFoundException;
 
-    void createUser(User newUser, String password) throws TokenGenerationException;
+    void createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException;
 
     User getUserByLogin(String login) throws NotFoundException;
 

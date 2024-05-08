@@ -16,8 +16,9 @@ import { useTranslation } from "react-i18next";
 import { useAuthenticate } from "@/data/useAuthenticate";
 import { useUserStore } from "@/store/userStore";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
-import { isTokenValid } from "@/utils/jwt";
 import { TFunction } from "i18next";
+import { AxiosError } from "axios";
+import { toast } from "@/components/ui/use-toast";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -29,7 +30,7 @@ type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
 const LoginPage: FC = () => {
   const { t } = useTranslation();
-  const { setToken, token } = useUserStore();
+  const { setToken, token, roles } = useUserStore();
   const { authenticate } = useAuthenticate();
   const navigate = useNavigate();
   const form = useForm<LoginSchema>({
@@ -41,13 +42,64 @@ const LoginPage: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    const result = await authenticate(values);
-    setToken(result.token);
-    navigate("/admin/test");
+    try {
+      const result = await authenticate(values);
+      setToken(result.token);
+      if (roles == undefined) {
+        return navigate("/login");
+      } else {
+        switch (roles[0]) {
+          case "ADMINISTRATOR":
+            navigate("/admin/test");
+            break;
+          case "TENANT":
+            navigate("/tenant/test");
+            break;
+          case "OWNER":
+            navigate("/owner/test");
+            break;
+          default:
+            navigate("/login");
+        }
+      }
+    } catch (error) {
+      const responseError = error as AxiosError;
+      if (
+        responseError.response?.status === 401 ||
+        responseError.response?.status === 404
+      ) {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.invalidCredentials"),
+        });
+      } else if (responseError.response?.status === 403) {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.loginNotAllowed"),
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.tryAgain"),
+        });
+      }
+    }
   });
 
-  if (token && isTokenValid(token)) {
-    return <Navigate to={"/admin/test"} />;
+  if (token && roles) {
+    switch (roles[0]) {
+      case "ADMINISTRATOR":
+        return <Navigate to={"/admin/test"} />;
+      case "TENANT":
+        return <Navigate to={"/tenant/test"} />;
+      case "OWNER":
+        return <Navigate to={"/owner/test"} />;
+      default:
+        return <Navigate to={"/login"} />;
+    }
   }
 
   return (
@@ -94,8 +146,8 @@ const LoginPage: FC = () => {
             )}
           />
           <NavLink
-            to={"/resetPassword"}
-            className="text-sm text-slate-600 self-end pb-2"
+            to={"/reset-password-form"}
+            className="text-sm text-slate-600 self-end pb-2 hover:underline hover:underline-offset-2"
           >
             {t("loginPage.forgotPassword")}
           </NavLink>

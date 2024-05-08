@@ -40,6 +40,7 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDetailedUserResponse(userService.getUserById(id)));
     }
 
+    
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping("/user/login/{login}")
     public ResponseEntity<DetailedUserResponse> get(@PathVariable String login)  {
@@ -51,24 +52,24 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @PostMapping("/block")
-    public ResponseEntity<String> blockUser(@RequestBody UUID id) {
+    @PostMapping("/{id}/block")
+    public ResponseEntity<String> blockUser(@PathVariable UUID id) {
         try {
             userService.blockUser(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping("/unblock")
+    @PostMapping("/{id}/unblock")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<String> unblockUser(@RequestBody UUID id) {
+    public ResponseEntity<String> unblockUser(@PathVariable UUID id) {
         try {
             userService.unblockUser(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -95,16 +96,22 @@ public class UserController {
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
+    }
 
+    @PatchMapping("/update-email")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> updateUserEmail(@RequestBody UserEmailUpdateRequest request) throws VerificationTokenUsedException, NotFoundException, VerificationTokenExpiredException {
+        userService.changeUserEmail(request.token(), request.email());
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 
 
     @PostMapping("/reset-password")
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity resetPassword(@RequestParam String login) {
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> resetPassword(@RequestParam String email) {
         try {
-            userService.resetUserPassword(login);
+            userService.resetUserPassword(email);
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (TokenGenerationException e) {

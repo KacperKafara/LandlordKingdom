@@ -8,17 +8,17 @@ import pl.lodz.p.it.ssbd2024.model.VerificationToken;
 
 public interface VerificationTokenService {
 
-    public String generateAccountVerificationToken(User user) throws TokenGenerationException;
+    String generateAccountVerificationToken(User user) throws TokenGenerationException;
 
-    public VerificationToken validateAccountVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
+    VerificationToken validateAccountVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
-    public String generateEmailVerificationToken(User user) throws TokenGenerationException;
+    String generateEmailVerificationToken(User user) throws TokenGenerationException;
 
-    public VerificationToken validateEmailVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
+    VerificationToken validateEmailVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
-    public String generatePasswordVerificationToken(User user) throws TokenGenerationException;
+    String generatePasswordVerificationToken(User user) throws TokenGenerationException;
 
-    public VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
+    VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
 
 
