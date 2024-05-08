@@ -80,12 +80,15 @@ const UserDetailsPage: FC = () => {
                   <DropdownMenuLabel>
                     {t("userDetailsPage.actions")}
                   </DropdownMenuLabel>
-                  <DropdownMenuItem onClick={() => handleBlockUser(data.id)}>
-                    {t("block.blockUserAction")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleUnblockUser(data.id)}>
-                    {t("block.unblockUserAction")}
-                  </DropdownMenuItem>
+                  {data.blocked ? (
+                      <DropdownMenuItem onClick={() => handleUnblockUser(data.id)}>
+                        {t("block.unblockUserAction")}
+                      </DropdownMenuItem>
+                  ) : (
+                      <DropdownMenuItem onClick={() => handleBlockUser(data.id)}>
+                        {t("block.blockUserAction")}
+                      </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem>test</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

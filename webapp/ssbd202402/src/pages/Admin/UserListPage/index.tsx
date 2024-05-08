@@ -152,12 +152,15 @@ const UserListPage: FC = () => {
                           >
                             {t("userListPage.resetUserEmailAction")}
                           </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleBlockUser(user.id)}>
-                            {t("block.blockUserAction")}
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handleUnblockUser(user.id)}>
-                            {t("block.unblockUserAction")}
-                          </DropdownMenuItem>
+                          {user.blocked ? (
+                              <DropdownMenuItem onClick={() => handleUnblockUser(user.id)}>
+                                {t("block.unblockUserAction")}
+                              </DropdownMenuItem>
+                          ) : (
+                              <DropdownMenuItem onClick={() => handleBlockUser(user.id)}>
+                                {t("block.blockUserAction")}
+                              </DropdownMenuItem>
+                          )}
                           <DropdownMenuItem>test</DropdownMenuItem>
                           <DropdownMenuItem>
                             <NavLink to={`/admin/users/user/${user.id}`}>

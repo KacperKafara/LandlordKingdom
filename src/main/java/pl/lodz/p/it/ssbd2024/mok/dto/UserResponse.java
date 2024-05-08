@@ -8,6 +8,7 @@ public record UserResponse(
         String lastName,
         String email,
         String login,
-        String language
+        String language,
+        boolean blocked
 ) {
 }

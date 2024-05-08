@@ -16,6 +16,7 @@ export const useUserActions = () => {
                 title: t("block.blockUserToastTitleSuccess"),
                 description: t("block.blockUserToastDescriptionSuccess"),
             });
+            window.location.reload();
         } else {
             toast({
                 title: t("block.blockUserToastTitleFail"),
@@ -31,6 +32,7 @@ export const useUserActions = () => {
                 title: t("block.unblockUserToastTitleSuccess"),
                 description: t("block.unblockUserToastDescriptionSuccess"),
             });
+            window.location.reload();
         } else {
             toast({
                 title: t("block.unblockUserToastTitleFail"),
