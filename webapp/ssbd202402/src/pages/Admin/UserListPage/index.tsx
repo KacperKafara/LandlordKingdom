@@ -29,29 +29,34 @@ import { fetchUsers } from "@/data/fetchUsers";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { useResetOtherUserPassword } from "@/data/useResetOtherUserPassword";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { NavLink } from "react-router-dom";
+import { useResetPassword } from "@/data/useResetOtherUserPassword";
+
+interface UserData {
+  login: string;
+  email: string;
+}
 
 const UserListPage: FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
-  const { resetPassword } = useResetOtherUserPassword();
+  const { resetPassword } = useResetPassword();
 
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
 
-  const [userLogin, setUserLogin] = useState<string>();
+  const [userData, setUserData] = useState<UserData>();
 
-  const handlePasswordResetClick = (login: string) => {
-    setUserLogin(login);
+  const handlePasswordResetClick = (data: UserData) => {
+    setUserData(data);
     setOpenPasswordResetDialog(true);
   };
 
   const handlePasswordReset = async () => {
-    const result = await resetPassword(userLogin!);
+    const result = await resetPassword(userData?.email || "");
 
     if (result === 204) {
       toast({
@@ -81,7 +86,7 @@ const UserListPage: FC = () => {
                 </AlertDialogTitle>
                 <AlertDialogDescription>
                   {t("userListPage.resetUserPasswordDescription")}
-                  <span className="font-bold">{userLogin}</span>?
+                  <span className="font-bold">{userData?.login}</span>?
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -124,7 +129,12 @@ const UserListPage: FC = () => {
                             {t("userListPage.actions")}
                           </DropdownMenuLabel>
                           <DropdownMenuItem
-                            onClick={() => handlePasswordResetClick(user.login)}
+                            onClick={() =>
+                              handlePasswordResetClick({
+                                login: user.login,
+                                email: user.email,
+                              })
+                            }
                           >
                             {t("userListPage.resetUserPasswordAction")}
                           </DropdownMenuItem>

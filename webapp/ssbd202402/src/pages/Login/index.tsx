@@ -146,8 +146,8 @@ const LoginPage: FC = () => {
             )}
           />
           <NavLink
-            to={"/resetPassword"}
-            className="text-sm text-slate-600 self-end pb-2"
+            to={"/reset-password-form"}
+            className="text-sm text-slate-600 self-end pb-2 hover:underline hover:underline-offset-2"
           >
             {t("loginPage.forgotPassword")}
           </NavLink>

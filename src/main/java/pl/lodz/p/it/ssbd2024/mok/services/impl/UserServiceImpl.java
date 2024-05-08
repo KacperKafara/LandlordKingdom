@@ -41,7 +41,6 @@ public class UserServiceImpl implements UserService {
     @Value("${app.url}")
     private String appUrl;
 
-
     @Override
     public List<User> getAll() {
         return repository.findAll();
@@ -81,7 +80,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
     public User updateUserData(UUID id, User user) throws NotFoundException {
         User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         userToUpdate.setFirstName(user.getFirstName());
@@ -106,13 +104,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public void resetUserPassword(String login) throws NotFoundException {
-        User user = getUserByLogin(login);
+    public void resetUserPassword(String email) throws NotFoundException {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         String token = verificationTokenService.generatePasswordVerificationToken(user);
 
-        String link = "http://localhost:3000/reset-password?token=" + token;
-        emailService.sendEmail(user.getEmail(), "Change password", link);
+        String link = appUrl + "/reset-password?token=" + token;
+        emailService.sendPasswordChangeEmail(user.getEmail(), user.getFirstName(), link, user.getLanguage());
     }
 
     @Override

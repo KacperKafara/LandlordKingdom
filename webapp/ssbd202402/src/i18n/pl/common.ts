@@ -50,6 +50,22 @@ const registerPage = {
     "Użytkownik o podanym loginie lub emailu już istnieje",
 };
 
+const resetPasswordForm = {
+  description:
+    "Podaj adres email, na który zostanie wysłany link do zresetowania hasła",
+  email: "Email*",
+  emailRequired: "Email jest wymagany",
+  resetPassword: "Zresetuj hasło",
+  loginButton: "Wróć do formularza logowania",
+  resetUserPasswordToastTitleSuccess: "Operacja powiodła się",
+  resetUserPasswordToastDescriptionSuccess:
+    "Link został wysłany na podany adres email",
+  resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
+  resetUserPasswordToastDescriptionNotFound:
+    "Użytkownik o podanym adresu email nie istnieje",
+  resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
+};
+
 const resetPasswordPage = {
   header: "Zresetuj hasło",
   password: "Hasło*",
@@ -108,6 +124,7 @@ export default {
   navLinks,
   loginPage,
   registerPage,
+  resetPasswordForm,
   resetPasswordPage,
   userListPage,
   userDetailsPage,

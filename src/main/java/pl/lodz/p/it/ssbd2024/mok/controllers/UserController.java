@@ -73,23 +73,23 @@ public class UserController {
 
     @PostMapping("/email-update-request")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<String> sendUpdateEmail(@RequestBody UUID id) throws NotFoundException {
+    public ResponseEntity<Void> sendUpdateEmail(@RequestBody UUID id) throws NotFoundException {
         userService.sendUpdateEmail(id);
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PatchMapping("/update-email")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<String> updateUserEmail(@RequestBody UserEmailUpdateRequest request) throws VerificationTokenUsedException, NotFoundException, VerificationTokenExpiredException {
+    public ResponseEntity<Void> updateUserEmail(@RequestBody UserEmailUpdateRequest request) throws VerificationTokenUsedException, NotFoundException, VerificationTokenExpiredException {
         userService.changeUserEmail(request.token(), request.email());
         return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @PostMapping("/reset-password")
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity resetPassword(@RequestParam String login) {
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> resetPassword(@RequestParam String email) {
         try {
-            userService.resetUserPassword(login);
+            userService.resetUserPassword(email);
         } catch (NotFoundException e) {
             return ResponseEntity.notFound().build();
         }
