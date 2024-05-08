@@ -21,6 +21,19 @@ import { Toaster } from "@/components/ui/toaster.tsx";
 import { useChangeUserPassword } from "@/data/useChangeUserPassword";
 import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  AlertDialogFooter,
+  AlertDialogHeader,
+} from "@/components/ui/alert-dialog";
+import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 
 const userDataFormSchema = (t: TFunction) =>
   z.object({
@@ -221,11 +234,37 @@ const UserDataPage: FC = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit">{t("changePasswordForm.submit")}</Button>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button>{t("changePasswordForm.submit")}</Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {t("changePasswordForm.alertDialogTitle")}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {t("changePasswordForm.alertDialogDescription")}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                    <AlertDialogAction asChild>
+                      <Button
+                        type="submit"
+                        onClick={() => handlePasswordChangeSubmit()}
+                      >
+                        {t("confirm")}
+                      </Button>
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </form>
           </Form>
         </div>
       </div>
+
       <Toaster />
     </>
   );

@@ -65,6 +65,10 @@ const changePasswordForm = {
   errorTitle: "Wystąpił błąd",
   errorDescriptionNotFound: "Nie znaleziono użytkownika",
   errorDescriptionBadRequest: "Wprowadzono niepoprawne hasło",
+  alertDialogTitle: "Potwierdzenie zmiany hasła",
+  alertDialogDescription: "Czy na pewno chcesz zmienić hasło?",
+  alertDialogCancel: "Nie",
+  alertDialogAction: "Tak",
 };
 
 const userListPage = {
