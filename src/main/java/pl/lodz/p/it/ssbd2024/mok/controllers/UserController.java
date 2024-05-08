@@ -37,25 +37,25 @@ public class UserController {
         return ResponseEntity.ok(UserMapper.toDetailedUserResponse(userService.getUserById(id)));
     }
 
+    @PostMapping("/{id}/block")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @PostMapping("/block")
-    public ResponseEntity<Void> blockUser(@RequestBody UUID id) {
+    public ResponseEntity<String> blockUser(@PathVariable UUID id) {
         try {
             userService.blockUser(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
-    @PostMapping("/unblock")
+    @PostMapping("/{id}/unblock")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> unblockUser(@RequestBody UUID id) {
+    public ResponseEntity<String> unblockUser(@PathVariable UUID id) {
         try {
             userService.unblockUser(id);
-            return ResponseEntity.status(HttpStatus.OK).build();
+            return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.notFound().build();
         }
     }
 
