@@ -35,4 +35,6 @@ public interface UserService {
     void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException;
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException;
+
+    void deleteNonVerifiedUsers();
 }

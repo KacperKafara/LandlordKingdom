@@ -1,12 +1,10 @@
 package pl.lodz.p.it.ssbd2024.aspects;
 
-import jakarta.annotation.Resource;
 import lombok.extern.java.Log;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,22 +26,33 @@ public class TransactionAspect {
     @Around(value = "transactionalMethods(transactional)", argNames = "jp, transactional")
     public Object logTransaction(ProceedingJoinPoint jp, Transactional transactional) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication != null ? authentication.getName() : "anonymous";
+        String username = authentication != null ? authentication.getName() : "<anonymous>";
         String callerClass = jp.getTarget().getClass().getName();
         String callerMethod = jp.getSignature().getName();
         String txId = UUID.randomUUID().toString();
         log.info("Transaction " + txId + " started by " + username + " in " + callerClass + "." + callerMethod);
         log.info("Transaction " + txId + " info: " + "propagation=" + transactional.propagation() + ", isolation=" + transactional.isolation() + ", readOnly=" + transactional.readOnly() + ", timeout=" + transactional.timeout());
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationImpl(txId));
-        log.info("Method " + callerMethod + " called with args: " + parseArgs(jp.getArgs()));
+        log.info("Method " + callerMethod + " called with args: " + parsArgs(jp.getArgs()));
         Object obj = jp.proceed();
-        log.info("Method " + callerMethod + " returned with: " + parseArgs(obj));
+        log.info("Method " + callerMethod + " returned with: " + parseReturnValue(obj));
         return obj;
     }
 
-    String parseArgs(Object args) {
+    String parsArgs(Object[] args) {
+        if (args == null || args.length == 0) {
+            return "<empty>";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (Object arg : args) {
+            sb.append(arg).append(", ");
+        }
+        return sb.toString();
+    }
+
+    String parseReturnValue(Object args) {
         return switch (args) {
-            case null -> "no args";
+            case null -> "<void>";
             case AbstractEntity entity -> entity.getId().toString();
             case List<?> entities -> {
                 StringBuilder sb = new StringBuilder();
