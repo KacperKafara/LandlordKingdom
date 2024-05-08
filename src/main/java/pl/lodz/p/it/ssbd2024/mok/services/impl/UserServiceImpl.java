@@ -85,8 +85,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void blockUser(UUID id) throws NotFoundException {
-        User user = getUserById(id);
-
+        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setBlocked(true);
         repository.saveAndFlush(user);
     }
@@ -112,6 +111,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void sendUpdateEmail(UUID id) throws NotFoundException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setBlocked(false);
         String token = verificationTokenService.generateEmailVerificationToken(user);
         URI uri = URI.create(appUrl + "/account/change-email/" + token);
         Map<String, Object> templateModel = Map.of("name", user.getFirstName(), "url", uri);
