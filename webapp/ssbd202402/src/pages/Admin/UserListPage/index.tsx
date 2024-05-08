@@ -29,6 +29,9 @@ import { fetchUsers } from "@/data/fetchUsers";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
+import { useResetOtherUserPassword } from "@/data/useResetOtherUserPassword";
+import { useBlockUser } from "@/data/useBlockUser";
+import { useUnblockUser } from "@/data/useUnblockUser";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { NavLink } from "react-router-dom";
@@ -45,6 +48,9 @@ const UserListPage: FC = () => {
   const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
   const { resetPassword } = useResetOtherUserPassword();
   const {updateEmail} = useResetOtherUserEmailAddress()
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
+
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
 
@@ -76,6 +82,36 @@ const UserListPage: FC = () => {
     }
 
     setOpenPasswordResetDialog(false);
+  };
+
+  const handleBlockUser = async (userId: string) => {
+    const result = await blockUser(userId);
+    if (result === 200) {
+      toast({
+        title: t("userListPage.blockUserToastTitleSuccess"),
+        description: t("userListPage.blockUserToastDescriptionSuccess"),
+      });
+    } else {
+      toast({
+        title: t("userListPage.blockUserToastTitleFail"),
+        description: t("userListPage.blockUserToastDescriptionFail"),
+      });
+    }
+  };
+
+  const handleUnblockUser = async (userId: string) => {
+    const result = await unblockUser(userId);
+    if (result === 200) {
+      toast({
+        title: t("userListPage.unblockUserToastTitleSuccess"),
+        description: t("userListPage.unblockUserToastDescriptionSuccess"),
+      });
+    } else {
+      toast({
+        title: t("userListPage.unblockUserToastTitleFail"),
+        description: t("userListPage.unblockUserToastDescriptionFail"),
+      });
+    }
   };
 
   return (
@@ -147,6 +183,12 @@ const UserListPage: FC = () => {
                               onClick={() => handleEmailUpdateClick(user.id)}
                           >
                             {t("userListPage.resetUserEmailAction")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleBlockUser(user.id)}>
+                            {t("userListPage.blockUserAction")}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem onClick={() => handleUnblockUser(user.id)}>
+                            {t("userListPage.unblockUserAction")}
                           </DropdownMenuItem>
                           <DropdownMenuItem>test</DropdownMenuItem>
                           <DropdownMenuItem>

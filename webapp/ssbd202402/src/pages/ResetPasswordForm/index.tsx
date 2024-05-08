@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useResetPassword } from "@/data/useResetOtherUserPassword";
+import { useResetOtherUserPassword } from "@/data/useResetOtherUserPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AxiosError } from "axios";
 import { TFunction } from "i18next";
@@ -30,7 +30,7 @@ const ResetPasswordForm: FC = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
   const navigate = useNavigate();
-  const { resetPassword } = useResetPassword();
+  const { resetPassword } = useResetOtherUserPassword();
   const form = useForm<ResetPasswordSchema>({
     resolver: zodResolver(getResetPasswordSchema(t)),
     values: {

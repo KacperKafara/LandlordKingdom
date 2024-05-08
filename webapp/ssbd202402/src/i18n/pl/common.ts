@@ -124,6 +124,16 @@ const userListPage = {
   resetUserEmailAction: "Zaktualizuj adres email",
   resetUserEmailSuccess: "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
+  blockUserAction: "Zablokuj",
+  blockUserToastTitleSuccess: "Operacja powiodła się",
+  blockUserToastDescriptionSuccess: "Użytkownik został zablokowany",
+  blockUserToastTitleFail: "Operacja nie powiodła się",
+  blockUserToastDescriptionFail: "Coś poszło nie tak...",
+  unblockUserAction: "Odblokuj",
+  unblockUserToastTitleSuccess: "Operacja powiodła się",
+  unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
+  unblockUserToastTitleFail: "Operacja nie powiodła się",
+  unblockUserToastDescriptionFail: "Coś poszło nie tak...",
 };
 
 const common = {
