@@ -7,6 +7,10 @@ const loginPage = {
   register: "Zarejestruj się",
   loginRequired: "Login jest wymagany",
   passwordRequired: "Hasło jest wymagane",
+  loginError: "Błąd logowania",
+  invalidCredentials: "Nieprawidłowe dane logowania",
+  loginNotAllowed: "Logowanie jest zablokowane, sprawdź email",
+  tryAgain: "Spróbuj ponownie",
 };
 
 const userDetailsPage = {

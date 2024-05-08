@@ -56,7 +56,7 @@ public class AuthController {
         } catch (UserNotVerifiedException | SignInBlockedException | UserBlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (InvalidLoginDataException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 

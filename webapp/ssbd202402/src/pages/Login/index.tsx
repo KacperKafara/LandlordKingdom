@@ -18,6 +18,8 @@ import { useUserStore } from "@/store/userStore";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { isTokenValid } from "@/utils/jwt";
 import { TFunction } from "i18next";
+import { AxiosError } from "axios";
+import { toast } from "@/components/ui/use-toast";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -41,9 +43,35 @@ const LoginPage: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    const result = await authenticate(values);
-    setToken(result.token);
-    navigate("/admin/test");
+    try {
+      const result = await authenticate(values);
+      setToken(result.token);
+      navigate("/admin/test");
+    } catch (error) {
+      const responseError = error as AxiosError;
+      if (
+        responseError.response?.status === 401 ||
+        responseError.response?.status === 404
+      ) {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.invalidCredentials"),
+        });
+      } else if (responseError.response?.status === 403) {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.loginNotAllowed"),
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.tryAgain"),
+        });
+      }
+    }
   });
 
   if (token && isTokenValid(token)) {
