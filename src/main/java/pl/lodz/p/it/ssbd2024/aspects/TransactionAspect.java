@@ -45,10 +45,9 @@ public class TransactionAspect {
         }
         StringBuilder sb = new StringBuilder();
         for (Object arg : args) {
-            if (arg instanceof AbstractEntity) {
-                sb.append("class: ").append(arg.getClass().getName()).append(" id: ").append(((AbstractEntity) arg).getId()).append(", ");
+            if (arg instanceof AbstractEntity abstractEntity) {
+                sb.append("class: ").append(arg.getClass().getName()).append(" id: ").append(abstractEntity.getId()).append(", ");
             }
-
         }
         if (sb.isEmpty()){
             return "<empty>";
