@@ -22,7 +22,7 @@ GRANT SELECT ON TABLE public.access_levels TO ssbd02mol;
 
 GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02mok;
 
-INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at) VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'admin', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, false, 0, 1, 'en', NOW());
+INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at) VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'admin', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'en', NOW());
 INSERT INTO public.personal_data (user_id, email, first_name, last_name) VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'admin@test.com', 'Admin', 'Admin');
 INSERT INTO public.access_levels (id, user_id, level, active, version) VALUES ('22f34716-3b77-4e63-809d-35f9a4758011', 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ADMINISTRATOR', true, 0);
 INSERT INTO public.administrators (id) VALUES ('22f34716-3b77-4e63-809d-35f9a4758011');

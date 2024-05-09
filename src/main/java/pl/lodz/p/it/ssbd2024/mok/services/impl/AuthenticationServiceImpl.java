@@ -90,8 +90,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setLoginAttempts(0);
             user.setLastSuccessfulLoginIp(ip);
             userRepository.saveAndFlush(user);
+            List<String> roles = getUserRoles(user);
 
-            return jwtService.generateToken(user.getId(), getUserRoles(user));
+            if(roles.contains("ADMINISTRATOR")) {
+                emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage());
+            }
+
+            return jwtService.generateToken(user.getId(), roles);
         } else {
             user.setLoginAttempts(user.getLoginAttempts() + 1);
             user.setLastFailedLogin(LocalDateTime.now());
