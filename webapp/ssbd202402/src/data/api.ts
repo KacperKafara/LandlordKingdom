@@ -20,13 +20,13 @@ api.interceptors.request.use((config) => {
     }
 );
 
-api.interceptors.response.use((response) => response, (error) => {
-  if (error.response.status === 401) {
-    // handle unauthorized
-  }
-  return Promise.reject(error);
-});
-
+// api.interceptors.response.use((response) => response, (error) => {
+//   if (error.response.status === 401) {
+//     // handle unauthorized
+//   }
+//   return Promise.reject(error);
+// });
+//
 
 export const noTokenApi = axios.create({
   baseURL: "http://localhost:8080/ssbd02/",
