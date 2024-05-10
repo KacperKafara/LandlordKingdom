@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(rollbackFor = NotFoundException.class)
 @RequiredArgsConstructor
 @Log
 public class UserServiceImpl implements UserService {
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackFor = IdenticalFieldValueException.class, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public void createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException {
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
@@ -74,7 +74,7 @@ public class UserServiceImpl implements UserService {
             tenantRepository.saveAndFlush(newTenant);
             String token = verificationTokenService.generateAccountVerificationToken(newUser);
 
-            URI uri = URI.create(appUrl + "/auth/verify/" + token);
+            URI uri = URI.create(appUrl + "/verify/" + token);
             emailService.sendAccountActivationEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
         } catch (ConstraintViolationException e) {
             String constraintName = e.getConstraintName();
@@ -109,6 +109,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public void resetUserPassword(String email) throws NotFoundException, TokenGenerationException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         String token = verificationTokenService.generatePasswordVerificationToken(user);
@@ -118,6 +119,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class})
     public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException {
         User user = getUserById(id);
 
@@ -130,17 +132,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void sendUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
+    public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setBlocked(false);
         String token = verificationTokenService.generateEmailVerificationToken(user);
         URI uri = URI.create(appUrl + "/update-email/" + token);
-        Map<String, Object> templateModel = Map.of("name", user.getFirstName(), "url", uri);
-        emailService.sendHtmlEmail(user.getEmail(), "Email address change", "email", templateModel, "en");
-//        emailService.sendEmail(user.getEmail(),"Email address update", "http://localhost:3000/account/change-email/" + token);
+        emailService.sendEmailChangeEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
     }
 
     @Override
+    @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
     public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
         User user = repository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VerificationToken;
@@ -28,7 +28,7 @@ import java.util.List;
 @Log
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
@@ -61,6 +61,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional(rollbackFor = {
+            NotFoundException.class,
+            UserNotVerifiedException.class,
+            UserBlockedException.class,
+            InvalidLoginDataException.class,
+            SignInBlockedException.class
+    })
     public String authenticate(String login, String password, String ip) throws NotFoundException, UserNotVerifiedException, UserBlockedException, InvalidLoginDataException, SignInBlockedException {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
@@ -100,6 +107,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @Transactional(rollbackFor = {
+            VerificationTokenUsedException.class,
+            VerificationTokenExpiredException.class,
+            NotFoundException.class
+    })
     public void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException {
         VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));

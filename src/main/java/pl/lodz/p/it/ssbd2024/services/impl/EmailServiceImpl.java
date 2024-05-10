@@ -109,7 +109,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendEmailChangeEmail(String to, String name, String uri, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "name", name,
-                "uri", uri);
+                "url", uri);
         String subject = mailMessageSource.getMessage("emailChange.subject", null, Locale.of(lang));
 
         sendHtmlEmail(to, subject, "emailChange", templateModel, lang);
@@ -119,7 +119,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendPasswordChangeEmail(String to, String name, String uri, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "name", name,
-                "uri", uri);
+                "url", uri);
         String subject = mailMessageSource.getMessage("passwordChange.subject", null, Locale.of(lang));
 
         sendHtmlEmail(to, subject, "passwordChange", templateModel, lang);

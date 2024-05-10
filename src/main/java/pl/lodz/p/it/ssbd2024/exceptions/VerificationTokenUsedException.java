@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2024.exceptions.handlers;
+package pl.lodz.p.it.ssbd2024.exceptions;
 
 public class VerificationTokenUsedException extends Exception{
 

@@ -39,7 +39,7 @@ const userDataFormSchema = (t: TFunction) =>
   z.object({
     firstName: z.string().max(50).min(1, t("userDataPage.firstNameNotEmpty")),
     lastName: z.string().max(50).min(1, t("userDataPage.lastNameNotEmpty")),
-    language: z.string().regex(/^(en-US|pl)$/),
+    language: z.string().regex(/^(en|pl)$/),
   });
 
 const passwordChangeSchema = (t: TFunction) =>
@@ -65,9 +65,9 @@ const UserDataPage: FC = () => {
   const form = useForm<userDataFormValues>({
     resolver: zodResolver(userDataFormSchema(t)),
     values: {
-      firstName: data?.firstName || "",
-      lastName: data?.lastName || "",
-      language: data?.language || "",
+      firstName: data?.data.firstName || "",
+      lastName: data?.data.lastName || "",
+      language: data?.data.language || "",
     },
   });
 
@@ -80,8 +80,10 @@ const UserDataPage: FC = () => {
     },
   });
 
-  const handleUserSubmit: SubmitHandler<UserUpdateRequestType> = (data) => {
-    putMutation.mutate(data);
+  const handleUserSubmit: SubmitHandler<UserUpdateRequestType> = (request) => {
+    let etag: string = data?.headers.etag;
+    etag = etag.substring(1, etag.length - 1);
+    putMutation.mutate({ request, etag });
   };
 
   const handlePasswordChangeSubmit = passwordChangeForm.handleSubmit(
@@ -172,7 +174,7 @@ const UserDataPage: FC = () => {
                           {...field}
                         >
                           <option value="pl">Polski</option>
-                          <option value="en-US">English</option>
+                          <option value="en">English</option>
                         </select>
                       </FormControl>
                     </div>

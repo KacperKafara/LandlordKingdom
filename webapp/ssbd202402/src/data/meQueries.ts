@@ -6,11 +6,20 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 
 const getMeData = async () => {
-  return (await api.get<UserResponse>("/me")).data;
+  return (await api.get<UserResponse>("/me"));
 };
 
-const putMeData = async (data: UserUpdateRequestType) => {
-  await api.put("/me", data);
+interface UserUpdateRequest {
+  request: UserUpdateRequestType;
+  etag: string;
+}
+
+const putMeData = async (data: UserUpdateRequest) => {
+  await api.put("/me", data.request, {
+    headers: {
+      "If-Match": data.etag,
+    }
+  });
 };
 
 export const useMeQuery = () => {

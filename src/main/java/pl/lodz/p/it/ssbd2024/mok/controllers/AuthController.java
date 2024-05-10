@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
@@ -52,9 +52,9 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
         try {
-            String token = authenticationService.authenticate(request.getLogin(), request.getPassword(), servletRequest.getRemoteAddr());
+            String token = authenticationService.authenticate(request.login(), request.password(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
@@ -66,7 +66,7 @@ public class AuthController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verify(@RequestBody VerifyUserRequest request) throws NotFoundException {
+    public ResponseEntity<Void> verify(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
         try {
             authenticationService.verify(request.token());
             return ResponseEntity.ok().build();

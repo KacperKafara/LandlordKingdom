@@ -5,7 +5,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public interface UserService {
 
     void unblockUser(UUID id) throws NotFoundException;
 
-    void sendUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException;
+    void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException;
 
     void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException;
 

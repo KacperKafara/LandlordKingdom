@@ -1,4 +1,11 @@
 package pl.lodz.p.it.ssbd2024.mok.dto;
 
-public record UserEmailUpdateRequest(String token, String email) {
+import jakarta.validation.constraints.Email;
+
+public record UserEmailUpdateRequest(
+        String token,
+
+        @Email
+        String email
+) {
 }

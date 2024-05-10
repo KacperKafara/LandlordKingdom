@@ -1,4 +1,14 @@
 package pl.lodz.p.it.ssbd2024.mok.dto;
 
-public record ChangePasswordRequest(String password, String token) {
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record ChangePasswordRequest(
+        @NotBlank
+        @Size(min = 8)
+        String password,
+
+        String token
+) {
 }

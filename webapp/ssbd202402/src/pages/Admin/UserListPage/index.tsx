@@ -31,8 +31,9 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
-import { NavLink } from "react-router-dom";
-import {useResetOtherUserEmailAddress} from "@/data/useUpdateEmailAddress.ts";
+import { useResetOtherUserEmailAddress } from "@/data/useUpdateEmailAddress.ts";
+import { useResetPassword } from "@/data/useUserPassword";
+import { useNavigate } from "react-router-dom";
 
 interface UserData {
   login: string;
@@ -42,9 +43,10 @@ interface UserData {
 const UserListPage: FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
-  const { resetPassword } = useResetOtherUserPassword();
-  const {updateEmail} = useResetOtherUserEmailAddress()
+  const { resetPassword } = useResetPassword();
+  const { updateEmail } = useResetOtherUserEmailAddress();
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
 
@@ -56,14 +58,13 @@ const UserListPage: FC = () => {
   };
 
   const handleEmailUpdateClick = async (id: string) => {
-    await updateEmail(id)
+    await updateEmail(id);
   };
-
 
   const handlePasswordReset = async () => {
     const result = await resetPassword(userData?.email || "");
 
-    if (result === 204) {
+    if (result === 200) {
       toast({
         title: t("userListPage.resetUserPasswordToastTitleSuccess"),
         description: t("userListPage.resetUserPasswordToastDescriptionSuccess"),
@@ -144,18 +145,18 @@ const UserListPage: FC = () => {
                             {t("userListPage.resetUserPasswordAction")}
                           </DropdownMenuItem>
                           <DropdownMenuItem
-                              onClick={() => handleEmailUpdateClick(user.id)}
+                            onClick={() => handleEmailUpdateClick(user.id)}
                           >
                             {t("userListPage.resetUserEmailAction")}
                           </DropdownMenuItem>
-                          <DropdownMenuItem>test</DropdownMenuItem>
-                          <DropdownMenuItem>
-                            <NavLink to={`/admin/users/user/${user.id}`}>
-                              {t("userListPage.viewDetails")}
-                            </NavLink>
-                          </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem>test</DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={() =>
+                              navigate(`/admin/users/user/${user.id}`)
+                            }
+                          >
+                            {t("userListPage.viewDetails")}
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
