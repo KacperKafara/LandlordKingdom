@@ -55,6 +55,7 @@ public class SecurityConfig {
             cors.setAllowedOrigins(List.of("http://localhost:3000"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
             cors.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.IF_MATCH));
+            cors.addExposedHeader(HttpHeaders.ETAG);
             return cors;
         };
     }

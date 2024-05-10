@@ -48,7 +48,7 @@ public class MeController {
 
             return ResponseEntity
                     .ok()
-                    .header(HttpHeaders.ETAG, signer.generateSignature(user.getId(), user.getVersion()))
+                    .eTag(signer.generateSignature(user.getId(), user.getVersion()))
                     .body(UserMapper.toUserResponse(user));
 
         } catch (NotFoundException e) {

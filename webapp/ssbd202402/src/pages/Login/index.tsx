@@ -19,6 +19,7 @@ import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { TFunction } from "i18next";
 import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
+import { isTokenValid } from "@/utils/jwt";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -89,7 +90,7 @@ const LoginPage: FC = () => {
     }
   });
 
-  if (token && roles) {
+  if (token && isTokenValid(token) && roles != undefined) {
     switch (roles[0]) {
       case "ADMINISTRATOR":
         return <Navigate to={"/admin/test"} />;
@@ -99,6 +100,7 @@ const LoginPage: FC = () => {
         return <Navigate to={"/owner/test"} />;
       default:
         return <Navigate to={"/login"} />;
+
     }
   }
 
