@@ -129,7 +129,7 @@ public class UserController {
 
     @PostMapping("/reset-password")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         try {
             userService.resetUserPassword(request.email());
             return ResponseEntity.ok().build();
