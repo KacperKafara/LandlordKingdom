@@ -35,4 +35,6 @@ public interface EmailService {
     void sendAdministratorPermissionLostEmail(String to, String name, String lang);
 
     void sendAccountDeletedEmail(String to, String name, String lang);
+
+    void sendAdminLoginEmail(String to, String name, String ip, String lang);
 }

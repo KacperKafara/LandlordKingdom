@@ -211,4 +211,14 @@ public class EmailServiceImpl implements EmailService {
 
         sendHtmlEmail(to, subject, "accountDelete", templateModel, lang);
     }
+
+    @Override
+    public void sendAdminLoginEmail(String to, String name, String ip, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name,
+                "ip", ip);
+        String subject = mailMessageSource.getMessage("adminLogin.subject", null, Locale.of(lang));
+
+        sendHtmlEmail(to, subject, "adminLogin", templateModel, lang);
+    }
 }

@@ -48,7 +48,6 @@ public class AuthController {
         } catch (IdenticalFieldValueException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
-            
     }
 
     @PostMapping("/signin")
