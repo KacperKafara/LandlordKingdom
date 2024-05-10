@@ -22,15 +22,9 @@ api.interceptors.request.use((config) => {
 );
 
 api.interceptors.response.use((response) => response, (error) => {
-<<<<<<< Updated upstream
-  if (error.response.status === 401) {
-    // handle unauthorized
-=======
   error = error as AxiosError;
   if (error.response?.status === 401) {
-    //rozwiązanie tymczasowe
-    localStorage.removeItem("token");
->>>>>>> Stashed changes
+    // handle unauthorized
   }
   return Promise.reject(error);
 });

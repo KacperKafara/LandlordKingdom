@@ -99,7 +99,6 @@ const LoginPage: FC = () => {
       case "OWNER":
         return <Navigate to={"/owner/test"} />;
       default:
-        break;
         return <Navigate to={"/login"} />;
 
     }

@@ -83,8 +83,6 @@ const UserDataPage: FC = () => {
   const handleUserSubmit: SubmitHandler<UserUpdateRequestType> = (request) => {
     let etag: string = data?.headers.etag;
     etag = etag.substring(1, etag.length - 1);
-    console.log(data);
-    console.log(etag);
     putMutation.mutate({ request, etag });
   };
 
