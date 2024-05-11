@@ -6,7 +6,6 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
@@ -21,9 +20,9 @@ import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
 
 import java.net.URI;
+import java.security.InvalidKeyException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -169,4 +168,6 @@ public class UserServiceImpl implements UserService {
             repository.flush();
         });
     }
+
+
 }
