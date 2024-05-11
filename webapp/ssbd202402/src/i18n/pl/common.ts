@@ -1,4 +1,3 @@
-
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -13,7 +12,8 @@ const loginPage = {
   loginNotAllowed: "Logowanie jest zablokowane, sprawdź email",
   tryAgain: "Spróbuj ponownie",
   codeLengthMessage: "Kod uwierzytelniania dwufazowego musi mieć 8 cyfr",
-  codeDescription: "Wprowaź kod uwierzytelniania dwufazowego"
+  codeDescription: "Wprowaź kod uwierzytelniania dwufazowego",
+  changeLanguage: "Język",
 };
 
 const userDetailsPage = {
@@ -124,7 +124,8 @@ const userListPage = {
   resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
   resetUserEmailAction: "Zaktualizuj adres email",
-  resetUserEmailSuccess: "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+  resetUserEmailSuccess:
+    "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
 };
 

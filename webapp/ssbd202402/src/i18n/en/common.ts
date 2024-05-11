@@ -13,6 +13,7 @@ const loginPage = {
   tryAgain: "Try again",
   codeLengthMessage: "Two-factor authentication code must be 8 digits",
   codeDescription: "Enter two-factor authentication code",
+  changeLanguage: "Language",
 };
 
 const userDetailsPage = {

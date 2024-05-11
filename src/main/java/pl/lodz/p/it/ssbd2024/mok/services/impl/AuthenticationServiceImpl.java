@@ -125,7 +125,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public void generateOTP(String login, String password, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException {
+    public void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
         if (!user.isVerified()) {
@@ -146,6 +146,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setLastSuccessfulLogin(LocalDateTime.now());
             user.setLoginAttempts(0);
             user.setLastSuccessfulLoginIp(ip);
+            user.setLanguage(language);
             userRepository.saveAndFlush(user);
             List<String> roles = getUserRoles(user);
 
@@ -154,8 +155,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
             String token = verificationTokenService.generateOTPToken(user);
             emailService.sendEmail(user.getEmail(), "OTP", "OTP tokne: " + token);
-
-            return;
         } else {
             user.setLoginAttempts(user.getLoginAttempts() + 1);
             user.setLastFailedLogin(LocalDateTime.now());
@@ -168,8 +167,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
             throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA);
         }
-
-
     }
 
     @Override

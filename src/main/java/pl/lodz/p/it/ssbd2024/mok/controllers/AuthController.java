@@ -69,7 +69,7 @@ public class AuthController {
     @PostMapping("/signin-2fa")
     public ResponseEntity<Void> authenticate2fa(@RequestBody @Valid AuthenticationRequest request) {
         try {
-            authenticationService.generateOTP(request.login(), request.password(), servletRequest.getRemoteAddr());
+            authenticationService.generateOTP(request.login(), request.password(), request.language(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());

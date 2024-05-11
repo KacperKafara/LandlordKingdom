@@ -4,6 +4,7 @@ import { api } from "./api";
 type AuthenticateRequest = {
   login: string;
   password: string;
+  language: string;
 };
 
 type AuthenticateResponse = {
@@ -17,10 +18,7 @@ type CodeVerificationRequest = {
 export const useAuthenticate = () => {
   const { mutateAsync } = useMutation({
     mutationFn: async (data: AuthenticateRequest) => {
-      const response = await api.post(
-        "/auth/signin-2fa",
-        data
-      );
+      const response = await api.post("/auth/signin-2fa", data);
       return response.data;
     },
   });
@@ -30,13 +28,13 @@ export const useAuthenticate = () => {
 
 export const useVerifyCode = () => {
   const { mutateAsync } = useMutation({
-    mutationFn: async (data: CodeVerificationRequest)=> {
+    mutationFn: async (data: CodeVerificationRequest) => {
       const response = await api.post<AuthenticateResponse>(
-          "/auth/verify-2fa",
-          data
+        "/auth/verify-2fa",
+        data
       );
       return response.data;
-    }
+    },
   });
   return { verifyCode: mutateAsync };
-}
+};
