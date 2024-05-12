@@ -11,9 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.AccountVerificationToken;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -24,6 +26,7 @@ import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -36,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final TenantRepository tenantRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
+    private final AccountVerificationTokenRepository accountVerificationTokenRepository;
     private final UserRepository userRepository;
 
 
@@ -167,6 +171,21 @@ public class UserServiceImpl implements UserService {
             emailService.sendAccountDeletedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
             repository.delete(user);
             repository.flush();
+        });
+    }
+
+    @Override
+    public void sendEmailVerifyAccount() {
+        LocalDateTime beforeTime = LocalDateTime.now().minusHours(removeUnverifiedAccountsAfterHours / 2);
+        LocalDateTime afterTime = beforeTime.plusMinutes(10);
+        List<User> users = repository.getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(beforeTime, afterTime);
+        users.forEach(user -> {
+            Optional<AccountVerificationToken> token = accountVerificationTokenRepository.findByUserId(user.getId());
+            if (token.isEmpty()) {
+                return;
+            }
+            URI uri = URI.create(appUrl + "/verify/" + token);
+            emailService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
         });
     }
 }
