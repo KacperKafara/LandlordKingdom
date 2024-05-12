@@ -11,10 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
@@ -94,15 +91,12 @@ public class UserController {
                                                        @RequestHeader(HttpHeaders.IF_MATCH) String tagValue
     ) {
         try {
-            User checkUser = userService.getUserById(id);
-            if (!signer.verifySignature(checkUser.getId(), checkUser.getVersion(), tagValue)) {
-                throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA);
-            }
-
-            User user = userService.updateUserData(id, UserMapper.toUser(request));
+            User user = userService.updateUserData(id, UserMapper.toUser(request), tagValue);
             return ResponseEntity.ok(UserMapper.toUserResponse(user));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage());
         }
     }
 
