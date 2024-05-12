@@ -27,7 +27,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import useLanguage from "@/i18n/languageHook";
+import { useLanguageStore } from "@/i18n/languageStore";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -41,7 +41,7 @@ const Login2FaPage: FC = () => {
   const { t } = useTranslation();
   const { setToken, token, roles } = useUserStore();
   const { authenticate } = useAuthenticate();
-  const { changeLanguage } = useLanguage();
+  const { setLanguage } = useLanguageStore();
 
   const [codeInputOpen, setCodeInputOpen] = useState(false);
   const form = useForm<LoginSchema>({
@@ -119,16 +119,14 @@ const Login2FaPage: FC = () => {
                 <DropdownMenuContent>
                   <DropdownMenuItem
                     onClick={() => {
-                      // i18next.changeLanguage("en");
-                      changeLanguage("en");
+                      setLanguage("en");
                     }}
                   >
                     EN
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
-                      changeLanguage("pl");
-                      // i18next.changeLanguage("pl");
+                      setLanguage("pl");
                     }}
                   >
                     PL

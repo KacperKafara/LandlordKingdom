@@ -8,7 +8,7 @@ export const defaultNS = "common";
 let userLang = "en";
 const storedLanguage = localStorage.getItem("language");
 
-if (storedLanguage) {
+if (storedLanguage && (storedLanguage === "pl" || storedLanguage === "en")) {
   userLang = storedLanguage;
 } else {
   userLang = navigator.language;

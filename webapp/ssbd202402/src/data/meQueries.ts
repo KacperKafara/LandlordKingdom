@@ -4,7 +4,7 @@ import { UserResponse } from "@/types/user/UserResponseType.ts";
 import { UserUpdateRequestType } from "@/types/user/UserUpdateRequestType.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
-import useLanguage from "@/i18n/languageHook";
+import { useLanguageStore } from "@/i18n/languageStore";
 
 const getMeData = async (changeLanguage: (lang: string) => void) => {
   const response = await api.get<UserResponse>("/me");
@@ -26,10 +26,10 @@ const putMeData = async (data: UserUpdateRequest) => {
 };
 
 export const useMeQuery = () => {
-  const { changeLanguage } = useLanguage();
+  const { setLanguage } = useLanguageStore();
   return useQuery({
     queryKey: ["meData"],
-    queryFn: () => getMeData(changeLanguage),
+    queryFn: () => getMeData(setLanguage),
   });
 };
 
