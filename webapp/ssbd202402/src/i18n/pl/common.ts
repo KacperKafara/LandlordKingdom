@@ -14,6 +14,8 @@ const loginPage = {
   codeLengthMessage: "Kod uwierzytelniania dwufazowego musi mieć 8 cyfr",
   codeDescription: "Wprowaź kod uwierzytelniania dwufazowego",
   changeLanguage: "Język",
+  submit: "Wyślij",
+  backToLoginForm: "Wróć do formularza logowania",
 };
 
 const userDetailsPage = {
