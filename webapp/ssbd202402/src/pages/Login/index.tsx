@@ -42,27 +42,18 @@ const LoginPage: FC = () => {
     },
   });
 
+  const role_mapping: { [key: string]: string } = {
+    "ADMINISTRATOR": "admin",
+    "TENANT": "tenant",
+    "OWNER": "owner",
+  }
+
+
   const onSubmit = form.handleSubmit(async (values) => {
     try {
       const result = await authenticate(values);
       setToken(result.token);
-      if (roles == undefined) {
-        return navigate("/login");
-      } else {
-        switch (roles[0]) {
-          case "ADMINISTRATOR":
-            navigate("/admin/test");
-            break;
-          case "TENANT":
-            navigate("/tenant/test");
-            break;
-          case "OWNER":
-            navigate("/owner/test");
-            break;
-          default:
-            navigate("/login");
-        }
-      }
+      navigate(`/${role_mapping[roles![0]]}`)
     } catch (error) {
       const responseError = error as AxiosError;
       if (
@@ -90,18 +81,8 @@ const LoginPage: FC = () => {
     }
   });
 
-  if (token && isTokenValid(token) && roles != undefined) {
-    switch (roles[0]) {
-      case "ADMINISTRATOR":
-        return <Navigate to={"/admin/test"} />;
-      case "TENANT":
-        return <Navigate to={"/tenant/test"} />;
-      case "OWNER":
-        return <Navigate to={"/owner/test"} />;
-      default:
-        return <Navigate to={"/login"} />;
-
-    }
+  if (token && isTokenValid(token)) {
+    return <Navigate to={`/${role_mapping[roles![0]]}`} replace />;
   }
 
   return (

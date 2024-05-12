@@ -1,3 +1,4 @@
+import { sign } from "crypto";
 
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
@@ -133,6 +134,9 @@ const common = {
 
 const navLinks = {
   account: "Moje konto",
+  signOut: "Wyloguj",
+  users: "Użytkownicy",
+  roles: "Zmień poziom dostępu",
 };
 
 const userDataPage = {
