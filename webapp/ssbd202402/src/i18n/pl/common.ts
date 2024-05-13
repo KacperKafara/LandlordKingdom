@@ -142,6 +142,9 @@ const common = {
 
 const navLinks = {
   account: "Moje konto",
+  signOut: "Wyloguj",
+  users: "Użytkownicy",
+  roles: "Zmień poziom dostępu",
 };
 
 const userDataPage = {
