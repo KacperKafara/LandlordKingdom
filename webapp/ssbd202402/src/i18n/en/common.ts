@@ -170,6 +170,8 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  sessionExpired: "Session expired",
+  sessionExpiredDescription: "Session expired, please login again",
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Confirm",

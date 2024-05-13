@@ -34,6 +34,7 @@ interface CodeInputProps {
   login: string;
   roles: string[] | undefined;
   setToken: (token: string) => void;
+  setRefreshToken: (token: string) => void;
   setCodeInputOpen: (value: boolean) => void;
   resetForm: () => void;
 }
@@ -44,6 +45,7 @@ const CodeInput: FC<CodeInputProps> = ({
   login,
   roles,
   setToken,
+  setRefreshToken,
   setCodeInputOpen,
   resetForm,
 }) => {
@@ -61,6 +63,7 @@ const CodeInput: FC<CodeInputProps> = ({
     try {
       const result = await verifyCode({ login, token: data.pin });
       setToken(result.token);
+      setRefreshToken(result.refreshToken);
       if (roles == undefined) {
         return navigate("/login");
       } else {

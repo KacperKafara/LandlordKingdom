@@ -34,7 +34,7 @@ public class JwtService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("team-2.proj-sum.it.p.lodz.pl")
                 .issuedAt(now)
-                .expiresAt(now.plus(jwtExpiration, ChronoUnit.HOURS))
+                .expiresAt(now.plus(30, ChronoUnit.SECONDS))
                 .subject(id.toString())
                 .claim("authorities",  roles)
                 .build();

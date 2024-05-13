@@ -1,23 +1,27 @@
 import { useMutation } from "@tanstack/react-query";
-import { api } from "./api";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 type ResetPasswordRequest = {
   email: string;
 };
 
-const sendRequest = async (request: ResetPasswordRequest) => {
+const sendRequest = async (
+  request: ResetPasswordRequest,
+  api: AxiosInstance
+) => {
   await api.post(`/users/reset-password`, request);
 };
 
 export const useResetPassword = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { api } = useAxiosPrivate();
 
   const { mutate, isSuccess } = useMutation({
-    mutationFn: sendRequest,
+    mutationFn: (request: ResetPasswordRequest) => sendRequest(request, api),
     onSuccess: () => {
       toast({
         title: t("userListPage.resetUserPasswordToastTitleSuccess"),
