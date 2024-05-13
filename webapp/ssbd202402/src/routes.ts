@@ -17,6 +17,7 @@ import VerifyAccountPage from "./pages/VerifyAccount";
 import RegistrationSuccessPage from "./pages/RegistrationSuccess";
 import UpdateEmailPage from "./pages/UpdateEmail";
 import ResetPasswordForm from "./pages/ResetPasswordForm";
+import Callback from "./pages/OauthCallback";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
@@ -40,6 +41,7 @@ export const UnprotectedRoutes: RouteObject[] = [
   { path: "/verify/:token", Component: VerifyAccountPage },
   { path: "/update-email/:token", Component: UpdateEmailPage },
   { path: "/reset-password-form", Component: ResetPasswordForm },
+  { path: "/auth/google/callback", Component: Callback },
 ];
 
 export const ProtectedRoutes: RouteObject[] = [

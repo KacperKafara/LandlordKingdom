@@ -20,6 +20,8 @@ import { TFunction } from "i18next";
 import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { isTokenValid } from "@/utils/jwt";
+import { useOAuthUrl } from "@/data/useOAuthUrl";
+import { FaGoogle } from "react-icons/fa";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -33,6 +35,7 @@ const LoginPage: FC = () => {
   const { t } = useTranslation();
   const { setToken, token, roles } = useUserStore();
   const { authenticate } = useAuthenticate();
+  const { oAuthUrl } = useOAuthUrl();
   const navigate = useNavigate();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(getLoginSchema(t)),
@@ -100,7 +103,6 @@ const LoginPage: FC = () => {
         return <Navigate to={"/owner/test"} />;
       default:
         return <Navigate to={"/login"} />;
-
     }
   }
 
@@ -154,6 +156,15 @@ const LoginPage: FC = () => {
             {t("loginPage.forgotPassword")}
           </NavLink>
           <Button type="submit">{t("loginPage.loginButton")}</Button>
+          <Button
+            variant="secondary"
+            type="button"
+            onClick={() => {
+              window.location.href = oAuthUrl?.url || "";
+            }}
+          >
+            <FaGoogle /> Login with google
+          </Button>
           <Button variant="link" asChild className="w-fit self-center">
             <NavLink to={"/register"}>{t("loginPage.register")}</NavLink>
           </Button>

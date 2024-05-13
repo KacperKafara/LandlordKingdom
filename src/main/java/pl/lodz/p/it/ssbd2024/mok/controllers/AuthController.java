@@ -3,25 +3,25 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.util.UriComponentsBuilder;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationResponse;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserCreateRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.VerifyUserRequest;
+import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
+@Log
 @RestController()
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -30,6 +30,21 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final HttpServletRequest servletRequest;
+
+    @Value("${oauth2.authUrl}")
+    private String oAuth2Url;
+
+    @Value("${oauth2.client_id}")
+    private String oAuthClientId;
+
+    @Value("${oauth2.client_secret}")
+    private String oAuthClientSecret;
+
+    @Value("${oauth2.redirect_uri}")
+    private String oAuthRedirectUri;
+
+    @Value("${oauth2.token_uri}")
+    private String oAuthTokenUri;
 
     @PostMapping("/signup")
     public ResponseEntity<Void> registerUser(@RequestBody @Valid UserCreateRequest newUserData) {
@@ -72,5 +87,36 @@ public class AuthController {
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
+    }
+
+    @GetMapping("/oauth2/url")
+    public ResponseEntity<OAuth2UrlResponse> getOAuth2Url() {
+        String url = UriComponentsBuilder
+                .fromUriString(oAuth2Url)
+                .queryParam("client_id", oAuthClientId)
+                .queryParam("redirect_uri", oAuthRedirectUri)
+                .queryParam("response_type", "code")
+                .queryParam("scope", "openid profile email")
+                .queryParam("access_type", "offline")
+                .queryParam("state", "standard_oauth")
+                .queryParam("prompt", "consent")
+                .build().toUriString();
+        return ResponseEntity.ok(new OAuth2UrlResponse(url));
+    }
+
+    @GetMapping("/oauth2/token")
+    public ResponseEntity getOAuth2Token(@RequestParam String code) {
+        String url = UriComponentsBuilder
+                .fromUriString(oAuthTokenUri)
+                .queryParam("client_id", oAuthClientId)
+                .queryParam("client_secret", oAuthClientSecret)
+                .queryParam("code", code)
+                .queryParam("grant_type", "authorization_code")
+                .queryParam("redirect_uri", oAuthRedirectUri)
+                .build().toUriString();
+        RestClient restClient = RestClient.create();
+        String result = restClient.post().uri(url).retrieve().body(String.class);
+        log.info(result);
+        return ResponseEntity.ok().build();
     }
 }
