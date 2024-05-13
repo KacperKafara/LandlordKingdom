@@ -37,7 +37,7 @@ const getLoginSchema = (t: TFunction) =>
 
 type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
-const Login2FaPage: FC = () => {
+const LoginPage: FC = () => {
   const { t } = useTranslation();
   const { token, roles } = useUserStore();
   const { authenticate } = useAuthenticate();
@@ -175,4 +175,4 @@ const Login2FaPage: FC = () => {
   );
 };
 
-export default Login2FaPage;
+export default LoginPage;
