@@ -64,6 +64,7 @@ public class AuthenticationServiceTest {
     String email;
     User user;
     String ip;
+    String language;
 
     @BeforeEach
     public void initData() {
@@ -73,11 +74,13 @@ public class AuthenticationServiceTest {
         firstName = "FirstName";
         lastName = "LastName";
         email = "test@mail.com";
+        language = "en";
         user = new User(firstName, lastName, email, login);
         user.setPassword(encoded);
         user.setVerified(true);
         user.setBlocked(false);
         user.setLoginAttempts(0);
+        user.setLanguage(language);
         user.setLastFailedLogin(LocalDateTime.now().minusMonths(5));
         user.setLastSuccessfulLogin(LocalDateTime.now().minusDays(3));
         ip = "1.1.1.1";
@@ -86,7 +89,7 @@ public class AuthenticationServiceTest {
     @Test
     public void Authenticate_CredentialsCorrect_ReturnToken_Test() {
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertDoesNotThrow(() -> authenticationService.authenticate(login, password, ip));
+        assertDoesNotThrow(() -> authenticationService.generateOTP(login, password, language, ip));
     }
 
     @Test
@@ -94,7 +97,7 @@ public class AuthenticationServiceTest {
         user.setVerified(false);
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertThrows(UserNotVerifiedException.class, () -> authenticationService.authenticate(login, password, ip));
+        assertThrows(UserNotVerifiedException.class, () -> authenticationService.generateOTP(login, password, language, ip));
     }
 
     @Test
@@ -102,7 +105,7 @@ public class AuthenticationServiceTest {
         user.setBlocked(true);
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertThrows(UserBlockedException.class, () -> authenticationService.authenticate(login, password, ip));
+        assertThrows(UserBlockedException.class, () -> authenticationService.generateOTP(login, password, language, ip));
     }
 
     @Test
@@ -111,7 +114,7 @@ public class AuthenticationServiceTest {
         user.setLastFailedLogin(LocalDateTime.now().minusSeconds(loginTimeOut / 3));
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertThrows(SignInBlockedException.class, () -> authenticationService.authenticate(login, password, ip));
+        assertThrows(SignInBlockedException.class, () -> authenticationService.generateOTP(login, password, language, ip));
     }
 
     @Test
@@ -120,6 +123,6 @@ public class AuthenticationServiceTest {
         user.setLastFailedLogin(LocalDateTime.now().minusSeconds(loginTimeOut * 10L));
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertDoesNotThrow(() -> authenticationService.authenticate(login, password, ip));
+        assertDoesNotThrow(() -> authenticationService.generateOTP(login, password, language, ip));
     }
 }

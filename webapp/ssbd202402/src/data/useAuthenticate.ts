@@ -1,5 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { api } from "./api";
+import { AxiosError } from "axios";
+import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 type AuthenticateRequest = {
   login: string;
@@ -12,22 +15,53 @@ type AuthenticateResponse = {
 };
 
 type CodeVerificationRequest = {
+  login: string;
   token: string;
 };
 
 export const useAuthenticate = () => {
-  const { mutateAsync } = useMutation({
+  const { toast } = useToast();
+  const { t } = useTranslation();
+
+  const { mutateAsync, isSuccess, isPending } = useMutation({
     mutationFn: async (data: AuthenticateRequest) => {
-      const response = await api.post("/auth/signin-2fa", data);
-      return response.data;
+      await api.post("/auth/signin-2fa", data);
+    },
+    onError: (error: AxiosError) => {
+      if (
+        error.response?.status === 401 ||
+        error.response?.status === 404 ||
+        error.response?.status === 400
+      ) {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.invalidCredentials"),
+        });
+      } else if (error.response?.status === 403) {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.loginNotAllowed"),
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: t("loginPage.loginError"),
+          description: t("loginPage.tryAgain"),
+        });
+      }
     },
   });
 
-  return { authenticate: mutateAsync };
+  return { authenticate: mutateAsync, isSuccess, isPending };
 };
 
 export const useVerifyCode = () => {
-  const { mutateAsync } = useMutation({
+  const { toast } = useToast();
+  const { t } = useTranslation();
+
+  const { mutateAsync, isSuccess } = useMutation({
     mutationFn: async (data: CodeVerificationRequest) => {
       const response = await api.post<AuthenticateResponse>(
         "/auth/verify-2fa",
@@ -35,6 +69,13 @@ export const useVerifyCode = () => {
       );
       return response.data;
     },
+    onError: () => {
+      toast({
+        variant: "destructive",
+        title: t("loginPage.tokenError.title"),
+        description: t("loginPage.tokenError.description"),
+      });
+    },
   });
-  return { verifyCode: mutateAsync };
+  return { verifyCode: mutateAsync, isSuccess };
 };

@@ -15,7 +15,7 @@ public interface UserService {
 
     User getUserByLogin(String login) throws NotFoundException;
 
-    User updateUserData(UUID id, User user) throws NotFoundException;
+    User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
     void blockUser(UUID id) throws NotFoundException;
 

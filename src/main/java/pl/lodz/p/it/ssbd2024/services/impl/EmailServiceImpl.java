@@ -221,4 +221,14 @@ public class EmailServiceImpl implements EmailService {
 
         sendHtmlEmail(to, subject, "adminLogin", templateModel, lang);
     }
+
+    @Override
+    public void sendOTPEmail(String to, String name, String otp, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name,
+                "otp", otp);
+        String subject = mailMessageSource.getMessage("OTP.subject", null, Locale.of(lang));
+
+        sendHtmlEmail(to, subject, "OTP", templateModel, lang);
+    }
 }
