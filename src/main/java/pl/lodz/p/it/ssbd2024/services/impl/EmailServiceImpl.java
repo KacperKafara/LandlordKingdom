@@ -106,6 +106,15 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendAccountActivatedEmail(String to, String name, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name);
+        String subject = mailMessageSource.getMessage("accountActivated.subject", null, Locale.of(lang));
+
+        sendHtmlEmail(to, subject, "accountActivated", templateModel, lang);
+    }
+
+    @Override
     public void sendEmailChangeEmail(String to, String name, String uri, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "name", name,
