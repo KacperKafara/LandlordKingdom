@@ -17,7 +17,7 @@ import VerifyAccountPage from "./pages/VerifyAccount";
 import RegistrationSuccessPage from "./pages/RegistrationSuccess";
 import UpdateEmailPage from "./pages/UpdateEmail";
 import ResetPasswordForm from "./pages/ResetPasswordForm";
-import Login2FaPage from "@/pages/Login/Login2Fa";
+import Login2FaPage from "@/pages/Login";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },

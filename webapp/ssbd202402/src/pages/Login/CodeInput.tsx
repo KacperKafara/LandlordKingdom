@@ -23,7 +23,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "@/components/ui/use-toast.ts";
 import { useNavigate } from "react-router-dom";
 import { useVerifyCode } from "@/data/useAuthenticate.ts";
-import { role_mapping } from "@/utils/role_path_maping.ts";
+import { role_mapping } from "@/data/role_path_maping";
 import { useUserStore } from "@/store/userStore.ts";
 
 const CodeFormSchema = (t: TFunction) => z.object({
