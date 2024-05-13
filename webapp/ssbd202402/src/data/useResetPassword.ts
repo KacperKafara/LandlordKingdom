@@ -4,8 +4,12 @@ import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 
-const sendRequest = async (email: String) => {
-  await api.post(`/users/reset-password?email=${email}`);
+type ResetPasswordRequest = {
+  email: string;
+};
+
+const sendRequest = async (request: ResetPasswordRequest) => {
+  await api.post(`/users/reset-password`, request);
 };
 
 export const useResetPassword = () => {

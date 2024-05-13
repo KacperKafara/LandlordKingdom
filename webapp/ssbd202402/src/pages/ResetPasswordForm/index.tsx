@@ -36,7 +36,7 @@ const ResetPasswordForm: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    resetPassword.mutate(values.email);
+    resetPassword.mutate(values);
 
     if (resetPassword.isSuccess) {
       navigate("/login");
