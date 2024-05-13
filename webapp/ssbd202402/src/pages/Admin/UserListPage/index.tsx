@@ -25,10 +25,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { fetchUsers } from "@/data/fetchUsers";
+import { useFetchUsersQuery } from "@/data/fetchUsers";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
 import { useResetPassword } from "@/data/useResetPassword";
 import { useNavigate } from "react-router-dom";
 import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
@@ -41,7 +40,7 @@ interface UserData {
 const UserListPage: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
+  const { data } = useFetchUsersQuery();
   const resetPassword = useResetPassword();
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);

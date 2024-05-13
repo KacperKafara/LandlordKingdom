@@ -14,6 +14,12 @@ const loginPage = {
   codeLengthMessage: "Kod uwierzytelniania dwufazowego musi mieć 8 cyfr",
   codeDescription: "Wprowaź kod uwierzytelniania dwufazowego",
   changeLanguage: "Język",
+  submit: "Wyślij",
+  backToLoginForm: "Wróć do formularza logowania",
+  tokenError: {
+    title: "Błąd danych",
+    description: "Wprowadzono niepoprawny żeton",
+  },
 };
 
 const userDetailsPage = {
@@ -133,8 +139,10 @@ const userListPage = {
   resetUserEmailSuccess:
     "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
-  updateEmailAddressTitle: "Czy na pewno chcesz zaktualizować adres email użytkownika?",
-  updateEmailAddressDescription: "Na adres email użytkownika zostanie wysłany link do zmiany adresu email",
+  updateEmailAddressTitle:
+    "Czy na pewno chcesz zaktualizować adres email użytkownika?",
+  updateEmailAddressDescription:
+    "Na adres email użytkownika zostanie wysłany link do zmiany adresu email",
   updateEmailAddress: "Zaktualizuj adres email",
 };
 
@@ -158,14 +166,14 @@ const userDataPage = {
   language: "Język*",
   error: "Błąd",
   success: "Dane zaktualizowane",
-
 };
 
 const mePage = {
   accountInfo: "Dane użytkownika",
   updateEmailAddress: "Zaktualizuj adres email",
   updateEmailAddressTitle: "Czy na pewno chcesz zaktualizować adres email?",
-  updateEmailAddressDescription: "Na przypisany do konta adres email zostanie wysłany link do formularza zmiany adresu email",
+  updateEmailAddressDescription:
+    "Na przypisany do konta adres email zostanie wysłany link do formularza zmiany adresu email",
 };
 
 export default {
@@ -181,6 +189,8 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  sessionExpired: "Sesja wygasła",
+  sessionExpiredDescription: "Twoja sesja wygasła, zaloguj się ponownie",
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",

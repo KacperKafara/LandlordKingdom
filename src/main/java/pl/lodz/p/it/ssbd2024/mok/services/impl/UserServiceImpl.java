@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -19,6 +20,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.net.URI;
 import java.security.InvalidKeyException;
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
     private final UserRepository userRepository;
+    private final SignVerifier signVerifier;
 
 
     @Value("${app.url}")
@@ -85,8 +88,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserData(UUID id, User user) throws NotFoundException {
+    public User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+
+        if(signVerifier.verifySignature(userToUpdate.getId(), userToUpdate.getVersion(), tagValue)){
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA);
+        }
+
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
         userToUpdate.setLanguage(user.getLanguage());

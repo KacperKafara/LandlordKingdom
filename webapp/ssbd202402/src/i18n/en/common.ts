@@ -14,6 +14,12 @@ const loginPage = {
   codeLengthMessage: "Two-factor authentication code must be 8 digits",
   codeDescription: "Enter two-factor authentication code",
   changeLanguage: "Language",
+  submit: "Submit",
+  backToLoginForm: "Back to login form",
+  tokenError: {
+    title: "Incorrect data",
+    description: "Provided incorrect token",
+  },
 };
 
 const userDetailsPage = {
@@ -173,6 +179,8 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  sessionExpired: "Session expired",
+  sessionExpiredDescription: "Session expired, please login again",
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Confirm",

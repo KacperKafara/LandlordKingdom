@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -33,6 +34,9 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Problem occurred while trying to connect to the database");
     }
 
-
+    @ExceptionHandler(JwtValidationException.class)
+    ResponseEntity<String> handleJwtValidationException(JwtValidationException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+    }
 
 }

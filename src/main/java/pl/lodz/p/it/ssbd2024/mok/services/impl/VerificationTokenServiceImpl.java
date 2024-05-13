@@ -28,6 +28,8 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 @Service
@@ -39,7 +41,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final PasswordVerificationTokenRepository passwordTokenRepository;
     private final OTPTokenRepository otpTokenRepository;
     private final HmacOneTimePasswordGenerator hotp = new HmacOneTimePasswordGenerator(8);
-    private Long counter = Long.MIN_VALUE;
+    private long counter = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) / 30;
 
     @Value("${otp.secret}")
     private String otpSecret;
@@ -117,7 +119,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
+    @Transactional(propagation = Propagation.MANDATORY)
     public VerificationToken validateOTPToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         OTPToken verificationToken = otpTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {

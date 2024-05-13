@@ -1,15 +1,15 @@
 import { useMutation } from "@tanstack/react-query";
-import { api } from "./api";
-import { AxiosError } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 type ChangePasswordType = {
   password: string;
   token: string;
 };
 
-const sendRequest = async (data: ChangePasswordType) => {
+const sendRequest = async (data: ChangePasswordType, api: AxiosInstance) => {
   const response = await api.post("/me/change-password-with-token", data);
   return response.status;
 };
@@ -17,9 +17,10 @@ const sendRequest = async (data: ChangePasswordType) => {
 export const useChangeUserPasswordWithToken = () => {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const { api } = useAxiosPrivate();
 
   const { mutate, isSuccess } = useMutation({
-    mutationFn: sendRequest,
+    mutationFn: (data: ChangePasswordType) => sendRequest(data, api),
     onSuccess: () => {
       toast({
         title: t("resetPasswordPage.changePasswordToastTitleSuccess"),
