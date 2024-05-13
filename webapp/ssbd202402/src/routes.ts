@@ -18,6 +18,7 @@ import RegistrationSuccessPage from "./pages/RegistrationSuccess";
 import UpdateEmailPage from "./pages/UpdateEmail";
 import ResetPasswordForm from "./pages/ResetPasswordForm";
 import Callback from "./pages/OauthCallback";
+import Login2FaPage from "@/pages/Login/Login2Fa";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
@@ -34,7 +35,7 @@ const AccountRoutes: RouteObject[] = [
 ];
 
 export const UnprotectedRoutes: RouteObject[] = [
-  { path: "/login", Component: LoginPage },
+  { path: "/login", Component: Login2FaPage },
   { path: "/register", Component: RegisterPage },
   { path: "/register-success", Component: RegistrationSuccessPage },
   { path: "/reset-password", Component: ResetPasswordPage },

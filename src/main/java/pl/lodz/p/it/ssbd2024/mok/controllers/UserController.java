@@ -11,18 +11,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
+import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.Signer;
@@ -132,14 +126,16 @@ public class UserController {
 
     @PostMapping("/reset-password")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Void> resetPassword(@RequestParam String email) {
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         try {
-            userService.resetUserPassword(email);
+            userService.sendChangePasswordEmail(request.email());
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (TokenGenerationException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+        } catch (UserBlockedException | UserNotVerifiedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 }
