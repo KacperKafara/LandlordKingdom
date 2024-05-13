@@ -40,7 +40,9 @@ const ResetPasswordForm: FC = () => {
 
   const onSubmit = form.handleSubmit(async (values) => {
     try {
-      await resetPassword(values.email);
+      // const email = values.email;
+      console.log({ email: values.email });
+      await resetPassword({ email: values.email });
       toast({
         title: t("resetPasswordForm.resetUserPasswordToastTitleSuccess"),
         description: t(
