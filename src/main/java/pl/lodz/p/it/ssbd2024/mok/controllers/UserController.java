@@ -2,9 +2,6 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,21 +44,21 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping("/filtered")
-    public ResponseEntity<List<UserResponse>> getAllFiltered(@RequestBody FilteredDataRequest request,
-                                                             @RequestBody List<String> roles,
+    public ResponseEntity<List<UserResponse>> getAllFiltered(@RequestBody FilteredUsersRequest request,
                                                              @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
                                                              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+
         UserSpecificationBuilder builder = new UserSpecificationBuilder();
         List<SearchCriteria> criteriaList = request.searchCriteriaList();
 
         if (criteriaList != null) {
-            criteriaList.forEach(x -> { x.setDataOption(request.dataOption());
+            criteriaList.forEach(x -> {
+                x.setDataOption(request.dataOption());
                 builder.with(x);
             });
         }
 
-        Pageable pageable = PageRequest.of(pageNum, pageSize);
-        Page<User> userPage = userService.getAllFiltered(builder.build(), roles, pageable);
+        List<User> userPage = userService.getAllFiltered(builder.build(), request.roles(), pageNum, pageSize);
 
         return ResponseEntity.ok(userPage.stream().map(UserMapper::toUserResponse).toList());
     }

@@ -4,8 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -54,29 +52,36 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<User> getAllFiltered(Specification<User> specification, List<String> roles, Pageable pageable) {
-        Set<UUID> notIncludedUsers = new HashSet<>();
+    public List<User> getAllFiltered(Specification<User> specification, List<String> roles, int pageNum, int pageSize) {
+        Set<UUID> includedUsers = new HashSet<>();
         if (roles != null && !roles.isEmpty()) {
-            if (!roles.contains("TENANT")) {
-                notIncludedUsers.addAll(tenantRepository.findAllByActive(true).stream().map(Tenant::getUser).map(User::getId).toList());
+            if (roles.contains("TENANT")) {
+                includedUsers.addAll(tenantRepository.findAllByActive(true).stream().map(Tenant::getUser).map(User::getId).toList());
             }
 
-            if (!roles.contains("OWNER")) {
-                notIncludedUsers.addAll(ownerRepository.findAllByActive(true).stream().map(Owner::getUser).map(User::getId).toList());
+            if (roles.contains("OWNER")) {
+                includedUsers.addAll(ownerRepository.findAllByActive(true).stream().map(Owner::getUser).map(User::getId).toList());
             }
 
-            if (!roles.contains("ADMINISTRATOR")) {
-                notIncludedUsers.addAll(administratorRepository.findAllByActive(true).stream().map(Administrator::getUser).map(User::getId).toList());
+            if (roles.contains("ADMINISTRATOR")) {
+                includedUsers.addAll(administratorRepository.findAllByActive(true).stream().map(Administrator::getUser).map(User::getId).toList());
             }
         }
 
-        Page<User> research = repository.findAll(specification, pageable);
+        List<User> users = repository.findAll(specification);
 
-        if (!notIncludedUsers.isEmpty()) {
-            research.filter(user -> notIncludedUsers.contains(user.getId()));
+        if (!includedUsers.isEmpty()) {
+            users = users.stream().filter(user -> includedUsers.contains(user.getId())).toList();
         }
 
-        return research;
+        if (pageNum * pageSize >= users.size()) {
+            return new ArrayList<>();
+        }
+
+        int startIdx = pageNum * pageSize;
+        int endIdx = Math.min(users.size(), startIdx + pageSize);
+
+        return users.subList(startIdx, endIdx);
     }
 
     @Override

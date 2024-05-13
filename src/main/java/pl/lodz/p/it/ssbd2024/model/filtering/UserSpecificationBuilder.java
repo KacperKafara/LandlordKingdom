@@ -31,7 +31,7 @@ public class UserSpecificationBuilder {
         Specification<User> result = new UserSpecification(params.getFirst());
         for (int i = 1; i < params.size(); i++) {
             SearchCriteria criteria = params.get(i);
-            result = SearchOperation.getDataOption(criteria.getOperation()).equals(SearchOperation.ALL) ?
+            result = SearchOperation.getDataOption(criteria.getDataOption()).equals(SearchOperation.ALL) ?
                     Specification.where(result).and(new UserSpecification(criteria)) :
                     Specification.where(result).or(new UserSpecification(criteria));
         }

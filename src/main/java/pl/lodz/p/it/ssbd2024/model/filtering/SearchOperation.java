@@ -10,7 +10,7 @@ public enum SearchOperation {
             "cn", "nc", "eq", "ne", "bw", "bn", "ew",
             "en", "nu", "nn", "gt", "ge", "lt", "le" };
 
-    public static SearchOperation getDataOption(final String dataOption){
+    public static SearchOperation getDataOption(final String dataOption) {
         return switch (dataOption) {
             case "all" -> ALL;
             case "any" -> ANY;
