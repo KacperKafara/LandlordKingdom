@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.integration;
 
+import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -35,6 +37,9 @@ public class BaseConfig {
     static final PostgreSQLContainer<?> postgres;
 
     @Container
+    static final GenericContainer<?> smtp;
+
+    @Container
     static final GenericContainer<?> tomcat;
 
     public static IDatabaseConnection connection;
@@ -51,12 +56,24 @@ public class BaseConfig {
                 .withReuse(true);
         postgres.start();
 
+        smtp = new GenericContainer<>("rnwood/smtp4dev")
+                .withNetwork(network)
+                .withNetworkAliases("smtp4test")
+                .withLogConsumer(outputFrame -> System.out.println(outputFrame.getUtf8String()))
+                .waitingFor(Wait.defaultWaitStrategy())
+                .withExposedPorts(25, 80)
+                .withReuse(true);
+        smtp.start();
+
         tomcat = new GenericContainer<>("tomcat:10.1.20-jdk21")
                 .withNetwork(network)
                 .withExposedPorts(8080)
                 .withLogConsumer(outputFrame -> System.out.println(outputFrame.getUtf8String()))
                 .dependsOn(postgres)
+                .dependsOn(smtp)
                 .withEnv("URL", "jdbc:postgresql://testdb:5432/ssbd02")
+                .withEnv("MAIL.PORT", "25")
+                .withEnv("MAIL.HOST", "smtp4test")
                 .withCopyToContainer(war, "/usr/local/tomcat/webapps/ssbd02.war")
                 .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080))
                 .withReuse(true);
@@ -77,12 +94,15 @@ public class BaseConfig {
         DatabaseConfig dbConfig = connection.getConfig();
         dbConfig.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
         dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new PostgresqlDataTypeFactory());
+
+        RestAssured.defaultParser = Parser.JSON;
     }
 
     @AfterAll
     public static void teardown() throws Exception {
         tomcat.stop();
         postgres.stop();
+        smtp.stop();
 
         if (connection != null) {
             connection.close();
