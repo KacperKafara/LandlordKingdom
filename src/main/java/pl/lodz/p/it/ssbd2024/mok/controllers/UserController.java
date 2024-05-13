@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +21,10 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
+import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
+import pl.lodz.p.it.ssbd2024.model.filtering.UserSpecificationBuilder;
+import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.Signer;
@@ -41,6 +43,27 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAll() {
         return ResponseEntity.ok(userService.getAll().stream().map(UserMapper::toUserResponse).toList());
+    }
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @GetMapping("/filtered")
+    public ResponseEntity<List<UserResponse>> getAllFiltered(@RequestBody FilteredDataRequest request,
+                                                             @RequestBody List<String> roles,
+                                                             @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
+                                                             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+        UserSpecificationBuilder builder = new UserSpecificationBuilder();
+        List<SearchCriteria> criteriaList = request.searchCriteriaList();
+
+        if (criteriaList != null) {
+            criteriaList.forEach(x -> { x.setDataOption(request.dataOption());
+                builder.with(x);
+            });
+        }
+
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
+        Page<User> userPage = userService.getAllFiltered(builder.build(), roles, pageable);
+
+        return ResponseEntity.ok(userPage.stream().map(UserMapper::toUserResponse).toList());
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")

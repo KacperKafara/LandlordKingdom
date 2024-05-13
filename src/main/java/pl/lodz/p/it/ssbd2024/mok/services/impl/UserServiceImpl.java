@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
-import pl.lodz.p.it.ssbd2024.model.Tenant;
-import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
+import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -22,9 +24,7 @@ import pl.lodz.p.it.ssbd2024.services.EmailService;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional(rollbackFor = NotFoundException.class)
@@ -34,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final TenantRepository tenantRepository;
+    private final OwnerRepository ownerRepository;
+    private final AdministratorRepository administratorRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
     private final UserRepository userRepository;
@@ -49,6 +51,32 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<User> getAllFiltered(Specification<User> specification, List<String> roles, Pageable pageable) {
+        Set<UUID> notIncludedUsers = new HashSet<>();
+        if (roles != null && !roles.isEmpty()) {
+            if (!roles.contains("TENANT")) {
+                notIncludedUsers.addAll(tenantRepository.findAllByActive(true).stream().map(Tenant::getUser).map(User::getId).toList());
+            }
+
+            if (!roles.contains("OWNER")) {
+                notIncludedUsers.addAll(ownerRepository.findAllByActive(true).stream().map(Owner::getUser).map(User::getId).toList());
+            }
+
+            if (!roles.contains("ADMINISTRATOR")) {
+                notIncludedUsers.addAll(administratorRepository.findAllByActive(true).stream().map(Administrator::getUser).map(User::getId).toList());
+            }
+        }
+
+        Page<User> research = repository.findAll(specification, pageable);
+
+        if (!notIncludedUsers.isEmpty()) {
+            research.filter(user -> notIncludedUsers.contains(user.getId()));
+        }
+
+        return research;
     }
 
     @Override
