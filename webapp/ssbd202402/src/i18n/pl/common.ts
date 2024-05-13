@@ -1,4 +1,3 @@
-
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -88,6 +87,9 @@ const resetPasswordPage = {
   changePasswordToastDescriptionSuccess: "Twoje hasło zostało zmienione",
   changePasswordToastTitleFail: "Operacja nie powiodła się",
   changePasswordToastDescriptionFail: "Coś poszło nie tak...",
+  changePasswordToastDescriptionTokenNotValid:
+    "Podany żeton nie jest poprawny, wymagane ponowne wysłanie maila.",
+  changePasswordToastDescriptionForbidden: "Jesteś zablokowany.",
 };
 
 const changePasswordForm = {
@@ -121,8 +123,12 @@ const userListPage = {
     "Do użytkownika została wysłana wiadomość email",
   resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
+  resetUserPasswordToastDescriptionNotFound: "Podany użytkownik nie istanieje.",
+  resetUserPasswordToastDescriptionForbidden:
+    "Użytkownik jest nieaktywowany albo zablokowany.",
   resetUserEmailAction: "Zaktualizuj adres email",
-  resetUserEmailSuccess: "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+  resetUserEmailSuccess:
+    "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
 };
 

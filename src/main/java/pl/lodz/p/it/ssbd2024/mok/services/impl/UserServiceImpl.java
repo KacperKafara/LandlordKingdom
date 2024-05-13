@@ -110,8 +110,37 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
-    public void resetUserPassword(String email) throws NotFoundException, TokenGenerationException {
+    public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
+        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setBlocked(false);
+        String token = verificationTokenService.generateEmailVerificationToken(user);
+        URI uri = URI.create(appUrl + "/update-email/" + token);
+        emailService.sendEmailChangeEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
+    }
+
+    @Override
+    @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
+    public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
+        VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
+        User user = repository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setEmail(email);
+        repository.saveAndFlush(user);
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class, UserBlockedException.class, UserNotVerifiedException.class})
+    public void sendChangePasswordEmail(String email) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+
+        if (user.isBlocked()) {
+            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
+        }
+
+        if (!user.isVerified()) {
+            throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED);
+        }
+
         String token = verificationTokenService.generatePasswordVerificationToken(user);
 
         String link = appUrl + "/reset-password?token=" + token;
@@ -132,29 +161,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
-    public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
-        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setBlocked(false);
-        String token = verificationTokenService.generateEmailVerificationToken(user);
-        URI uri = URI.create(appUrl + "/update-email/" + token);
-        emailService.sendEmailChangeEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
-    }
-
-    @Override
-    @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
-    public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
-        VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
-        User user = repository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setEmail(email);
-        repository.saveAndFlush(user);
-
-    }
-
-    @Override
-    public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+    @Transactional(rollbackFor = {VerificationTokenUsedException.class, VerificationTokenExpiredException.class, UserBlockedException.class})
+    public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException {
         VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
         User user = verificationToken.getUser();
+
+        if (user.isBlocked()) {
+            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
+        }
+
         user.setPassword(passwordEncoder.encode(password));
         userRepository.saveAndFlush(user);
     }

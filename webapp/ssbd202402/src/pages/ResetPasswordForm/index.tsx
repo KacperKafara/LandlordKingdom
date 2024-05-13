@@ -8,10 +8,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
-import { useResetPassword } from "@/data/useUserPassword";
+import { useResetPassword } from "@/data/useResetPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
 import { TFunction } from "i18next";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -28,9 +26,8 @@ type ResetPasswordSchema = z.infer<ReturnType<typeof getResetPasswordSchema>>;
 
 const ResetPasswordForm: FC = () => {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const navigate = useNavigate();
-  const { resetPassword } = useResetPassword();
+  const resetPassword = useResetPassword();
   const form = useForm<ResetPasswordSchema>({
     resolver: zodResolver(getResetPasswordSchema(t)),
     values: {
@@ -39,34 +36,10 @@ const ResetPasswordForm: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    try {
-      // const email = values.email;
-      console.log({ email: values.email });
-      await resetPassword({ email: values.email });
-      toast({
-        title: t("resetPasswordForm.resetUserPasswordToastTitleSuccess"),
-        description: t(
-          "resetPasswordForm.resetUserPasswordToastDescriptionSuccess"
-        ),
-      });
+    resetPassword.mutate(values);
+
+    if (resetPassword.isSuccess) {
       navigate("/login");
-    } catch (error) {
-      const errorResponse = error as AxiosError;
-      if (errorResponse.response?.status === 404) {
-        toast({
-          title: t("resetPasswordForm.resetUserPasswordToastTitleFail"),
-          description: t(
-            "resetPasswordForm.resetUserPasswordToastDescriptionNotFound"
-          ),
-        });
-      } else {
-        toast({
-          title: t("resetPasswordForm.resetUserPasswordToastTitleFail"),
-          description: t(
-            "resetPasswordForm.resetUserPasswordToastDescriptionFail"
-          ),
-        });
-      }
     }
   });
 
