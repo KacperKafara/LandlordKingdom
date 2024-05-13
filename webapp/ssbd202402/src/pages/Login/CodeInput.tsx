@@ -20,7 +20,6 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
-import { toast } from "@/components/ui/use-toast.ts";
 import { useNavigate } from "react-router-dom";
 import { useVerifyCode } from "@/data/useAuthenticate.ts";
 
@@ -32,6 +31,7 @@ const CodeFormSchema = (t: TFunction) =>
   });
 
 interface CodeInputProps {
+  login: string;
   roles: string[] | undefined;
   setToken: (token: string) => void;
   setCodeInputOpen: (value: boolean) => void;
@@ -41,6 +41,7 @@ interface CodeInputProps {
 type CodeSchema = z.infer<ReturnType<typeof CodeFormSchema>>;
 
 const CodeInput: FC<CodeInputProps> = ({
+  login,
   roles,
   setToken,
   setCodeInputOpen,
@@ -58,7 +59,7 @@ const CodeInput: FC<CodeInputProps> = ({
 
   const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
     try {
-      const result = await verifyCode({ token: data.pin });
+      const result = await verifyCode({ login, token: data.pin });
       setToken(result.token);
       if (roles == undefined) {
         return navigate("/login");
@@ -77,13 +78,7 @@ const CodeInput: FC<CodeInputProps> = ({
             navigate("/login");
         }
       }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: t("loginPage.loginError"),
-        description: t("loginPage.tryAgain"),
-      });
-    }
+    } catch (_) {}
   };
 
   return (

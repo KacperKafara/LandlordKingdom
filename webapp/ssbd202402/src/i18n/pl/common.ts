@@ -16,6 +16,10 @@ const loginPage = {
   changeLanguage: "Język",
   submit: "Wyślij",
   backToLoginForm: "Wróć do formularza logowania",
+  tokenError: {
+    title: "Błąd danych",
+    description: "Wprowadzono niepoprawny żeton",
+  },
 };
 
 const userDetailsPage = {

@@ -79,12 +79,10 @@ public class AuthController {
         try {
             String token = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(token));
-        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (LoginNotMatchToOTPException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 }

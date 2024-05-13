@@ -16,6 +16,10 @@ const loginPage = {
   changeLanguage: "Language",
   submit: "Submit",
   backToLoginForm: "Back to login form",
+  tokenError: {
+    title: "Incorrect data",
+    description: "Provided incorrect token",
+  },
 };
 
 const userDetailsPage = {
