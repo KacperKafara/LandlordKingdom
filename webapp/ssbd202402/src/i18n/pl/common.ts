@@ -133,6 +133,9 @@ const userListPage = {
   resetUserEmailSuccess:
     "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
+  updateEmailAddressTitle: "Czy na pewno chcesz zaktualizować adres email użytkownika?",
+  updateEmailAddressDescription: "Na adres email użytkownika zostanie wysłany link do zmiany adresu email",
+  updateEmailAddress: "Zaktualizuj adres email",
 };
 
 const common = {
@@ -155,11 +158,14 @@ const userDataPage = {
   language: "Język*",
   error: "Błąd",
   success: "Dane zaktualizowane",
+
 };
 
 const mePage = {
   accountInfo: "Dane użytkownika",
   updateEmailAddress: "Zaktualizuj adres email",
+  updateEmailAddressTitle: "Czy na pewno chcesz zaktualizować adres email?",
+  updateEmailAddressDescription: "Na przypisany do konta adres email zostanie wysłany link do formularza zmiany adresu email",
 };
 
 export default {
