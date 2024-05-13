@@ -11,6 +11,8 @@ const loginPage = {
   invalidCredentials: "Nieprawidłowe dane logowania",
   loginNotAllowed: "Logowanie jest zablokowane, sprawdź email",
   tryAgain: "Spróbuj ponownie",
+  codeLengthMessage: "Kod uwierzytelniania dwufazowego musi mieć 8 cyfr",
+  codeDescription: "Wprowaź kod uwierzytelniania dwufazowego"
 };
 
 const userDetailsPage = {
