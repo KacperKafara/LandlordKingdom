@@ -38,21 +38,4 @@ public class Signer {
         }
     }
 
-    private boolean verifySignature(String token) throws ParseException, JOSEException {
-        JWSObject jwsObject = JWSObject.parse(token);
-        JWSVerifier verifier = new MACVerifier(secretValue);
-        return jwsObject.verify(verifier);
-    }
-
-    public boolean verifySignature(UUID id, Long version, String token) {
-        try {
-            if (!verifySignature(token)) return false;
-            JWSObject jwsObject = JWSObject.parse(token);
-            Map<String, Object> claims = jwsObject.getPayload().toJSONObject();
-            return id.equals(UUID.fromString((String) claims.get("id"))) && version.equals(claims.get("version"));
-        } catch (ParseException | JOSEException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, OptimisticLockExceptionMessages.PROBLEM_WITH_IF_MATCH_HEADER);
-        }
-    }
-
 }

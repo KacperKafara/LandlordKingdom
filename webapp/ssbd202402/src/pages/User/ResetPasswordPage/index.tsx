@@ -7,7 +7,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFunction } from "i18next";
@@ -16,7 +15,6 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { Toaster } from "@/components/ui/toaster";
 import { useChangeUserPasswordWithToken } from "@/data/useChangeUserPasswordWithToken";
 
 const getPasswordResetSchema = (t: TFunction) =>
@@ -35,8 +33,7 @@ type PasswordResetSchema = z.infer<ReturnType<typeof getPasswordResetSchema>>;
 const ResetPasswordPage: FC = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { toast } = useToast();
-  const { changePassword } = useChangeUserPasswordWithToken();
+  const changePassword = useChangeUserPasswordWithToken();
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
 
@@ -55,24 +52,13 @@ const ResetPasswordPage: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    const result = await changePassword({
+    changePassword.mutate({
       password: values.password,
       token: token || "",
     });
 
-    if (result === 200) {
-      toast({
-        title: t("resetPasswordPage.changePasswordToastTitleSuccess"),
-        description: t(
-          "resetPasswordPage.changePasswordToastDescriptionSuccess"
-        ),
-      });
+    if (changePassword.isSuccess) {
       navigate("/login");
-    } else {
-      toast({
-        title: t("resetPasswordPage.changePasswordToastTitleFail"),
-        description: t("resetPasswordPage.changePasswordToastDescriptionFail"),
-      });
     }
   });
 
@@ -129,7 +115,6 @@ const ResetPasswordPage: FC = () => {
           </div>
         </form>
       </Form>
-      <Toaster />
     </div>
   );
 };

@@ -17,8 +17,6 @@ import { useAuthenticate } from "@/data/useAuthenticate";
 import { useUserStore } from "@/store/userStore";
 import { NavLink, Navigate } from "react-router-dom";
 import i18next, { TFunction } from "i18next";
-import { AxiosError } from "axios";
-import { toast } from "@/components/ui/use-toast";
 import { isTokenValid } from "@/utils/jwt";
 import CodeInput from "@/pages/Login/CodeInput";
 import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
@@ -28,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLanguageStore } from "@/i18n/languageStore";
+import { Loader2 } from "lucide-react";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -39,9 +38,10 @@ type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
 const Login2FaPage: FC = () => {
   const { t } = useTranslation();
-  const { setToken, token, roles } = useUserStore();
-  const { authenticate } = useAuthenticate();
+  const { setToken, setRefreshToken, token, roles } = useUserStore();
+  const { authenticate, isPending } = useAuthenticate();
   const { setLanguage } = useLanguageStore();
+  const [login, setLogin] = useState<string>();
 
   const [codeInputOpen, setCodeInputOpen] = useState(false);
   const form = useForm<LoginSchema>({
@@ -52,57 +52,33 @@ const Login2FaPage: FC = () => {
     },
   });
 
+  const role_mapping: { [key: string]: string } = {
+    ADMINISTRATOR: "admin",
+    TENANT: "tenant",
+    OWNER: "owner",
+  };
+
   const onSubmit = form.handleSubmit(async ({ login, password }) => {
     try {
       await authenticate({ login, password, language: i18next.language });
       setCodeInputOpen(true);
-    } catch (error) {
-      const responseError = error as AxiosError;
-      if (
-        responseError.response?.status === 401 ||
-        responseError.response?.status === 404
-      ) {
-        toast({
-          variant: "destructive",
-          title: t("loginPage.loginError"),
-          description: t("loginPage.invalidCredentials"),
-        });
-      } else if (responseError.response?.status === 403) {
-        toast({
-          variant: "destructive",
-          title: t("loginPage.loginError"),
-          description: t("loginPage.loginNotAllowed"),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("loginPage.loginError"),
-          description: t("loginPage.tryAgain"),
-        });
-      }
-    }
+      setLogin(login);
+    } catch (_) {}
   });
 
-  if (token && isTokenValid(token) && roles != undefined) {
-    switch (roles[0]) {
-      case "ADMINISTRATOR":
-        return <Navigate to={"/admin/test"} />;
-      case "TENANT":
-        return <Navigate to={"/tenant/test"} />;
-      case "OWNER":
-        return <Navigate to={"/owner/test"} />;
-      default:
-        return <Navigate to={"/login"} />;
-    }
+  if (token && isTokenValid(token)) {
+    return <Navigate to={`/${role_mapping[roles![0]]}`} replace />;
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       {codeInputOpen ? (
         <CodeInput
+          login={login || ""}
           roles={roles}
           setToken={setToken}
           setCodeInputOpen={setCodeInputOpen}
+          setRefreshToken={setRefreshToken}
           resetForm={form.reset}
         />
       ) : (
@@ -178,7 +154,10 @@ const Login2FaPage: FC = () => {
             >
               {t("loginPage.forgotPassword")}
             </NavLink>
-            <Button type="submit">{t("loginPage.loginButton")}</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {t("loginPage.loginButton")}
+            </Button>
             <Button variant="link" asChild className="w-fit self-center">
               <NavLink to={"/register"}>{t("loginPage.register")}</NavLink>
             </Button>

@@ -1,20 +1,26 @@
 pipeline {
     agent any
+    tools {
+        nodejs 'nodejs'
+    }
 
     stages {
-        stage('Build') {
+        stage('Build java') {
             steps {
-                echo 'Building..'
+                sh 'mvn -B -Dmaven.test.skip clean package '
+            }
+        }
+        stage('Build js') {
+            steps {
+                dir('./webapp/ssbd202402') {
+                    sh 'yarn'
+                    sh 'yarn build'
+                }
             }
         }
         stage('Test') {
             steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+                sh 'mvn test'
             }
         }
     }
