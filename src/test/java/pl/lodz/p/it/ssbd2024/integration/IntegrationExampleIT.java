@@ -10,7 +10,7 @@ import java.io.FileInputStream;
 
 import static io.restassured.RestAssured.given;
 import static org.dbunit.Assertion.assertEquals;
-
+import static org.hamcrest.Matchers.equalTo;
 
 public class IntegrationExampleIT extends BaseConfig {
 
@@ -31,7 +31,7 @@ public class IntegrationExampleIT extends BaseConfig {
 
         ReplacementDataSet dataSetFromDb = createDataSetFromDb();
 
-        IDataSet resultDataset = new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/datasets/usersAddResult.xml"));
+        IDataSet resultDataset = new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/datasets/usersResult.xml"));
 
         assertEquals(resultDataset, dataSetFromDb);
     }
