@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Map;
 
-@Log
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -46,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setText(body, true);
             mailSender.send(message);
         } catch (MessagingException e) {
-            log.warning("Failed to send email.");
+            log.warn("Failed to send email.");
             throw new RuntimeException(e);
         }
 

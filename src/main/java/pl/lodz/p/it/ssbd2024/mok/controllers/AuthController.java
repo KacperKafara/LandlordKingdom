@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +31,7 @@ import java.security.InvalidKeyException;
 @RequiredArgsConstructor
 @PreAuthorize("permitAll()")
 public class AuthController {
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final HttpServletRequest servletRequest;
@@ -95,7 +98,7 @@ public class AuthController {
     @PostMapping("verify-2fa")
     public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
         try {
-            String token = authenticationService.verifyOTP(request.token());
+            String token = authenticationService.verifyOTP(request.token(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

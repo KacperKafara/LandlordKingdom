@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,7 +29,7 @@ import java.util.UUID;
 @Service
 @Transactional(rollbackFor = NotFoundException.class)
 @RequiredArgsConstructor
-@Log
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
