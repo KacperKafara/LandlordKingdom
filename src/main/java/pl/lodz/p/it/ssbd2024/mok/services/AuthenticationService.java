@@ -16,5 +16,5 @@ public interface AuthenticationService {
 
     void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException;
 
-    String verifyOTP(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException;
+    String verifyOTP(String token, String remoteAddr) throws VerificationTokenUsedException, VerificationTokenExpiredException;
 }

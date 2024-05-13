@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Log
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -170,10 +170,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String verifyOTP(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+    public String verifyOTP(String token, String remoteAddr) throws VerificationTokenUsedException, VerificationTokenExpiredException {
         VerificationToken verificationToken = verificationTokenService.validateOTPToken(token);
         String jwt = jwtService.generateToken(verificationToken.getUser().getId(), getUserRoles(verificationToken.getUser()));
-
+        log.info("Session started for user with id: {} from ip address: {}", verificationToken.getUser().getId(), remoteAddr);
         return jwt;
     }
 }
