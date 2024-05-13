@@ -1,4 +1,4 @@
-import {FC} from "react";
+import { FC } from "react";
 import {
     InputOTP,
     InputOTPGroup,
@@ -13,17 +13,18 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
-import {zodResolver} from "@hookform/resolvers/zod"
-import {SubmitHandler, useForm} from "react-hook-form"
-import {z} from "zod"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { z } from "zod"
 
-import {Button} from "@/components/ui/button"
-import {TFunction} from "i18next";
-import {useTranslation} from "react-i18next";
-import {toast} from "@/components/ui/use-toast.ts";
-import {useNavigate} from "react-router-dom";
-import {useVerifyCode} from "@/data/useAuthenticate.ts";
-
+import { Button } from "@/components/ui/button"
+import { TFunction } from "i18next";
+import { useTranslation } from "react-i18next";
+import { toast } from "@/components/ui/use-toast.ts";
+import { useNavigate } from "react-router-dom";
+import { useVerifyCode } from "@/data/useAuthenticate.ts";
+import { role_mapping } from "@/data/role_path_maping";
+import { useUserStore } from "@/store/userStore.ts";
 
 const CodeFormSchema = (t: TFunction) => z.object({
     pin: z.string().min(6, {
@@ -31,14 +32,14 @@ const CodeFormSchema = (t: TFunction) => z.object({
     }),
 })
 
-interface CodeInputProps  {
-    roles : string[] | undefined,
-    setToken: (token: string) => void
+interface CodeInputProps {
+    roles: string[] | undefined,
 }
 
 type CodeSchema = z.infer<ReturnType<typeof CodeFormSchema>>
-const CodeInput: FC<CodeInputProps> = ({roles, setToken}) => {
-    const {t} = useTranslation();
+const CodeInput: FC<CodeInputProps> = ({ roles }) => {
+    const { t } = useTranslation();
+    const { setToken, token } = useUserStore();
     const form = useForm<CodeSchema>({
         resolver: zodResolver(CodeFormSchema(t)),
         defaultValues: {
@@ -46,29 +47,17 @@ const CodeInput: FC<CodeInputProps> = ({roles, setToken}) => {
         },
     })
     const navigate = useNavigate();
-    const {verifyCode} = useVerifyCode();
+    const { verifyCode } = useVerifyCode();
+
+
+
 
     const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
         try {
-            const result = await verifyCode({token: data.pin})
+            const result = await verifyCode({ token: data.pin });
             setToken(result.token);
-            if (roles == undefined) {
-                return navigate("/login");
-            } else {
-                switch (roles[0]) {
-                    case "ADMINISTRATOR":
-                        navigate("/admin/test");
-                        break;
-                    case "TENANT":
-                        navigate("/tenant/test");
-                        break;
-                    case "OWNER":
-                        navigate("/owner/test");
-                        break;
-                    default:
-                        navigate("/login");
-                }
-            }
+            console.log(token);
+            navigate(`/${role_mapping[roles![0]]}`);
         } catch (error) {
             toast({
                 variant: "destructive",
@@ -85,27 +74,27 @@ const CodeInput: FC<CodeInputProps> = ({roles, setToken}) => {
                     <FormField
                         control={form.control}
                         name="pin"
-                        render={({field}) => (
+                        render={({ field }) => (
                             <FormItem className="text-center">
                                 <FormLabel className="text-2xl" >One-Time Password</FormLabel>
                                 <FormControl>
                                     <InputOTP maxLength={8} {...field}>
                                         <InputOTPGroup className="">
-                                            <InputOTPSlot index={0}/>
-                                            <InputOTPSlot index={1}/>
-                                            <InputOTPSlot index={2}/>
-                                            <InputOTPSlot index={3}/>
-                                            <InputOTPSlot index={4}/>
-                                            <InputOTPSlot index={5}/>
-                                            <InputOTPSlot index={6}/>
-                                            <InputOTPSlot index={7}/>
+                                            <InputOTPSlot index={0} />
+                                            <InputOTPSlot index={1} />
+                                            <InputOTPSlot index={2} />
+                                            <InputOTPSlot index={3} />
+                                            <InputOTPSlot index={4} />
+                                            <InputOTPSlot index={5} />
+                                            <InputOTPSlot index={6} />
+                                            <InputOTPSlot index={7} />
                                         </InputOTPGroup>
                                     </InputOTP>
                                 </FormControl>
                                 <FormDescription >
                                     {t("loginPage.codeDescription")}
                                 </FormDescription>
-                                <FormMessage/>
+                                <FormMessage />
                             </FormItem>
                         )}
                     />
