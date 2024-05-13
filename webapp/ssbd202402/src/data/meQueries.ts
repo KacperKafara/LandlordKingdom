@@ -4,9 +4,12 @@ import { UserResponse } from "@/types/user/UserResponseType.ts";
 import { UserUpdateRequestType } from "@/types/user/UserUpdateRequestType.ts";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
+import { useLanguageStore } from "@/i18n/languageStore";
 
-const getMeData = async () => {
-  return (await api.get<UserResponse>("/me"));
+const getMeData = async (changeLanguage: (lang: string) => void) => {
+  const response = await api.get<UserResponse>("/me");
+  changeLanguage(response.data.language);
+  return response;
 };
 
 interface UserUpdateRequest {
@@ -18,14 +21,15 @@ const putMeData = async (data: UserUpdateRequest) => {
   await api.put("/me", data.request, {
     headers: {
       "If-Match": data.etag,
-    }
+    },
   });
 };
 
 export const useMeQuery = () => {
+  const { setLanguage } = useLanguageStore();
   return useQuery({
     queryKey: ["meData"],
-    queryFn: getMeData,
+    queryFn: () => getMeData(setLanguage),
   });
 };
 

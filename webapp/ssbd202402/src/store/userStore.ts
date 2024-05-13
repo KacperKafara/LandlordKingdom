@@ -7,6 +7,7 @@ type UserStore = {
   roles?: string[];
   setToken: (token: string) => void;
   clearToken: () => void;
+  activeRole?: string;
 };
 
 const LSToken = localStorage.getItem("token");
@@ -15,6 +16,7 @@ export const useUserStore = create<UserStore>((set) => ({
   token: LSToken === null ? undefined : LSToken,
   id: LSToken === null ? undefined : decodeJwt(LSToken).sub,
   roles: LSToken === null ? undefined : decodeJwt(LSToken).authorities,
+  activeRole: LSToken === null ? undefined : decodeJwt(LSToken).authorities[0],
   setToken: (token: string) =>
     set(() => {
       const payload = decodeJwt(token);
@@ -26,8 +28,8 @@ export const useUserStore = create<UserStore>((set) => ({
       };
     }),
   clearToken: () =>
-      set(() => {
-          localStorage.removeItem("token");
-          return { token: undefined, id: undefined, roles: undefined };
-      }),
+    set(() => {
+      localStorage.removeItem("token");
+      return { token: undefined, id: undefined, roles: undefined };
+    }),
 }));

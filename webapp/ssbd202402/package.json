@@ -23,6 +23,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "i18next": "^23.11.2",
+    "input-otp": "^1.2.4",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.372.0",
     "postcss": "^8.4.38",
