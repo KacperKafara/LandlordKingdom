@@ -28,7 +28,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useLanguageStore } from "@/i18n/languageStore";
-
+import { role_mapping } from "@/utils/role_path_maping.ts";
 const getLoginSchema = (t: TFunction) =>
   z.object({
     login: z.string().min(1, t("loginPage.loginRequired")),
@@ -39,7 +39,7 @@ type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
 const Login2FaPage: FC = () => {
   const { t } = useTranslation();
-  const { setToken, token, roles } = useUserStore();
+  const { token, roles } = useUserStore();
   const { authenticate } = useAuthenticate();
   const { setLanguage } = useLanguageStore();
 
@@ -83,23 +83,14 @@ const Login2FaPage: FC = () => {
     }
   });
 
-  if (token && isTokenValid(token) && roles != undefined) {
-    switch (roles[0]) {
-      case "ADMINISTRATOR":
-        return <Navigate to={"/admin/test"} />;
-      case "TENANT":
-        return <Navigate to={"/tenant/test"} />;
-      case "OWNER":
-        return <Navigate to={"/owner/test"} />;
-      default:
-        return <Navigate to={"/login"} />;
-    }
+  if (token && isTokenValid(token)) {
+    return <Navigate to={`/${role_mapping[roles![0]]}`} replace />;
   }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       {codeInputOpen ? (
-        <CodeInput roles={roles} setToken={setToken} />
+        <CodeInput roles={roles} />
       ) : (
         <Form {...form}>
           <form
