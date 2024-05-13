@@ -46,13 +46,12 @@ const LoginPage: FC = () => {
   });
 
   const role_mapping: { [key: string]: string } = {
-    "ADMINISTRATOR": "admin",
-    "TENANT": "tenant",
-    "OWNER": "owner",
-  }
+    ADMINISTRATOR: "admin",
+    TENANT: "tenant",
+    OWNER: "owner",
+  };
 
-
-  const onSubmit = form.handleSubmit(async ({login,password}) => {
+  const onSubmit = form.handleSubmit(async ({ login, password }) => {
     try {
       const result = await authenticate({
         login,
@@ -60,7 +59,7 @@ const LoginPage: FC = () => {
         language: i18next.language,
       });
       setToken(result.token);
-      navigate(`/${role_mapping[roles![0]]}`)
+      navigate(`/${role_mapping[roles![0]]}`);
     } catch (error) {
       const responseError = error as AxiosError;
       if (

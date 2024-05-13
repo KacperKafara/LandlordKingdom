@@ -21,9 +21,9 @@ import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
-@Log
 import java.security.InvalidKeyException;
 
+@Log
 @RestController()
 @RequestMapping("/auth")
 @RequiredArgsConstructor
