@@ -1,0 +1,72 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- Define element types -->
+    <xs:element name="dataset">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="users" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="personal_data" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="access_levels" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="administrators" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="owners" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="tenants" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="users">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="login" type="xs:string" use="required"/>
+            <xs:attribute name="password" type="xs:string" use="required"/>
+            <xs:attribute name="login_attempts" type="xs:string" use="required"/>
+            <xs:attribute name="last_successful_login" type="xs:string" use="optional"/>
+            <xs:attribute name="last_failed_login" type="xs:string" use="optional"/>
+            <xs:attribute name="last_successful_login_ip" type="xs:string" use="optional"/>
+            <xs:attribute name="last_failed_login_ip" type="xs:string" use="optional"/>
+            <xs:attribute name="blocked" type="xs:boolean" use="required"/>
+            <xs:attribute name="verified" type="xs:boolean" use="required"/>
+            <xs:attribute name="language" type="xs:string" use="required"/>
+            <xs:attribute name="version" type="xs:string" use="required"/>
+            <xs:attribute name="created_at" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="personal_data">
+        <xs:complexType>
+            <xs:attribute name="user_id" type="xs:string" use="required"/>
+            <xs:attribute name="email" type="xs:string" use="required"/>
+            <xs:attribute name="first_name" type="xs:string" use="required"/>
+            <xs:attribute name="last_name" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="access_levels">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="user_id" type="xs:string" use="required"/>
+            <xs:attribute name="level" type="xs:string" use="required"/>
+            <xs:attribute name="active" type="xs:boolean" use="required"/>
+            <xs:attribute name="version" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="administrators">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="owners">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="tenants">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>
