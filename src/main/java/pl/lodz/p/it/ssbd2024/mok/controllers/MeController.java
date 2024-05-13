@@ -11,12 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidPasswordException;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticatedChangePasswordRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.ChangePasswordRequest;
@@ -103,6 +99,8 @@ public class MeController {
             return ResponseEntity.ok().build();
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (UserBlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 

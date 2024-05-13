@@ -1,7 +1,12 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import com.eatthepath.otp.HmacOneTimePasswordGenerator;
+import com.eatthepath.otp.TimeBasedOneTimePasswordGenerator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,11 +17,16 @@ import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
+import pl.lodz.p.it.ssbd2024.mok.repositories.OTPTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -27,6 +37,13 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final AccountVerificationTokenRepository accountTokenRepository;
     private final EmailVerificationTokenRepository emailTokenRepository;
     private final PasswordVerificationTokenRepository passwordTokenRepository;
+    private final OTPTokenRepository otpTokenRepository;
+    private final HmacOneTimePasswordGenerator hotp = new HmacOneTimePasswordGenerator(8);
+    private Long counter = Long.MIN_VALUE;
+
+    @Value("${otp.secret}")
+    private String otpSecret;
+
 
     @Override
     public String generateAccountVerificationToken(User user) throws TokenGenerationException {
@@ -85,6 +102,28 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
             throw new VerificationTokenExpiredException(VerificationTokenMessages.VERIFICATION_TOKEN_EXPIRED);
         }
         passwordTokenRepository.deleteById(verificationToken.getId());
+        return verificationToken;
+    }
+
+    @Override
+    public String generateOTPToken(User user) throws InvalidKeyException {
+        byte[] bytes = otpSecret.getBytes();
+        SecretKey key = new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA1");
+        String tokenVal = hotp.generateOneTimePasswordString(key, counter++);
+        otpTokenRepository.deleteByUserId(user.getId());
+        otpTokenRepository.flush();
+        OTPToken token = new OTPToken(tokenVal, Instant.now().plus(PasswordVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
+        return otpTokenRepository.saveAndFlush(token).getToken();
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
+    public VerificationToken validateOTPToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
+        OTPToken verificationToken = otpTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
+        if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
+            throw new VerificationTokenExpiredException(VerificationTokenMessages.VERIFICATION_TOKEN_EXPIRED);
+        }
+        otpTokenRepository.deleteById(verificationToken.getId());
         return verificationToken;
     }
 

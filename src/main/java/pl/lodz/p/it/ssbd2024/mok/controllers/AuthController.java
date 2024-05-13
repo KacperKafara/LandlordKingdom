@@ -22,6 +22,8 @@ import pl.lodz.p.it.ssbd2024.mok.dto.VerifyUserRequest;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
+import java.security.InvalidKeyException;
+
 @RestController()
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -64,11 +66,37 @@ public class AuthController {
         }
     }
 
+    @PostMapping("/signin-2fa")
+    public ResponseEntity<Void> authenticate2fa(@RequestBody @Valid AuthenticationRequest request) {
+        try {
+            authenticationService.generateOTP(request.login(), request.password(), request.language(), servletRequest.getRemoteAddr());
+            return ResponseEntity.ok().build();
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (UserNotVerifiedException | SignInBlockedException | UserBlockedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        } catch (InvalidLoginDataException e) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+        } catch (InvalidKeyException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There was an error generating OTP");
+        }
+    }
+
     @PostMapping("/verify")
     public ResponseEntity<Void> verify(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
         try {
             authenticationService.verify(request.token());
             return ResponseEntity.ok().build();
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    @PostMapping("verify-2fa")
+    public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
+        try {
+            String token = authenticationService.verifyOTP(request.token());
+            return ResponseEntity.ok(new AuthenticationResponse(token));
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
