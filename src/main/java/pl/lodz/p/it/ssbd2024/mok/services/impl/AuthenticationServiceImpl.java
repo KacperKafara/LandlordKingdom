@@ -122,6 +122,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setVerified(true);
         userRepository.saveAndFlush(user);
+        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage())    ;
     }
 
     @Override

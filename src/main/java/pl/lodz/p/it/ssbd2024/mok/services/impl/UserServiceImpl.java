@@ -97,6 +97,7 @@ public class UserServiceImpl implements UserService {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setBlocked(true);
         repository.saveAndFlush(user);
+        emailService.sendAccountBlockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
@@ -105,6 +106,7 @@ public class UserServiceImpl implements UserService {
 
         user.setBlocked(false);
         repository.saveAndFlush(user);
+        emailService.sendAccountUnblockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
