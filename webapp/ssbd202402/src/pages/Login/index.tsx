@@ -16,7 +16,7 @@ import { useTranslation } from "react-i18next";
 import { useAuthenticate } from "@/data/useAuthenticate";
 import { useUserStore } from "@/store/userStore";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
-import { TFunction } from "i18next";
+import i18next, { TFunction } from "i18next";
 import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
 import { isTokenValid } from "@/utils/jwt";
@@ -42,9 +42,13 @@ const LoginPage: FC = () => {
     },
   });
 
-  const onSubmit = form.handleSubmit(async (values) => {
+  const onSubmit = form.handleSubmit(async ({ login, password }) => {
     try {
-      const result = await authenticate(values);
+      const result = await authenticate({
+        login,
+        password,
+        language: i18next.language,
+      });
       setToken(result.token);
       if (roles == undefined) {
         return navigate("/login");
@@ -100,7 +104,6 @@ const LoginPage: FC = () => {
         return <Navigate to={"/owner/test"} />;
       default:
         return <Navigate to={"/login"} />;
-
     }
   }
 
