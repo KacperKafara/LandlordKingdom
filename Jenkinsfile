@@ -10,6 +10,7 @@ pipeline {
         stage('Build js') {
             steps {
                 dir('./webapp/ssbd202402') {
+                    sh 'yarn'
                     sh 'yarn build'
                 }
             }
