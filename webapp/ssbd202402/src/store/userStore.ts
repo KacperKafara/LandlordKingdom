@@ -30,12 +30,13 @@ export const useUserStore = create<UserStore>((set) => ({
         token,
         id: payload.sub,
         roles: payload.authorities,
+        activeRole: payload.authorities[0],
       };
     }),
   clearToken: () =>
     set(() => {
       localStorage.removeItem("token");
-      return { token: undefined, id: undefined, roles: undefined };
+      return { token: undefined, id: undefined, roles: undefined, activeRole: undefined };
     }),
   setRefreshToken: (token: string) =>
     set(() => {

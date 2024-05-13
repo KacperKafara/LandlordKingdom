@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,7 +31,7 @@ import java.util.UUID;
 @Service
 @Transactional(rollbackFor = NotFoundException.class)
 @RequiredArgsConstructor
-@Log
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -105,6 +106,7 @@ public class UserServiceImpl implements UserService {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setBlocked(true);
         repository.saveAndFlush(user);
+        emailService.sendAccountBlockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
@@ -113,6 +115,7 @@ public class UserServiceImpl implements UserService {
 
         user.setBlocked(false);
         repository.saveAndFlush(user);
+        emailService.sendAccountUnblockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override

@@ -33,7 +33,7 @@ const AccountRoutes: RouteObject[] = [
 ];
 
 export const UnprotectedRoutes: RouteObject[] = [
-  { path: "/login", Component: Login2FaPage },
+  { path: "/login", Component: LoginPage },
   { path: "/register", Component: RegisterPage },
   { path: "/register-success", Component: RegistrationSuccessPage },
   { path: "/reset-password", Component: ResetPasswordPage },

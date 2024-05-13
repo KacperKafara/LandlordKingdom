@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { TFunction } from "i18next";
-import { FC, act } from "react";
+import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { useUserStore } from "@/store/userStore";
