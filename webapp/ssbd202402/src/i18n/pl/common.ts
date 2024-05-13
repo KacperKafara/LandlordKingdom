@@ -20,6 +20,7 @@ const loginPage = {
     title: "Błąd danych",
     description: "Wprowadzono niepoprawny żeton",
   },
+  googleLoginButton: "Zaloguj się z Google",
 };
 
 const userDetailsPage = {
