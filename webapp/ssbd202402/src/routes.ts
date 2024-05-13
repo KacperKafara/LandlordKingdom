@@ -4,7 +4,6 @@ import OwnerLayout from "./Layouts/OwnerLayout";
 import TenantLayout from "./Layouts/TenantLayout";
 import AccountLayout from "./Layouts/AccountLayout";
 import AdminTestPage from "./pages/Admin/Test";
-import LoginPage from "./pages/Login";
 import RegisterPage from "./pages/Register";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
@@ -17,7 +16,7 @@ import VerifyAccountPage from "./pages/VerifyAccount";
 import RegistrationSuccessPage from "./pages/RegistrationSuccess";
 import UpdateEmailPage from "./pages/UpdateEmail";
 import ResetPasswordForm from "./pages/ResetPasswordForm";
-import Login2FaPage from "@/pages/Login/Login2Fa";
+import Login2FaPage from "@/pages/Login";
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },

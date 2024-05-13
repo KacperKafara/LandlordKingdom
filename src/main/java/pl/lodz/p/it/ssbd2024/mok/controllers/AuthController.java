@@ -3,7 +3,6 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,7 +30,6 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<Void> registerUser(@RequestBody @Valid UserCreateRequest newUserData) {
-
         try {
             User newUser = new User(
                     newUserData.firstName(),
@@ -45,20 +43,6 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
         } catch (IdenticalFieldValueException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
-        }
-    }
-
-    @PostMapping("/signin")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody @Valid AuthenticationRequest request) {
-        try {
-            String token = authenticationService.authenticate(request.login(), request.password(), servletRequest.getRemoteAddr());
-            return ResponseEntity.ok(new AuthenticationResponse(token, ""));
-        } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UserNotVerifiedException | SignInBlockedException | UserBlockedException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
-        } catch (InvalidLoginDataException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
@@ -88,13 +72,15 @@ public class AuthController {
         }
     }
 
-    @PostMapping("verify-2fa")
-    public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
+    @PostMapping("/verify-2fa")
+    public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid Verify2FATokenRequest request) {
         try {
-            Map<String, String> tokens = authenticationService.verifyOTP(request.token());
+            Map<String, String> tokens = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(tokens.get("token"), tokens.get("refreshToken")));
-        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
@@ -53,6 +54,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private int loginTimeOut;
 
     @Override
+    @Transactional(propagation = Propagation.MANDATORY)
     public List<String> getUserRoles(User user) {
         List<String> roles = new ArrayList<>();
 
@@ -61,57 +63,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         administratorRepository.findByUserIdAndActive(user.getId(), true).ifPresent(admin -> roles.add("ADMINISTRATOR"));
 
         return roles;
-    }
-
-    @Override
-    @Transactional(rollbackFor = {
-            NotFoundException.class,
-            UserNotVerifiedException.class,
-            UserBlockedException.class,
-            InvalidLoginDataException.class,
-            SignInBlockedException.class
-    })
-    public String authenticate(String login, String password, String ip) throws NotFoundException, UserNotVerifiedException, UserBlockedException, InvalidLoginDataException, SignInBlockedException {
-        User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-
-        if (!user.isVerified()) {
-            throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED);
-        }
-
-        if (user.isBlocked()) {
-            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
-        }
-
-        if (user.getLoginAttempts() >= maxLoginAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toSeconds() <= loginTimeOut) {
-            throw new SignInBlockedException(UserExceptionMessages.SIGN_IN_BLOCKED);
-        } else if (user.getLoginAttempts() >= maxLoginAttempts) {
-            user.setLoginAttempts(0);
-        }
-
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            user.setLastSuccessfulLogin(LocalDateTime.now());
-            user.setLoginAttempts(0);
-            user.setLastSuccessfulLoginIp(ip);
-            userRepository.saveAndFlush(user);
-            List<String> roles = getUserRoles(user);
-
-            if(roles.contains("ADMINISTRATOR")) {
-                emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage());
-            }
-
-            return jwtService.generateToken(user.getId(), roles);
-        } else {
-            user.setLoginAttempts(user.getLoginAttempts() + 1);
-            user.setLastFailedLogin(LocalDateTime.now());
-            user.setLastFailedLoginIp(ip);
-            userRepository.saveAndFlush(user);
-
-            if (user.getLoginAttempts() >= maxLoginAttempts) {
-                LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
-                emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
-            }
-            throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA);
-        }
     }
 
     @Override
@@ -146,41 +97,65 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         if (passwordEncoder.matches(password, user.getPassword())) {
-            user.setLastSuccessfulLogin(LocalDateTime.now());
-            user.setLoginAttempts(0);
-            user.setLastSuccessfulLoginIp(ip);
             user.setLanguage(language);
             userRepository.saveAndFlush(user);
-            List<String> roles = getUserRoles(user);
 
-            if(roles.contains("ADMINISTRATOR")) {
-                emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage());
-            }
             String token = verificationTokenService.generateOTPToken(user);
-            emailService.sendEmail(user.getEmail(), "OTP", "OTP tokne: " + token);
+            emailService.sendOTPEmail(user.getEmail(), user.getFirstName(), token, user.getLanguage());
         } else {
-            user.setLoginAttempts(user.getLoginAttempts() + 1);
-            user.setLastFailedLogin(LocalDateTime.now());
-            user.setLastFailedLoginIp(ip);
-            userRepository.saveAndFlush(user);
-
-            if (user.getLoginAttempts() >= maxLoginAttempts) {
-                LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
-                emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
-            }
+            handleFailedLogin(user, ip);
             throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA);
         }
     }
 
     @Override
-    public Map<String, String> verifyOTP(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
-        VerificationToken verificationToken = verificationTokenService.validateOTPToken(token);
+    public Map<String, String> verifyOTP(String token, String login, String ip) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException, LoginNotMatchToOTPException {
+        VerificationToken verificationToken;
+
+        try {
+            verificationToken = verificationTokenService.validateOTPToken(token);
+        } catch (VerificationTokenUsedException e) {
+            User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+            handleFailedLogin(user, ip);
+            throw e;
+        }
+
+        User user = verificationToken.getUser();
+
+        if(!user.getLogin().equals(login)) {
+            handleFailedLogin(user, ip);
+            throw new LoginNotMatchToOTPException(UserExceptionMessages.LOGIN_NOT_MATCH_TO_OTP);
+        }
+
+        user.setLastSuccessfulLogin(LocalDateTime.now());
+        user.setLoginAttempts(0);
+        user.setLastSuccessfulLoginIp(ip);
+
+        List<String> roles = getUserRoles(user);
+
+        if(roles.contains("ADMINISTRATOR")) {
+            emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage());
+        }
+
         String jwt = jwtService.generateToken(verificationToken.getUser().getId(), getUserRoles(verificationToken.getUser()));
         String refreshToken = jwtService.generateRefreshToken(verificationToken.getUser().getId());
 
         return Map.of(
                 "token", jwt,
                 "refreshToken", refreshToken);
+    }
+
+    @Transactional(propagation = Propagation.MANDATORY)
+    protected void handleFailedLogin(User user, String ip) {
+        user.setLastFailedLogin(LocalDateTime.now());
+        user.setLastFailedLoginIp(ip);
+        user.setLoginAttempts(user.getLoginAttempts() + 1);
+        userRepository.saveAndFlush(user);
+
+        if (user.getLoginAttempts() >= maxLoginAttempts) {
+            LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
+            emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
+        }
     }
 
     @Override
@@ -198,5 +173,4 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         throw new RefreshTokenExpiredException(UserExceptionMessages.REFRESH_TOKEN_EXPIRED);
     }
-
 }
