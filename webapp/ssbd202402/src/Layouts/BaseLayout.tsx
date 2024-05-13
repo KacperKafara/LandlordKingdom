@@ -29,20 +29,24 @@ type BaseLayoutProps = {
 
 const config = {
   admin: {
-    color: "border-b-4 border-orange-500",
+    footer: "bg-orange-500",
+    nav: "border-b-4 border-orange-500",
     hover: "hover:bg-orange-300",
   },
   tenant: {
-    color: "bg-green-500",
+    footer: "border-t-4 border-green-500",
+    nav: "border-b-4 bg-green-500",
     hover: "hover:bg-green-300",
   },
   owner: {
-    color: "bg-blue-500",
+    footer: "border-t-4 border-blue-500",
+    nav: "border-b-4 bg-blue-500",
     hover: "hover:bg-blue-300",
   },
 } satisfies {
   [key in LayoutType]: {
-    color: string;
+    nav: string;
+    footer: string;
     hover: string;
   };
 };
@@ -80,7 +84,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
       <nav
         className={cn(
           "h-20 flex flex-row justify-between items-center px-10",
-          config[type].color
+          config[type].nav
         )}
       >
         <div className="text-2xl font-bold">
@@ -131,7 +135,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
       <footer
         className={cn(
           "h-12 flex justify-center items-center text-xl px-10",
-          config[type].color
+          config[type].footer
         )}
       >
         {t("footer")}

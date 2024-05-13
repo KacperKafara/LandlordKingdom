@@ -29,6 +29,7 @@ import { useLanguageStore } from "@/i18n/languageStore";
 import { Loader2 } from "lucide-react";
 import { useOAuthUrl } from "@/data/useOAuthUrl";
 import { FaGoogle } from "react-icons/fa";
+import { IoLanguage } from "react-icons/io5";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -47,7 +48,6 @@ const Login2FaPage: FC = () => {
 
   const [codeInputOpen, setCodeInputOpen] = useState(false);
   const { oAuthUrl } = useOAuthUrl();
-  const navigate = useNavigate();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(getLoginSchema(t)),
     values: {
@@ -63,11 +63,9 @@ const Login2FaPage: FC = () => {
   };
 
   const onSubmit = form.handleSubmit(async ({ login, password }) => {
-    try {
-      await authenticate({ login, password, language: i18next.language });
-      setCodeInputOpen(true);
-      setLogin(login);
-    } catch (_) {}
+    await authenticate({ login, password, language: i18next.language });
+    setCodeInputOpen(true);
+    setLogin(login);
   });
 
   if (token && isTokenValid(token)) {
@@ -95,9 +93,12 @@ const Login2FaPage: FC = () => {
                 {t("logoPlaceholder")}
               </h1>
               <DropdownMenu>
-                <DropdownMenuTrigger className="w-fit self-end absolute right-2 top-1">
+                <DropdownMenuTrigger
+                  className="w-fit self-end absolute right-1 top-1"
+                  asChild
+                >
                   <Button variant="ghost">
-                    {t("loginPage.changeLanguage")}
+                    <IoLanguage className="w-5 h-5" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
@@ -106,14 +107,14 @@ const Login2FaPage: FC = () => {
                       setLanguage("en");
                     }}
                   >
-                    EN
+                    English
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
                       setLanguage("pl");
                     }}
                   >
-                    PL
+                    Polski
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -157,26 +158,28 @@ const Login2FaPage: FC = () => {
             >
               {t("loginPage.forgotPassword")}
             </NavLink>
-            <Button type="submit" disabled={isPending}>
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              {t("loginPage.loginButton")}
-            </Button>
-                     <Button
-            variant="secondary"
-            type="button"
-              window.location.href = oAuthUrl?.url || "";
-            onClick={() => {
-            }}
-          >
-            <FaGoogle /> Login with google
-          </Button>
-            <Button variant="link" asChild className="w-fit self-center">
-              <NavLink to={"/register"}>{t("loginPage.register")}</NavLink>
-            </Button>
+            <div className="flex flex-col gap-3">
+              <Button type="submit" disabled={isPending}>
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                {t("loginPage.loginButton")}
+              </Button>
+              <Button
+                variant="secondary"
+                type="button"
+                onClick={() => {
+                  window.location.href = oAuthUrl?.url || "";
+                }}
+              >
+                <FaGoogle className="mr-2 h-4 w-4" />
+                {t("loginPage.googleLoginButton")}
+              </Button>
+              <Button variant="link" asChild className="w-fit self-center">
+                <NavLink to={"/register"}>{t("loginPage.register")}</NavLink>
+              </Button>
+            </div>
           </form>
         </Form>
       )}
- 
     </div>
   );
 };

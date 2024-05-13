@@ -20,6 +20,7 @@ const loginPage = {
     title: "Incorrect data",
     description: "Provided incorrect token",
   },
+  googleLoginButton: "Sign in with Google",
 };
 
 const userDetailsPage = {

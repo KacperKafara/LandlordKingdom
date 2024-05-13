@@ -4,8 +4,6 @@ import OwnerLayout from "./Layouts/OwnerLayout";
 import TenantLayout from "./Layouts/TenantLayout";
 import AccountLayout from "./Layouts/AccountLayout";
 import AdminTestPage from "./pages/Admin/Test";
-import LoginPage from "./pages/Login";
-import RegisterPage from "./pages/Register";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";

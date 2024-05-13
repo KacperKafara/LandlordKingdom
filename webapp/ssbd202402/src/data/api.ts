@@ -34,7 +34,6 @@ api.interceptors.response.use(
 
 export const noTokenApi = axios.create({
   baseURL: "http://localhost:8080/ssbd02/",
-  timeout: 1000,
   headers: {
     "Content-Type": "application/json",
   },
