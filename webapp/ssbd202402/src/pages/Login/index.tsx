@@ -27,9 +27,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useLanguageStore } from "@/i18n/languageStore";
 import { Loader2 } from "lucide-react";
-import { useOAuthUrl } from "@/data/useOAuthUrl";
-import { FaGoogle } from "react-icons/fa";
 import { IoLanguage } from "react-icons/io5";
+import GoogleLoginButton from "@/components/GoogleLoginButton";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -45,9 +44,7 @@ const Login2FaPage: FC = () => {
   const { authenticate, isPending } = useAuthenticate();
   const { setLanguage } = useLanguageStore();
   const [login, setLogin] = useState<string>();
-
   const [codeInputOpen, setCodeInputOpen] = useState(false);
-  const { oAuthUrl } = useOAuthUrl();
   const form = useForm<LoginSchema>({
     resolver: zodResolver(getLoginSchema(t)),
     values: {
@@ -163,16 +160,7 @@ const Login2FaPage: FC = () => {
                 {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 {t("loginPage.loginButton")}
               </Button>
-              <Button
-                variant="secondary"
-                type="button"
-                onClick={() => {
-                  window.location.href = oAuthUrl?.url || "";
-                }}
-              >
-                <FaGoogle className="mr-2 h-4 w-4" />
-                {t("loginPage.googleLoginButton")}
-              </Button>
+              <GoogleLoginButton />
               <Button variant="link" asChild className="w-fit self-center">
                 <NavLink to={"/register"}>{t("loginPage.register")}</NavLink>
               </Button>
