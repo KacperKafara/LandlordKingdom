@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Build java') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn -B -Dmaven.test.skip clean package '
             }
         }
         stage('Build js') {
