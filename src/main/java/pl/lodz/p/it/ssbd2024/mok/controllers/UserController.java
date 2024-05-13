@@ -15,11 +15,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
+import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.Signer;
@@ -129,9 +126,9 @@ public class UserController {
 
     @PostMapping("/reset-password")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Void> resetPassword(@RequestParam String email) {
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         try {
-            userService.sendChangePasswordEmail(email);
+            userService.sendChangePasswordEmail(request.email());
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
