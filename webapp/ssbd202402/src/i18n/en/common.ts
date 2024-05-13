@@ -130,8 +130,12 @@ const userListPage = {
   resetUserPasswordToastDescriptionFail: "Something went wrong...",
   resetUserEmailAction: "Update email",
   resetUserEmailSuccess:
-    "Email to change the address has been sent to the user",
+    "An email for changing current address has been sent to the user's email address",
   resetUserEmailError: "Error while initializing email change",
+  resetUserEmailTitle: "Are you sure you want to update user email address?",
+  resetUserEmailDescription: "A link to change the email address will be sent to the user's email address",
+  updateEmailAddress: "Update email address",
+
 };
 
 const common = {
@@ -141,6 +145,9 @@ const common = {
 
 const navLinks = {
   account: "My account",
+  signOut: "Sign out",
+  users: "Users",
+  roles: "Change access level"
 };
 
 const userDataPage = {
@@ -156,6 +163,8 @@ const userDataPage = {
 const mePage = {
   accountInfo: "User data",
   updateEmailAddress: "Update email address",
+  updateEmailAddressTitle: "Are you sure you want to update your email address?",
+  updateEmailAddressDescription: "A link to change the email address will be sent to the user's email address",
 };
 
 export default {
@@ -171,6 +180,8 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  sessionExpired: "Session expired",
+  sessionExpiredDescription: "Session expired, please login again",
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Confirm",

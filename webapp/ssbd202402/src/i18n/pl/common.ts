@@ -190,6 +190,8 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  sessionExpired: "Sesja wygasła",
+  sessionExpiredDescription: "Twoja sesja wygasła, zaloguj się ponownie",
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",

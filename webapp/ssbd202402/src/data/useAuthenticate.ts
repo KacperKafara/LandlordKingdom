@@ -12,6 +12,7 @@ type AuthenticateRequest = {
 
 type AuthenticateResponse = {
   token: string;
+  refreshToken: string;
 };
 
 type CodeVerificationRequest = {

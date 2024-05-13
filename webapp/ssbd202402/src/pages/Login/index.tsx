@@ -40,7 +40,7 @@ type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
 const Login2FaPage: FC = () => {
   const { t } = useTranslation();
-  const { setToken, token, roles } = useUserStore();
+  const { setToken, setRefreshToken, token, roles } = useUserStore();
   const { authenticate, isPending } = useAuthenticate();
   const { setLanguage } = useLanguageStore();
   const [login, setLogin] = useState<string>();
@@ -77,6 +77,7 @@ const Login2FaPage: FC = () => {
           roles={roles}
           setToken={setToken}
           setCodeInputOpen={setCodeInputOpen}
+          setRefreshToken={setRefreshToken}
           resetForm={form.reset}
         />
       ) : (

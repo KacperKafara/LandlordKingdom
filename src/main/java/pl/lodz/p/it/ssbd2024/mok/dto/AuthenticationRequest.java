@@ -9,12 +9,9 @@ import lombok.Builder;
 @Builder
 public record AuthenticationRequest (
         @NotBlank
-        @NotNull
         String login,
 
         @NotBlank
-        @NotNull
-        @Size(min = 8)
         String password,
 
         @NotBlank(message = "Language name cannot be blank.")

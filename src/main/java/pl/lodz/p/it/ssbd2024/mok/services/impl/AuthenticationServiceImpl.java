@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Log
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -76,6 +76,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setVerified(true);
         userRepository.saveAndFlush(user);
+        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage())    ;
     }
 
     @Override

@@ -34,6 +34,7 @@ interface CodeInputProps {
   login: string;
   roles: string[] | undefined;
   setToken: (token: string) => void;
+  setRefreshToken: (token: string) => void;
   setCodeInputOpen: (value: boolean) => void;
   resetForm: () => void;
 }
@@ -44,6 +45,7 @@ const CodeInput: FC<CodeInputProps> = ({
   login,
   roles,
   setToken,
+  setRefreshToken,
   setCodeInputOpen,
   resetForm,
 }) => {
