@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
@@ -24,6 +25,8 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Log
 @Service
@@ -170,10 +173,30 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public String verifyOTP(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+    public Map<String, String> verifyOTP(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
         VerificationToken verificationToken = verificationTokenService.validateOTPToken(token);
         String jwt = jwtService.generateToken(verificationToken.getUser().getId(), getUserRoles(verificationToken.getUser()));
+        String refreshToken = jwtService.generateRefreshToken(verificationToken.getUser().getId());
 
-        return jwt;
+        return Map.of(
+                "token", jwt,
+                "refreshToken", refreshToken);
     }
+
+    @Override
+    public Map<String, String> refresh(String refreshToken) throws NotFoundException, RefreshTokenExpiredException {
+        Jwt token = jwtService.decodeRefreshToken(refreshToken);
+
+        UUID userId = UUID.fromString(token.getSubject());
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+
+        if (jwtService.validateRefreshExpiration(token)) {
+            return Map.of(
+                    "token", jwtService.generateToken(userId, getUserRoles(user)),
+                    "refreshToken", refreshToken);
+        }
+
+        throw new RefreshTokenExpiredException(UserExceptionMessages.REFRESH_TOKEN_EXPIRED);
+    }
+
 }
