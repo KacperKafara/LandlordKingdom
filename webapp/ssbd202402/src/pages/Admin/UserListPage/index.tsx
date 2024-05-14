@@ -25,15 +25,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { fetchUsers } from "@/data/fetchUsers";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { Toaster } from "@/components/ui/toaster";
 import { useToast } from "@/components/ui/use-toast";
 import { useResetOtherUserEmailAddress } from "@/data/useUpdateEmailAddress.ts";
 import { useResetPassword } from "@/data/useUserPassword";
 import { useNavigate } from "react-router-dom";
+import UserFilter from "./UserFilter";
+import { useFilteredUsers } from "@/data/useFilteredUsers";
 
 interface UserData {
   login: string;
@@ -44,7 +43,7 @@ const UserListPage: FC = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data } = useQuery({ queryKey: ["users"], queryFn: fetchUsers });
+  const { users } = useFilteredUsers();
   const { resetPassword } = useResetPassword();
   const { updateEmail } = useResetOtherUserEmailAddress();
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
@@ -81,7 +80,9 @@ const UserListPage: FC = () => {
 
   return (
     <>
-      <div className="text-center m-10">!!! THERE SHOULD BE FILTER !!!</div>
+      <div className="flex justify-center">
+        <UserFilter />
+      </div>
       <div className="flex justify-center">
         <div className="w-3/5">
           <AlertDialog open={openPaswordResetDialog}>
@@ -118,8 +119,8 @@ const UserListPage: FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data &&
-                data.map((user) => (
+              {users &&
+                users.map((user) => (
                   <TableRow key={user.login}>
                     <TableCell>{user.firstName}</TableCell>
                     <TableCell>{user.lastName}</TableCell>
@@ -166,7 +167,6 @@ const UserListPage: FC = () => {
           </Table>
         </div>
       </div>
-      <Toaster />
     </>
   );
 };

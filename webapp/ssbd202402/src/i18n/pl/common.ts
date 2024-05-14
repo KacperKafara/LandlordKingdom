@@ -1,4 +1,3 @@
-
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -122,11 +121,27 @@ const userListPage = {
   resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
   resetUserEmailAction: "Zaktualizuj adres email",
-  resetUserEmailSuccess: "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+  resetUserEmailSuccess:
+    "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
 };
 
+const userFilter = {
+  yes: "Tak",
+  no: "Nie",
+  both: "Oba",
+  verified: "Zweryfikowany",
+  blocked: "Zablokowany",
+  login: "Login",
+  email: "Email",
+  submit: "Filtruj",
+  roles: "Role",
+};
+
 const common = {
+  tenant: "Najemca",
+  owner: "Właściciel",
+  administrator: "Administrator",
   yes: "tak",
   no: "nie",
 };
@@ -159,6 +174,7 @@ export default {
   resetPasswordPage,
   changePasswordForm,
   userListPage,
+  userFilter,
   userDetailsPage,
   mePage,
   userDataPage,

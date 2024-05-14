@@ -43,7 +43,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @GetMapping("/filtered")
+    @PostMapping("/filtered")
     public ResponseEntity<List<UserResponse>> getAllFiltered(@RequestBody FilteredUsersRequest request,
                                                              @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
                                                              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
