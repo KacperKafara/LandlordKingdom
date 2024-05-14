@@ -29,7 +29,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 @PreAuthorize("permitAll()")
 public class AuthController {
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final HttpServletRequest servletRequest;
@@ -98,7 +97,7 @@ public class AuthController {
         try {
             Map<String, String> tokens = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(tokens.get("token"), tokens.get("refreshToken")));
-        }catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
