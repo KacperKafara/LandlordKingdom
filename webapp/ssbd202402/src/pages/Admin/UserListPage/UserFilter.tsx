@@ -3,8 +3,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -18,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { useUsersFilterStore } from "@/store/usersFilterStore";
 import { SearchCriteria } from "@/types/filter/SearchCriteria";
 import { ChevronsUpDown } from "lucide-react";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
@@ -27,15 +25,12 @@ interface FilterUsers {
   blocked: boolean | null;
   login: string;
   email: string;
-  roles: string[];
+  role: string;
 }
 
 const UserFilter: FC = () => {
   const { t } = useTranslation();
-  const allRoles = ["TENANT", "OWNER", "ADMINISTRATOR"];
-  const [openRolesPanel, setOpenRolesPanel] = useState<boolean>(false);
-  const [verifiedSelect, setVerifiedSelect] = useState<string>("both");
-  const [blockedSelect, setBlockedSelect] = useState<string>("both");
+  const allRoles = ["ALL", "TENANT", "OWNER", "ADMINISTRATOR"];
   const store = useUsersFilterStore();
 
   const filterForm = useForm<FilterUsers>({
@@ -44,7 +39,7 @@ const UserFilter: FC = () => {
       blocked: null,
       login: "",
       email: "",
-      roles: allRoles,
+      role: "ALL",
     },
   });
 
@@ -86,22 +81,10 @@ const UserFilter: FC = () => {
     store.setSearchCriteriaList({
       dataOption: "all",
       searchCriteriaList: criterias,
-      roles: values.roles,
+      role: values.role,
     });
+    store.setPageNumber(0);
   });
-
-  const handleRoleCheck = (role: string) => {
-    const current = filterForm.getValues("roles");
-    if (current.includes(role)) {
-      filterForm.setValue(
-        "roles",
-        current.filter((val) => val != role)
-      );
-    } else {
-      current.push(role);
-      filterForm.setValue("roles", current);
-    }
-  };
 
   return (
     <>
@@ -119,7 +102,7 @@ const UserFilter: FC = () => {
                       <Button
                         variant={"outline"}
                         role="combobox"
-                        className="flex gap-1"
+                        className="flex w-24 justify-between"
                       >
                         {filterForm.getValues("verified") == null
                           ? t("userFilter.both")
@@ -130,29 +113,30 @@ const UserFilter: FC = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuRadioGroup
-                        value={verifiedSelect}
-                        onValueChange={setVerifiedSelect}
+                      <DropdownMenuCheckboxItem
+                        checked={filterForm.getValues("verified") === null}
+                        onCheckedChange={() =>
+                          filterForm.setValue("verified", null)
+                        }
                       >
-                        <DropdownMenuRadioItem
-                          value="both"
-                          onClick={() => filterForm.setValue("verified", null)}
-                        >
-                          {t("userFilter.both")}
-                        </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem
-                          value="yes"
-                          onClick={() => filterForm.setValue("verified", true)}
-                        >
-                          {t("userFilter.yes")}
-                        </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem
-                          value="no"
-                          onClick={() => filterForm.setValue("verified", false)}
-                        >
-                          {t("userFilter.no")}
-                        </DropdownMenuRadioItem>
-                      </DropdownMenuRadioGroup>
+                        {t("userFilter.both")}
+                      </DropdownMenuCheckboxItem>
+                      <DropdownMenuCheckboxItem
+                        checked={filterForm.getValues("verified") === true}
+                        onCheckedChange={() =>
+                          filterForm.setValue("verified", true)
+                        }
+                      >
+                        {t("userFilter.yes")}
+                      </DropdownMenuCheckboxItem>
+                      <DropdownMenuCheckboxItem
+                        checked={filterForm.getValues("verified") === false}
+                        onCheckedChange={() =>
+                          filterForm.setValue("verified", false)
+                        }
+                      >
+                        {t("userFilter.no")}
+                      </DropdownMenuCheckboxItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </FormItem>
@@ -169,7 +153,7 @@ const UserFilter: FC = () => {
                       <Button
                         variant={"outline"}
                         role="combobox"
-                        className="flex gap-1"
+                        className="flex w-24 justify-between"
                       >
                         {filterForm.getValues("blocked") == null
                           ? t("userFilter.both")
@@ -180,29 +164,30 @@ const UserFilter: FC = () => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuRadioGroup
-                        value={blockedSelect}
-                        onValueChange={setBlockedSelect}
+                      <DropdownMenuCheckboxItem
+                        checked={filterForm.getValues("blocked") === null}
+                        onCheckedChange={() =>
+                          filterForm.setValue("blocked", null)
+                        }
                       >
-                        <DropdownMenuRadioItem
-                          value="both"
-                          onClick={() => filterForm.setValue("blocked", null)}
-                        >
-                          {t("userFilter.both")}
-                        </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem
-                          value="yes"
-                          onClick={() => filterForm.setValue("blocked", true)}
-                        >
-                          {t("userFilter.yes")}
-                        </DropdownMenuRadioItem>
-                        <DropdownMenuRadioItem
-                          value="no"
-                          onClick={() => filterForm.setValue("blocked", false)}
-                        >
-                          {t("userFilter.no")}
-                        </DropdownMenuRadioItem>
-                      </DropdownMenuRadioGroup>
+                        {t("userFilter.both")}
+                      </DropdownMenuCheckboxItem>
+                      <DropdownMenuCheckboxItem
+                        checked={filterForm.getValues("blocked") === true}
+                        onCheckedChange={() =>
+                          filterForm.setValue("blocked", true)
+                        }
+                      >
+                        {t("userFilter.yes")}
+                      </DropdownMenuCheckboxItem>
+                      <DropdownMenuCheckboxItem
+                        checked={filterForm.getValues("blocked") === false}
+                        onCheckedChange={() =>
+                          filterForm.setValue("blocked", false)
+                        }
+                      >
+                        {t("userFilter.no")}
+                      </DropdownMenuCheckboxItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </FormItem>
@@ -234,29 +219,23 @@ const UserFilter: FC = () => {
             />
             <FormField
               control={filterForm.control}
-              name="roles"
+              name="role"
               render={() => (
                 <FormItem>
-                  <FormLabel>{t("userFilter.roles")}</FormLabel>
-                  <DropdownMenu
-                    open={openRolesPanel}
-                    onOpenChange={setOpenRolesPanel}
-                  >
+                  <FormLabel>{t("userFilter.role")}</FormLabel>
+                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
                         variant={"outline"}
                         role="combobox"
-                        className="flex gap-1 w-96 justify-between"
+                        className="flex gap-1 w-48 justify-between"
                       >
                         <div className="flex gap-1">
-                          {filterForm.getValues("roles").map((role) => (
-                            <div
-                              key={role}
-                              className="border-2 rounded-3xl p-1"
-                            >
-                              {t(`common.${role.toLowerCase()}`)}
-                            </div>
-                          ))}
+                          {t(
+                            `userFilter.${filterForm
+                              .getValues("role")
+                              .toLowerCase()}`
+                          )}
                         </div>
                         <ChevronsUpDown />
                       </Button>
@@ -265,11 +244,12 @@ const UserFilter: FC = () => {
                       {allRoles.map((role) => (
                         <DropdownMenuCheckboxItem
                           key={role}
-                          checked={filterForm.getValues("roles").includes(role)}
-                          onCheckedChange={() => handleRoleCheck(role)}
-                          onSelect={(e) => e.preventDefault()}
+                          checked={filterForm.getValues("role") === role}
+                          onCheckedChange={() =>
+                            filterForm.setValue("role", role)
+                          }
                         >
-                          {t(`common.${role.toLowerCase()}`)}
+                          {t(`userFilter.${role.toLowerCase()}`)}
                         </DropdownMenuCheckboxItem>
                       ))}
                     </DropdownMenuContent>
@@ -277,7 +257,7 @@ const UserFilter: FC = () => {
                 </FormItem>
               )}
             />
-            <div className="flex">
+            <div className="flex self-end">
               <Button type="submit">{t("userFilter.submit")}</Button>
             </div>
           </div>

@@ -135,13 +135,14 @@ const userFilter = {
   login: "Login",
   email: "Email",
   submit: "Filtruj",
-  roles: "Role",
-};
-
-const common = {
+  role: "Rola",
+  all: "Wszystkie",
   tenant: "Najemca",
   owner: "Właściciel",
   administrator: "Administrator",
+};
+
+const common = {
   yes: "tak",
   no: "nie",
 };

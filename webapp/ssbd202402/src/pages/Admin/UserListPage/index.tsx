@@ -33,6 +33,7 @@ import { useResetPassword } from "@/data/useUserPassword";
 import { useNavigate } from "react-router-dom";
 import UserFilter from "./UserFilter";
 import { useFilteredUsers } from "@/data/useFilteredUsers";
+import PageChanger from "./PageChanger";
 
 interface UserData {
   login: string;
@@ -80,7 +81,7 @@ const UserListPage: FC = () => {
 
   return (
     <>
-      <div className="flex justify-center">
+      <div className="flex justify-center m-5">
         <UserFilter />
       </div>
       <div className="flex justify-center">
@@ -166,6 +167,9 @@ const UserListPage: FC = () => {
             </TableBody>
           </Table>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <PageChanger />
       </div>
     </>
   );

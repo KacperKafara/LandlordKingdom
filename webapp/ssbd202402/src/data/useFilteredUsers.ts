@@ -4,14 +4,16 @@ import { api } from "./api";
 import { UserResponse } from "@/types/user/UserResponseType";
 
 export const useFilteredUsers = () => {
-  const { criteria, pageNumber, pageSize } = useUsersFilterStore();
+  const { criteria, pageNumber, pageSize, setTotalPages } =
+    useUsersFilterStore();
 
   const { data, isLoading } = useQuery({
     queryKey: ["filteredUsers", criteria, pageNumber, pageSize],
     queryFn: async () => {
       const query = `?pageNum=${pageNumber}&pageSize=${pageSize}`;
       const result = await api.post("/users/filtered" + query, criteria);
-      return result.data;
+      setTotalPages(result.data.totalPages);
+      return result.data.users;
     },
   });
 

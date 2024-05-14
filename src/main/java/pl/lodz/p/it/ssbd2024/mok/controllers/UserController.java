@@ -60,13 +60,13 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/filtered")
-    public ResponseEntity<List<UserResponse>> getAllFiltered(@RequestBody FilteredUsersRequest request,
+    public ResponseEntity<FilteredUsersResponse> getAllFiltered(@RequestBody FilteredUsersRequest request,
                                                              @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
                                                              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<SearchCriteria> criteriaList = request.searchCriteriaList();
-        List<User> response;
+        FilteredUsersResponse response;
 
         switch (request.role()) {
             case "TENANT" -> {
@@ -82,10 +82,9 @@ public class UserController {
                     builder.with(x);
                 });
 
-                response = tenantService.getAllFiltered(builder.build(), pageable)
-                        .stream()
-                        .map(Tenant::getUser)
-                        .toList();
+                Page<Tenant> result = tenantService.getAllFiltered(builder.build(), pageable);
+                response = new FilteredUsersResponse(result.stream().map(Tenant::getUser).map(UserMapper::toUserResponse).toList(),
+                        result.getTotalPages());
             }
             case "OWNER" -> {
                 OwnerSpecificationBuilder builder = new OwnerSpecificationBuilder();
@@ -100,10 +99,9 @@ public class UserController {
                     builder.with(x);
                 });
 
-                response = ownerService.getAllFiltered(builder.build(), pageable)
-                        .stream()
-                        .map(Owner::getUser)
-                        .toList();
+                Page<Owner> result = ownerService.getAllFiltered(builder.build(), pageable);
+                response = new FilteredUsersResponse(result.stream().map(Owner::getUser).map(UserMapper::toUserResponse).toList(),
+                        result.getTotalPages());
             }
             case "ADMINISTRATOR" -> {
                 AdministratorSpecificationBuilder builder = new AdministratorSpecificationBuilder();
@@ -118,11 +116,9 @@ public class UserController {
                     builder.with(x);
                 });
 
-                response = administratorService
-                        .getAllFiltered(builder.build(), pageable)
-                        .stream()
-                        .map(Administrator::getUser)
-                        .toList();
+                Page<Administrator> result = administratorService.getAllFiltered(builder.build(), pageable);
+                response = new FilteredUsersResponse(result.stream().map(Administrator::getUser).map(UserMapper::toUserResponse).toList(),
+                        result.getTotalPages());
             }
             default -> {
                 Page<User> userPage;
@@ -135,12 +131,13 @@ public class UserController {
                     });
                 }
 
-                userPage = userService.getAllFiltered(builder.build(), pageable);
-                response = userPage.stream().toList();
+                Page<User> result = userService.getAllFiltered(builder.build(), pageable);
+                response = new FilteredUsersResponse(result.stream().map(UserMapper::toUserResponse).toList(),
+                        result.getTotalPages());
             }
         }
 
-        return ResponseEntity.ok(response.stream().map(UserMapper::toUserResponse).toList());
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
