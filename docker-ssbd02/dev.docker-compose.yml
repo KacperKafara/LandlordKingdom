@@ -28,6 +28,9 @@ services:
       - my_network
     depends_on:
       - db
+    volumes:
+      - ./privateJwt-key.pem:/etc/ssbd02/privateJwt-key.pem
+      - ./privateRefresh-key.pem:/etc/ssbd02/privateRefresh-key.pem
 
 
   smtp4dev:
