@@ -7,6 +7,6 @@ import java.util.List;
 public record FilteredUsersRequest(
         List<SearchCriteria> searchCriteriaList,
         String dataOption,
-        List<String> roles
+        String role
 ) {
 }

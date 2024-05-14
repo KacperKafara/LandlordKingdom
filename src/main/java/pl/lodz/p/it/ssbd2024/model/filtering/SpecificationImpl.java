@@ -1,24 +1,23 @@
 package pl.lodz.p.it.ssbd2024.model.filtering;
 
+
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
-import pl.lodz.p.it.ssbd2024.model.User;
 
 import java.util.Objects;
 
-public class UserSpecification implements Specification<User> {
-    private final SearchCriteria searchCriteria;
+public class SpecificationImpl<T> implements Specification<T> {
+    protected final SearchCriteria searchCriteria;
 
-    public UserSpecification(final SearchCriteria searchCriteria) {
-        super();
+    public SpecificationImpl(SearchCriteria searchCriteria) {
         this.searchCriteria = searchCriteria;
     }
 
     @Override
-    public Predicate toPredicate(Root<User> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+    public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
         String strToSearch = searchCriteria.getValue().toString().toLowerCase();
 
         return switch (Objects.requireNonNull(SearchOperation.getSimpleOperation(searchCriteria.getOperation()))) {

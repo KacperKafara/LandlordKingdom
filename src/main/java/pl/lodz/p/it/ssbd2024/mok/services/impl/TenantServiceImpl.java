@@ -1,8 +1,10 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
@@ -24,6 +26,11 @@ public class TenantServiceImpl implements TenantService {
     private final EmailService emailService;
     private final TenantRepository tenantRepository;
     private final UserRepository userRepository;
+
+    @Override
+    public Page<Tenant> getAllFiltered(Specification<Tenant> specification, Pageable pageable) {
+        return tenantRepository.findAll(specification, pageable);
+    }
 
     @Override
     public Tenant removeTenantAccessLevel(UUID id) throws NotFoundException {

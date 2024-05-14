@@ -2,8 +2,11 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,7 @@ import java.util.*;
 @Transactional(rollbackFor = NotFoundException.class)
 @RequiredArgsConstructor
 @Log
+@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
@@ -52,36 +56,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAllFiltered(Specification<User> specification, List<String> roles, int pageNum, int pageSize) {
-        Set<UUID> includedUsers = new HashSet<>();
-        if (roles != null && !roles.isEmpty()) {
-            if (roles.contains("TENANT")) {
-                includedUsers.addAll(tenantRepository.findAllByActive(true).stream().map(Tenant::getUser).map(User::getId).toList());
-            }
-
-            if (roles.contains("OWNER")) {
-                includedUsers.addAll(ownerRepository.findAllByActive(true).stream().map(Owner::getUser).map(User::getId).toList());
-            }
-
-            if (roles.contains("ADMINISTRATOR")) {
-                includedUsers.addAll(administratorRepository.findAllByActive(true).stream().map(Administrator::getUser).map(User::getId).toList());
-            }
-        }
-
-        List<User> users = repository.findAll(specification);
-
-        if (!includedUsers.isEmpty()) {
-            users = users.stream().filter(user -> includedUsers.contains(user.getId())).toList();
-        }
-
-        if (pageNum * pageSize >= users.size()) {
-            return new ArrayList<>();
-        }
-
-        int startIdx = pageNum * pageSize;
-        int endIdx = Math.min(users.size(), startIdx + pageSize);
-
-        return users.subList(startIdx, endIdx);
+    public Page<User> getAllFiltered(Specification<User> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable);
     }
 
     @Override

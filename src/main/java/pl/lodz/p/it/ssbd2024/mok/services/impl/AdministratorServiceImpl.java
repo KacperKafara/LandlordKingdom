@@ -1,9 +1,10 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
@@ -24,6 +25,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final EmailService emailService;
     private final AdministratorRepository administratorRepository;
     private final UserRepository userRepository;
+
+    @Override
+    public Page<Administrator> getAllFiltered(Specification<Administrator> specification, Pageable pageable) {
+        return administratorRepository.findAll(specification, pageable);
+    }
 
 
     @Override

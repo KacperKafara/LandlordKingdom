@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +21,24 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
+import pl.lodz.p.it.ssbd2024.model.Administrator;
+import pl.lodz.p.it.ssbd2024.model.Owner;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
-import pl.lodz.p.it.ssbd2024.model.filtering.UserSpecificationBuilder;
+import pl.lodz.p.it.ssbd2024.model.filtering.builders.AdministratorSpecificationBuilder;
+import pl.lodz.p.it.ssbd2024.model.filtering.builders.OwnerSpecificationBuilder;
+import pl.lodz.p.it.ssbd2024.model.filtering.builders.TenantSpecificationBuilder;
+import pl.lodz.p.it.ssbd2024.model.filtering.builders.UserSpecificationBuilder;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
+import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
+import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
+import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +47,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final TenantService tenantService;
+    private final OwnerService ownerService;
+    private final AdministratorService administratorService;
     private final Signer signer;
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -48,19 +64,83 @@ public class UserController {
                                                              @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
                                                              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 
-        UserSpecificationBuilder builder = new UserSpecificationBuilder();
+        Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<SearchCriteria> criteriaList = request.searchCriteriaList();
+        List<User> response;
 
-        if (criteriaList != null) {
-            criteriaList.forEach(x -> {
-                x.setDataOption(request.dataOption());
-                builder.with(x);
-            });
+        switch (request.role()) {
+            case "TENANT" -> {
+                TenantSpecificationBuilder builder = new TenantSpecificationBuilder();
+
+                if (criteriaList == null) {
+                    criteriaList = new ArrayList<>();
+                }
+
+                criteriaList.add(new SearchCriteria("active", "eq", true));
+                criteriaList.forEach(x -> {
+                    x.setDataOption(request.dataOption());
+                    builder.with(x);
+                });
+
+                response = tenantService.getAllFiltered(builder.build(), pageable)
+                        .stream()
+                        .map(Tenant::getUser)
+                        .toList();
+            }
+            case "OWNER" -> {
+                OwnerSpecificationBuilder builder = new OwnerSpecificationBuilder();
+
+                if (criteriaList == null) {
+                    criteriaList = new ArrayList<>();
+                }
+
+                criteriaList.add(new SearchCriteria("active", "eq", true));
+                criteriaList.forEach(x -> {
+                    x.setDataOption(request.dataOption());
+                    builder.with(x);
+                });
+
+                response = ownerService.getAllFiltered(builder.build(), pageable)
+                        .stream()
+                        .map(Owner::getUser)
+                        .toList();
+            }
+            case "ADMINISTRATOR" -> {
+                AdministratorSpecificationBuilder builder = new AdministratorSpecificationBuilder();
+
+                if (criteriaList == null) {
+                    criteriaList = new ArrayList<>();
+                }
+
+                criteriaList.add(new SearchCriteria("active", "eq", true));
+                criteriaList.forEach(x -> {
+                    x.setDataOption(request.dataOption());
+                    builder.with(x);
+                });
+
+                response = administratorService
+                        .getAllFiltered(builder.build(), pageable)
+                        .stream()
+                        .map(Administrator::getUser)
+                        .toList();
+            }
+            default -> {
+                Page<User> userPage;
+                UserSpecificationBuilder builder = new UserSpecificationBuilder();
+
+                if (criteriaList != null) {
+                    criteriaList.forEach(x -> {
+                        x.setDataOption(request.dataOption());
+                        builder.with(x);
+                    });
+                }
+
+                userPage = userService.getAllFiltered(builder.build(), pageable);
+                response = userPage.stream().toList();
+            }
         }
 
-        List<User> userPage = userService.getAllFiltered(builder.build(), request.roles(), pageNum, pageSize);
-
-        return ResponseEntity.ok(userPage.stream().map(UserMapper::toUserResponse).toList());
+        return ResponseEntity.ok(response.stream().map(UserMapper::toUserResponse).toList());
     }
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
