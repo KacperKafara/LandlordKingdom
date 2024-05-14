@@ -45,7 +45,6 @@ const CodeInput: FC<CodeInputProps> = ({
   login,
   roles,
   setToken,
-  setRefreshToken,
   setCodeInputOpen,
   resetForm,
 }) => {
