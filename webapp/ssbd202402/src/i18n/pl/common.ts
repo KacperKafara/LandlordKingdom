@@ -158,7 +158,7 @@ const block = {
   unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
   unblockUserToastTitleFail: "Operacja nie powiodła się",
   unblockUserToastDescriptionFail: "Coś poszło nie tak...",
-}
+};
 
 const common = {
   yes: "tak",
@@ -190,8 +190,16 @@ const mePage = {
     "Na przypisany do konta adres email zostanie wysłany link do formularza zmiany adresu email",
 };
 
+const registerSuccessPage = {
+  title: "Dziękujemy za stworzenie konta",
+  description:
+    "Wysłaliśmy ci email z linkiem slużącym do aktywacji konta. Użyj tego linku aby zweryfikować swój adres email. Dopóki nie zweryfikujesz adresu, nie możesz się zalogować.",
+  loginButton: "Wróc do strony logowania",
+};
+
 export default {
   common,
+  registerSuccessPage,
   navLinks,
   loginPage,
   registerPage,

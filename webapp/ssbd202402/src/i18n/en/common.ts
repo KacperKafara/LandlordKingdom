@@ -133,9 +133,9 @@ const userListPage = {
     "An email for changing current address has been sent to the user's email address",
   resetUserEmailError: "Error while initializing email change",
   resetUserEmailTitle: "Are you sure you want to update user email address?",
-  resetUserEmailDescription: "A link to change the email address will be sent to the user's email address",
+  resetUserEmailDescription:
+    "A link to change the email address will be sent to the user's email address",
   updateEmailAddress: "Update email address",
-
 };
 
 const common = {
@@ -147,7 +147,7 @@ const navLinks = {
   account: "My account",
   signOut: "Sign out",
   users: "Users",
-  roles: "Change access level"
+  roles: "Change access level",
 };
 
 const userDataPage = {
@@ -163,12 +163,22 @@ const userDataPage = {
 const mePage = {
   accountInfo: "User data",
   updateEmailAddress: "Update email address",
-  updateEmailAddressTitle: "Are you sure you want to update your email address?",
-  updateEmailAddressDescription: "A link to change the email address will be sent to the user's email address",
+  updateEmailAddressTitle:
+    "Are you sure you want to update your email address?",
+  updateEmailAddressDescription:
+    "A link to change the email address will be sent to the user's email address",
+};
+
+const registerSuccessPage = {
+  title: "Thanks for creating an account",
+  description:
+    "We send you an email with verification link. Use this link to verify your account. Until you perform this action you won't be able to login.",
+  loginButton: "Go back to login",
 };
 
 export default {
   common,
+  registerSuccessPage,
   navLinks,
   loginPage,
   registerPage,
