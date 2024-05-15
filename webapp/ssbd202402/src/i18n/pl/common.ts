@@ -147,6 +147,19 @@ const userListPage = {
   updateEmailAddress: "Zaktualizuj adres email",
 };
 
+const block = {
+  blockUserAction: "Zablokuj",
+  blockUserToastTitleSuccess: "Operacja powiodła się",
+  blockUserToastDescriptionSuccess: "Użytkownik został zablokowany",
+  blockUserToastTitleFail: "Operacja nie powiodła się",
+  blockUserToastDescriptionFail: "Coś poszło nie tak...",
+  unblockUserAction: "Odblokuj",
+  unblockUserToastTitleSuccess: "Operacja powiodła się",
+  unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
+  unblockUserToastTitleFail: "Operacja nie powiodła się",
+  unblockUserToastDescriptionFail: "Coś poszło nie tak...",
+}
+
 const common = {
   yes: "tak",
   no: "nie",
@@ -185,6 +198,7 @@ export default {
   resetPasswordForm,
   resetPasswordPage,
   changePasswordForm,
+  block,
   userListPage,
   userDetailsPage,
   mePage,
