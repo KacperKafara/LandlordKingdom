@@ -198,6 +198,18 @@ const mePage = {
     "Are you sure you want to update your email address?",
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the user's email address",
+  title: "My account",
+  basicInformation: "Basic informations",
+  firstNameLabel: "First name",
+  lastNamelabel: "Last name",
+  emailLabel: "Email",
+  lastSuccessfullLoginDateLabel: "Last successful Login Date",
+  lastSuccessfillLoginIPLabel: "Last successful Login IP",
+  lastFailedfullLoginDateLabel: "Last failed Login Date",
+  lastFailedfillLoginIPLabel: "Last failed Login IP",
+  updateData: "Update your data",
+  changeEmail: "Change your email",
+  changePassword: "Change your password",
 };
 
 const registerSuccessPage = {

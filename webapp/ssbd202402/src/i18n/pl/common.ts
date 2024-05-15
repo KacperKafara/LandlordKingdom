@@ -1,5 +1,4 @@
 import { Role } from "@/store/userStore";
-
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -206,6 +205,18 @@ const mePage = {
   updateEmailAddressTitle: "Czy na pewno chcesz zaktualizować adres email?",
   updateEmailAddressDescription:
     "Na przypisany do konta adres email zostanie wysłany link do formularza zmiany adresu email",
+  title: "Moje konto",
+  basicInformation: "Podstawowe informacje",
+  firstNameLabel: "Imię",
+  lastNamelabel: "Nazwisko",
+  emailLabel: "Email",
+  lastSuccessfullLoginDateLabel: "Data ostatniego udanego logowania",
+  lastSuccessfillLoginIPLabel: "Adres ip ostatniego udanego logowania",
+  lastFailedfullLoginDateLabel: "Data ostatniego nieudanego logowania",
+  lastFailedfillLoginIPLabel: "Adres ip ostatniego nieudanego logowania",
+  updateData: "Zmień swoje dane",
+  changeEmail: "Zmień swój email",
+  changePassword: "Zmień swoje hasło",
 };
 
 const registerSuccessPage = {
