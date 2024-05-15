@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { useUserStore } from "@/store/userStore";
+import { Role, useUserStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -57,7 +57,7 @@ const config = {
 };
 
 const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const colors = config[type];
   const navigate = useNavigate();
   const { activeRole, setActiveRole } = useUserStore();
@@ -108,7 +108,9 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                 variant="ghost"
                 className={cn("px-2 py-1 capitalize", colors.hover)}
               >
-                {t(`roles.${activeRole?.toLowerCase()}`)}
+                {i18n.exists(`roles.${activeRole?.toLowerCase()}`)
+                  ? t(`roles.${activeRole?.toLowerCase() as Role}`)
+                  : ""}
                 <IoMdArrowDropdown />
               </Button>
             </DropdownMenuTrigger>
@@ -122,7 +124,9 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                   key={idx}
                 >
                   <NavLink to={`/${role_mapping[role]}`}>
-                    {t(`roles.${role.toLowerCase()}`)}
+                    {i18n.exists(`roles.${role.toLowerCase()}`)
+                      ? t(`roles.${role.toLowerCase() as Role}`)
+                      : ""}
                   </NavLink>
                 </DropdownMenuItem>
               ))}
@@ -138,7 +142,11 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
           config[type].footer
         )}
       >
-        <span className="mr-2">{t(`roles.${activeRole?.toLowerCase()}`)}</span>
+        <span className="mr-2">
+          {i18n.exists(`roles.${activeRole?.toLowerCase()}`)
+            ? t(`roles.${activeRole?.toLowerCase() as Role}`)
+            : ""}
+        </span>
         {t("footer")}
       </footer>
     </div>

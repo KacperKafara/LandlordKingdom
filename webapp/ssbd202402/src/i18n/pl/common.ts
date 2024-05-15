@@ -1,3 +1,5 @@
+import { Role } from "@/store/userStore";
+
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -201,6 +203,8 @@ const roles = {
   administrator: "Administrator",
   tenant: "Najemnca",
   owner: "Właściciel",
+} satisfies {
+  [key in Role]: string;
 };
 
 export default {

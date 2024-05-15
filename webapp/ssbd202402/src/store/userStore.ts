@@ -14,6 +14,8 @@ type UserStore = {
   setActiveRole: (role: string) => void;
 };
 
+export type Role = "administrator" | "tenant" | "owner";
+
 const LSToken = localStorage.getItem("token");
 const LSRefreshToken = localStorage.getItem("refreshToken");
 
