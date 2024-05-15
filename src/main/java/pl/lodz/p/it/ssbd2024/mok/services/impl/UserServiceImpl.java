@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,9 +11,11 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.AccountVerificationToken;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -23,9 +24,9 @@ import pl.lodz.p.it.ssbd2024.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.net.URI;
-import java.security.InvalidKeyException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
     private final TenantRepository tenantRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
+    private final AccountVerificationTokenRepository accountVerificationTokenRepository;
     private final UserRepository userRepository;
     private final SignVerifier signVerifier;
 
@@ -195,5 +197,18 @@ public class UserServiceImpl implements UserService {
         });
     }
 
-
+    @Override
+    public void sendEmailVerifyAccount() {
+        LocalDateTime beforeTime = LocalDateTime.now().minusHours(removeUnverifiedAccountsAfterHours / 2);
+        LocalDateTime afterTime = beforeTime.plusMinutes(10);
+        List<User> users = repository.getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(beforeTime, afterTime);
+        users.forEach(user -> {
+            Optional<AccountVerificationToken> token = accountVerificationTokenRepository.findByUserId(user.getId());
+            if (token.isEmpty()) {
+                return;
+            }
+            URI uri = URI.create(appUrl + "/verify/" + token);
+            emailService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
+        });
+    }
 }
