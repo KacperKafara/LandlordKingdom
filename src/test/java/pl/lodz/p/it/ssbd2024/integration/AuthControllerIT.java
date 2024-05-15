@@ -302,7 +302,7 @@ public class AuthControllerIT extends BaseConfig {
     @DisplayName("Authorization_TokenExpired_ReturnUnauthorized_Test")
     public void Authorization_TokenExpired_ReturnUnauthorized_Test() {
 
-        String expiredToken = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ0ZWFtLTIucHJvai1zdW0uaXQucC5sb2R6LnBsIiwic3ViIjoiMmQxYzkxZTgtY2MwYy00ZjMzLWFlNmUtMjBhOTk0OGE2ZjJkIiwiZXhwIjoxNzE1ODAwOTA2LCJpYXQiOjE3MTU3OTczMDYsImF1dGhvcml0aWVzIjpbIlRFTkFOVCJdfQ.rPX6doHqC0HdRGdSpGe5lT5Du5Y8Q1TfgKUSrVC0kS2B9tF52xjLXvFiQuMDMEjVYAtwHSZMrN8SjpqH2Echzg";
+        String expiredToken = "eyJraWQiOiIxYTEzODRlMC0wMWMzLTQ4NzAtYWMzZC1kN2UwZGJlODg4ODEiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZWFtLTIucHJvai1zdW0uaXQucC5sb2R6LnBsIiwic3ViIjoiMDU4NTQxMzItOGI3Yy00NDBlLTllZjItOGZlNDZhNzk2MmRjIiwiZXhwIjoxNzE1ODA3NjM1LCJpYXQiOjE3MTU4MDc2MzQsImF1dGhvcml0aWVzIjpbIlRFTkFOVCJdfQ.a3LRBzOUjOkv5YHvj4KqGZg2SG_r22x2RWkMa7pOgN-sN4xVh6Xj9yEgNVQQ9B8NDBRl0tz5DqWlHUJnrEJTCrdFvt9hMIhyfWOYiRwIOBss9bI7wOg1kdJEjXfJMck2umwAtEDMg7mRD5TaulosCz-3HRKhU4q7R69NtRttPAMqHg3a7eEq7fEuLy7XQJy5Ikz5V3NEy9Qyn5Gndr4fMdPJRryAV1VOZt_IfOV0ItBOy3UOTDcKosH3fv6QvcOY6JVARNG2lAANH_q3BtbJKw3IACZ8f0b0xLoVjGNQRPacTKyvVxn4m_sxW-37kaHK6BNSv8vX328TeQJ5qGdHoQ";
 
         given()
                 .contentType(ContentType.JSON)
@@ -318,7 +318,7 @@ public class AuthControllerIT extends BaseConfig {
     @DisplayName("RefreshToken_ExpiredToken_ReturnBadRequest_Test")
     public void RefreshToken_ExpiredToken_ReturnBadRequest_Test() {
 
-        String expiredRefreshToken = "eyJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJ0ZWFtLTIucHJvai1zdW0uaXQucC5sb2R6LnBsIiwic3ViIjoiMmQxYzkxZTgtY2MwYy00ZjMzLWFlNmUtMjBhOTk0OGE2ZjJkIiwiZXhwIjoxNzE1ODgzNzA2LCJpYXQiOjE3MTU3OTczMDZ9.WAHNJqtDUUJ5XM1lavoEOJSfk3ZZGUpcvJ9GiDNvNLSjy0N0_UosYmFJfHAiPsi6-ZKihQZoHMIw1FSqE_SyOw";
+        String expiredRefreshToken = "eyJraWQiOiI0ZGViMjA1YS1hMTEyLTRlZGUtYjNlNS04OGZmMTRkMThmYTkiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ0ZWFtLTIucHJvai1zdW0uaXQucC5sb2R6LnBsIiwic3ViIjoiMDU4NTQxMzItOGI3Yy00NDBlLTllZjItOGZlNDZhNzk2MmRjIiwiZXhwIjoxNzE1ODA3NjM1LCJpYXQiOjE3MTU4MDc2MzR9.k9fmo5KI2RXoF_U78-NnhC7009tUkE7TrP6T8xAUlGG2pRGIMdKV80qTMHYnelE-moMC5nlrDqO8ryeDLc7jgWMQp-mJCWGlFgKcNGUzvGU0q70WOXHpQyJSpkjmFm8EphidOchX6C5MvhLqmVY5AqXWlpIJowaEpHBVxo82NlaiI2Y8lunTrqlfsVY3UcPyHEV-ko7VG6JVia3d2peK4BWjzQJ00tcyGs9VF4Zw5xxa0yNyNTgeM_mveGBnJ1UKz3XJZAKQb6InXGdNuqIL0IVTZIRf2NRKa2rO6z2LZtYK-ZzGAJKgaR0AOSHaOmJU9qS0o8u2xbAfWS5Q1hYxLw";
 
         RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest(expiredRefreshToken);
 
@@ -329,6 +329,6 @@ public class AuthControllerIT extends BaseConfig {
                 .post(AUTH_URL + "/refresh")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.BAD_REQUEST.value());
+                .statusCode(HttpStatus.UNAUTHORIZED.value());
     }
 }
