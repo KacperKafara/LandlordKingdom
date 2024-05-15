@@ -158,7 +158,23 @@ const block = {
   unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
   unblockUserToastTitleFail: "Operacja nie powiodła się",
   unblockUserToastDescriptionFail: "Coś poszło nie tak...",
-}
+};
+
+const userFilter = {
+  yes: "Tak",
+  no: "Nie",
+  both: "Oba",
+  verified: "Zweryfikowany",
+  blocked: "Zablokowany",
+  login: "Login",
+  email: "Email",
+  submit: "Filtruj",
+  role: "Rola",
+  all: "Wszystkie",
+  tenant: "Najemca",
+  owner: "Właściciel",
+  administrator: "Administrator",
+};
 
 const common = {
   yes: "tak",
@@ -200,6 +216,7 @@ export default {
   changePasswordForm,
   block,
   userListPage,
+  userFilter,
   userDetailsPage,
   mePage,
   userDataPage,
