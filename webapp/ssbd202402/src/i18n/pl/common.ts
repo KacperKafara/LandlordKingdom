@@ -1,4 +1,3 @@
-
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -12,6 +11,16 @@ const loginPage = {
   invalidCredentials: "Nieprawidłowe dane logowania",
   loginNotAllowed: "Logowanie jest zablokowane, sprawdź email",
   tryAgain: "Spróbuj ponownie",
+  codeLengthMessage: "Kod uwierzytelniania dwufazowego musi mieć 8 cyfr",
+  codeDescription: "Wprowaź kod uwierzytelniania dwufazowego",
+  changeLanguage: "Język",
+  submit: "Wyślij",
+  backToLoginForm: "Wróć do formularza logowania",
+  tokenError: {
+    title: "Błąd danych",
+    description: "Wprowadzono niepoprawny żeton",
+  },
+  googleLoginButton: "Zaloguj się z Google",
 };
 
 const userDetailsPage = {
@@ -88,6 +97,9 @@ const resetPasswordPage = {
   changePasswordToastDescriptionSuccess: "Twoje hasło zostało zmienione",
   changePasswordToastTitleFail: "Operacja nie powiodła się",
   changePasswordToastDescriptionFail: "Coś poszło nie tak...",
+  changePasswordToastDescriptionTokenNotValid:
+    "Podany żeton nie jest poprawny, wymagane ponowne wysłanie maila.",
+  changePasswordToastDescriptionForbidden: "Jesteś zablokowany.",
 };
 
 const changePasswordForm = {
@@ -121,9 +133,18 @@ const userListPage = {
     "Do użytkownika została wysłana wiadomość email",
   resetUserPasswordToastTitleFail: "Operacja nie powiodła się",
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
+  resetUserPasswordToastDescriptionNotFound: "Podany użytkownik nie istanieje.",
+  resetUserPasswordToastDescriptionForbidden:
+    "Użytkownik jest nieaktywowany albo zablokowany.",
   resetUserEmailAction: "Zaktualizuj adres email",
-  resetUserEmailSuccess: "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+  resetUserEmailSuccess:
+    "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
+  updateEmailAddressTitle:
+    "Czy na pewno chcesz zaktualizować adres email użytkownika?",
+  updateEmailAddressDescription:
+    "Na adres email użytkownika zostanie wysłany link do zmiany adresu email",
+  updateEmailAddress: "Zaktualizuj adres email",
 };
 
 const common = {
@@ -133,6 +154,9 @@ const common = {
 
 const navLinks = {
   account: "Moje konto",
+  signOut: "Wyloguj",
+  users: "Użytkownicy",
+  roles: "Zmień poziom dostępu",
 };
 
 const userDataPage = {
@@ -148,6 +172,9 @@ const userDataPage = {
 const mePage = {
   accountInfo: "Dane użytkownika",
   updateEmailAddress: "Zaktualizuj adres email",
+  updateEmailAddressTitle: "Czy na pewno chcesz zaktualizować adres email?",
+  updateEmailAddressDescription:
+    "Na przypisany do konta adres email zostanie wysłany link do formularza zmiany adresu email",
 };
 
 export default {
@@ -163,6 +190,8 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  sessionExpired: "Sesja wygasła",
+  sessionExpiredDescription: "Twoja sesja wygasła, zaloguj się ponownie",
   footer: "Landlord Kingdom - SSBD202402",
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",

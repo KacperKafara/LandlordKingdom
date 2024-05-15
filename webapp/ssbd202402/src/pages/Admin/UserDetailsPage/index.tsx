@@ -1,7 +1,5 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchUser } from "@/data/fetchUser";
-import { useQuery } from "@tanstack/react-query";
 import { NavLink, Navigate, useParams } from "react-router-dom";
 import {
   Card,
@@ -18,15 +16,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useGetUserQuery } from "@/data/fetchUser";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
 
-  const { data, isError } = useQuery({
-    queryKey: ["user", id],
-    queryFn: () => (id ? fetchUser(id) : Promise.resolve(null)),
-  });
+  const { data, isError } = useGetUserQuery(id!);
 
   if (isError) {
     return <Navigate to="/admin/users" />;

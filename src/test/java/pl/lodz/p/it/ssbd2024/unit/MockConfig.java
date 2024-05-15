@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
+import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
 
@@ -73,6 +74,16 @@ public class MockConfig {
     @Bean
     PasswordVerificationTokenRepository passwordVerificationTokenRepository() {
         return Mockito.mock(PasswordVerificationTokenRepository.class);
+    }
+
+    @Bean
+    VerificationTokenService verificationTokenService() {
+        return Mockito.mock(VerificationTokenService.class);
+    }
+
+    @Bean
+    OTPTokenRepository otpTokenRepository() {
+        return Mockito.mock(OTPTokenRepository.class);
     }
 
     //TODO: mol repositories

@@ -16,9 +16,18 @@ public class Encoders {
     @Value("${jwt.secret}")
     private String jwtSecret;
 
+    @Value("${refreshToken.secret}")
+    private String refreshTokenSecret;
+
     @Bean
     public JwtEncoder jwtEncoder() {
         byte[] bytes = jwtSecret.getBytes();
+        return new NimbusJwtEncoder(new ImmutableSecret<>(new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA512")));
+    }
+
+    @Bean
+    public JwtEncoder refreshTokenEncoder() {
+        byte[] bytes = refreshTokenSecret.getBytes();
         return new NimbusJwtEncoder(new ImmutableSecret<>(new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA512")));
     }
 

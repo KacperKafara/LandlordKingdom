@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { AxiosError } from "axios";
-import { noTokenApi } from "@/data/api";
+import { api } from "@/data/api";
 const updateEmailFormSchema = (t: TFunction) =>
   z.object({
     email: z.string().email(t("updateEmailPage.emailNotValid")),
@@ -43,7 +43,7 @@ const UpdateEmailPage: FC = () => {
     data: updateEmailFormValues
   ) => {
     try {
-      await noTokenApi.post("/me/update-email", {
+      await api.post("/me/update-email", {
         token: token,
         email: data.email,
       });
