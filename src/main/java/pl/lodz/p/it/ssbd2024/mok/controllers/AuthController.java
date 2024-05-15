@@ -1,11 +1,14 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -17,10 +20,13 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
+import pl.lodz.p.it.ssbd2024.mok.dto.oauth.GoogleOAuth2TokenResponse;
+import pl.lodz.p.it.ssbd2024.mok.dto.oauth.GoogleOAuth2TokenPayload;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
 import java.security.InvalidKeyException;
+import java.util.Base64;
 import java.util.Map;
 
 @Log
@@ -119,8 +125,9 @@ public class AuthController {
         return ResponseEntity.ok(new OAuth2UrlResponse(url));
     }
 
+
     @GetMapping("/oauth2/token")
-    public ResponseEntity getOAuth2Token(@RequestParam String code) {
+    public ResponseEntity getOAuth2Token(@RequestParam String code) throws JsonProcessingException {
         String url = UriComponentsBuilder
                 .fromUriString(oAuthTokenUri)
                 .queryParam("client_id", oAuthClientId)
@@ -130,8 +137,18 @@ public class AuthController {
                 .queryParam("redirect_uri", oAuthRedirectUri)
                 .build().toUriString();
         RestClient restClient = RestClient.create();
-        String result = restClient.post().uri(url).retrieve().body(String.class);
-        log.info(result);
+        GoogleOAuth2TokenResponse result = restClient.post()
+                .uri(url)
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .body(GoogleOAuth2TokenResponse.class);
+
+        String token = result.getIdToken();
+        String[] tokenChunks = token.split("\\.");
+        Base64.Decoder decoder = Base64.getUrlDecoder();
+        String tokenPayload = new String(decoder.decode(tokenChunks[1]));
+        ObjectMapper mapper = new ObjectMapper();
+        GoogleOAuth2TokenPayload payload = mapper.readValue(tokenPayload, GoogleOAuth2TokenPayload.class);
         return ResponseEntity.ok().build();
     }
 

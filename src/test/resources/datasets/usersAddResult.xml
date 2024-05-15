@@ -172,6 +172,7 @@
          version="1" id="05854132-8b7c-440e-9ef2-8fe46a7962dc"
          login="tenant"
          password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+         created_at="2024-05-04 14:33:01.413581"
          language="en-US"/>
   <users blocked="false"
          login_attempts="0"
@@ -181,6 +182,7 @@
          version="0" id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
          login="test_login2"
          password="password123"
+         created_at="2024-05-04 14:33:01.413581"
          language="en"/>
   <users blocked="false"
          login_attempts="0"
@@ -190,6 +192,7 @@
          version="1" id="2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9"
          login="test"
          password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+         created_at="2024-05-04 14:33:01.413581"
          language="en-US"/>
   <users blocked="false"
          login_attempts="0"
@@ -197,6 +200,7 @@
          last_failed_login="[NULL]"
          last_successful_login="2024-05-04 14:33:01.413581"
          version="0" id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
+         created_at="2024-05-04 14:33:01.413581"
          login="test_login3"
          password="password123"
          language="en"/>
