@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="userSchema.xsd">
+    <!-- User data - Not Verified -->
+    <users id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+           login="userNotVerified"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="2024-05-04 14:33:01.413581"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="false"
+           verified="false"
+           language="en"
+           version="0"
+           created_at="[NOW]"/>
+
+    <!-- Personal Data -->
+    <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   email="userNotVerified@test.com"
+                   first_name="test_first_name1"
+                   last_name="test_last_name1"/>
+
+    <!-- Access Level -->
+    <access_levels active="true"
+                   version="0"
+                   id="22f34716-3b77-4e63-809d-35f9a4758011"
+                   user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   level="TENANT"/>
+
+    <!-- Tenant -->
+    <tenants id="22f34716-3b77-4e63-809d-35f9a4758011"/>
+
+    <!-- User data - Verified and Not Blocked -->
+    <users id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
+           login="userVerified"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="2024-05-04 14:33:01.413581"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="false"
+           verified="true"
+           language="en"
+           version="0"
+           created_at="[NOW]"/>
+
+    <!-- Personal Data -->
+    <personal_data user_id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
+                   email="userVerified@test.com"
+                   first_name="test_first_name2"
+                   last_name="test_last_name2"/>
+
+    <!-- Access Level -->
+    <access_levels active="true"
+                   version="0"
+                   id="22f34716-3b77-4e63-809d-35f9a4758012"
+                   user_id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
+                   level="TENANT"/>
+
+    <!-- Tenant -->
+    <tenants id="22f34716-3b77-4e63-809d-35f9a4758012"/>
+
+    <!-- User data - Blocked -->
+    <users id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
+           login="userBlocked"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="2024-05-04 14:33:01.413581"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="true"
+           verified="true"
+           language="en"
+           version="0"
+           created_at="[NOW]"/>
+
+    <!-- Personal Data -->
+    <personal_data user_id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
+                   email="userBlocked@test.com"
+                   first_name="test_first_name3"
+                   last_name="test_last_name3"/>
+
+    <!-- Access Level -->
+    <access_levels active="true"
+                   version="0"
+                   id="22f34716-3b77-4e63-809d-35f9a4758013"
+                   user_id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
+                   level="TENANT"/>
+
+    <!-- Tenant -->
+    <tenants id="22f34716-3b77-4e63-809d-35f9a4758013"/>
+
+    <!-- User data - 3 Login Attempts (Last Failed Login 2 Days Ago) -->
+    <users id="594d67c2-6820-4724-8f22-512dd097dc5e"
+           login="userWithAttempts2DaysAgo"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="3"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="[now-2d]"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="false"
+           verified="true"
+           language="en"
+           version="0"
+           created_at="[NOW]"/>
+
+    <!-- Personal Data -->
+    <personal_data user_id="594d67c2-6820-4724-8f22-512dd097dc5e"
+                   email="userWithAttempts2DaysAgo@test.com"
+                   first_name="test_first_name5"
+                   last_name="test_last_name5"/>
+
+    <!-- Access Level -->
+    <access_levels active="true"
+                   version="0"
+                   id="22f34716-3b77-4e63-809d-35f9a4758015"
+                   user_id="594d67c2-6820-4724-8f22-512dd097dc5e"
+                   level="TENANT"/>
+
+    <!-- Tenant -->
+    <tenants id="22f34716-3b77-4e63-809d-35f9a4758015"/>
+
+</dataset>

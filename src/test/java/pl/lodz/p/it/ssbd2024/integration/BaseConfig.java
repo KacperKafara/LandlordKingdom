@@ -61,7 +61,7 @@ public class BaseConfig {
                 .withNetworkAliases("smtp4test")
                 .withLogConsumer(outputFrame -> System.out.println(outputFrame.getUtf8String()))
                 .waitingFor(Wait.defaultWaitStrategy())
-                .withExposedPorts(25, 80)
+                .withExposedPorts(25, 143, 80)
                 .withReuse(true);
         smtp.start();
 
