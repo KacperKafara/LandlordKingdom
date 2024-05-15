@@ -1,4 +1,5 @@
 export type UserResponse = {
+  blocked: any;
   id: string; 
   firstName: string;
   lastName: string;

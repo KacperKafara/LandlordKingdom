@@ -18,6 +18,8 @@ public interface EmailService {
 
     void sendAccountUnblockEmail(String to, String name, String lang);
 
+    void sendAccountActivatedEmail(String to, String name, String lang);
+
     void sendEmailChangeEmail(String to, String name, String uri, String lang);
 
     void sendPasswordChangeEmail(String to, String name, String uri, String lang);
@@ -37,4 +39,7 @@ public interface EmailService {
     void sendAccountDeletedEmail(String to, String name, String lang);
 
     void sendAdminLoginEmail(String to, String name, String ip, String lang);
+
+
+    void sendOTPEmail(String to, String name, String otp, String lang);
 }

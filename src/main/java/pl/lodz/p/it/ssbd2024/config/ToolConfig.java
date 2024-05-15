@@ -13,12 +13,10 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 @ComponentScan({
         "pl.lodz.p.it.ssbd2024.util",
         "pl.lodz.p.it.ssbd2024.services",
-        "pl.lodz.p.it.ssbd2024.aspects",
         "pl.lodz.p.it.ssbd2024.mok.services",
         "pl.lodz.p.it.ssbd2024.mol.repositories",
         "pl.lodz.p.it.ssbd2024.mok.repositories",
 })
-@EnableAspectJAutoProxy
 @EnableScheduling
 public class ToolConfig {
     @Value("${scheduler.threadPool.size}")

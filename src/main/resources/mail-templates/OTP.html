@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html th:lang="${lang}" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+</head>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1 th:text="#{hello}  + ' ' + ${name} + '.'"/>
+    <p th:text="#{OTP.info} + ': ' + ${otp}"/>
+</body>
+</html>

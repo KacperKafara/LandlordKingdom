@@ -1,7 +1,5 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchUser } from "@/data/fetchUser";
-import { useQuery } from "@tanstack/react-query";
 import { NavLink, Navigate, useParams } from "react-router-dom";
 import {
   Card,
@@ -18,15 +16,17 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useGetUserQuery } from "@/data/fetchUser";
+import { useBlockUser } from "@/data/useBlockUser.ts";
+import { useUnblockUser } from "@/data/useUnblockUser.ts";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
 
-  const { data, isError } = useQuery({
-    queryKey: ["user", id],
-    queryFn: () => (id ? fetchUser(id) : Promise.resolve(null)),
-  });
+  const { data, isError } = useGetUserQuery(id!);
 
   if (isError) {
     return <Navigate to="/admin/users" />;
@@ -78,6 +78,19 @@ const UserDetailsPage: FC = () => {
                   <DropdownMenuLabel>
                     {t("userDetailsPage.actions")}
                   </DropdownMenuLabel>
+                  {data.blocked ? (
+                      <DropdownMenuItem onClick={async () => {
+                          await unblockUser(data.id);
+                      }}>
+                          {t("block.unblockUserAction")}
+                      </DropdownMenuItem>
+                  ) : (
+                      <DropdownMenuItem onClick={async () => {
+                          await blockUser(data.id);
+                      }}>
+                          {t("block.blockUserAction")}
+                      </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem>test</DropdownMenuItem>
                   <DropdownMenuItem>test</DropdownMenuItem>
                   <DropdownMenuItem>test</DropdownMenuItem>

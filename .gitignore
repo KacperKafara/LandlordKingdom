@@ -39,3 +39,6 @@ build/
 .DS_Store
 
 /.idea/
+
+docker-ssbd02/privateJwt-key.pem
+docker-ssbd02/privateRefresh-key.pem

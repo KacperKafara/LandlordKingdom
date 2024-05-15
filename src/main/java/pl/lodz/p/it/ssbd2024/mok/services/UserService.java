@@ -9,6 +9,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.User;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public interface UserService {
 
     User getUserByLogin(String login) throws NotFoundException;
 
-    User updateUserData(UUID id, User user) throws NotFoundException;
+    User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
     void blockUser(UUID id) throws NotFoundException;
 
@@ -36,11 +37,13 @@ public interface UserService {
 
     void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException;
 
-    void resetUserPassword(String login) throws NotFoundException, TokenGenerationException;
+    void sendChangePasswordEmail(String login) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException;
 
     void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException;
 
-    void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException;
+    void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException;
 
     void deleteNonVerifiedUsers();
+
+    void sendEmailVerifyAccount();
 }

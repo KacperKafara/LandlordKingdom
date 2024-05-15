@@ -31,6 +31,8 @@ import pl.lodz.p.it.ssbd2024.model.filtering.builders.TenantSpecificationBuilder
 import pl.lodz.p.it.ssbd2024.model.filtering.builders.UserSpecificationBuilder;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
+import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
 import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
@@ -194,15 +196,12 @@ public class UserController {
                                                        @RequestHeader(HttpHeaders.IF_MATCH) String tagValue
     ) {
         try {
-            User checkUser = userService.getUserById(id);
-            if (!signer.verifySignature(checkUser.getId(), checkUser.getVersion(), tagValue)) {
-                throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA);
-            }
-
-            User user = userService.updateUserData(id, UserMapper.toUser(request));
+            User user = userService.updateUserData(id, UserMapper.toUser(request), tagValue);
             return ResponseEntity.ok(UserMapper.toUserResponse(user));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage());
         }
     }
 
@@ -232,14 +231,16 @@ public class UserController {
 
     @PostMapping("/reset-password")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Void> resetPassword(@RequestParam String email) {
+    public ResponseEntity<Void> resetPassword(@RequestBody @Valid ResetPasswordRequest request) {
         try {
-            userService.resetUserPassword(email);
+            userService.sendChangePasswordEmail(request.email());
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (TokenGenerationException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+        } catch (UserBlockedException | UserNotVerifiedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
 }

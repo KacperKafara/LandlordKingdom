@@ -66,6 +66,7 @@
         <aspectj.version>1.9.22</aspectj.version>
         <logback.version>1.5.4</logback.version>
         <slf4j.version>2.0.12</slf4j.version>
+        <java-otp.version>0.4.0</java-otp.version>
     </properties>
 
     <dependencies>
@@ -239,6 +240,16 @@
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring6</artifactId>
             <version>${thymeleaf.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.eatthepath</groupId>
+            <artifactId>java-otp</artifactId>
+            <version>${java-otp.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk18on</artifactId>
+            <version>1.77</version>
         </dependency>
     </dependencies>
 

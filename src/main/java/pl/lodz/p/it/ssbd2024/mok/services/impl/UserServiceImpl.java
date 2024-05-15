@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.hibernate.query.SemanticException;
@@ -15,22 +14,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
-import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.model.AccountVerificationToken;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
+import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(rollbackFor = NotFoundException.class)
 @RequiredArgsConstructor
-@Log
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
@@ -38,7 +44,9 @@ public class UserServiceImpl implements UserService {
     private final TenantRepository tenantRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
+    private final AccountVerificationTokenRepository accountVerificationTokenRepository;
     private final UserRepository userRepository;
+    private final SignVerifier signVerifier;
 
 
     @Value("${app.url}")
@@ -93,8 +101,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserData(UUID id, User user) throws NotFoundException {
+    public User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+
+        if(signVerifier.verifySignature(userToUpdate.getId(), userToUpdate.getVersion(), tagValue)){
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA);
+        }
+
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
         userToUpdate.setLanguage(user.getLanguage());
@@ -106,6 +119,7 @@ public class UserServiceImpl implements UserService {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setBlocked(true);
         repository.saveAndFlush(user);
+        emailService.sendAccountBlockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
@@ -114,29 +128,7 @@ public class UserServiceImpl implements UserService {
 
         user.setBlocked(false);
         repository.saveAndFlush(user);
-    }
-
-    @Override
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
-    public void resetUserPassword(String email) throws NotFoundException, TokenGenerationException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        String token = verificationTokenService.generatePasswordVerificationToken(user);
-
-        String link = appUrl + "/reset-password?token=" + token;
-        emailService.sendPasswordChangeEmail(user.getEmail(), user.getFirstName(), link, user.getLanguage());
-    }
-
-    @Override
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class})
-    public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException {
-        User user = getUserById(id);
-
-        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
-        }
-
-        user.setPassword(passwordEncoder.encode(newPassword));
-        userRepository.saveAndFlush(user);
+        emailService.sendAccountUnblockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
@@ -160,9 +152,47 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class, UserBlockedException.class, UserNotVerifiedException.class})
+    public void sendChangePasswordEmail(String email) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+
+        if (user.isBlocked()) {
+            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
+        }
+
+        if (!user.isVerified()) {
+            throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED);
+        }
+
+        String token = verificationTokenService.generatePasswordVerificationToken(user);
+
+        String link = appUrl + "/reset-password?token=" + token;
+        emailService.sendPasswordChangeEmail(user.getEmail(), user.getFirstName(), link, user.getLanguage());
+    }
+
+    @Override
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class})
+    public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException {
+        User user = getUserById(id);
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.saveAndFlush(user);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {VerificationTokenUsedException.class, VerificationTokenExpiredException.class, UserBlockedException.class})
+    public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException {
         VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
         User user = verificationToken.getUser();
+
+        if (user.isBlocked()) {
+            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
+        }
+
         user.setPassword(passwordEncoder.encode(password));
         userRepository.saveAndFlush(user);
     }
@@ -175,6 +205,21 @@ public class UserServiceImpl implements UserService {
             emailService.sendAccountDeletedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
             repository.delete(user);
             repository.flush();
+        });
+    }
+
+    @Override
+    public void sendEmailVerifyAccount() {
+        LocalDateTime beforeTime = LocalDateTime.now().minusHours(removeUnverifiedAccountsAfterHours / 2);
+        LocalDateTime afterTime = beforeTime.plusMinutes(10);
+        List<User> users = repository.getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(beforeTime, afterTime);
+        users.forEach(user -> {
+            Optional<AccountVerificationToken> token = accountVerificationTokenRepository.findByUserId(user.getId());
+            if (token.isEmpty()) {
+                return;
+            }
+            URI uri = URI.create(appUrl + "/verify/" + token);
+            emailService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
         });
     }
 }

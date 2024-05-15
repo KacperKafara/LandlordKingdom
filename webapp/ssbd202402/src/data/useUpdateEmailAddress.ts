@@ -1,11 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { api } from "./api";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 export const useResetOtherUserEmailAddress = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { api } = useAxiosPrivate();
+
   const { mutateAsync } = useMutation({
     mutationFn: async (id: string) => {
       const response = await api.post(`/users/${id}/email-update-request`);
@@ -31,6 +33,8 @@ export const useResetOtherUserEmailAddress = () => {
 export const useResetMyEmailAddress = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
+  const { api } = useAxiosPrivate();
+
   const { mutateAsync } = useMutation({
     mutationFn: async () => {
       const response = await api.post(`/me/email-update-request`);

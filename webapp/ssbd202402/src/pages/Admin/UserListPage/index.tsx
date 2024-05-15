@@ -27,13 +27,14 @@ import {
 } from "@/components/ui/table";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useToast } from "@/components/ui/use-toast";
-import { useResetOtherUserEmailAddress } from "@/data/useUpdateEmailAddress.ts";
-import { useResetPassword } from "@/data/useUserPassword";
+import { useResetPassword } from "@/data/useResetPassword";
 import { useNavigate } from "react-router-dom";
 import UserFilter from "./UserFilter";
 import { useFilteredUsers } from "@/data/useFilteredUsers";
 import PageChanger from "./PageChanger";
+import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
+import { useBlockUser } from "@/data/useBlockUser.ts";
+import { useUnblockUser } from "@/data/useUnblockUser.ts";
 
 interface UserData {
   login: string;
@@ -41,15 +42,14 @@ interface UserData {
 }
 
 const UserListPage: FC = () => {
-  const { toast } = useToast();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { users } = useFilteredUsers();
-  const { resetPassword } = useResetPassword();
-  const { updateEmail } = useResetOtherUserEmailAddress();
+  const resetPassword = useResetPassword();
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
-
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
   const [userData, setUserData] = useState<UserData>();
 
   const handlePasswordResetClick = (data: UserData) => {
@@ -57,24 +57,10 @@ const UserListPage: FC = () => {
     setOpenPasswordResetDialog(true);
   };
 
-  const handleEmailUpdateClick = async (id: string) => {
-    await updateEmail(id);
-  };
-
   const handlePasswordReset = async () => {
-    const result = await resetPassword(userData?.email || "");
-
-    if (result === 200) {
-      toast({
-        title: t("userListPage.resetUserPasswordToastTitleSuccess"),
-        description: t("userListPage.resetUserPasswordToastDescriptionSuccess"),
-      });
-    } else {
-      toast({
-        title: t("userListPage.resetUserPasswordToastTitleFail"),
-        description: t("userListPage.resetUserPasswordToastDescriptionFail"),
-      });
-    }
+    resetPassword.mutate({
+      email: userData?.email || "",
+    });
 
     setOpenPasswordResetDialog(false);
   };
@@ -146,11 +132,26 @@ const UserListPage: FC = () => {
                           >
                             {t("userListPage.resetUserPasswordAction")}
                           </DropdownMenuItem>
-                          <DropdownMenuItem
-                            onClick={() => handleEmailUpdateClick(user.id)}
-                          >
-                            {t("userListPage.resetUserEmailAction")}
+                          <DropdownMenuItem asChild>
+                            <UpdateUserEmailAddress />
                           </DropdownMenuItem>
+                          {user.blocked ? (
+                            <DropdownMenuItem
+                              onClick={async () => {
+                                await unblockUser(user.id);
+                              }}
+                            >
+                              {t("block.unblockUserAction")}
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem
+                              onClick={async () => {
+                                await blockUser(user.id);
+                              }}
+                            >
+                              {t("block.blockUserAction")}
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() =>

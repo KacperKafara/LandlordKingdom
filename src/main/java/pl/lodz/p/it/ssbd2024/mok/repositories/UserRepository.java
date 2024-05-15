@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mok.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pl.lodz.p.it.ssbd2024.model.User;
 
@@ -16,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
 
     Optional<User> findByLogin(String login);
 
-    void deleteUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
-
     List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
+
+    List<User> getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(LocalDateTime createdAt, LocalDateTime createdAt2);
 }

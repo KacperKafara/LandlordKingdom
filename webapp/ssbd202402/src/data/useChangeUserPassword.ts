@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { api } from "./api";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 type ChangePasswordType = {
   oldPassword: string;
@@ -7,6 +7,7 @@ type ChangePasswordType = {
 };
 
 export const useChangeUserPassword = () => {
+  const { api } = useAxiosPrivate();
   const { mutateAsync } = useMutation({
     mutationFn: async (data: ChangePasswordType) => {
       const response = await api.post("/me/change-password", data);
