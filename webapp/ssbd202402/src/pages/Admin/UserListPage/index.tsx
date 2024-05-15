@@ -31,8 +31,8 @@ import { useTranslation } from "react-i18next";
 import { useResetPassword } from "@/data/useResetPassword";
 import { useNavigate } from "react-router-dom";
 import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
-import {useBlockUser} from "@/data/useBlockUser.ts";
-import {useUnblockUser} from "@/data/useUnblockUser.ts";
+import { useBlockUser } from "@/data/useBlockUser.ts";
+import { useUnblockUser } from "@/data/useUnblockUser.ts";
 
 interface UserData {
   login: string;
@@ -132,17 +132,21 @@ const UserListPage: FC = () => {
                             <UpdateUserEmailAddress />
                           </DropdownMenuItem>
                           {user.blocked ? (
-                              <DropdownMenuItem onClick={async () => {
+                            <DropdownMenuItem
+                              onClick={async () => {
                                 await unblockUser(user.id);
-                              }}>
-                                {t("block.unblockUserAction")}
-                              </DropdownMenuItem>
+                              }}
+                            >
+                              {t("block.unblockUserAction")}
+                            </DropdownMenuItem>
                           ) : (
-                              <DropdownMenuItem onClick={async () => {
+                            <DropdownMenuItem
+                              onClick={async () => {
                                 await blockUser(user.id);
-                              }}>
-                                {t("block.blockUserAction")}
-                              </DropdownMenuItem>
+                              }}
+                            >
+                              {t("block.blockUserAction")}
+                            </DropdownMenuItem>
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
