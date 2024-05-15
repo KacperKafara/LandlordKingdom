@@ -17,12 +17,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useGetUserQuery } from "@/data/fetchUser";
-import { useUserActions } from "@/data/useUserActions";
+import { useBlockUser } from "@/data/useBlockUser.ts";
+import { useUnblockUser } from "@/data/useUnblockUser.ts";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const { handleBlockUser, handleUnblockUser } = useUserActions();
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
 
   const { data, isError } = useGetUserQuery(id!);
 
@@ -76,21 +78,19 @@ const UserDetailsPage: FC = () => {
                   <DropdownMenuLabel>
                     {t("userDetailsPage.actions")}
                   </DropdownMenuLabel>
-                    {data.blocked ? (
-                        <DropdownMenuItem onClick={async () => {
-                            await handleUnblockUser(data.id);
-                            await refreshUserData(data.id);
-                        }}>
-                            {t("block.unblockUserAction")}
-                        </DropdownMenuItem>
-                    ) : (
-                        <DropdownMenuItem onClick={async () => {
-                            await handleBlockUser(data.id);
-                            await refreshUserData(data.id);
-                        }}>
-                            {t("block.blockUserAction")}
-                        </DropdownMenuItem>
-                    )}
+                  {data.blocked ? (
+                      <DropdownMenuItem onClick={async () => {
+                          await unblockUser(data.id);
+                      }}>
+                          {t("block.unblockUserAction")}
+                      </DropdownMenuItem>
+                  ) : (
+                      <DropdownMenuItem onClick={async () => {
+                          await blockUser(data.id);
+                      }}>
+                          {t("block.blockUserAction")}
+                      </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem>test</DropdownMenuItem>
                   <DropdownMenuItem>test</DropdownMenuItem>
                   <DropdownMenuItem>test</DropdownMenuItem>

@@ -31,7 +31,8 @@ import { useTranslation } from "react-i18next";
 import { useResetPassword } from "@/data/useResetPassword";
 import { useNavigate } from "react-router-dom";
 import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
-import { useUserActions } from "@/data/useUserActions";
+import {useBlockUser} from "@/data/useBlockUser.ts";
+import {useUnblockUser} from "@/data/useUnblockUser.ts";
 
 interface UserData {
   login: string;
@@ -45,7 +46,8 @@ const UserListPage: FC = () => {
   const resetPassword = useResetPassword();
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
-  const { handleBlockUser, handleUnblockUser } = useUserActions();
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
   const [userData, setUserData] = useState<UserData>();
 
   const handlePasswordResetClick = (data: UserData) => {
@@ -129,25 +131,19 @@ const UserListPage: FC = () => {
                           <DropdownMenuItem asChild>
                             <UpdateUserEmailAddress />
                           </DropdownMenuItem>
-                            {user.blocked ? (
-                                <DropdownMenuItem
-                                    onClick={async () => {
-                                        await handleUnblockUser(user.id);
-                                        await refetch();
-                                    }}
-                                >
-                                    {t("block.unblockUserAction")}
-                                </DropdownMenuItem>
-                            ) : (
-                                <DropdownMenuItem
-                                    onClick={async () => {
-                                        await handleBlockUser(user.id);
-                                        await refetch();
-                                    }}
-                                >
-                                    {t("block.blockUserAction")}
-                                </DropdownMenuItem>
-                            )}
+                          {user.blocked ? (
+                              <DropdownMenuItem onClick={async () => {
+                                await unblockUser(user.id);
+                              }}>
+                                {t("block.unblockUserAction")}
+                              </DropdownMenuItem>
+                          ) : (
+                              <DropdownMenuItem onClick={async () => {
+                                await blockUser(user.id);
+                              }}>
+                                {t("block.blockUserAction")}
+                              </DropdownMenuItem>
+                          )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() =>
