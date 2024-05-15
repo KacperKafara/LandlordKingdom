@@ -9,7 +9,6 @@ import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
-const UserDataPage = loadable(() => import("./pages/Me/UserData"));
 const MePage = loadable(() => import("./pages/Me"));
 const UserListPage = loadable(() => import("./pages/Admin/UserListPage"));
 const LoginPage = loadable(() => import("./pages/Login"));
@@ -34,10 +33,7 @@ const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
 ];
-const AccountRoutes: RouteObject[] = [
-  { index: true, Component: MePage },
-  { path: "info", Component: UserDataPage },
-];
+const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 
 export const UnprotectedRoutes: RouteObject[] = [
   { path: "/login", Component: LoginPage },
