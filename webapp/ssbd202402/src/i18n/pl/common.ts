@@ -197,8 +197,15 @@ const registerSuccessPage = {
   loginButton: "Wróc do strony logowania",
 };
 
+const roles = {
+  administrator: "Administrator",
+  tenant: "Najemnca",
+  owner: "Właściciel",
+};
+
 export default {
   common,
+  roles,
   registerSuccessPage,
   navLinks,
   loginPage,

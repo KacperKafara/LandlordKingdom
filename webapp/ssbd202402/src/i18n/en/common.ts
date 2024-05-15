@@ -176,8 +176,15 @@ const registerSuccessPage = {
   loginButton: "Go back to login",
 };
 
+const roles = {
+  administrator: "Administrator",
+  tenant: "Tenant",
+  owner: "Owner",
+};
+
 export default {
   common,
+  roles,
   registerSuccessPage,
   navLinks,
   loginPage,

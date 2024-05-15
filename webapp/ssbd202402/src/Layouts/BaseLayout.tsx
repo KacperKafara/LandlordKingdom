@@ -33,22 +33,26 @@ const config = {
     footer: "bg-orange-500",
     nav: "border-b-4 border-orange-500",
     hover: "hover:bg-orange-300",
+    accentColor: "bg-orange-300",
   },
   tenant: {
     footer: "bg-green-500",
     nav: "border-b-4 border-green-500",
     hover: "hover:bg-green-300",
+    accentColor: "bg-green-300",
   },
   owner: {
     footer: "bg-blue-500",
     nav: "border-b-4 border-blue-500",
     hover: "hover:bg-blue-300",
+    accentColor: "bg-blue-300",
   },
 } satisfies {
   [key in LayoutType]: {
     nav: string;
     footer: string;
     hover: string;
+    accentColor: string;
   };
 };
 
@@ -87,7 +91,13 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
             <NavLink
               key={link.path + idx}
               to={link.path}
-              className={cn("px-2 py-1 rounded-md", colors.hover)}
+              className={({ isActive }) =>
+                cn(
+                  "px-2 py-1 rounded-md",
+                  colors.hover,
+                  isActive && colors.accentColor
+                )
+              }
             >
               {link.label}
             </NavLink>
@@ -98,7 +108,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                 variant="ghost"
                 className={cn("px-2 py-1 capitalize", colors.hover)}
               >
-                {activeRole?.toLowerCase()}
+                {t(`roles.${activeRole?.toLowerCase()}`)}
                 <IoMdArrowDropdown />
               </Button>
             </DropdownMenuTrigger>
@@ -111,8 +121,8 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                   asChild
                   key={idx}
                 >
-                  <NavLink to={`/${role_mapping[role]}`} className="capitalize">
-                    {role.toLowerCase()}
+                  <NavLink to={`/${role_mapping[role]}`}>
+                    {t(`roles.${role.toLowerCase()}`)}
                   </NavLink>
                 </DropdownMenuItem>
               ))}
@@ -128,9 +138,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
           config[type].footer
         )}
       >
-        <span className="capitalize mr-2">
-          {activeRole?.toLocaleLowerCase()}
-        </span>
+        <span className="mr-2">{t(`roles.${activeRole?.toLowerCase()}`)}</span>
         {t("footer")}
       </footer>
     </div>
