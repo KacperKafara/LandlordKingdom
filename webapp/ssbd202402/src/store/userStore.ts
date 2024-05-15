@@ -6,11 +6,12 @@ type UserStore = {
   id?: string;
   roles?: string[];
   refreshToken?: string;
+  activeRole?: string;
   setToken: (token: string) => void;
   setRefreshToken: (token: string) => void;
   clearRefreshToken: () => void;
   clearToken: () => void;
-  activeRole?: string;
+  setActiveRole: (role: string) => void;
 };
 
 const LSToken = localStorage.getItem("token");
@@ -36,7 +37,12 @@ export const useUserStore = create<UserStore>((set) => ({
   clearToken: () =>
     set(() => {
       localStorage.removeItem("token");
-      return { token: undefined, id: undefined, roles: undefined, activeRole: undefined };
+      return {
+        token: undefined,
+        id: undefined,
+        roles: undefined,
+        activeRole: undefined,
+      };
     }),
   setRefreshToken: (token: string) =>
     set(() => {
@@ -48,4 +54,5 @@ export const useUserStore = create<UserStore>((set) => ({
       localStorage.removeItem("refreshToken");
       return { refreshToken: undefined };
     }),
+  setActiveRole: (role: string) => set(() => ({ activeRole: role })),
 }));

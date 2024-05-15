@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import { TFunction } from "i18next";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
@@ -14,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import MyAccountButton from "./MyAccountButton";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 export type NavigationLink = {
   path: string;
@@ -34,13 +35,13 @@ const config = {
     hover: "hover:bg-orange-300",
   },
   tenant: {
-    footer: "border-t-4 border-green-500",
-    nav: "border-b-4 bg-green-500",
+    footer: "bg-green-500",
+    nav: "border-b-4 border-green-500",
     hover: "hover:bg-green-300",
   },
   owner: {
-    footer: "border-t-4 border-blue-500",
-    nav: "border-b-4 bg-blue-500",
+    footer: "bg-blue-500",
+    nav: "border-b-4 border-blue-500",
     hover: "hover:bg-blue-300",
   },
 } satisfies {
@@ -51,32 +52,21 @@ const config = {
   };
 };
 
-const fixedLinks: (t: TFunction) => NavigationLink[] = (t) => [
-  { path: "/account", label: t("navLinks.account") },
-];
-
 const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { t } = useTranslation();
   const colors = config[type];
   const navigate = useNavigate();
-  const userStore = useUserStore();
+  const { activeRole, setActiveRole } = useUserStore();
   const { roles } = useUserStore();
-  const handleLoginButtonClick = () => {
-    userStore.clearToken();
-    navigate("/login");
-  };
+
   const role_mapping: { [key: string]: string } = {
     ADMINISTRATOR: "admin",
     TENANT: "tenant",
     OWNER: "owner",
   };
 
-  const onRoleItemClick = (role: string) => {
-    userStore.activeRole = role;
-    console.log(userStore.activeRole);
-  };
   const onLogoClick = () => {
-    navigate(`/${role_mapping[userStore.activeRole!]}`);
+    navigate(`/${role_mapping[activeRole!]}`);
   };
 
   return (
@@ -92,8 +82,8 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
             {t("logoPlaceholder")}
           </p>
         </div>
-        <div className="flex flex-row gap-5 items-center">
-          {[...links, ...fixedLinks(t)].map((link, idx) => (
+        <div className="flex flex-row gap-3 items-center">
+          {links.map((link, idx) => (
             <NavLink
               key={link.path + idx}
               to={link.path}
@@ -102,33 +92,33 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
               {link.label}
             </NavLink>
           ))}
-          <button
-            onClick={handleLoginButtonClick}
-            className={cn("px-2 py-1 rounded-md", colors.hover)}
-          >
-            {t("navLinks.signOut")}
-          </button>
           <DropdownMenu>
-            <DropdownMenuTrigger
-              className={cn(" px-2 py-1", colors.hover)}
-              asChild
-            >
-              <Button variant="ghost">{userStore.activeRole}</Button>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className={cn("px-2 py-1 capitalize", colors.hover)}
+              >
+                {activeRole?.toLowerCase()}
+                <IoMdArrowDropdown />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>{t("navLinks.roles")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {roles?.map((role, idx) => (
                 <DropdownMenuItem
-                  onClick={() => onRoleItemClick(role)}
+                  onClick={() => setActiveRole(role)}
                   asChild
                   key={idx}
                 >
-                  <NavLink to={`/${role_mapping[role]}`}>{role}</NavLink>
+                  <NavLink to={`/${role_mapping[role]}`} className="capitalize">
+                    {role.toLowerCase()}
+                  </NavLink>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          <MyAccountButton hover={colors.hover} />
         </div>
       </nav>
       <main className="flex-1 px-10">{children}</main>
@@ -138,6 +128,9 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
           config[type].footer
         )}
       >
+        <span className="capitalize mr-2">
+          {activeRole?.toLocaleLowerCase()}
+        </span>
         {t("footer")}
       </footer>
     </div>
