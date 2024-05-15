@@ -82,7 +82,6 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Block user - user is blocked")
-    @Disabled // Delete after fixing method
     void BlockUser_UserIsBlocked_ThrowException_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
@@ -91,6 +90,18 @@ class UserServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         user.setBlocked(true);
         assertThrows(UserAlreadyBlockedException.class, () -> userService.blockUser(userId));
+    }
+
+    @Test
+    @DisplayName("Block user - user is blocked")
+    void UnblockUser_UserIsNotBlocked_ThrowException_Test() {
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        user.setBlocked(false);
+
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        user.setBlocked(false);
+        assertThrows(UserAlreadyUnblockedException.class, () -> userService.unblockUser(userId));
     }
 
     @Test

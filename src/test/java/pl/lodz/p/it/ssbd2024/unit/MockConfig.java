@@ -112,4 +112,9 @@ public class MockConfig {
 
     //TODO: mol repositories
 
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return Mockito.mock(PasswordEncoder.class);
+    }
 }
