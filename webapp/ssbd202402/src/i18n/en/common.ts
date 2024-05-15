@@ -20,6 +20,7 @@ const loginPage = {
     title: "Incorrect data",
     description: "Provided incorrect token",
   },
+  googleLoginButton: "Sign in with Google",
 };
 
 const userDetailsPage = {
@@ -132,9 +133,38 @@ const userListPage = {
     "An email for changing current address has been sent to the user's email address",
   resetUserEmailError: "Error while initializing email change",
   resetUserEmailTitle: "Are you sure you want to update user email address?",
-  resetUserEmailDescription: "A link to change the email address will be sent to the user's email address",
+  resetUserEmailDescription:
+    "A link to change the email address will be sent to the user's email address",
   updateEmailAddress: "Update email address",
+};
 
+const block = {
+  blockUserAction: "Block",
+  blockUserToastTitleSuccess: "Operation successfully completed",
+  blockUserToastDescriptionSuccess: "User has been blocked",
+  blockUserToastTitleFail: "Operaiton failed",
+  blockUserToastDescriptionFail: "Something went wrong...",
+  unblockUserAction: "Unblock",
+  unblockUserToastTitleSuccess: "Operation successfully completed",
+  unblockUserToastDescriptionSuccess: "User has unbeen blocked",
+  unblockUserToastTitleFail: "Operaiton failed",
+  unblockUserToastDescriptionFail: "Something went wrong...",
+};
+
+const userFilter = {
+  yes: "Yes",
+  no: "Nie",
+  both: "Both",
+  verified: "Verified",
+  blocked: "Not verified",
+  login: "Login",
+  email: "Email",
+  submit: "Filter",
+  role: "Role",
+  all: "All",
+  tenant: "Tenant",
+  owner: "Owner",
+  administrator: "Administrator",
 };
 
 const common = {
@@ -146,7 +176,7 @@ const navLinks = {
   account: "My account",
   signOut: "Sign out",
   users: "Users",
-  roles: "Change access level"
+  roles: "Change access level",
 };
 
 const userDataPage = {
@@ -162,8 +192,10 @@ const userDataPage = {
 const mePage = {
   accountInfo: "User data",
   updateEmailAddress: "Update email address",
-  updateEmailAddressTitle: "Are you sure you want to update your email address?",
-  updateEmailAddressDescription: "A link to change the email address will be sent to the user's email address",
+  updateEmailAddressTitle:
+    "Are you sure you want to update your email address?",
+  updateEmailAddressDescription:
+    "A link to change the email address will be sent to the user's email address",
 };
 
 export default {
@@ -175,6 +207,8 @@ export default {
   resetPasswordPage,
   changePasswordForm,
   userListPage,
+  userFilter,
+  block,
   userDetailsPage,
   mePage,
   userDataPage,

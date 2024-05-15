@@ -16,7 +16,8 @@ public class UserMapper {
                 user.getLastName(),
                 user.getEmail(),
                 user.getLogin(),
-                user.getLanguage());
+                user.getLanguage(),
+                user.isBlocked());
     }
 
     public static DetailedUserResponse toDetailedUserResponse(User user) {

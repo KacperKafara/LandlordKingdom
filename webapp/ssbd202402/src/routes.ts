@@ -4,19 +4,26 @@ import OwnerLayout from "./Layouts/OwnerLayout";
 import TenantLayout from "./Layouts/TenantLayout";
 import AccountLayout from "./Layouts/AccountLayout";
 import AdminTestPage from "./pages/Admin/Test";
-import RegisterPage from "./pages/Register";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
-import UserListPage from "./pages/Admin/UserListPage";
-import MePage from "@/pages/Me";
-import UserDataPage from "@/pages/Me/UserData";
-import UserDetailsPage from "./pages/Admin/UserDetailsPage";
-import ResetPasswordPage from "./pages/User/ResetPasswordPage";
-import VerifyAccountPage from "./pages/VerifyAccount";
-import RegistrationSuccessPage from "./pages/RegistrationSuccess";
-import UpdateEmailPage from "./pages/UpdateEmail";
-import ResetPasswordForm from "./pages/ResetPasswordForm";
-import Login2FaPage from "@/pages/Login";
+import loadable from "@loadable/component";
+
+const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
+const UserDataPage = loadable(() => import("./pages/Me/UserData"));
+const MePage = loadable(() => import("./pages/Me"));
+const UserListPage = loadable(() => import("./pages/Admin/UserListPage"));
+const LoginPage = loadable(() => import("./pages/Login"));
+const RegisterPage = loadable(() => import("./pages/Register"));
+const RegistrationSuccessPage = loadable(
+  () => import("./pages/RegistrationSuccess")
+);
+const ResetPasswordPage = loadable(
+  () => import("./pages/User/ResetPasswordPage")
+);
+const VerifyAccountPage = loadable(() => import("./pages/VerifyAccount"));
+const UpdateEmailPage = loadable(() => import("./pages/UpdateEmail"));
+const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
+const Callback = loadable(() => import("./pages/OauthCallback"));
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
@@ -40,6 +47,7 @@ export const UnprotectedRoutes: RouteObject[] = [
   { path: "/verify/:token", Component: VerifyAccountPage },
   { path: "/update-email/:token", Component: UpdateEmailPage },
   { path: "/reset-password-form", Component: ResetPasswordForm },
+  { path: "/auth/google/callback", Component: Callback },
 ];
 
 export const ProtectedRoutes: RouteObject[] = [

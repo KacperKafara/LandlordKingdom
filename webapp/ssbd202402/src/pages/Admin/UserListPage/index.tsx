@@ -25,12 +25,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useFetchUsersQuery } from "@/data/fetchUsers";
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useResetPassword } from "@/data/useResetPassword";
 import { useNavigate } from "react-router-dom";
+import UserFilter from "./UserFilter";
+import { useFilteredUsers } from "@/data/useFilteredUsers";
+import PageChanger from "./PageChanger";
 import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
+import { useBlockUser } from "@/data/useBlockUser.ts";
+import { useUnblockUser } from "@/data/useUnblockUser.ts";
 
 interface UserData {
   login: string;
@@ -40,11 +44,12 @@ interface UserData {
 const UserListPage: FC = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data } = useFetchUsersQuery();
+  const { users } = useFilteredUsers();
   const resetPassword = useResetPassword();
   const [openPaswordResetDialog, setOpenPasswordResetDialog] =
     useState<boolean>(false);
-
+  const { blockUser } = useBlockUser();
+  const { unblockUser } = useUnblockUser();
   const [userData, setUserData] = useState<UserData>();
 
   const handlePasswordResetClick = (data: UserData) => {
@@ -62,7 +67,9 @@ const UserListPage: FC = () => {
 
   return (
     <>
-      <div className="text-center m-10">!!! THERE SHOULD BE FILTER !!!</div>
+      <div className="flex justify-center m-5">
+        <UserFilter />
+      </div>
       <div className="flex justify-center">
         <div className="w-3/5">
           <AlertDialog open={openPaswordResetDialog}>
@@ -99,8 +106,8 @@ const UserListPage: FC = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data &&
-                data.map((user) => (
+              {users &&
+                users.map((user) => (
                   <TableRow key={user.login}>
                     <TableCell>{user.firstName}</TableCell>
                     <TableCell>{user.lastName}</TableCell>
@@ -128,6 +135,23 @@ const UserListPage: FC = () => {
                           <DropdownMenuItem asChild>
                             <UpdateUserEmailAddress />
                           </DropdownMenuItem>
+                          {user.blocked ? (
+                            <DropdownMenuItem
+                              onClick={async () => {
+                                await unblockUser(user.id);
+                              }}
+                            >
+                              {t("block.unblockUserAction")}
+                            </DropdownMenuItem>
+                          ) : (
+                            <DropdownMenuItem
+                              onClick={async () => {
+                                await blockUser(user.id);
+                              }}
+                            >
+                              {t("block.blockUserAction")}
+                            </DropdownMenuItem>
+                          )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
                             onClick={() =>
@@ -144,6 +168,9 @@ const UserListPage: FC = () => {
             </TableBody>
           </Table>
         </div>
+      </div>
+      <div className="flex justify-center">
+        <PageChanger />
       </div>
     </>
   );

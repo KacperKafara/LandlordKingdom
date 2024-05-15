@@ -20,6 +20,7 @@ const loginPage = {
     title: "Błąd danych",
     description: "Wprowadzono niepoprawny żeton",
   },
+  googleLoginButton: "Zaloguj się z Google",
 };
 
 const userDetailsPage = {
@@ -146,6 +147,35 @@ const userListPage = {
   updateEmailAddress: "Zaktualizuj adres email",
 };
 
+const block = {
+  blockUserAction: "Zablokuj",
+  blockUserToastTitleSuccess: "Operacja powiodła się",
+  blockUserToastDescriptionSuccess: "Użytkownik został zablokowany",
+  blockUserToastTitleFail: "Operacja nie powiodła się",
+  blockUserToastDescriptionFail: "Coś poszło nie tak...",
+  unblockUserAction: "Odblokuj",
+  unblockUserToastTitleSuccess: "Operacja powiodła się",
+  unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
+  unblockUserToastTitleFail: "Operacja nie powiodła się",
+  unblockUserToastDescriptionFail: "Coś poszło nie tak...",
+};
+
+const userFilter = {
+  yes: "Tak",
+  no: "Nie",
+  both: "Oba",
+  verified: "Zweryfikowany",
+  blocked: "Zablokowany",
+  login: "Login",
+  email: "Email",
+  submit: "Filtruj",
+  role: "Rola",
+  all: "Wszystkie",
+  tenant: "Najemca",
+  owner: "Właściciel",
+  administrator: "Administrator",
+};
+
 const common = {
   yes: "tak",
   no: "nie",
@@ -184,7 +214,9 @@ export default {
   resetPasswordForm,
   resetPasswordPage,
   changePasswordForm,
+  block,
   userListPage,
+  userFilter,
   userDetailsPage,
   mePage,
   userDataPage,

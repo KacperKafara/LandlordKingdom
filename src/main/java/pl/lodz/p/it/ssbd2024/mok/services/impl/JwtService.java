@@ -1,13 +1,16 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
+import pl.lodz.p.it.ssbd2024.util.KeyReader;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
+import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -19,9 +22,16 @@ import java.util.UUID;
 public class JwtService {
     private final JwtEncoder jwtEncoder;
     private final JwtEncoder refreshTokenEncoder;
+    private PublicKey refreshTokenPublicKey;
 
-    @Value("${refreshToken.secret}")
-    private String refreshTokenSecret;
+    @Value("${refreshToken.public_key_file_path}")
+    private String publicRefreshTokenKeyFilePath;
+
+    @PostConstruct
+    public void readKeys() throws IOException {
+        this.refreshTokenPublicKey = KeyReader.readPublicJwtKey(publicRefreshTokenKeyFilePath);
+    }
+
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
@@ -39,7 +49,7 @@ public class JwtService {
                 .claim("authorities",  roles)
                 .build();
 
-        var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS512).build(), claims);
+        var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(SignatureAlgorithm.RS256).build(), claims);
         return jwtEncoder.encode(encoderParameters).getTokenValue();
     }
 
@@ -52,7 +62,7 @@ public class JwtService {
                 .subject(id.toString())
                 .build();
 
-        var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS512).build(), claims);
+        var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(SignatureAlgorithm.RS256).build(), claims);
         return refreshTokenEncoder.encode(encoderParameters).getTokenValue();
     }
 
@@ -61,11 +71,8 @@ public class JwtService {
     }
 
     public Jwt decodeRefreshToken(String token) {
-        byte[] bytes = refreshTokenSecret.getBytes();
-        SecretKey key = new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA512");
         NimbusJwtDecoder decoder = NimbusJwtDecoder
-                .withSecretKey(key)
-                .macAlgorithm(MacAlgorithm.HS512)
+                .withPublicKey((RSAPublicKey) refreshTokenPublicKey)
                 .build();
 
         return decoder.decode(token);

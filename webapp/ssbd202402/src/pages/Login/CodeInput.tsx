@@ -45,7 +45,6 @@ const CodeInput: FC<CodeInputProps> = ({
   login,
   roles,
   setToken,
-  setRefreshToken,
   setCodeInputOpen,
   resetForm,
 }) => {
@@ -60,28 +59,25 @@ const CodeInput: FC<CodeInputProps> = ({
   const { verifyCode } = useVerifyCode();
 
   const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
-    try {
-      const result = await verifyCode({ login, token: data.pin });
-      setToken(result.token);
-      setRefreshToken(result.refreshToken);
-      if (roles == undefined) {
-        return navigate("/login");
-      } else {
-        switch (roles[0]) {
-          case "ADMINISTRATOR":
-            navigate("/admin/test");
-            break;
-          case "TENANT":
-            navigate("/tenant/test");
-            break;
-          case "OWNER":
-            navigate("/owner/test");
-            break;
-          default:
-            navigate("/login");
-        }
+    const result = await verifyCode({ login, token: data.pin });
+    setToken(result.token);
+    if (roles == undefined) {
+      return navigate("/login");
+    } else {
+      switch (roles[0]) {
+        case "ADMINISTRATOR":
+          navigate("/admin/test");
+          break;
+        case "TENANT":
+          navigate("/tenant/test");
+          break;
+        case "OWNER":
+          navigate("/owner/test");
+          break;
+        default:
+          navigate("/login");
       }
-    } catch (_) {}
+    }
   };
 
   return (
