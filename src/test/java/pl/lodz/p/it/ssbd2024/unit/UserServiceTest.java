@@ -184,4 +184,32 @@ class UserServiceTest {
         assertThrows(VerificationTokenExpiredException.class, () -> userService.changePasswordWithToken("password", "token"));
     }
 
+    @Test
+    @DisplayName("Change password with token - user is blocked")
+    void ChangePasswordWithToken_UserIsBlocked_Test() {
+        User user = new User();
+        user.setBlocked(true);
+        when(passwordVerificationTokenRepository.findByToken("token")).thenReturn(Optional.of(new PasswordVerificationToken("token", Instant.now().plusSeconds(60), user)));
+        assertThrows(UserBlockedException.class, () -> userService.changePasswordWithToken("password", "token"));
+    }
+
+
+    @Test
+    @DisplayName("Send change password email - user is blocked")
+    void SendChangePasswordEmail_UserIsBlocked_Test() {
+        User user = new User();
+        user.setBlocked(true);
+        when(userRepository.findByEmail("email")).thenReturn(Optional.of(user));
+        assertThrows(UserBlockedException.class, () -> userService.sendChangePasswordEmail("email"));
+    }
+
+    @Test
+    @DisplayName("Send change password email - user is not verified")
+    void SendChangePasswordEmail_UserIsNotVerified_Test() {
+        User user = new User();
+        user.setVerified(false);
+        when(userRepository.findByEmail("email")).thenReturn(Optional.of(user));
+        assertThrows(UserNotVerifiedException.class, () -> userService.sendChangePasswordEmail("email"));
+    }
+
 }
