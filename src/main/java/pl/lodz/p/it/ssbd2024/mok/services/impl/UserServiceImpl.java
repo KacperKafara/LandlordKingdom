@@ -3,7 +3,12 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.query.SemanticException;
+import org.hibernate.query.sqm.PathElementException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +59,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
+    public Page<User> getAllFiltered(Specification<User> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable);
     }
 
     @Override

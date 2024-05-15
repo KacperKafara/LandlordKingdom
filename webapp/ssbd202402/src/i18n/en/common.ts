@@ -140,6 +140,35 @@ const userListPage = {
   updateEmailAddress: "Update email address",
 };
 
+const block = {
+  blockUserAction: "Block",
+  blockUserToastTitleSuccess: "Operation successfully completed",
+  blockUserToastDescriptionSuccess: "User has been blocked",
+  blockUserToastTitleFail: "Operaiton failed",
+  blockUserToastDescriptionFail: "Something went wrong...",
+  unblockUserAction: "Unblock",
+  unblockUserToastTitleSuccess: "Operation successfully completed",
+  unblockUserToastDescriptionSuccess: "User has unbeen blocked",
+  unblockUserToastTitleFail: "Operaiton failed",
+  unblockUserToastDescriptionFail: "Something went wrong...",
+};
+
+const userFilter = {
+  yes: "Yes",
+  no: "Nie",
+  both: "Both",
+  verified: "Verified",
+  blocked: "Not verified",
+  login: "Login",
+  email: "Email",
+  submit: "Filter",
+  role: "Role",
+  all: "All",
+  tenant: "Tenant",
+  owner: "Owner",
+  administrator: "Administrator",
+};
+
 const common = {
   yes: "yes",
   no: "no",
@@ -197,6 +226,8 @@ export default {
   resetPasswordPage,
   changePasswordForm,
   userListPage,
+  userFilter,
+  block,
   userDetailsPage,
   mePage,
   userDataPage,
