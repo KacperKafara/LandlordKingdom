@@ -75,6 +75,8 @@ public class BaseConfig {
                 .withEnv("MAIL.PORT", "25")
                 .withEnv("MAIL.HOST", "smtp4test")
                 .withCopyToContainer(war, "/usr/local/tomcat/webapps/ssbd02.war")
+                .withCopyFileToContainer(MountableFile.forClasspathResource("privateJwt-key.pem"), "/etc/ssbd02/privateJwt-key.pem")
+                .withCopyFileToContainer(MountableFile.forClasspathResource("privateRefresh-key.pem"), "/etc/ssbd02/privateRefresh-key.pem")
                 .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080))
                 .withReuse(true);
         tomcat.start();

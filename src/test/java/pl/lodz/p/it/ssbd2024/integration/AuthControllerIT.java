@@ -227,11 +227,7 @@ public class AuthControllerIT extends BaseConfig {
                 .extract()
                 .response();
 
-        String token = response.path("token");
         String refreshToken = response.path("refreshToken");
-
-        System.out.println("Token: " + token);
-        System.out.println("RefreshToken: " + refreshToken);
 
         RefreshTokenRequest refreshTokenRequest = new RefreshTokenRequest(refreshToken);
 
