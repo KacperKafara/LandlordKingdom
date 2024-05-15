@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.SemanticException;
+import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -28,6 +30,7 @@ public class TenantServiceImpl implements TenantService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<Tenant> getAllFiltered(Specification<Tenant> specification, Pageable pageable) {
         return tenantRepository.findAll(specification, pageable);
     }

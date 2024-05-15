@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.model.filtering.builders;
 
 import org.springframework.data.jpa.domain.Specification;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidDataException;
+import pl.lodz.p.it.ssbd2024.messages.FilterMessages;
 import pl.lodz.p.it.ssbd2024.model.Administrator;
 import pl.lodz.p.it.ssbd2024.model.filtering.RoleSpecification;
 import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
@@ -27,19 +29,24 @@ public class AdministratorSpecificationBuilder implements SpecificationBuilder<A
         return this;
     }
 
-    public Specification<Administrator> build() {
-        if (params.isEmpty()) {
-            return null;
+    public Specification<Administrator> build() throws InvalidDataException {
+        try {
+            if (params.isEmpty()) {
+                return null;
+            }
+
+            Specification<Administrator> result = new RoleSpecification<>(params.getFirst());
+            for (int i = 1; i < params.size(); i++) {
+                SearchCriteria criteria = params.get(i);
+                result = SearchOperation.getDataOption(criteria.getDataOption()).equals(SearchOperation.ALL) ?
+                        Specification.where(result).and(new RoleSpecification<>(criteria)) :
+                        Specification.where(result).or(new RoleSpecification<>(criteria));
+            }
+
+            return result;
+        } catch (Exception e) {
+            throw new InvalidDataException(FilterMessages.INVALID_DATA);
         }
 
-        Specification<Administrator> result = new RoleSpecification<>(params.getFirst());
-        for (int i = 1; i < params.size(); i++) {
-            SearchCriteria criteria = params.get(i);
-            result = SearchOperation.getDataOption(criteria.getDataOption()).equals(SearchOperation.ALL) ?
-                    Specification.where(result).and(new RoleSpecification<>(criteria)) :
-                    Specification.where(result).or(new RoleSpecification<>(criteria));
-        }
-
-        return result;
     }
 }

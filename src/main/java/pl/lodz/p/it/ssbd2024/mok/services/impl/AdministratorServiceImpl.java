@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.SemanticException;
+import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,6 +29,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<Administrator> getAllFiltered(Specification<Administrator> specification, Pageable pageable) {
         return administratorRepository.findAll(specification, pageable);
     }

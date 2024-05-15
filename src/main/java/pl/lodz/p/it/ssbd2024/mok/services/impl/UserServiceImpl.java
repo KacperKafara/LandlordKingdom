@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.query.SemanticException;
+import org.hibernate.query.sqm.PathElementException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +17,6 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
-import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -36,8 +36,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final TenantRepository tenantRepository;
-    private final OwnerRepository ownerRepository;
-    private final AdministratorRepository administratorRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
     private final UserRepository userRepository;
@@ -56,6 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<User> getAllFiltered(Specification<User> specification, Pageable pageable) {
         return repository.findAll(specification, pageable);
     }

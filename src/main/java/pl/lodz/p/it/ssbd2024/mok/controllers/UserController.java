@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.SemanticException;
+import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +16,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
-import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
+import pl.lodz.p.it.ssbd2024.messages.FilterMessages;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.Administrator;
@@ -61,80 +61,83 @@ public class UserController {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @PostMapping("/filtered")
     public ResponseEntity<FilteredUsersResponse> getAllFiltered(@RequestBody FilteredUsersRequest request,
-                                                             @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
-                                                             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+                                                                @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
+                                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<SearchCriteria> criteriaList = request.searchCriteriaList();
         FilteredUsersResponse response;
+        try {
+            switch (request.role()) {
+                case "TENANT" -> {
+                    TenantSpecificationBuilder builder = new TenantSpecificationBuilder();
 
-        switch (request.role()) {
-            case "TENANT" -> {
-                TenantSpecificationBuilder builder = new TenantSpecificationBuilder();
+                    if (criteriaList == null) {
+                        criteriaList = new ArrayList<>();
+                    }
 
-                if (criteriaList == null) {
-                    criteriaList = new ArrayList<>();
-                }
-
-                criteriaList.add(new SearchCriteria("active", "eq", true));
-                criteriaList.forEach(x -> {
-                    x.setDataOption(request.dataOption());
-                    builder.with(x);
-                });
-
-                Page<Tenant> result = tenantService.getAllFiltered(builder.build(), pageable);
-                response = new FilteredUsersResponse(result.stream().map(Tenant::getUser).map(UserMapper::toUserResponse).toList(),
-                        result.getTotalPages());
-            }
-            case "OWNER" -> {
-                OwnerSpecificationBuilder builder = new OwnerSpecificationBuilder();
-
-                if (criteriaList == null) {
-                    criteriaList = new ArrayList<>();
-                }
-
-                criteriaList.add(new SearchCriteria("active", "eq", true));
-                criteriaList.forEach(x -> {
-                    x.setDataOption(request.dataOption());
-                    builder.with(x);
-                });
-
-                Page<Owner> result = ownerService.getAllFiltered(builder.build(), pageable);
-                response = new FilteredUsersResponse(result.stream().map(Owner::getUser).map(UserMapper::toUserResponse).toList(),
-                        result.getTotalPages());
-            }
-            case "ADMINISTRATOR" -> {
-                AdministratorSpecificationBuilder builder = new AdministratorSpecificationBuilder();
-
-                if (criteriaList == null) {
-                    criteriaList = new ArrayList<>();
-                }
-
-                criteriaList.add(new SearchCriteria("active", "eq", true));
-                criteriaList.forEach(x -> {
-                    x.setDataOption(request.dataOption());
-                    builder.with(x);
-                });
-
-                Page<Administrator> result = administratorService.getAllFiltered(builder.build(), pageable);
-                response = new FilteredUsersResponse(result.stream().map(Administrator::getUser).map(UserMapper::toUserResponse).toList(),
-                        result.getTotalPages());
-            }
-            default -> {
-                Page<User> userPage;
-                UserSpecificationBuilder builder = new UserSpecificationBuilder();
-
-                if (criteriaList != null) {
+                    criteriaList.add(new SearchCriteria("active", "eq", true));
                     criteriaList.forEach(x -> {
                         x.setDataOption(request.dataOption());
                         builder.with(x);
                     });
-                }
 
-                Page<User> result = userService.getAllFiltered(builder.build(), pageable);
-                response = new FilteredUsersResponse(result.stream().map(UserMapper::toUserResponse).toList(),
-                        result.getTotalPages());
+                    Page<Tenant> result = tenantService.getAllFiltered(builder.build(), pageable);
+                    response = new FilteredUsersResponse(result.stream().map(Tenant::getUser).map(UserMapper::toUserResponse).toList(),
+                            result.getTotalPages());
+                }
+                case "OWNER" -> {
+                    OwnerSpecificationBuilder builder = new OwnerSpecificationBuilder();
+
+                    if (criteriaList == null) {
+                        criteriaList = new ArrayList<>();
+                    }
+
+                    criteriaList.add(new SearchCriteria("active", "eq", true));
+                    criteriaList.forEach(x -> {
+                        x.setDataOption(request.dataOption());
+                        builder.with(x);
+                    });
+
+                    Page<Owner> result = ownerService.getAllFiltered(builder.build(), pageable);
+                    response = new FilteredUsersResponse(result.stream().map(Owner::getUser).map(UserMapper::toUserResponse).toList(),
+                            result.getTotalPages());
+                }
+                case "ADMINISTRATOR" -> {
+                    AdministratorSpecificationBuilder builder = new AdministratorSpecificationBuilder();
+
+                    if (criteriaList == null) {
+                        criteriaList = new ArrayList<>();
+                    }
+
+                    criteriaList.add(new SearchCriteria("active", "eq", true));
+                    criteriaList.forEach(x -> {
+                        x.setDataOption(request.dataOption());
+                        builder.with(x);
+                    });
+
+                    Page<Administrator> result = administratorService.getAllFiltered(builder.build(), pageable);
+                    response = new FilteredUsersResponse(result.stream().map(Administrator::getUser).map(UserMapper::toUserResponse).toList(),
+                            result.getTotalPages());
+                }
+                default -> {
+                    UserSpecificationBuilder builder = new UserSpecificationBuilder();
+
+                    if (criteriaList != null) {
+                        criteriaList.forEach(x -> {
+                            x.setDataOption(request.dataOption());
+                            builder.with(x);
+                        });
+                    }
+
+                    Page<User> result = userService.getAllFiltered(builder.build(), pageable);
+                    response = new FilteredUsersResponse(result.stream().map(UserMapper::toUserResponse).toList(),
+                            result.getTotalPages());
+                }
             }
+
+        } catch (InvalidDataException | SemanticException | PathElementException | NullPointerException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FilterMessages.INVALID_DATA);
         }
 
         return ResponseEntity.ok(response);
@@ -161,7 +164,7 @@ public class UserController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID administratorId = UUID.fromString(jwt.getSubject());
 
-        if(administratorId.equals(id)){
+        if (administratorId.equals(id)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, AdministratorMessages.OWN_ADMINISTRATOR_BLOCK);
         }
 
