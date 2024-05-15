@@ -135,7 +135,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
           <MyAccountButton hover={colors.hover} />
         </div>
       </nav>
-      <main className="flex-1 px-10">{children}</main>
+      <main className="flex-1 px-10 flex justify-center">{children}</main>
       <footer
         className={cn(
           "h-12 flex justify-center items-center text-xl px-10",

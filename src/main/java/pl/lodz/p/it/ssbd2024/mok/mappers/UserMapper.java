@@ -34,6 +34,8 @@ public class UserMapper {
                 user.getLanguage(),
                 lastSuccessfulLogin,
                 lastFailedLogin,
+                user.getLastSuccessfulLoginIp(),
+                user.getLastFailedLoginIp(),
                 user.isBlocked(),
                 user.isVerified());
     }

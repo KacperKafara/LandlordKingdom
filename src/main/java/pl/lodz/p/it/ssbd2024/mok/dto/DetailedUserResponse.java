@@ -11,6 +11,8 @@ public record DetailedUserResponse(
         String language,
         String lastSuccessfulLogin,
         String lastFailedLogin,
+        String lastSuccessfulLoginIP,
+        String lastFailedLoginIP,
         boolean blocked,
         boolean verified
 ) {
