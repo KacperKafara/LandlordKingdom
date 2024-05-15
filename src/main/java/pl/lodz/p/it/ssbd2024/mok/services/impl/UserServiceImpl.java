@@ -16,13 +16,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
-import pl.lodz.p.it.ssbd2024.model.AccountVerificationToken;
-import pl.lodz.p.it.ssbd2024.model.Tenant;
-import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.model.VerificationToken;
-import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
+import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
@@ -30,6 +25,7 @@ import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.net.URI;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,6 +38,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final TenantRepository tenantRepository;
+    private final OwnerRepository ownerRepository;
+    private final AdministratorRepository administratorRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
     private final AccountVerificationTokenRepository accountVerificationTokenRepository;
@@ -104,7 +102,7 @@ public class UserServiceImpl implements UserService {
     public User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
-        if(signVerifier.verifySignature(userToUpdate.getId(), userToUpdate.getVersion(), tagValue)){
+        if (signVerifier.verifySignature(userToUpdate.getId(), userToUpdate.getVersion(), tagValue)) {
             throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA);
         }
 
@@ -221,5 +219,15 @@ public class UserServiceImpl implements UserService {
             URI uri = URI.create(appUrl + "/verify/" + token);
             emailService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
         });
+    }
+
+    @Override
+    public List<String> getUserRoles(UUID id) {
+        List<String> roles = new ArrayList<>();
+        administratorRepository.findByUserIdAndActive(id, true).ifPresent(administrator -> roles.add("ADMIN"));
+        ownerRepository.findByUserIdAndActive(id, true).ifPresent(owner -> roles.add("OWNER"));
+        tenantRepository.findByUserIdAndActive(id, true).ifPresent(tenant -> roles.add("TENANT"));
+
+        return roles;
     }
 }

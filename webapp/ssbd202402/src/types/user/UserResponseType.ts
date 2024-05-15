@@ -10,4 +10,5 @@ export type UserResponse = {
   lastSuccessfulLogin?: string;
   lastFailedLoginIP?: string;
   lastSuccessfulLoginIP?: string;
+  roles: string[];
 };
