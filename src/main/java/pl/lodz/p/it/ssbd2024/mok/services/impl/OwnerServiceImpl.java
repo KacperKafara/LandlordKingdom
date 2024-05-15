@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,19 +17,13 @@ import pl.lodz.p.it.ssbd2024.services.EmailService;
 import java.util.Optional;
 import java.util.UUID;
 
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(rollbackFor = NotFoundException.class)
 @Service
+@RequiredArgsConstructor
 public class OwnerServiceImpl implements OwnerService {
     private final EmailService emailService;
     private final OwnerRepository ownerRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    public OwnerServiceImpl(EmailService emailService, OwnerRepository ownerRepository, UserRepository userRepository) {
-        this.emailService = emailService;
-        this.ownerRepository = ownerRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Owner removeOwnerAccessLevel(UUID id) throws NotFoundException {

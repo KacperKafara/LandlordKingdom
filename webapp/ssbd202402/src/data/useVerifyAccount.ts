@@ -1,11 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
-import { api } from "./api";
 import { useToast } from "@/components/ui/use-toast";
 import { useParams } from "react-router-dom";
+import useAxiosPrivate from "./useAxiosPrivate";
 
 export const useVerifyAccount = () => {
   const { token } = useParams<{ token: string }>();
   const { toast } = useToast();
+  const { api } = useAxiosPrivate();
+
   const { mutate, isSuccess } = useMutation({
     mutationKey: ["verify"],
     mutationFn: async () => {

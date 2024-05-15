@@ -9,6 +9,7 @@
                 last_failed_login CDATA #IMPLIED
                 blocked (true|false) #REQUIRED
                 verified (true|false) #REQUIRED
+                created_at CDATA #REQUIRED
                 language CDATA #REQUIRED
                 version CDATA #REQUIRED
                 >

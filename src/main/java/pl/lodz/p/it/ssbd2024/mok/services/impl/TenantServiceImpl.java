@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,19 +16,14 @@ import pl.lodz.p.it.ssbd2024.services.EmailService;
 import java.util.Optional;
 import java.util.UUID;
 
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(rollbackFor = NotFoundException.class)
 @Service
+@RequiredArgsConstructor
 public class TenantServiceImpl implements TenantService {
 
     private final EmailService emailService;
     private final TenantRepository tenantRepository;
     private final UserRepository userRepository;
-
-    public TenantServiceImpl(EmailService emailService, TenantRepository tenantRepository, UserRepository userRepository) {
-        this.emailService = emailService;
-        this.tenantRepository = tenantRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Tenant removeTenantAccessLevel(UUID id) throws NotFoundException {

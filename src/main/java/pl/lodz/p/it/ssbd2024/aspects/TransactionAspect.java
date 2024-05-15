@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.aspects;
 
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -15,7 +16,7 @@ import pl.lodz.p.it.ssbd2024.model.AbstractEntity;
 import java.util.List;
 import java.util.UUID;
 
-@Log
+@Slf4j
 @Aspect
 @Component
 public class TransactionAspect {
@@ -45,7 +46,12 @@ public class TransactionAspect {
         }
         StringBuilder sb = new StringBuilder();
         for (Object arg : args) {
-            sb.append(arg).append(", ");
+            if (arg instanceof AbstractEntity abstractEntity) {
+                sb.append("class: ").append(arg.getClass().getName()).append(" id: ").append(abstractEntity.getId()).append(", ");
+            }
+        }
+        if (sb.isEmpty()){
+            return "<empty>";
         }
         return sb.toString();
     }

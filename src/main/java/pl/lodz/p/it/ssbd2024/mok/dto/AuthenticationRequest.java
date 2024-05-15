@@ -1,15 +1,21 @@
 package pl.lodz.p.it.ssbd2024.mok.dto;
 
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class AuthenticationRequest {
-    private String login;
-    private String password;
+public record AuthenticationRequest (
+        @NotBlank
+        String login,
+
+        @NotBlank
+        String password,
+
+        @NotBlank(message = "Language name cannot be blank.")
+        @Pattern(regexp = "^(en|pl)$", message = "Language name must be 'en' or 'pl'.")
+        String language
+){
 }

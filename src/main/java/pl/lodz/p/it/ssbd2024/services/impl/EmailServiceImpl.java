@@ -4,6 +4,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Map;
 
-@Log
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
@@ -46,7 +47,7 @@ public class EmailServiceImpl implements EmailService {
             helper.setText(body, true);
             mailSender.send(message);
         } catch (MessagingException e) {
-            log.warning("Failed to send email.");
+            log.warn("Failed to send email.");
             throw new RuntimeException(e);
         }
 
@@ -106,10 +107,19 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
+    public void sendAccountActivatedEmail(String to, String name, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name);
+        String subject = mailMessageSource.getMessage("accountActivated.subject", null, Locale.of(lang));
+
+        sendHtmlEmail(to, subject, "accountActivated", templateModel, lang);
+    }
+
+    @Override
     public void sendEmailChangeEmail(String to, String name, String uri, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "name", name,
-                "uri", uri);
+                "url", uri);
         String subject = mailMessageSource.getMessage("emailChange.subject", null, Locale.of(lang));
 
         sendHtmlEmail(to, subject, "emailChange", templateModel, lang);
@@ -119,7 +129,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendPasswordChangeEmail(String to, String name, String uri, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "name", name,
-                "uri", uri);
+                "url", uri);
         String subject = mailMessageSource.getMessage("passwordChange.subject", null, Locale.of(lang));
 
         sendHtmlEmail(to, subject, "passwordChange", templateModel, lang);
@@ -210,5 +220,25 @@ public class EmailServiceImpl implements EmailService {
         String subject = mailMessageSource.getMessage("accountDelete.subject", null, Locale.of(lang));
 
         sendHtmlEmail(to, subject, "accountDelete", templateModel, lang);
+    }
+
+    @Override
+    public void sendAdminLoginEmail(String to, String name, String ip, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name,
+                "ip", ip);
+        String subject = mailMessageSource.getMessage("adminLogin.subject", null, Locale.of(lang));
+
+        sendHtmlEmail(to, subject, "adminLogin", templateModel, lang);
+    }
+
+    @Override
+    public void sendOTPEmail(String to, String name, String otp, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name,
+                "otp", otp);
+        String subject = mailMessageSource.getMessage("OTP.subject", null, Locale.of(lang));
+
+        sendHtmlEmail(to, subject, "OTP", templateModel, lang);
     }
 }

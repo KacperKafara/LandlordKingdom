@@ -1,20 +1,31 @@
 pipeline {
     agent any
+    tools {
+        nodejs 'nodejs'
+    }
 
     stages {
-        stage('Build') {
+        stage('Build java') {
             steps {
-                echo 'Building..'
+                sh 'mvn -B -Dmaven.test.skip clean package '
             }
         }
-        stage('Test') {
+        stage('Build js') {
             steps {
-                echo 'Testing..'
+                dir('./webapp/ssbd202402') {
+                    sh 'yarn'
+                    sh 'yarn build'
+                }
             }
         }
-        stage('Deploy') {
+        stage('Unit tests') {
             steps {
-                echo 'Deploying....'
+                sh 'mvn test'
+            }
+            post {
+                always {
+                    junit 'target/surefire-reports/**/*.xml'
+                }
             }
         }
     }

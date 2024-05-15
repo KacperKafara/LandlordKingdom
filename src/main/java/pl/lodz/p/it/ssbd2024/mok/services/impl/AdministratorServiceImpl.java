@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -16,19 +17,14 @@ import pl.lodz.p.it.ssbd2024.services.EmailService;
 import java.util.Optional;
 import java.util.UUID;
 
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(rollbackFor = NotFoundException.class)
 @Service
+@RequiredArgsConstructor
 public class AdministratorServiceImpl implements AdministratorService {
     private final EmailService emailService;
     private final AdministratorRepository administratorRepository;
     private final UserRepository userRepository;
 
-    @Autowired
-    public AdministratorServiceImpl(EmailService emailService, AdministratorRepository administratorRepository, UserRepository userRepository) {
-        this.emailService = emailService;
-        this.administratorRepository = administratorRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public Administrator removeAdministratorAccessLevel(UUID id) throws NotFoundException {
@@ -37,7 +33,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         administrator.setActive(false);
         User user = administrator.getUser();
 
-        emailService.sendAdministratorPermissionLostEmail(user.getEmail(), user.getFirstName(), "en");
+        emailService.sendAdministratorPermissionLostEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
 
         return administratorRepository.saveAndFlush(administrator);
     }
@@ -62,7 +58,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         administrator.setActive(true);
         User user = administrator.getUser();
 
-        emailService.sendAdministratorPermissionGainedEmail(user.getEmail(), user.getFirstName(), "en");
+        emailService.sendAdministratorPermissionGainedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
 
         return administratorRepository.saveAndFlush(administrator);
     }

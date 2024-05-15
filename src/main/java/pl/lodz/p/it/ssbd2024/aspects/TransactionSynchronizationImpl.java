@@ -1,9 +1,10 @@
 package pl.lodz.p.it.ssbd2024.aspects;
 
 import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.support.TransactionSynchronization;
 
-@Log
+@Slf4j
 public class TransactionSynchronizationImpl implements TransactionSynchronization {
     private String txKey;
 

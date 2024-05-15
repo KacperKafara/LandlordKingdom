@@ -5,7 +5,7 @@ import jakarta.validation.constraints.*;
 public record UserCreateRequest(
         @NotBlank String login,
         @Email String email,
-        @NotNull @Size(min = 1) String firstName,
-        @NotNull @Size(min = 1) String lastName,
+        @NotBlank @Size(min = 1, max = 50) String firstName,
+        @NotBlank @Size(min = 1, max = 50) String lastName,
         @NotBlank @Size(min = 8) String password) {
 }
