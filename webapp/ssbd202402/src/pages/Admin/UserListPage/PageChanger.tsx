@@ -24,7 +24,9 @@ const PageChanger: FC = () => {
           className={pageNumber > 0 ? "cursor-pointer" : "opacity-25"}
           onClick={() => prevPage()}
         />
-        <div className="font-bold">{pageNumber + 1}</div>
+        <div className="font-bold">
+          {pageNumber + 1} / {totalPages}
+        </div>
         <ChevronRight
           className={
             pageNumber < totalPages - 1 ? "cursor-pointer" : "opacity-25"

@@ -1,4 +1,3 @@
-
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -159,7 +158,7 @@ const block = {
   unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
   unblockUserToastTitleFail: "Operacja nie powiodła się",
   unblockUserToastDescriptionFail: "Coś poszło nie tak...",
-}
+};
 
 const userFilter = {
   yes: "Tak",
