@@ -93,7 +93,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Block user - user is blocked")
+    @DisplayName("Unblock user - user is not blocked")
     void UnblockUser_UserIsNotBlocked_ThrowException_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
