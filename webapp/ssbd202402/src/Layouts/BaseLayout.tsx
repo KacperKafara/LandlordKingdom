@@ -74,7 +74,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       <nav
         className={cn(
           "h-20 flex flex-row justify-between items-center px-10",
