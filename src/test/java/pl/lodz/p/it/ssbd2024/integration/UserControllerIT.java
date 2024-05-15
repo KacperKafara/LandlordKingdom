@@ -17,13 +17,16 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class UserControllerIT extends BaseConfig {
-    private static final String USERS_URL = baseUrl + "/users";
-    private static final String AUTH_URL = baseUrl + "/auth";
+    private static String USERS_URL = baseUrl;
+    private static String AUTH_URL = baseUrl;
 
     private String adminToken;
 
     @BeforeEach
     public void setUp() throws MessagingException, IOException {
+        baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
+        USERS_URL = baseUrl + "/users";
+        AUTH_URL = baseUrl + "/auth";
         loadDataSet("src/test/resources/datasets/usersForUsersIT.xml");
 
         AuthenticationRequest signinRequest = new AuthenticationRequest("adminUser", "password", "en");

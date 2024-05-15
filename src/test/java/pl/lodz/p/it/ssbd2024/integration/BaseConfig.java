@@ -80,6 +80,7 @@ public class BaseConfig {
                 .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080))
                 .withReuse(true);
         tomcat.start();
+        baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
     }
 
     @BeforeEach
