@@ -1,17 +1,19 @@
 package pl.lodz.p.it.ssbd2024.unit;
 
-import jakarta.validation.constraints.Email;
 import org.mockito.Mockito;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.util.Encoders;
 
 @Configuration
 @Profile("unit")
@@ -77,13 +79,18 @@ public class MockConfig {
     }
 
     @Bean
-    VerificationTokenService verificationTokenService() {
-        return Mockito.mock(VerificationTokenService.class);
+    OTPTokenRepository otpTokenRepository() {
+        return Mockito.mock(OTPTokenRepository.class);
     }
 
     @Bean
-    OTPTokenRepository otpTokenRepository() {
-        return Mockito.mock(OTPTokenRepository.class);
+    Encoders encoders() {
+        return Mockito.mock(Encoders.class);
+    }
+
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     //TODO: mol repositories
