@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="userSchema.xsd">
+    <!-- Administrator -->
+    <users id="ba537227-d54f-42b3-aa58-10492cddf8a5"
+           login="adminUser"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="2024-05-04 14:33:01.413581"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="false"
+           verified="true"
+           language="en"
+           version="0"
+           created_at="[NOW]"/>
+
+    <!-- Personal Data -->
+    <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a5"
+                   email="adminUser@test.com"
+                   first_name="AdminUser"
+                   last_name="AdminUser"/>
+
+    <!-- Access Level -->
+    <access_levels active="true"
+                   version="0"
+                   id="22f34716-3b77-4e63-809d-35f9a4758011"
+                   user_id="ba537227-d54f-42b3-aa58-10492cddf8a5"
+                   level="ADMINISTRATOR"/>
+
+    <!-- Administrator -->
+    <administrators id="22f34716-3b77-4e63-809d-35f9a4758011"/>
+
+    <!-- User -->
+    <users id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+           login="adimnUser2"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="2024-05-04 14:33:01.413581"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="false"
+           verified="true"
+           language="en"
+           version="0"
+           created_at="[NOW]"/>
+
+    <!-- Personal Data -->
+    <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   email="adimnUser2@test.com"
+                   first_name="User"
+                   last_name="Owner"/>
+
+    <!-- Access Level -->
+    <access_levels active="true"
+                   version="0"
+                   id="22f34716-3b77-4e63-809d-35f9a4758012"
+                   user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   level="ADMINISTRATOR"/>
+
+    <!-- Tenant -->
+    <administrators id="22f34716-3b77-4e63-809d-35f9a4758012"/>
+
+    <!-- User -->
+    <users id="ba537227-d54f-42b3-aa58-10492cddf8a7"
+           login="user"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="2024-05-04 14:33:01.413581"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="false"
+           verified="true"
+           language="en"
+           version="0"
+           created_at="[NOW]"/>
+
+    <!-- Personal Data -->
+    <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a7"
+                   email="user@test.com"
+                   first_name="User"
+                   last_name="User"/>
+</dataset>
