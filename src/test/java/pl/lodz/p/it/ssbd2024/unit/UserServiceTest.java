@@ -18,6 +18,8 @@ import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -235,4 +237,44 @@ class UserServiceTest {
         verify(userRepository, never()).saveAndFlush(user);
     }
 
+    @Test
+    @DisplayName("Get user by login - user found")
+    void getUserByLogin_UserFound_ReturnUser() throws NotFoundException {
+        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
+
+        User result = userService.getUserByLogin(login);
+
+        Assertions.assertEquals(user, result);
+    }
+
+    @Test
+    @DisplayName("Get user by login - user not found")
+    void getUserByLogin_UserNotFound_ThrowNotFoundException() {
+        when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> userService.getUserByLogin(login));
+    }
+
+    @Test
+    @DisplayName("Get all users")
+    void getAll_ReturnListOfUsers() {
+        List<User> users = new ArrayList<>();
+        users.add(new User());
+        users.add(new User());
+
+        when(userRepository.findAll()).thenReturn(users);
+
+        List<User> result = userService.getAll();
+
+        Assertions.assertEquals(users, result);
+    }
+
+    @Test
+    @DisplayName("Send email update email - user not found")
+    void sendEmailUpdateEmail_UserNotFound_ThrowNotFoundException() {
+        UUID userId = UUID.randomUUID();
+        when(userRepository.findById(userId)).thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () -> userService.sendEmailUpdateEmail(userId));
+    }
 }
