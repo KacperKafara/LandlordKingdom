@@ -108,4 +108,22 @@ public class User extends AbstractEntity {
         this.blocked = false;
         this.verified = false;
     }
+
+    public User(String firstName,
+                String lastName,
+                String email,
+                String login,
+                String language) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.login = login;
+        this.language = language;
+        this.password = "";
+        this.loginAttempts = 0;
+        this.lastSuccessfulLogin = null;
+        this.lastFailedLogin = null;
+        this.blocked = false;
+        this.verified = false;
+    }
 }
