@@ -21,7 +21,7 @@ export const updateUser = async (
   data: UpdateUserRequest,
   api: AxiosInstance
 ) => {
-  await api.put(`/users/${data.id}/update-data`, data.request, {
+  await api.put(`/users/${data.id}`, data.request, {
     headers: {
       "If-Match": data.etag,
     },
