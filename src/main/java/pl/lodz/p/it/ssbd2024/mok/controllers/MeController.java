@@ -20,6 +20,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -38,11 +39,12 @@ public class MeController {
             Jwt jwt = (Jwt) authentication.getPrincipal();
             UUID id = UUID.fromString(jwt.getSubject());
             User user = userService.getUserById(id);
+            List<String> roles = userService.getUserRoles(id);
 
             return ResponseEntity
                     .ok()
                     .eTag(signer.generateSignature(user.getId(), user.getVersion()))
-                    .body(UserMapper.toDetailedUserResponse(user));
+                    .body(UserMapper.toDetailedUserResponse(user, roles));
 
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
