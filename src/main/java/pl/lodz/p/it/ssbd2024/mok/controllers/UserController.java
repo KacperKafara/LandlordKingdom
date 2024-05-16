@@ -169,7 +169,6 @@ public class UserController {
         if (administratorId.equals(id)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, AdministratorMessages.OWN_ADMINISTRATOR_BLOCK);
         }
-
         try {
             userService.blockUser(id);
             return ResponseEntity.ok().build();
