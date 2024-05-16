@@ -71,29 +71,49 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserByEmail(String email) throws NotFoundException {
+        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+    }
+
+    @Override
+    public User getUserByGoogleId(String googleId) throws NotFoundException {
+        return repository.findByGoogleId(googleId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+    }
+
+    @Override
     public User getUserByLogin(String login) throws NotFoundException {
         return repository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
     }
 
     @Override
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
-    public void createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException {
+    public User createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException, CreationException {
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
+        return createUser(newUser);
+    }
+
+    @Override
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
+    public User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException {
         Tenant newTenant = new Tenant();
         newTenant.setActive(true);
         newTenant.setUser(newUser);
 
+        Tenant tenant;
         try {
-            tenantRepository.saveAndFlush(newTenant);
+            tenant = tenantRepository.saveAndFlush(newTenant);
             String token = verificationTokenService.generateAccountVerificationToken(newUser);
 
             URI uri = URI.create(appUrl + "/verify/" + token);
             emailService.sendAccountActivationEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
+            return tenant.getUser();
         } catch (ConstraintViolationException e) {
             String constraintName = e.getConstraintName();
             if (constraintName.equals("users_login_key") || constraintName.equals("personal_data_email_key")) {
                 throw new IdenticalFieldValueException(UserExceptionMessages.LOGIN_OR_EMAIL_EXISTS, "login_email");
+            } else {
+                throw new CreationException(UserExceptionMessages.CREATION_FAILED);
             }
         }
     }

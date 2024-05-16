@@ -26,6 +26,7 @@ const MyAccountButton: FC<MyAccountButtonProps> = ({ hover }) => {
 
   const handleLoginButtonClick = () => {
     userStore.clearToken();
+    userStore.clearRefreshToken();
     navigate("/login");
   };
   return (

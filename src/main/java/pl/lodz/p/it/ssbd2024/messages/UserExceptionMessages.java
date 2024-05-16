@@ -12,4 +12,5 @@ public class UserExceptionMessages {
     public final static String LOGIN_NOT_MATCH_TO_OTP = "Login does not match to OTP";
     public static final String ALREADY_BLOCKED = "User is already blocked";
     public static final String ALREADY_UNBLOCKED = "User is already unblocked";
+    public static final String CREATION_FAILED = "User creation failed";
 }

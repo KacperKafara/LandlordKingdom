@@ -14,6 +14,7 @@ import java.util.List;
 @Table(name = "users")
 @Getter
 @SecondaryTable(name = "personal_data", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
+@SecondaryTable(name = "google_auth", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 @NoArgsConstructor
 public class User extends AbstractEntity {
     @Setter
@@ -30,7 +31,7 @@ public class User extends AbstractEntity {
     private String login;
 
     @Setter
-    @Column(name = "password", nullable = false, length = 64)
+    @Column(name = "password", length = 64)
     private String password;
 
     @Setter
@@ -70,6 +71,10 @@ public class User extends AbstractEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AccessLevel> accessLevels = new ArrayList<>();
+
+    @Setter
+    @Column(name = "google_id", table = "google_auth")
+    private String googleId;
 
     public User(String firstName,
                 String lastName,

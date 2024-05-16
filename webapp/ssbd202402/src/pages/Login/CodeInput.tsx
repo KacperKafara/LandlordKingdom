@@ -23,6 +23,12 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useVerifyCode } from "@/data/useAuthenticate.ts";
 
+const role_mapping: { [key: string]: string } = {
+  ADMINISTRATOR: "admin",
+  TENANT: "tenant",
+  OWNER: "owner",
+};
+
 const CodeFormSchema = (t: TFunction) =>
   z.object({
     pin: z.string().min(6, {
@@ -66,19 +72,7 @@ const CodeInput: FC<CodeInputProps> = ({
     if (roles == undefined) {
       return navigate("/login");
     } else {
-      switch (roles[0]) {
-        case "ADMINISTRATOR":
-          navigate("/admin/test");
-          break;
-        case "TENANT":
-          navigate("/tenant/test");
-          break;
-        case "OWNER":
-          navigate("/owner/test");
-          break;
-        default:
-          navigate("/login");
-      }
+      navigate(`/${role_mapping[roles![0]]}`);
     }
   };
 
