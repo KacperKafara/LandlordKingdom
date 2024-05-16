@@ -32,9 +32,66 @@ import { z } from "zod";
 const passwordChangeSchema = (t: TFunction) =>
   z
     .object({
-      oldPassword: z.string().min(8, t("registerPage.passwordRequired")),
-      newPassword: z.string().min(8, t("registerPage.passwordRequired")),
-      confirmPassword: z.string().min(8, t("registerPage.passwordMatch")),
+      oldPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      newPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      confirmPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
     })
     .refine((data) => data.newPassword === data.confirmPassword, {
       message: t("registerPage.passwordMatch"),

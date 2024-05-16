@@ -25,8 +25,46 @@ import LanguageSelector from "@/components/LanguageSelector";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
-    login: z.string().min(1, t("loginPage.loginRequired")),
-    password: z.string().min(1, t("loginPage.passwordRequired")),
+    login: z
+      .string()
+      .min(
+        3,
+        t("validation.minLength") +
+          " " +
+          3 +
+          " " +
+          t("validation.characters") +
+          "."
+      )
+      .max(
+        50,
+        t("validation.maxLength") +
+          " " +
+          50 +
+          " " +
+          t("validation.characters") +
+          "."
+      ),
+    password: z
+      .string()
+      .min(
+        8,
+        t("validation.minLength") +
+          " " +
+          8 +
+          " " +
+          t("validation.characters") +
+          "."
+      )
+      .max(
+        50,
+        t("validation.maxLength") +
+          " " +
+          50 +
+          " " +
+          t("validation.characters") +
+          "."
+      ),
   });
 
 type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;

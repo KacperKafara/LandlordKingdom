@@ -142,15 +142,22 @@ const userListPage = {
 
 const block = {
   blockUserAction: "Block",
-  blockUserToastTitleSuccess: "Operation successfully completed",
-  blockUserToastDescriptionSuccess: "User has been blocked",
-  blockUserToastTitleFail: "Operaiton failed",
-  blockUserToastDescriptionFail: "Something went wrong...",
   unblockUserAction: "Unblock",
-  unblockUserToastTitleSuccess: "Operation successfully completed",
-  unblockUserToastDescriptionSuccess: "User has unbeen blocked",
-  unblockUserToastTitleFail: "Operaiton failed",
-  unblockUserToastDescriptionFail: "Something went wrong...",
+  toast: {
+    title: {
+      success: "Operation success",
+      fail: "Operation failed",
+    },
+
+    description: {
+      blockSuccess: "User sucessfully blocked.",
+      unblockSuccess: "User sucessfully unblocked.",
+      notFound: "Users not found.",
+      alreadyBlocked: "User already blocked.",
+      alreadyUnblocked: "User already unblocked.",
+      fail: "Something went wrong...",
+    },
+  },
 };
 
 const userFilter = {
@@ -232,6 +239,12 @@ const registerSuccessPage = {
   loginButton: "Go back to login",
 };
 
+const validation = {
+  characters: "character(s)",
+  minLength: "Field must contain at least",
+  maxLength: "Field must contain at most",
+};
+
 const roles = {
   administrator: "Administrator",
   tenant: "Tenant",
@@ -258,6 +271,7 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  validation,
   sessionExpired: "Session expired",
   sessionExpiredDescription: "Session expired, please login again",
   footer: "Landlord Kingdom - SSBD202402",

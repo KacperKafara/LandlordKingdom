@@ -20,7 +20,27 @@ import { z } from "zod";
 
 const getResetPasswordSchema = (t: TFunction) =>
   z.object({
-    email: z.string().email(t("resetPasswordForm.emailRequired")),
+    email: z
+      .string()
+      .email(t("resetPasswordForm.emailRequired"))
+      .min(
+        5,
+        t("validation.minLength") +
+          " " +
+          5 +
+          " " +
+          t("validation.characters") +
+          "."
+      )
+      .max(
+        50,
+        t("validation.maxLength") +
+          " " +
+          50 +
+          " " +
+          t("validation.characters") +
+          "."
+      ),
   });
 
 type ResetPasswordSchema = z.infer<ReturnType<typeof getResetPasswordSchema>>;

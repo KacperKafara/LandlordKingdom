@@ -150,15 +150,22 @@ const userListPage = {
 
 const block = {
   blockUserAction: "Zablokuj",
-  blockUserToastTitleSuccess: "Operacja powiodła się",
-  blockUserToastDescriptionSuccess: "Użytkownik został zablokowany",
-  blockUserToastTitleFail: "Operacja nie powiodła się",
-  blockUserToastDescriptionFail: "Coś poszło nie tak...",
   unblockUserAction: "Odblokuj",
-  unblockUserToastTitleSuccess: "Operacja powiodła się",
-  unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
-  unblockUserToastTitleFail: "Operacja nie powiodła się",
-  unblockUserToastDescriptionFail: "Coś poszło nie tak...",
+  toast: {
+    title: {
+      success: "Operacja powiodła się",
+      fail: "Operacja nie powiodła się",
+    },
+
+    description: {
+      blockSuccess: "Użytkownik pomyślnie zablokowany",
+      unblockSuccess: "Użytkownik pomyślnie odblokowany",
+      notFound: "Podany użytkownik nie istnieje",
+      alreadyBlocked: "Użytkownik jest już zablokowany.",
+      alreadyUnblocked: "Użytkownik jest już odblokowany",
+      fail: "Coś poszło nie tak...",
+    },
+  },
 };
 
 const userFilter = {
@@ -239,6 +246,12 @@ const registerSuccessPage = {
   loginButton: "Wróc do strony logowania",
 };
 
+const validation = {
+  characters: "znak(i/ów)",
+  minLength: "Pole musi zawierać minimalnie",
+  maxLength: "Pole musi zawierać maksymalnie",
+};
+
 const roles = {
   administrator: "Administrator",
   tenant: "Najemnca",
@@ -265,6 +278,7 @@ export default {
   mePage,
   userDataPage,
   updateEmailPage,
+  validation,
   sessionExpired: "Sesja wygasła",
   sessionExpiredDescription: "Twoja sesja wygasła, zaloguj się ponownie",
   footer: "Landlord Kingdom - SSBD202402",

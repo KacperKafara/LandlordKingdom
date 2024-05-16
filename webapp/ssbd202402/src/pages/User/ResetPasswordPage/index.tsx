@@ -20,8 +20,46 @@ import { useChangeUserPasswordWithToken } from "@/data/useChangeUserPasswordWith
 const getPasswordResetSchema = (t: TFunction) =>
   z
     .object({
-      password: z.string().min(8, t("registerPage.passwordRequired")),
-      confirmPassword: z.string().min(8, t("registerPage.passwordMatch")),
+      password: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      confirmPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: t("registerPage.passwordMatch"),

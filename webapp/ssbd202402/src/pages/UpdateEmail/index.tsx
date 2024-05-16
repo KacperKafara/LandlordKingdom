@@ -22,7 +22,27 @@ import { AxiosError } from "axios";
 import { api } from "@/data/api";
 const updateEmailFormSchema = (t: TFunction) =>
   z.object({
-    email: z.string().email(t("updateEmailPage.emailNotValid")),
+    email: z
+      .string()
+      .email(t("updateEmailPage.emailNotValid"))
+      .min(
+        5,
+        t("validation.minLength") +
+          " " +
+          5 +
+          " " +
+          t("validation.characters") +
+          "."
+      )
+      .max(
+        50,
+        t("validation.maxLength") +
+          " " +
+          50 +
+          " " +
+          t("validation.characters") +
+          "."
+      ),
   });
 
 type updateEmailFormValues = z.infer<ReturnType<typeof updateEmailFormSchema>>;
@@ -68,15 +88,15 @@ const UpdateEmailPage: FC = () => {
 
   return (
     <>
-      <div className="h-screen flex flex-col justify-center items-center">
-        <h1 className="text-3xl mb-10">
-          {t("updateEmailPage.updateEmailTitle")}
-        </h1>
+      <div className="h-screen flex flex-col justify-center items-center bg-gray-100">
         <Form {...form}>
           <form
-            className="w-[40vw] flex flex-col"
+            className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl relative"
             onSubmit={form.handleSubmit(handleUserSubmit)}
           >
+            <h1 className="text-3xl mb-10 text-center">
+              {t("updateEmailPage.updateEmailTitle")}
+            </h1>
             <FormField
               control={form.control}
               name="email"
