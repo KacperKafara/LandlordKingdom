@@ -99,6 +99,4 @@ public class MockConfig {
         return Mockito.mock(SignVerifier.class);
     }
 
-    //TODO: mol repositories
-
 }
