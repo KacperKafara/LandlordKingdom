@@ -5,6 +5,7 @@ import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -25,6 +26,9 @@ public class EmailServiceImpl implements EmailService {
     private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
     private final ResourceBundleMessageSource mailMessageSource;
+
+    @Value("${app.url}")
+    private String webUrl;
 
     @Override
     public void sendEmail(String to, String subject, String body) {
@@ -109,7 +113,7 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendAccountActivatedEmail(String to, String name, String lang) {
         Map<String, Object> templateModel = Map.of(
-                "name", name);
+                "name", name, "url", webUrl);
         String subject = mailMessageSource.getMessage("accountActivated.subject", null, Locale.of(lang));
 
         sendHtmlEmail(to, subject, "accountActivated", templateModel, lang);
