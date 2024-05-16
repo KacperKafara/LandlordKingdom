@@ -48,21 +48,19 @@ public class BaseConfig {
         postgres = new PostgreSQLContainer<>("postgres:16.2")
                 .withNetwork(network)
                 .withNetworkAliases("testdb")
-                .waitingFor(Wait.defaultWaitStrategy())
                 .withExposedPorts(5432)
                 .withUsername("postgres")
                 .withPassword("postgres")
                 .withCopyFileToContainer(MountableFile.forClasspathResource("initTest.sql"), "/docker-entrypoint-initdb.d/init.sql")
-                .withReuse(true);
+                .waitingFor(Wait.defaultWaitStrategy());
         postgres.start();
 
         smtp = new GenericContainer<>("rnwood/smtp4dev")
                 .withNetwork(network)
                 .withNetworkAliases("smtp4test")
                 .withLogConsumer(outputFrame -> System.out.println(outputFrame.getUtf8String()))
-                .waitingFor(Wait.defaultWaitStrategy())
                 .withExposedPorts(25, 143, 80)
-                .withReuse(true);
+                .waitingFor(Wait.defaultWaitStrategy());
         smtp.start();
 
         tomcat = new GenericContainer<>("tomcat:10.1.20-jdk21")
@@ -77,8 +75,7 @@ public class BaseConfig {
                 .withCopyToContainer(war, "/usr/local/tomcat/webapps/ssbd02.war")
                 .withCopyFileToContainer(MountableFile.forClasspathResource("privateJwt-key.pem"), "/etc/ssbd02/privateJwt-key.pem")
                 .withCopyFileToContainer(MountableFile.forClasspathResource("privateRefresh-key.pem"), "/etc/ssbd02/privateRefresh-key.pem")
-                .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080))
-                .withReuse(true);
+                .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080));
         tomcat.start();
 
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
