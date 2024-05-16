@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="userSchema.xsd">
+    <!-- Users data -->
+    <users id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+           login="test_login1"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           last_successful_login="2024-05-04 14:33:01.413581"
+           last_failed_login="2024-05-04 14:33:01.413581"
+           last_successful_login_ip="[NULL]"
+           last_failed_login_ip="[NULL]"
+           blocked="false"
+           verified="true"
+           language="en"
+           version="0"
+           created_at="2024-05-04 14:33:01.413581"/>
+
+
+    <!-- Personal Data -->
+    <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   email="test_email1@test.com"
+                   first_name="test_first_name1"
+                   last_name="test_last_name1"/>
+
+    <!-- User 1 -->
+    <access_levels active="true"
+                   version="0"
+                   id="22f34716-3b77-4e63-809d-35f9a4758011"
+                   user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   level="TENANT"/>
+    <access_levels active="true"
+                   version="0"
+                   id="397cf3c5-f369-4783-1092-6fc781fd2b0d"
+                   user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   level="OWNER"/>
+    <access_levels active="true"
+                   version="0"
+                   id="6bcef94d-16f5-401b-a0d0-9461257572f6"
+                   user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+                   level="ADMINISTRATOR"/>
+
+
+    <!-- Administrators -->
+    <administrators id="6bcef94d-16f5-401b-a0d0-9461257572f6"/>
+
+    <!-- Owners -->
+    <owners id="397cf3c5-f369-4783-1092-6fc781fd2b0d"/>
+
+    <!-- Tenants -->
+    <tenants id="22f34716-3b77-4e63-809d-35f9a4758011"/>
+</dataset>

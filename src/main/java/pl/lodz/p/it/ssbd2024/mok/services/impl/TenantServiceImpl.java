@@ -42,7 +42,7 @@ public class TenantServiceImpl implements TenantService {
         tenant.setActive(false);
         User user = tenant.getUser();
 
-        emailService.sendTenantPermissionLostEmail(user.getEmail(), user.getFirstName(), "en");
+        emailService.sendTenantPermissionLostEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
 
         return tenantRepository.saveAndFlush(tenant);
     }
@@ -67,7 +67,7 @@ public class TenantServiceImpl implements TenantService {
         tenant.setActive(true);
         User user = tenant.getUser();
 
-        emailService.sendTenantPermissionGainedEmail(user.getEmail(), user.getFirstName(), "en");
+        emailService.sendTenantPermissionGainedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
 
         return tenantRepository.saveAndFlush(tenant);
     }

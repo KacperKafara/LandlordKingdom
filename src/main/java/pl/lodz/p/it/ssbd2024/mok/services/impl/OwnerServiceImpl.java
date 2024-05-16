@@ -41,7 +41,7 @@ public class OwnerServiceImpl implements OwnerService {
         owner.setActive(false);
         User user = owner.getUser();
 
-        emailService.sendOwnerPermissionLostEmail(user.getEmail(), user.getFirstName(), "en");
+        emailService.sendOwnerPermissionLostEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
 
         return ownerRepository.saveAndFlush(owner);
     }
@@ -66,7 +66,7 @@ public class OwnerServiceImpl implements OwnerService {
         owner.setActive(true);
         User user = owner.getUser();
 
-        emailService.sendOwnerPermissionGainedEmail(user.getEmail(), user.getFirstName(), "en");
+        emailService.sendOwnerPermissionGainedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
 
         return ownerRepository.saveAndFlush(owner);
     }

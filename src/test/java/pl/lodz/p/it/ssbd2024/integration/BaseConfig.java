@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.integration;
 
+import io.restassured.RestAssured;
+import io.restassured.parsing.Parser;
 import org.dbunit.database.DatabaseConfig;
 import org.dbunit.database.DatabaseConnection;
 import org.dbunit.database.IDatabaseConnection;
@@ -35,6 +37,9 @@ public class BaseConfig {
     static final PostgreSQLContainer<?> postgres;
 
     @Container
+    static final GenericContainer<?> smtp;
+
+    @Container
     static final GenericContainer<?> tomcat;
 
     public static IDatabaseConnection connection;
@@ -43,23 +48,34 @@ public class BaseConfig {
         postgres = new PostgreSQLContainer<>("postgres:16.2")
                 .withNetwork(network)
                 .withNetworkAliases("testdb")
-                .waitingFor(Wait.defaultWaitStrategy())
                 .withExposedPorts(5432)
                 .withUsername("postgres")
                 .withPassword("postgres")
                 .withCopyFileToContainer(MountableFile.forClasspathResource("initTest.sql"), "/docker-entrypoint-initdb.d/init.sql")
-                .withReuse(true);
+                .waitingFor(Wait.defaultWaitStrategy());
         postgres.start();
+
+        smtp = new GenericContainer<>("rnwood/smtp4dev")
+                .withNetwork(network)
+                .withNetworkAliases("smtp4test")
+                .withLogConsumer(outputFrame -> System.out.println(outputFrame.getUtf8String()))
+                .withExposedPorts(25, 143, 80)
+                .waitingFor(Wait.defaultWaitStrategy());
+        smtp.start();
 
         tomcat = new GenericContainer<>("tomcat:10.1.20-jdk21")
                 .withNetwork(network)
                 .withExposedPorts(8080)
                 .withLogConsumer(outputFrame -> System.out.println(outputFrame.getUtf8String()))
                 .dependsOn(postgres)
+                .dependsOn(smtp)
                 .withEnv("URL", "jdbc:postgresql://testdb:5432/ssbd02")
+                .withEnv("MAIL.PORT", "25")
+                .withEnv("MAIL.HOST", "smtp4test")
                 .withCopyToContainer(war, "/usr/local/tomcat/webapps/ssbd02.war")
-                .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080))
-                .withReuse(true);
+                .withCopyFileToContainer(MountableFile.forClasspathResource("privateJwt-key.pem"), "/etc/ssbd02/privateJwt-key.pem")
+                .withCopyFileToContainer(MountableFile.forClasspathResource("privateRefresh-key.pem"), "/etc/ssbd02/privateRefresh-key.pem")
+                .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080));
         tomcat.start();
 
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
@@ -69,6 +85,8 @@ public class BaseConfig {
     public void setup() throws Exception {
         int postgresPort = postgres.getMappedPort(5432);
 
+        baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
+
         String jdbcUrl = String.format("jdbc:postgresql://localhost:%d/ssbd02?loggerLevel=OFF", postgresPort);
         Connection jdbcConnection = DriverManager.getConnection(jdbcUrl, postgres.getUsername(), postgres.getPassword());
 
@@ -77,12 +95,15 @@ public class BaseConfig {
         DatabaseConfig dbConfig = connection.getConfig();
         dbConfig.setProperty(DatabaseConfig.FEATURE_CASE_SENSITIVE_TABLE_NAMES, false);
         dbConfig.setProperty(DatabaseConfig.PROPERTY_DATATYPE_FACTORY, new PostgresqlDataTypeFactory());
+
+        RestAssured.defaultParser = Parser.JSON;
     }
 
     @AfterAll
     public static void teardown() throws Exception {
         tomcat.stop();
         postgres.stop();
+        smtp.stop();
 
         if (connection != null) {
             connection.close();

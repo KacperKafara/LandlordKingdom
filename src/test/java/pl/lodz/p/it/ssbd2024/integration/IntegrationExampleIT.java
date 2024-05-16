@@ -1,17 +1,14 @@
 package pl.lodz.p.it.ssbd2024.integration;
 
-
-import org.dbunit.dataset.IDataSet;
-import org.dbunit.dataset.ReplacementDataSet;
-import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
-
-import java.io.FileInputStream;
+import org.springframework.http.HttpStatus;
+import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static io.restassured.RestAssured.given;
-import static org.dbunit.Assertion.assertEquals;
 
-
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class IntegrationExampleIT extends BaseConfig {
 
 
@@ -27,12 +24,22 @@ public class IntegrationExampleIT extends BaseConfig {
 
     @Test
     public void dbunitTest() throws Exception {
-        loadDataSet("src/test/resources/datasets/users.xml");
+        loadDataSet("src/test/resources/datasets/user.xml");
 
-        ReplacementDataSet dataSetFromDb = createDataSetFromDb();
+        AuthenticationRequest request = new AuthenticationRequest("test_login1", "password", "en");
 
-        IDataSet resultDataset = new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/datasets/usersAddResult.xml"));
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(baseUrl + "/auth/signin-2fa")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
 
-        assertEquals(resultDataset, dataSetFromDb);
+
+//        ReplacementDataSet dataSetFromDb = createDataSetFromDb();
+//        IDataSet resultDataset = new FlatXmlDataSetBuilder().build(new FileInputStream("src/test/resources/datasets/userResult.xml"));
+//        assertEquals(resultDataset, dataSetFromDb);
     }
 }
