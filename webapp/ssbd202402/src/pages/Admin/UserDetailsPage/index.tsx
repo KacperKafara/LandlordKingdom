@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, Navigate, useParams } from "react-router-dom";
 import {
@@ -22,6 +22,7 @@ import { useUnblockUser } from "@/data/useUnblockUser.ts";
 import { useTenantRole } from "@/data/roles/useTenantRole";
 import { useOwnerRole } from "@/data/roles/useOwnerRole";
 import { useAdminRole } from "@/data/roles/useAdminRole";
+import UpdateUserDataDialog from "./updateUserDataDialog";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
@@ -31,47 +32,69 @@ const UserDetailsPage: FC = () => {
   const { addTenantRole, removeTenantRole } = useTenantRole();
   const { addOwnerRole, removeOwnerRole } = useOwnerRole();
   const { addAdminRole, removeAdminRole } = useAdminRole();
+  const [openUpdateUserDataDialog, setOpenUpdateUserDataDialog] =
+    useState<boolean>(false);
 
-  const { data, isError } = useGetUserQuery(id!);
+  const { data } = useGetUserQuery(id!);
 
-  if (isError) {
+  if (data?.status && (data.status < 200 || data?.status >= 300)) {
     return <Navigate to="/admin/users" />;
   }
+
+  const handleUpdateUserDataDialogOpen = () => {
+    setOpenUpdateUserDataDialog(true);
+  };
 
   return (
     <>
       <NavLink to={`/admin/users`}>{t("userDetailsPage.goBack")}</NavLink>
+      {openUpdateUserDataDialog && id && data && (
+        <UpdateUserDataDialog
+          id={id}
+          userData={{
+            firstName: data.data.firstName,
+            lastName: data.data.lastName,
+            language: data.data.language,
+          }}
+          etag={data.headers.etag}
+          setOpenUpdateUserDataDialog={setOpenUpdateUserDataDialog}
+          openUpdateUserDataDialog={openUpdateUserDataDialog}
+        />
+      )}
       {data && (
         <Card>
           <div className="flex justify-between items-start">
             <div>
-              <CardHeader>
-                <CardTitle>
-                  {data.firstName} {data.lastName}
-                </CardTitle>
-                <CardDescription>{data.email}</CardDescription>
-              </CardHeader>
+              <div className="flex">
+                <CardHeader>
+                  <CardTitle>
+                    {data.data.firstName} {data.data.lastName}
+                  </CardTitle>
+                  <CardDescription>{data.data.email}</CardDescription>
+                </CardHeader>
+              </div>
               <CardContent>
                 <p>
-                  {t("userDetailsPage.login")}: {data.login}
+                  {t("userDetailsPage.login")}: {data.data.login}
                 </p>
                 <p>
                   {t("userDetailsPage.blocked")}:{" "}
-                  {data.blocked ? t("common.yes") : t("common.no")}
+                  {data.data.blocked ? t("common.yes") : t("common.no")}
                 </p>
                 <p>
                   {t("userDetailsPage.verified")}:{" "}
-                  {data.verified ? t("common.yes") : t("common.no")}
+                  {data.data.verified ? t("common.yes") : t("common.no")}
                 </p>
                 <p>
                   {t("userDetailsPage.lastSuccessfulLogin")}:{" "}
-                  {data.lastSuccessfulLogin}
+                  {data.data.lastSuccessfulLogin}
                 </p>
                 <p>
-                  {t("userDetailsPage.lastFailedLogin")}: {data.lastFailedLogin}
+                  {t("userDetailsPage.lastFailedLogin")}:{" "}
+                  {data.data.lastFailedLogin}
                 </p>
                 <p>
-                  {t("userDetailsPage.language")}: {data.language}
+                  {t("userDetailsPage.language")}: {data.data.language}
                 </p>
               </CardContent>
             </div>
@@ -84,10 +107,10 @@ const UserDetailsPage: FC = () => {
                   <DropdownMenuLabel>
                     {t("userDetailsPage.actions")}
                   </DropdownMenuLabel>
-                  {data.blocked ? (
+                  {data.data.blocked ? (
                     <DropdownMenuItem
                       onClick={async () => {
-                        await unblockUser(data.id);
+                        await unblockUser(data.data.id);
                       }}
                     >
                       {t("block.unblockUserAction")}
@@ -95,51 +118,53 @@ const UserDetailsPage: FC = () => {
                   ) : (
                     <DropdownMenuItem
                       onClick={async () => {
-                        await blockUser(data.id);
+                        await blockUser(data.data.id);
                       }}
                     >
                       {t("block.blockUserAction")}
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem>test</DropdownMenuItem>
-                  <DropdownMenuItem>test</DropdownMenuItem>
-                  <DropdownMenuItem>test</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleUpdateUserDataDialogOpen()}
+                  >
+                    {t("updateDataForm.updateUserData")}
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
           </div>
         </Card>
       )}
-      <Card>
+      <Card className="mt-3">
         <CardHeader>
           <CardTitle>Roles</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex gap-2">
-            {data?.roles.includes("TENANT") ? (
-              <Button onClick={() => removeTenantRole(data?.id || "")}>
+            {data?.data.roles.includes("TENANT") ? (
+              <Button onClick={() => removeTenantRole(data?.data.id || "")}>
                 Remove Tenant Role
               </Button>
             ) : (
-              <Button onClick={() => addTenantRole(data?.id || "")}>
+              <Button onClick={() => addTenantRole(data?.data.id || "")}>
                 Add Tenant Role
               </Button>
             )}
-            {data?.roles.includes("OWNER") ? (
-              <Button onClick={() => removeOwnerRole(data?.id || "")}>
+            {data?.data.roles.includes("OWNER") ? (
+              <Button onClick={() => removeOwnerRole(data?.data.id || "")}>
                 Remove Owner Role
               </Button>
             ) : (
-              <Button onClick={() => addOwnerRole(data?.id || "")}>
+              <Button onClick={() => addOwnerRole(data?.data.id || "")}>
                 Add Owner Role
               </Button>
             )}
-            {data?.roles.includes("ADMIN") ? (
-              <Button onClick={() => removeAdminRole(data?.id || "")}>
+            {data?.data.roles.includes("ADMIN") ? (
+              <Button onClick={() => removeAdminRole(data?.data.id || "")}>
                 Remove Admin Role
               </Button>
             ) : (
-              <Button onClick={() => addAdminRole(data?.id || "")}>
+              <Button onClick={() => addAdminRole(data?.data.id || "")}>
                 Add Admin Role
               </Button>
             )}

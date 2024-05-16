@@ -191,6 +191,19 @@ const userDataPage = {
   success: "Data updated",
 };
 
+const updateDataForm = {
+  error: "Error during updating data",
+  success: "Data updated",
+  precondinationFailed: "You are not working on the latest data",
+  triggerButton: "Update data",
+  title: "Update user data",
+  firstName: "First name",
+  lastName: "Last name",
+  language: "Language",
+  updateButton: "Update",
+  updateUserData: "Update user data",
+};
+
 const mePage = {
   accountInfo: "User data",
   updateEmailAddress: "Update email address",
@@ -241,6 +254,7 @@ export default {
   userFilter,
   block,
   userDetailsPage,
+  updateDataForm,
   mePage,
   userDataPage,
   updateEmailPage,

@@ -199,6 +199,19 @@ const userDataPage = {
   success: "Dane zaktualizowane",
 };
 
+const updateDataForm = {
+  error: "Błąd podczas aktualizacji danych",
+  success: "Dane zaktualizowane",
+  precondinationFailed: "Nie pracujesz na najnowszych danych",
+  triggerButton: "Aktualizuj dane",
+  title: "Aktualizacja danych użytkownika",
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  language: "Język",
+  updateButton: "Aktualizuj",
+  updateUserData: "Aktualizuj dane użytkownika",
+};
+
 const mePage = {
   accountInfo: "Dane użytkownika",
   updateEmailAddress: "Zaktualizuj adres email",
@@ -248,6 +261,7 @@ export default {
   userListPage,
   userFilter,
   userDetailsPage,
+  updateDataForm,
   mePage,
   userDataPage,
   updateEmailPage,

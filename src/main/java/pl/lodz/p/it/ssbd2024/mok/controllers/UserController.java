@@ -189,7 +189,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}/update-data")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<UserResponse> updateUserData(@PathVariable UUID id,
                                                        @RequestBody @Valid UpdateUserDataRequest request,

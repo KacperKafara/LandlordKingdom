@@ -45,6 +45,7 @@ const CodeInput: FC<CodeInputProps> = ({
   login,
   roles,
   setToken,
+  setRefreshToken,
   setCodeInputOpen,
   resetForm,
 }) => {
@@ -61,6 +62,7 @@ const CodeInput: FC<CodeInputProps> = ({
   const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
     const result = await verifyCode({ login, token: data.pin });
     setToken(result.token);
+    setRefreshToken(result.refreshToken);
     if (roles == undefined) {
       return navigate("/login");
     } else {
