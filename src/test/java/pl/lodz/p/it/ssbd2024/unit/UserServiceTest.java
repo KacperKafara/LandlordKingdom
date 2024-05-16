@@ -154,7 +154,7 @@ class UserServiceTest {
         UUID userId = UUID.randomUUID();
         User user = new User();
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
-        when(signVerifier.verifySignature(any(), any(), eq("tagValue"))).thenReturn(true);
+        when(signVerifier.verifySignature(any(), any(), eq("tagValue"))).thenReturn(false);
         assertThrows(ApplicationOptimisticLockException.class, () -> userService.updateUserData(userId, user, "tagValue"));
     }
 
