@@ -10,7 +10,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TFunction } from "i18next";
+import i18next, { TFunction } from "i18next";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -46,6 +46,7 @@ interface RegistrationRequest {
   email: string;
   login: string;
   password: string;
+  language: string;
 }
 
 const RegisterPage: FC = () => {
@@ -80,6 +81,7 @@ const RegisterPage: FC = () => {
         email: values.email,
         login: values.login,
         password: values.password,
+        language: i18next.language,
       });
       toast({
         description: t("registerPage.registerSuccess"),

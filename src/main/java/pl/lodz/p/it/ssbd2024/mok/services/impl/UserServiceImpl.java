@@ -117,6 +117,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void blockUser(UUID id) throws NotFoundException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        if(user.isBlocked()){
+            throw new UserAlreadyBlockedException(UserExceptionMessages.ALREADY_BLOCKED);
+        }
         user.setBlocked(true);
         repository.saveAndFlush(user);
         emailService.sendAccountBlockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
@@ -125,7 +128,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void unblockUser(UUID id) throws NotFoundException {
         User user = getUserById(id);
-
+        if (!user.isBlocked()) {
+            throw new UserAlreadyUnblockedException(UserExceptionMessages.ALREADY_UNBLOCKED);
+        }
         user.setBlocked(false);
         repository.saveAndFlush(user);
         emailService.sendAccountUnblockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
