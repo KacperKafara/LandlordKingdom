@@ -14,6 +14,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.Encoders;
+import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 @Configuration
 @Profile("unit")
@@ -91,6 +92,11 @@ public class MockConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    SignVerifier signVerifier() {
+        return Mockito.mock(SignVerifier.class);
     }
 
     //TODO: mol repositories

@@ -19,16 +19,9 @@ import { NavLink, Navigate } from "react-router-dom";
 import i18next, { TFunction } from "i18next";
 import { isTokenValid } from "@/utils/jwt";
 import CodeInput from "@/pages/Login/CodeInput";
-import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
-import {
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useLanguageStore } from "@/i18n/languageStore";
 import { Loader2 } from "lucide-react";
-import { IoLanguage } from "react-icons/io5";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -42,7 +35,6 @@ const Login2FaPage: FC = () => {
   const { t } = useTranslation();
   const { setToken, setRefreshToken, token, roles } = useUserStore();
   const { authenticate, isPending } = useAuthenticate();
-  const { setLanguage } = useLanguageStore();
   const [login, setLogin] = useState<string>();
   const [codeInputOpen, setCodeInputOpen] = useState(false);
   const form = useForm<LoginSchema>({
@@ -90,32 +82,7 @@ const Login2FaPage: FC = () => {
               <h1 className="w-fit text-3xl font-bold">
                 {t("logoPlaceholder")}
               </h1>
-              <DropdownMenu>
-                <DropdownMenuTrigger
-                  className="w-fit self-end absolute right-1 top-1"
-                  asChild
-                >
-                  <Button variant="ghost">
-                    <IoLanguage className="w-5 h-5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setLanguage("en");
-                    }}
-                  >
-                    English
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      setLanguage("pl");
-                    }}
-                  >
-                    Polski
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <LanguageSelector />
             </div>
             <h2 className="self-center text-2xl pb-7 pt-3">
               {t("loginPage.loginHeader")}

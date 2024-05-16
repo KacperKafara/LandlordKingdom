@@ -50,7 +50,7 @@ public class TransactionAspect {
                 sb.append("class: ").append(arg.getClass().getName()).append(" id: ").append(abstractEntity.getId()).append(", ");
             }
         }
-        if (sb.isEmpty()){
+        if (sb.isEmpty()) {
             return "<empty>";
         }
         return sb.toString();
@@ -63,7 +63,9 @@ public class TransactionAspect {
             case List<?> entities -> {
                 StringBuilder sb = new StringBuilder();
                 for (Object entity : entities) {
-                    sb.append(((AbstractEntity) entity).getId()).append(", ");
+                    if (entity instanceof AbstractEntity abstractEntity) {
+                        sb.append(abstractEntity.getId()).append(", ");
+                    }
                 }
                 yield sb.toString();
             }

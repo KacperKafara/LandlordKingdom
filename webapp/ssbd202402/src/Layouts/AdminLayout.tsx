@@ -3,12 +3,7 @@ import BaseLayout, { NavigationLink } from "./BaseLayout";
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserStore } from "@/store/userStore";
 
-const links: NavigationLink[] = [
-  { label: "Users", path: "/admin/users" },
-  { label: "test1", path: "test1" },
-  { label: "test2", path: "test1" },
-  { label: "test3", path: "test1" },
-];
+const links: NavigationLink[] = [{ label: "Users", path: "/admin/users" }];
 
 const AdminLayout: FC = () => {
   const { roles } = useUserStore();

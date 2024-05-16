@@ -14,16 +14,13 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticatedChangePasswordRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.ChangePasswordRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserEmailUpdateRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
+import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -36,17 +33,18 @@ public class MeController {
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserResponse> getUserData() {
+    public ResponseEntity<DetailedUserResponse> getUserData() {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Jwt jwt = (Jwt) authentication.getPrincipal();
             UUID id = UUID.fromString(jwt.getSubject());
             User user = userService.getUserById(id);
+            List<String> roles = userService.getUserRoles(id);
 
             return ResponseEntity
                     .ok()
                     .eTag(signer.generateSignature(user.getId(), user.getVersion()))
-                    .body(UserMapper.toUserResponse(user));
+                    .body(UserMapper.toDetailedUserResponse(user, roles));
 
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
@@ -57,7 +55,7 @@ public class MeController {
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<UserResponse> updateUserData(
             @Valid @RequestBody UpdateUserDataRequest request,
-            @RequestHeader(HttpHeaders.IF_MATCH) String tagValue){
+            @RequestHeader(HttpHeaders.IF_MATCH) String tagValue) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Jwt jwt = (Jwt) authentication.getPrincipal();

@@ -114,7 +114,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         String tokenVal = hotp.generateOneTimePasswordString(key, counter++);
         otpTokenRepository.deleteByUserId(user.getId());
         otpTokenRepository.flush();
-        OTPToken token = new OTPToken(tokenVal, Instant.now().plus(PasswordVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
+        OTPToken token = new OTPToken(tokenVal, Instant.now().plus(OTPToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
         return otpTokenRepository.saveAndFlush(token).getToken();
     }
 

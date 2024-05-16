@@ -6,6 +6,7 @@ import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class UserMapper {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -20,7 +21,7 @@ public class UserMapper {
                 user.isBlocked());
     }
 
-    public static DetailedUserResponse toDetailedUserResponse(User user) {
+    public static DetailedUserResponse toDetailedUserResponse(User user, List<String> roles) {
         String lastSuccessfulLogin = user.getLastSuccessfulLogin() != null ?
                 user.getLastSuccessfulLogin().format(formatter) : null;
         String lastFailedLogin = user.getLastFailedLogin() != null ?
@@ -34,8 +35,11 @@ public class UserMapper {
                 user.getLanguage(),
                 lastSuccessfulLogin,
                 lastFailedLogin,
+                user.getLastSuccessfulLoginIp(),
+                user.getLastFailedLoginIp(),
                 user.isBlocked(),
-                user.isVerified());
+                user.isVerified(),
+                roles);
     }
 
     public static User toUser(UpdateUserDataRequest userRequest) {

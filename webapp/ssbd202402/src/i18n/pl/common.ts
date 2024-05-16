@@ -1,3 +1,4 @@
+import { Role } from "@/store/userStore";
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -158,7 +159,23 @@ const block = {
   unblockUserToastDescriptionSuccess: "Użytkownik został odblokowany",
   unblockUserToastTitleFail: "Operacja nie powiodła się",
   unblockUserToastDescriptionFail: "Coś poszło nie tak...",
-}
+};
+
+const userFilter = {
+  yes: "Tak",
+  no: "Nie",
+  both: "Oba",
+  verified: "Zweryfikowany",
+  blocked: "Zablokowany",
+  login: "Login",
+  email: "Email",
+  submit: "Filtruj",
+  role: "Rola",
+  all: "Wszystkie",
+  tenant: "Najemca",
+  owner: "Właściciel",
+  administrator: "Administrator",
+};
 
 const common = {
   yes: "tak",
@@ -188,10 +205,39 @@ const mePage = {
   updateEmailAddressTitle: "Czy na pewno chcesz zaktualizować adres email?",
   updateEmailAddressDescription:
     "Na przypisany do konta adres email zostanie wysłany link do formularza zmiany adresu email",
+  title: "Moje konto",
+  basicInformation: "Podstawowe informacje",
+  firstNameLabel: "Imię",
+  lastNamelabel: "Nazwisko",
+  emailLabel: "Email",
+  lastSuccessfullLoginDateLabel: "Data ostatniego udanego logowania",
+  lastSuccessfillLoginIPLabel: "Adres ip ostatniego udanego logowania",
+  lastFailedfullLoginDateLabel: "Data ostatniego nieudanego logowania",
+  lastFailedfillLoginIPLabel: "Adres ip ostatniego nieudanego logowania",
+  updateData: "Zmień swoje dane",
+  changeEmail: "Zmień swój email",
+  changePassword: "Zmień swoje hasło",
+};
+
+const registerSuccessPage = {
+  title: "Dziękujemy za stworzenie konta",
+  description:
+    "Wysłaliśmy ci email z linkiem slużącym do aktywacji konta. Użyj tego linku aby zweryfikować swój adres email. Dopóki nie zweryfikujesz adresu, nie możesz się zalogować.",
+  loginButton: "Wróc do strony logowania",
+};
+
+const roles = {
+  administrator: "Administrator",
+  tenant: "Najemnca",
+  owner: "Właściciel",
+} satisfies {
+  [key in Role]: string;
 };
 
 export default {
   common,
+  roles,
+  registerSuccessPage,
   navLinks,
   loginPage,
   registerPage,
@@ -200,6 +246,7 @@ export default {
   changePasswordForm,
   block,
   userListPage,
+  userFilter,
   userDetailsPage,
   mePage,
   userDataPage,
