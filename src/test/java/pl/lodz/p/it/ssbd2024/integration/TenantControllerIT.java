@@ -9,12 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class TenantControllerIT extends BaseConfig {
     private static String TENANTS_URL = baseUrl;
 
@@ -22,7 +24,6 @@ public class TenantControllerIT extends BaseConfig {
 
     @BeforeEach
     public void setUp() throws MessagingException, IOException {
-        baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
         String AUTH_URL = baseUrl + "/auth";
         TENANTS_URL = baseUrl + "/tenants";
 

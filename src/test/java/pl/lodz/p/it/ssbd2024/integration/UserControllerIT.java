@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.io.IOException;
 
@@ -18,6 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class UserControllerIT extends BaseConfig {
     private static String USERS_URL = baseUrl;
 
@@ -25,7 +27,6 @@ public class UserControllerIT extends BaseConfig {
 
     @BeforeEach
     public void setUp() throws MessagingException, IOException {
-        baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
         USERS_URL = baseUrl + "/users";
         String AUTH_URL = baseUrl + "/auth";
 
@@ -179,7 +180,7 @@ public class UserControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
-                .get(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .get(USERS_URL + "/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -196,8 +197,9 @@ public class UserControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .header("If-Match", etag)
+                .body(updateRequest)
                 .when()
-                .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .put(USERS_URL + "/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -211,7 +213,7 @@ public class UserControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
-                .get(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .get(USERS_URL + "/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -228,8 +230,9 @@ public class UserControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .header("If-Match", etag)
+                .body(updateRequest)
                 .when()
-                .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .put(USERS_URL + "/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
@@ -243,7 +246,7 @@ public class UserControllerIT extends BaseConfig {
                 .header("If-Match", etag)
                 .when()
                 .body(updateRequest2)
-                .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .put(USERS_URL + "/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.PRECONDITION_FAILED.value());

@@ -9,16 +9,19 @@ import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.RefreshTokenRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AuthControllerIT extends BaseConfig {
-    private static final String AUTH_URL = baseUrl + "/auth";
+    private static  String AUTH_URL = baseUrl + "/auth";
 
     @BeforeEach
     public void loadDataSet() {
         loadDataSet("src/test/resources/datasets/usersForAuthIT.xml");
+        AUTH_URL = baseUrl + "/auth";
     }
 
     @Test

@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticatedChangePasswordRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import java.io.IOException;
 
@@ -19,6 +20,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class MeControllerIT extends BaseConfig {
     private static String ME_URL = baseUrl;
     private static String AUTH_URL = baseUrl;
@@ -27,7 +29,6 @@ public class MeControllerIT extends BaseConfig {
 
     @BeforeEach
     public void setUp() throws MessagingException, IOException {
-        baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
         ME_URL = baseUrl + "/me";
         AUTH_URL = baseUrl + "/auth";
         loadDataSet("src/test/resources/datasets/userForMeIT.xml");

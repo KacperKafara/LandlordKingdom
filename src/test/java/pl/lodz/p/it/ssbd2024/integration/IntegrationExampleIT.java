@@ -1,13 +1,14 @@
 package pl.lodz.p.it.ssbd2024.integration;
 
-
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
+import org.springframework.test.annotation.DirtiesContext;
 
 import static io.restassured.RestAssured.given;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class IntegrationExampleIT extends BaseConfig {
 
 
