@@ -69,7 +69,7 @@ public class MeControllerIT extends BaseConfig {
     public void getUserData_userExists_returnOK() {
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .when()
                 .get(ME_URL)
                 .then()
@@ -83,7 +83,7 @@ public class MeControllerIT extends BaseConfig {
     public void updateUserData_IfMatchCorrect_returnOK() {
         Response response = given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .when()
                 .get(ME_URL)
                 .then()
@@ -99,7 +99,7 @@ public class MeControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .header(HttpHeaders.IF_MATCH, etag)
                 .when()
                 .body(updateRequest)
@@ -115,7 +115,7 @@ public class MeControllerIT extends BaseConfig {
     public void updateUserData_IfMatchIncorrect_returnPreconditionFailed() {
         Response response = given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .when()
                 .get(ME_URL)
                 .then()
@@ -131,7 +131,7 @@ public class MeControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .header(HttpHeaders.IF_MATCH, etag)
                 .when()
                 .body(updateRequest)
@@ -145,7 +145,7 @@ public class MeControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .header(HttpHeaders.IF_MATCH, etag)
                 .when()
                 .body(updateRequest2)
@@ -162,7 +162,7 @@ public class MeControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .when()
                 .body(changePasswordRequest)
                 .post(ME_URL + "/change-password")
@@ -178,7 +178,7 @@ public class MeControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .when()
                 .body(changePasswordRequest)
                 .post(ME_URL + "/change-password")

@@ -177,7 +177,7 @@ public class UserControllerIT extends BaseConfig {
     public void updateUserData_IfMatchCorrect_returnOK() {
         Response response = given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .when()
                 .get(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
                 .then()
@@ -194,7 +194,7 @@ public class UserControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .header("If-Match", etag)
                 .when()
                 .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
@@ -209,7 +209,7 @@ public class UserControllerIT extends BaseConfig {
     public void updateUserData_IfMatchNotCorrect_returnOK() {
         Response response = given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .when()
                 .get(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
                 .then()
@@ -226,7 +226,7 @@ public class UserControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .header("If-Match", etag)
                 .when()
                 .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
@@ -239,7 +239,7 @@ public class UserControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + adminToken)
+                .auth().oauth2(adminToken)
                 .header("If-Match", etag)
                 .when()
                 .body(updateRequest2)
