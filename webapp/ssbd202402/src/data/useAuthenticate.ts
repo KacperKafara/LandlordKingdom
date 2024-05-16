@@ -3,16 +3,12 @@ import { api } from "./api";
 import { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import { AuthenticateResponse } from "@/types/AuthenticateResponse";
 
 type AuthenticateRequest = {
   login: string;
   password: string;
   language: string;
-};
-
-type AuthenticateResponse = {
-  token: string;
-  refreshToken: string;
 };
 
 type CodeVerificationRequest = {

@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
@@ -24,9 +25,11 @@ import pl.lodz.p.it.ssbd2024.mok.dto.oauth.GoogleOAuth2TokenResponse;
 import pl.lodz.p.it.ssbd2024.mok.dto.oauth.GoogleOAuth2TokenPayload;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
+import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 
 import java.security.InvalidKeyException;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 
 @Log
@@ -38,6 +41,7 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final HttpServletRequest servletRequest;
+    private final JwtService jwtService;
 
     @Value("${oauth2.authUrl}")
     private String oAuth2Url;
@@ -68,7 +72,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (TokenGenerationException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
-        } catch (IdenticalFieldValueException e) {
+        } catch (IdenticalFieldValueException | CreationException e) {
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
         }
     }
@@ -128,7 +132,7 @@ public class AuthController {
 
 
     @GetMapping("/oauth2/token")
-    public ResponseEntity getOAuth2Token(@RequestParam String code) throws JsonProcessingException {
+    public ResponseEntity<AuthenticationResponse> getOAuth2Token(@RequestParam String code) throws JsonProcessingException {
         String url = UriComponentsBuilder
                 .fromUriString(oAuthTokenUri)
                 .queryParam("client_id", oAuthClientId)
@@ -150,7 +154,47 @@ public class AuthController {
         String tokenPayload = new String(decoder.decode(tokenChunks[1]));
         ObjectMapper mapper = new ObjectMapper();
         GoogleOAuth2TokenPayload payload = mapper.readValue(tokenPayload, GoogleOAuth2TokenPayload.class);
-        return ResponseEntity.ok().build();
+
+        Map<String, String> response;
+        try {
+            User user;
+            try {
+                user = userService.getUserByGoogleId(payload.getSub());
+
+                if (!user.isVerified()) {
+                    throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED);
+                }
+
+                List<String> roles = userService.getUserRoles(user.getId());
+                String userToken = jwtService.generateToken(user.getId(), roles);
+                String refreshToken = jwtService.generateRefreshToken(user.getId());
+
+                response = Map.of(
+                        "token", userToken,
+                        "refreshToken", refreshToken);
+
+            } catch (NotFoundException e) {
+                User newUser = new User(
+                        payload.getGivenName(),
+                        payload.getFamilyName(),
+                        payload.getEmail(),
+                        payload.getEmail(),
+                        "en"
+                );
+                newUser.setGoogleId(payload.getSub());
+                userService.createUser(newUser);
+                return ResponseEntity.status(HttpStatus.CREATED).build();
+            }
+
+        } catch (TokenGenerationException e1) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+        } catch (IdenticalFieldValueException | CreationException e1) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage());
+        } catch (UserNotVerifiedException e1) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e1.getMessage());
+        }
+
+        return ResponseEntity.ok(new AuthenticationResponse(response.get("token"), response.get("refreshToken")));
     }
 
     @PostMapping("/refresh")

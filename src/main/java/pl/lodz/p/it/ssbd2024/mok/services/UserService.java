@@ -23,7 +23,13 @@ public interface UserService {
 
     User getUserById(UUID id) throws NotFoundException;
 
-    void createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException;
+    User getUserByEmail(String email) throws NotFoundException;
+
+    User getUserByGoogleId(String googleId) throws NotFoundException;
+
+    User createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
+
+    User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
 
     User getUserByLogin(String login) throws NotFoundException;
 
