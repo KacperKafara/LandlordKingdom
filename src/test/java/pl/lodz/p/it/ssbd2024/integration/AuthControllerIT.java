@@ -2,12 +2,22 @@ package pl.lodz.p.it.ssbd2024.integration;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import jakarta.validation.Valid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
+import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
+import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
+import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.RefreshTokenRequest;
+import pl.lodz.p.it.ssbd2024.mok.dto.UserCreateRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -289,7 +299,7 @@ public class AuthControllerIT extends BaseConfig {
     @DisplayName("Verify2fa_IncorrectUser_ReturnNotFound_Test")
     public void Verify2fa_IncorrectUser_ReturnNotFound_Test() {
 
-        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("userNotFound", "otp");
+        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("userNotFound", "12345678");
 
         given()
                 .contentType(ContentType.JSON)
@@ -333,5 +343,148 @@ public class AuthControllerIT extends BaseConfig {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    @DisplayName("RegisterUser_CorrectData_ReturnCreated_Test")
+    public void RegisterUser_CorrectData_ReturnCreated_Test() {
+        UserCreateRequest request = new UserCreateRequest("login", "email@test.com", "FirstName", "LastName", "password", "en");
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CREATED.value());
+    }
+
+    @Test
+    @DisplayName("RegisterUser_ExistingLogin_ReturnUnprocessableEntity_Test")
+    public void RegisterUser_ExistingLogin_ReturnUnprocessableEntity_Test() {
+        UserCreateRequest request = new UserCreateRequest("userVerified", "email@test.com", "FirstName", "LastName", "password", "en");
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+    }
+
+    @Test
+    @DisplayName("RegisterUser_ExistingEmail_ReturnUnprocessableEntity_Test")
+    public void RegisterUser_ExistingEmail_ReturnUnprocessableEntity_Test() {
+        UserCreateRequest request = new UserCreateRequest("login", "userVerified@test.com", "FirstName", "LastName", "password", "en");
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+    }
+
+    @Test
+    @DisplayName("RegisterUser_PasswordIncorrect_ReturnBadRequest_Test")
+    public void RegisterUser_PasswordIncorrect_ReturnBadRequest_Test() {
+        UserCreateRequest request = new UserCreateRequest("login", "email@test.com", "FirstName", "LastName", "pass", "en");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        request = new UserCreateRequest("login", "email@test.com", "FirstName", "LastName", "", "en");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+
+        request = new UserCreateRequest("login", "email@test.com", "FirstName", "LastName", "yVBZAc5fy5hTzJB4QjhiIzvTtT0NDfYqalqKCGvONpr6GIZ6elC", "en");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("RegisterUser_LanguageIncorrect_ReturnBadRequest_Test")
+    public void RegisterUser_LanguageIncorrect_ReturnBadRequest_Test() {
+        UserCreateRequest request = new UserCreateRequest("login", "email@test.com", "FirstName", "LastName", "password", "");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        request = new UserCreateRequest("login", "email@test.com", "FirstName", "LastName", "password", "abc");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("RegisterUser_EmailIncorrect_ReturnBadRequest_Test")
+    public void RegisterUser_EmailIncorrect_ReturnBadRequest_Test() {
+        UserCreateRequest request = new UserCreateRequest("login", "", "FirstName", "LastName", "password", "en");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        request = new UserCreateRequest("login", "em", "FirstName", "LastName", "password", "en");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        request = new UserCreateRequest("login", "email", "FirstName", "LastName", "password", "en");
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(request)
+                .post(AUTH_URL + "/signup")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 }
