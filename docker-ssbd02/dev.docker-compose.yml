@@ -19,7 +19,7 @@ services:
   tomcat:
     build:
       context: ..
-      dockerfile: Dockerfile
+      dockerfile: ../DockerfileTomcat
     container_name: ssbd02-tomcat
     restart: always
     ports:

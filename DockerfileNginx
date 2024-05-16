@@ -1,0 +1,11 @@
+FROM node:20.13.1 as build
+WORKDIR /usr/src/app
+COPY webapp/ssbd202402/package.json webapp/ssbd202402/yarn.lock ./
+RUN yarn
+COPY webapp/ssbd202402 .
+RUN yarn build
+
+FROM nginx:1.22.1-alpine
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
