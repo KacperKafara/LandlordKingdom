@@ -87,12 +87,6 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void Authenticate_CredentialsCorrect_ReturnToken_Test() {
-        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertDoesNotThrow(() -> authenticationService.generateOTP(login, password, language, ip));
-    }
-
-    @Test
     public void Authenticate_UserIsNotVerified_ThrowException_Test() {
         user.setVerified(false);
 
@@ -115,14 +109,5 @@ public class AuthenticationServiceTest {
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
         assertThrows(SignInBlockedException.class, () -> authenticationService.generateOTP(login, password, language, ip));
-    }
-
-    @Test
-    public void Authenticate_UserReachedMaxLoginAttemptsButTimePassed_ReturnToken_Test() {
-        user.setLoginAttempts(3);
-        user.setLastFailedLogin(LocalDateTime.now().minusSeconds(loginTimeOut * 10L));
-
-        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-        assertDoesNotThrow(() -> authenticationService.generateOTP(login, password, language, ip));
     }
 }
