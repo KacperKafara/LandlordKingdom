@@ -80,12 +80,14 @@ public class BaseConfig {
                 .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080))
                 .withReuse(true);
         tomcat.start();
+
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
     }
 
     @BeforeEach
     public void setup() throws Exception {
         int postgresPort = postgres.getMappedPort(5432);
+
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
 
         String jdbcUrl = String.format("jdbc:postgresql://localhost:%d/ssbd02?loggerLevel=OFF", postgresPort);
