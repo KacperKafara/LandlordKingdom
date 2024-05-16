@@ -2,17 +2,22 @@ package pl.lodz.p.it.ssbd2024.integration;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+import io.restassured.response.Validatable;
+import io.restassured.response.ValidatableResponse;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
+import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
 
 import java.io.IOException;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class OwnerControllerIT extends BaseConfig {
@@ -24,7 +29,7 @@ public class OwnerControllerIT extends BaseConfig {
     public void setUp() throws MessagingException, IOException {
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
         String AUTH_URL = baseUrl + "/auth";
-        OWNERS_URL = baseUrl + "/tenants";
+        OWNERS_URL = baseUrl + "/owners";
 
         loadDataSet("src/test/resources/datasets/usersForOwnersIT.xml");
 
