@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
+import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
 
 import java.io.IOException;
@@ -169,5 +170,82 @@ public class UserControllerIT extends BaseConfig {
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
                 .body("blocked", equalTo(false));
+    }
+
+    @Test
+    @DisplayName("updateUserData_IfMatchCorrect_returnOK")
+    public void updateUserData_IfMatchCorrect_returnOK() {
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("language", equalTo("en"))
+                .extract()
+                .response();
+
+        String etag = response.getHeader("ETag");
+        etag = etag.substring(1, etag.length() - 1);
+
+        UpdateUserDataRequest updateRequest = new UpdateUserDataRequest("admin", "user", "pl");
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", etag)
+                .when()
+                .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("language", equalTo("pl"));
+    }
+
+    @Test
+    @DisplayName("updateUserData_IfMatchNotCorrect_returnOK")
+    public void updateUserData_IfMatchNotCorrect_returnOK() {
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("language", equalTo("en"))
+                .extract()
+                .response();
+
+        String etag = response.getHeader("ETag");
+        etag = etag.substring(1, etag.length() - 1);
+
+        UpdateUserDataRequest updateRequest = new UpdateUserDataRequest("admin", "user", "pl");
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", etag)
+                .when()
+                .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("language", equalTo("pl"));
+
+        UpdateUserDataRequest updateRequest2 = new UpdateUserDataRequest("admin", "user", "en");
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", etag)
+                .when()
+                .body(updateRequest2)
+                .put(USERS_URL + "/users/2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.PRECONDITION_FAILED.value());
     }
 }
