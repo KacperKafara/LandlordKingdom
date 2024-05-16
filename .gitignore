@@ -42,3 +42,5 @@ build/
 
 docker-ssbd02/privateJwt-key.pem
 docker-ssbd02/privateRefresh-key.pem
+/src/test/resources/privateJwt-key.pem
+/src/test/resources/privateRefresh-key.pem
