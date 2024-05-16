@@ -1,32 +1,25 @@
 package pl.lodz.p.it.ssbd2024.unit;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import pl.lodz.p.it.ssbd2024.config.ToolConfig;
-import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.AccountVerificationToken;
 import pl.lodz.p.it.ssbd2024.model.EmailVerificationToken;
 import pl.lodz.p.it.ssbd2024.model.PasswordVerificationToken;
-import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OTPTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
-import pl.lodz.p.it.ssbd2024.mok.services.impl.VerificationTokenServiceImpl;
 
 import java.time.Instant;
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ActiveProfiles("unit")
 @SpringJUnitConfig({ToolConfig.class, MockConfig.class})
@@ -40,8 +33,6 @@ public class VerificationTokenServiceTest {
     private EmailVerificationTokenRepository emailTokenRepository;
     @Autowired
     private PasswordVerificationTokenRepository passwordTokenRepository;
-    @Autowired
-    private OTPTokenRepository otpTokenRepository;
 
     @Test
     public void validateAccountVerificationToken_tokenExpired_throwVerificationTokenUsedException() {
@@ -66,6 +57,8 @@ public class VerificationTokenServiceTest {
         when(accountTokenRepository.findByToken("abcd")).thenReturn(Optional.of(accountVerificationToken));
         accountVerificationToken.setToken("abcd");
         assertEquals(accountVerificationToken, verificationTokenService.validateAccountVerificationToken(accountVerificationToken.getToken()));
+
+        verify(accountTokenRepository).deleteById(accountVerificationToken.getId());
     }
 
     @Test
@@ -91,6 +84,8 @@ public class VerificationTokenServiceTest {
         when(emailTokenRepository.findByToken("abcd")).thenReturn(Optional.of(emailVerificationToken));
         emailVerificationToken.setToken("abcd");
         assertEquals(emailVerificationToken, verificationTokenService.validateEmailVerificationToken(emailVerificationToken.getToken()));
+
+        verify(emailTokenRepository).deleteById(emailVerificationToken.getId());
     }
 
     @Test
@@ -116,6 +111,8 @@ public class VerificationTokenServiceTest {
         when(passwordTokenRepository.findByToken("abcd")).thenReturn(Optional.of(passwordVerificationToken));
         passwordVerificationToken.setToken("abcd");
         assertEquals(passwordVerificationToken, verificationTokenService.validatePasswordVerificationToken(passwordVerificationToken.getToken()));
+
+        verify(accountTokenRepository).deleteById(passwordVerificationToken.getId());
     }
 
     @Test
