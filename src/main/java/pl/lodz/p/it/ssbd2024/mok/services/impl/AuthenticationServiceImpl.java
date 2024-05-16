@@ -76,7 +76,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setVerified(true);
         userRepository.saveAndFlush(user);
-        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage())    ;
+        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
@@ -123,7 +123,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         User user = verificationToken.getUser();
 
-        if(!user.getLogin().equals(login)) {
+        if (!user.getLogin().equals(login)) {
             handleFailedLogin(user, ip);
             throw new LoginNotMatchToOTPException(UserExceptionMessages.LOGIN_NOT_MATCH_TO_OTP);
         }
@@ -134,7 +134,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         List<String> roles = getUserRoles(user);
 
-        if(roles.contains("ADMINISTRATOR")) {
+        if (roles.contains("ADMINISTRATOR")) {
             emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage());
         }
 

@@ -1,3 +1,5 @@
+import { Role } from "@/store/userStore";
+
 const loginPage = {
   forgotPassword: "Forgot password?",
   loginButton: "Sign in",
@@ -196,10 +198,39 @@ const mePage = {
     "Are you sure you want to update your email address?",
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the user's email address",
+  title: "My account",
+  basicInformation: "Basic informations",
+  firstNameLabel: "First name",
+  lastNamelabel: "Last name",
+  emailLabel: "Email",
+  lastSuccessfullLoginDateLabel: "Last successful Login Date",
+  lastSuccessfillLoginIPLabel: "Last successful Login IP",
+  lastFailedfullLoginDateLabel: "Last failed Login Date",
+  lastFailedfillLoginIPLabel: "Last failed Login IP",
+  updateData: "Update your data",
+  changeEmail: "Change your email",
+  changePassword: "Change your password",
+};
+
+const registerSuccessPage = {
+  title: "Thanks for creating an account",
+  description:
+    "We send you an email with verification link. Use this link to verify your account. Until you perform this action you won't be able to login.",
+  loginButton: "Go back to login",
+};
+
+const roles = {
+  administrator: "Administrator",
+  tenant: "Tenant",
+  owner: "Owner",
+} satisfies {
+  [key in Role]: string;
 };
 
 export default {
   common,
+  roles,
+  registerSuccessPage,
   navLinks,
   loginPage,
   registerPage,
