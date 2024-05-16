@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ActiveProfiles("unit")
 @SpringJUnitConfig({ToolConfig.class, MockConfig.class})
@@ -91,6 +91,9 @@ public class AuthenticationServiceTest {
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
         assertThrows(UserNotVerifiedException.class, () -> authenticationService.generateOTP(login, password, language, ip));
+
+        verify(userRepository, never()).saveAndFlush(user);
+        verify(emailService, never()).sendOTPEmail(anyString(), anyString(), anyString(), anyString());
     }
 
     @Test
@@ -99,6 +102,9 @@ public class AuthenticationServiceTest {
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
         assertThrows(UserBlockedException.class, () -> authenticationService.generateOTP(login, password, language, ip));
+
+        verify(userRepository, never()).saveAndFlush(user);
+        verify(emailService, never()).sendOTPEmail(anyString(), anyString(), anyString(), anyString());
     }
 
     @Test
@@ -108,5 +114,8 @@ public class AuthenticationServiceTest {
 
         when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
         assertThrows(SignInBlockedException.class, () -> authenticationService.generateOTP(login, password, language, ip));
+
+        verify(userRepository, never()).saveAndFlush(user);
+        verify(emailService, never()).sendOTPEmail(anyString(), anyString(), anyString(), anyString());
     }
 }
