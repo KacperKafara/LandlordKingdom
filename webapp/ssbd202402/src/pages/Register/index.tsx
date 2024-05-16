@@ -10,7 +10,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { TFunction } from "i18next";
+import i18next, { TFunction } from "i18next";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ import { api } from "@/data/api";
 import { Toaster } from "@/components/ui/toaster";
 import { ToastAction } from "@radix-ui/react-toast";
 import { AxiosError } from "axios";
+import LanguageSelector from "@/components/LanguageSelector";
 
 const getRegistrationSchema = (t: TFunction) =>
   z
@@ -45,6 +46,7 @@ interface RegistrationRequest {
   email: string;
   login: string;
   password: string;
+  language: string;
 }
 
 const RegisterPage: FC = () => {
@@ -79,6 +81,7 @@ const RegisterPage: FC = () => {
         email: values.email,
         login: values.login,
         password: values.password,
+        language: i18next.language,
       });
       toast({
         description: t("registerPage.registerSuccess"),
@@ -117,8 +120,9 @@ const RegisterPage: FC = () => {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 bg-white rounded-md border-black p-7 w-6/12 flex flex-col shadow-2xl"
+          className="border-1 bg-white rounded-md border-black p-7 w-6/12 flex flex-col shadow-2xl relative"
         >
+          <LanguageSelector />
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
           </h1>

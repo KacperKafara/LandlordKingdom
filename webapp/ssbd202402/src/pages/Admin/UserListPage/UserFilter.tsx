@@ -13,6 +13,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Role } from "@/store/userStore";
 import { useUsersFilterStore } from "@/store/usersFilterStore";
 import { SearchCriteria } from "@/types/filter/SearchCriteria";
 import { ChevronsUpDown } from "lucide-react";
@@ -232,9 +233,9 @@ const UserFilter: FC = () => {
                       >
                         <div className="flex gap-1">
                           {t(
-                            `userFilter.${filterForm
-                              .getValues("role")
-                              .toLowerCase()}`
+                            `userFilter.${
+                              filterForm.getValues("role").toLowerCase() as Role
+                            }`
                           )}
                         </div>
                         <ChevronsUpDown />
@@ -249,7 +250,7 @@ const UserFilter: FC = () => {
                             filterForm.setValue("role", role)
                           }
                         >
-                          {t(`userFilter.${role.toLowerCase()}`)}
+                          {t(`userFilter.${role.toLowerCase() as Role}`)}
                         </DropdownMenuCheckboxItem>
                       ))}
                     </DropdownMenuContent>

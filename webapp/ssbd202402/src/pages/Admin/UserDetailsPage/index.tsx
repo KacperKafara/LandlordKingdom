@@ -19,12 +19,18 @@ import {
 import { useGetUserQuery } from "@/data/fetchUser";
 import { useBlockUser } from "@/data/useBlockUser.ts";
 import { useUnblockUser } from "@/data/useUnblockUser.ts";
+import { useTenantRole } from "@/data/roles/useTenantRole";
+import { useOwnerRole } from "@/data/roles/useOwnerRole";
+import { useAdminRole } from "@/data/roles/useAdminRole";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { blockUser } = useBlockUser();
   const { unblockUser } = useUnblockUser();
+  const { addTenantRole, removeTenantRole } = useTenantRole();
+  const { addOwnerRole, removeOwnerRole } = useOwnerRole();
+  const { addAdminRole, removeAdminRole } = useAdminRole();
 
   const { data, isError } = useGetUserQuery(id!);
 
@@ -79,17 +85,21 @@ const UserDetailsPage: FC = () => {
                     {t("userDetailsPage.actions")}
                   </DropdownMenuLabel>
                   {data.blocked ? (
-                      <DropdownMenuItem onClick={async () => {
-                          await unblockUser(data.id);
-                      }}>
-                          {t("block.unblockUserAction")}
-                      </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        await unblockUser(data.id);
+                      }}
+                    >
+                      {t("block.unblockUserAction")}
+                    </DropdownMenuItem>
                   ) : (
-                      <DropdownMenuItem onClick={async () => {
-                          await blockUser(data.id);
-                      }}>
-                          {t("block.blockUserAction")}
-                      </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onClick={async () => {
+                        await blockUser(data.id);
+                      }}
+                    >
+                      {t("block.blockUserAction")}
+                    </DropdownMenuItem>
                   )}
                   <DropdownMenuItem>test</DropdownMenuItem>
                   <DropdownMenuItem>test</DropdownMenuItem>
@@ -100,6 +110,42 @@ const UserDetailsPage: FC = () => {
           </div>
         </Card>
       )}
+      <Card>
+        <CardHeader>
+          <CardTitle>Roles</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-2">
+            {data?.roles.includes("TENANT") ? (
+              <Button onClick={() => removeTenantRole(data?.id || "")}>
+                Remove Tenant Role
+              </Button>
+            ) : (
+              <Button onClick={() => addTenantRole(data?.id || "")}>
+                Add Tenant Role
+              </Button>
+            )}
+            {data?.roles.includes("OWNER") ? (
+              <Button onClick={() => removeOwnerRole(data?.id || "")}>
+                Remove Owner Role
+              </Button>
+            ) : (
+              <Button onClick={() => addOwnerRole(data?.id || "")}>
+                Add Owner Role
+              </Button>
+            )}
+            {data?.roles.includes("ADMIN") ? (
+              <Button onClick={() => removeAdminRole(data?.id || "")}>
+                Remove Admin Role
+              </Button>
+            ) : (
+              <Button onClick={() => addAdminRole(data?.id || "")}>
+                Add Admin Role
+              </Button>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </>
   );
 };

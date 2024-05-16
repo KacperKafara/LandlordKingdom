@@ -46,4 +46,6 @@ public interface UserService {
     void deleteNonVerifiedUsers();
 
     void sendEmailVerifyAccount();
+
+    List<String> getUserRoles(UUID id);
 }

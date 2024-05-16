@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.dto;
 
+import java.util.List;
 import java.util.UUID;
 
 public record DetailedUserResponse(
@@ -11,7 +12,10 @@ public record DetailedUserResponse(
         String language,
         String lastSuccessfulLogin,
         String lastFailedLogin,
+        String lastSuccessfulLoginIP,
+        String lastFailedLoginIP,
         boolean blocked,
-        boolean verified
+        boolean verified,
+        List<String> roles
 ) {
 }

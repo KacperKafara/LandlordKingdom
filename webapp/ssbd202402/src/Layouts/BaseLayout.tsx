@@ -1,9 +1,8 @@
 import { cn } from "@/lib/utils";
-import { TFunction } from "i18next";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
-import { useUserStore } from "@/store/userStore";
+import { Role, useUserStore } from "@/store/userStore";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +13,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import MyAccountButton from "./MyAccountButton";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 export type NavigationLink = {
   path: string;
@@ -32,55 +33,48 @@ const config = {
     footer: "bg-orange-500",
     nav: "border-b-4 border-orange-500",
     hover: "hover:bg-orange-300",
+    accentColor: "bg-orange-300",
   },
   tenant: {
-    footer: "border-t-4 border-green-500",
-    nav: "border-b-4 bg-green-500",
+    footer: "bg-green-500",
+    nav: "border-b-4 border-green-500",
     hover: "hover:bg-green-300",
+    accentColor: "bg-green-300",
   },
   owner: {
-    footer: "border-t-4 border-blue-500",
-    nav: "border-b-4 bg-blue-500",
+    footer: "bg-blue-500",
+    nav: "border-b-4 border-blue-500",
     hover: "hover:bg-blue-300",
+    accentColor: "bg-blue-300",
   },
 } satisfies {
   [key in LayoutType]: {
     nav: string;
     footer: string;
     hover: string;
+    accentColor: string;
   };
 };
 
-const fixedLinks: (t: TFunction) => NavigationLink[] = (t) => [
-  { path: "/account", label: t("navLinks.account") },
-];
-
 const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const colors = config[type];
   const navigate = useNavigate();
-  const userStore = useUserStore();
+  const { activeRole, setActiveRole } = useUserStore();
   const { roles } = useUserStore();
-  const handleLoginButtonClick = () => {
-    userStore.clearToken();
-    navigate("/login");
-  };
+
   const role_mapping: { [key: string]: string } = {
     ADMINISTRATOR: "admin",
     TENANT: "tenant",
     OWNER: "owner",
   };
 
-  const onRoleItemClick = (role: string) => {
-    userStore.activeRole = role;
-    console.log(userStore.activeRole);
-  };
   const onLogoClick = () => {
-    navigate(`/${role_mapping[userStore.activeRole!]}`);
+    navigate(`/${role_mapping[activeRole!]}`);
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-slate-50">
       <nav
         className={cn(
           "h-20 flex flex-row justify-between items-center px-10",
@@ -92,43 +86,53 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
             {t("logoPlaceholder")}
           </p>
         </div>
-        <div className="flex flex-row gap-5 items-center">
-          {[...links, ...fixedLinks(t)].map((link, idx) => (
+        <div className="flex flex-row gap-3 items-center">
+          {links.map((link, idx) => (
             <NavLink
               key={link.path + idx}
               to={link.path}
-              className={cn("px-2 py-1 rounded-md", colors.hover)}
+              className={({ isActive }) =>
+                cn(
+                  "px-2 py-1 rounded-md",
+                  colors.hover,
+                  isActive && colors.accentColor
+                )
+              }
             >
               {link.label}
             </NavLink>
           ))}
-          <button
-            onClick={handleLoginButtonClick}
-            className={cn("px-2 py-1 rounded-md", colors.hover)}
-          >
-            {t("navLinks.signOut")}
-          </button>
           <DropdownMenu>
-            <DropdownMenuTrigger
-              className={cn(" px-2 py-1", colors.hover)}
-              asChild
-            >
-              <Button variant="ghost">{userStore.activeRole}</Button>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className={cn("px-2 py-1 capitalize", colors.hover)}
+              >
+                {i18n.exists(`roles.${activeRole?.toLowerCase()}`)
+                  ? t(`roles.${activeRole?.toLowerCase() as Role}`)
+                  : ""}
+                <IoMdArrowDropdown />
+              </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56">
               <DropdownMenuLabel>{t("navLinks.roles")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {roles?.map((role, idx) => (
                 <DropdownMenuItem
-                  onClick={() => onRoleItemClick(role)}
+                  onClick={() => setActiveRole(role)}
                   asChild
                   key={idx}
                 >
-                  <NavLink to={`/${role_mapping[role]}`}>{role}</NavLink>
+                  <NavLink to={`/${role_mapping[role]}`}>
+                    {i18n.exists(`roles.${role.toLowerCase()}`)
+                      ? t(`roles.${role.toLowerCase() as Role}`)
+                      : ""}
+                  </NavLink>
                 </DropdownMenuItem>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          <MyAccountButton hover={colors.hover} />
         </div>
       </nav>
       <main className="flex-1 px-10">{children}</main>
@@ -138,6 +142,11 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
           config[type].footer
         )}
       >
+        <span className="mr-2">
+          {i18n.exists(`roles.${activeRole?.toLowerCase()}`)
+            ? t(`roles.${activeRole?.toLowerCase() as Role}`)
+            : ""}
+        </span>
         {t("footer")}
       </footer>
     </div>

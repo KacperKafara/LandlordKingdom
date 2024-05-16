@@ -150,10 +150,11 @@ public class UserController {
     public ResponseEntity<DetailedUserResponse> get(@PathVariable UUID id) {
         try {
             User user = userService.getUserById(id);
+            List<String> roles = userService.getUserRoles(id);
             return ResponseEntity
                     .ok()
                     .header(HttpHeaders.ETAG, signer.generateSignature(user.getId(), user.getVersion()))
-                    .body(UserMapper.toDetailedUserResponse(user));
+                    .body(UserMapper.toDetailedUserResponse(user, roles));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
@@ -169,7 +170,6 @@ public class UserController {
         if (administratorId.equals(id)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, AdministratorMessages.OWN_ADMINISTRATOR_BLOCK);
         }
-
         try {
             userService.blockUser(id);
             return ResponseEntity.ok().build();

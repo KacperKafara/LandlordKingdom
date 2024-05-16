@@ -61,7 +61,8 @@ public class AuthController {
                     newUserData.firstName(),
                     newUserData.lastName(),
                     newUserData.email(),
-                    newUserData.login()
+                    newUserData.login(),
+                    newUserData.language()
             );
             userService.createUser(newUser, newUserData.password());
             return ResponseEntity.status(HttpStatus.CREATED).build();

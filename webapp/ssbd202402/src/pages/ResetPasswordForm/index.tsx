@@ -1,3 +1,4 @@
+import LanguageSelector from "@/components/LanguageSelector";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -48,8 +49,9 @@ const ResetPasswordForm: FC = () => {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl"
+          className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2x relative"
         >
+          <LanguageSelector />
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
           </h1>
