@@ -2,17 +2,22 @@ import { FC } from "react";
 import BaseLayout, { NavigationLink } from "./BaseLayout";
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserStore } from "@/store/userStore";
+import { useTranslation } from "react-i18next";
+import { TFunction } from "i18next";
 
-const links: NavigationLink[] = [{ label: "Users", path: "/admin/users" }];
+const links = (t: TFunction): NavigationLink[] => [
+  { label: t("navLinks.users"), path: "/admin/users" },
+];
 
 const AdminLayout: FC = () => {
+  const { t } = useTranslation();
   const { roles } = useUserStore();
   if (!roles?.includes("ADMINISTRATOR")) {
     return <Navigate to={"/error"} />;
   }
 
   return (
-    <BaseLayout type="admin" links={links}>
+    <BaseLayout type="admin" links={links(t)}>
       <Outlet />
     </BaseLayout>
   );

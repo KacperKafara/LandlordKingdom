@@ -29,9 +29,9 @@ public interface UserService {
 
     User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
-    void blockUser(UUID id) throws NotFoundException;
+    void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException;
 
-    void unblockUser(UUID id) throws NotFoundException;
+    void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException;
 
     void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException;
 

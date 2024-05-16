@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void blockUser(UUID id) throws NotFoundException {
+    public void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         if(user.isBlocked()){
             throw new UserAlreadyBlockedException(UserExceptionMessages.ALREADY_BLOCKED);
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void unblockUser(UUID id) throws NotFoundException {
+    public void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException {
         User user = getUserById(id);
         if (!user.isBlocked()) {
             throw new UserAlreadyUnblockedException(UserExceptionMessages.ALREADY_UNBLOCKED);

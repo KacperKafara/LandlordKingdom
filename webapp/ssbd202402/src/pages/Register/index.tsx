@@ -26,12 +26,127 @@ import LanguageSelector from "@/components/LanguageSelector";
 const getRegistrationSchema = (t: TFunction) =>
   z
     .object({
-      firstName: z.string().min(1, t("registerPage.firstNameRequired")),
-      lastName: z.string().min(1, t("registerPage.lastNameRequired")),
-      email: z.string().email(t("registerPage.emailRequired")),
-      login: z.string().min(1, t("registerPage.loginRequired")),
-      password: z.string().min(8, t("registerPage.passwordRequired")),
-      confirmPassword: z.string().min(8, t("registerPage.passwordMatch")),
+      firstName: z
+        .string()
+        .min(
+          1,
+          t("validation.minLength") +
+            " " +
+            1 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      lastName: z
+        .string()
+        .min(
+          1,
+          t("validation.minLength") +
+            " " +
+            1 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      email: z
+        .string()
+        .email(t("registerPage.emailRequired"))
+        .min(
+          5,
+          t("validation.minLength") +
+            " " +
+            5 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      login: z
+        .string()
+        .min(
+          3,
+          t("validation.minLength") +
+            " " +
+            3 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      password: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      confirmPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
     })
     .refine((data) => data.password === data.confirmPassword, {
       message: t("registerPage.passwordMatch"),

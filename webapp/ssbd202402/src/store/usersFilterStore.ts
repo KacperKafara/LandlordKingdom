@@ -16,7 +16,7 @@ export const useUsersFilterStore = create<UsersFilterStore>((set) => ({
   criteria: {
     dataOption: "all",
     searchCriteriaList: [],
-    role: "",
+    role: "ALL",
   },
   pageNumber: 0,
   pageSize: 10,

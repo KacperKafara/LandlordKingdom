@@ -6,11 +6,11 @@ import jakarta.validation.constraints.Size;
 
 public record UpdateUserDataRequest(
         @NotBlank(message = "First name cannot be blank.")
-        @Size(max = 50, message = "First name length must be less than 50.")
+        @Size(min = 1, max = 50, message = "First name length must be between 1 and 50.")
         String firstName,
 
         @NotBlank(message = "Last name cannot be blank.")
-        @Size(max = 50, message = "Last name length must be less than 50.")
+        @Size(min = 1, max = 50, message = "Last name length must be between 1 and 50.")
         String lastName,
 
         @NotBlank(message = "Language name cannot be blank.")
