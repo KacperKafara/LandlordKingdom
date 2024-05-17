@@ -24,7 +24,8 @@ public class EmailReader extends BaseConfig {
         return mailSender;
     }
 
-    public static String readOtpFromEmail(String userMailAddress) throws MessagingException, IOException {
+    public static String readOtpFromEmail(String userMailAddress) throws MessagingException, IOException, InterruptedException {
+        Thread.sleep(2000);
         JavaMailSenderImpl mailSender = configureMailSender();
 
         try (Store store = mailSender.getSession().getStore("imap")) {

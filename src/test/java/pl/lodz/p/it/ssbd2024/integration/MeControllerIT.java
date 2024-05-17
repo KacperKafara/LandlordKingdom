@@ -28,7 +28,7 @@ public class MeControllerIT extends BaseConfig {
     private String adminToken;
 
     @BeforeEach
-    public void setUp() throws MessagingException, IOException {
+    public void setUp() throws MessagingException, IOException, InterruptedException {
         ME_URL = baseUrl + "/me";
         AUTH_URL = baseUrl + "/auth";
         loadDataSet("src/test/resources/datasets/userForMeIT.xml");

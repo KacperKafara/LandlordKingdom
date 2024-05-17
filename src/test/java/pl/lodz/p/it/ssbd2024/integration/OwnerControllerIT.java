@@ -23,7 +23,7 @@ public class OwnerControllerIT extends BaseConfig {
     private String adminToken;
 
     @BeforeEach
-    public void setUp() throws MessagingException, IOException {
+    public void setUp() throws MessagingException, IOException, InterruptedException {
         String AUTH_URL = baseUrl + "/auth";
         OWNERS_URL = baseUrl + "/owners";
 

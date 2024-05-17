@@ -26,7 +26,7 @@ public class UserControllerIT extends BaseConfig {
     private String adminToken;
 
     @BeforeEach
-    public void setUp() throws MessagingException, IOException {
+    public void setUp() throws MessagingException, IOException, InterruptedException {
         USERS_URL = baseUrl + "/users";
         String AUTH_URL = baseUrl + "/auth";
 
