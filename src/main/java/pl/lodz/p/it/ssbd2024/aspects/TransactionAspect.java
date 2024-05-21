@@ -31,12 +31,12 @@ public class TransactionAspect {
         String callerClass = jp.getTarget().getClass().getName();
         String callerMethod = jp.getSignature().getName();
         String txId = UUID.randomUUID().toString();
-        log.info("Transaction " + txId + " started by " + username + " in " + callerClass + "." + callerMethod);
-        log.info("Transaction " + txId + " info: " + "propagation=" + transactional.propagation() + ", isolation=" + transactional.isolation() + ", readOnly=" + transactional.readOnly() + ", timeout=" + transactional.timeout());
+        log.info("Transaction {} started by {} in {}.{}", txId, username, callerClass, callerMethod);
+        log.info("Transaction {} info: propagation={}, isolation={}, readOnly={}, timeout={}", txId, transactional.propagation(), transactional.isolation(), transactional.readOnly(), transactional.timeout());
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationImpl(txId));
-        log.info("Method " + callerMethod + " called with args: " + parsArgs(jp.getArgs()));
+        log.info("Method {} called with args: {}", callerMethod, parsArgs(jp.getArgs()));
         Object obj = jp.proceed();
-        log.info("Method " + callerMethod + " returned with: " + parseReturnValue(obj));
+        log.info("Method {} returned with: {}", callerMethod, parseReturnValue(obj));
         return obj;
     }
 
