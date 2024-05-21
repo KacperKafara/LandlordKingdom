@@ -93,7 +93,7 @@ const UserData: FC = () => {
                     defaultValue={field.value}
                   >
                     <SelectTrigger className="">
-                      <SelectValue placeholder="Theme" />
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="pl">Polski</SelectItem>
