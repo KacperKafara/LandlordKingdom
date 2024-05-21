@@ -47,7 +47,21 @@ public class TransactionAspect {
         StringBuilder sb = new StringBuilder();
         for (Object arg : args) {
             if (arg instanceof AbstractEntity abstractEntity) {
-                sb.append("class: ").append(arg.getClass().getName()).append(" id: ").append(abstractEntity.getId()).append(", ");
+                sb
+                        .append(abstractEntity.getClass().getName())
+                        .append(abstractEntity)
+                        .append(", ");
+            }
+
+            if (arg instanceof List<?> entities) {
+                for (Object entity : entities) {
+                    if (entity instanceof AbstractEntity abstractEntity) {
+                        sb
+                                .append(abstractEntity.getClass().getName())
+                                .append(abstractEntity)
+                                .append(", ");
+                    }
+                }
             }
         }
         if (sb.isEmpty()) {
@@ -59,17 +73,17 @@ public class TransactionAspect {
     String parseReturnValue(Object args) {
         return switch (args) {
             case null -> "<void>";
-            case AbstractEntity entity -> entity.getId().toString();
+            case AbstractEntity entity -> entity.getClass().getName() + entity;
             case List<?> entities -> {
                 StringBuilder sb = new StringBuilder();
                 for (Object entity : entities) {
                     if (entity instanceof AbstractEntity abstractEntity) {
-                        sb.append(abstractEntity.getId()).append(", ");
+                        sb.append(abstractEntity).append(", ");
                     }
                 }
                 yield sb.toString();
             }
-            default -> args.toString();
+            default -> null;
         };
     }
 }

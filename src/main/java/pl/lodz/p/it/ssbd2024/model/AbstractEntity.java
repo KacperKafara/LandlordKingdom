@@ -20,4 +20,12 @@ public abstract class AbstractEntity {
     @Column(name = "version", nullable = false)
     @Version
     private Long version;
+
+    @Override
+    public final String toString() {
+        return "{" +
+                "id=" + id +
+                ", version=" + version +
+                '}';
+    }
 }
