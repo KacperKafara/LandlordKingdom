@@ -37,60 +37,60 @@ const passwordChangeSchema = (t: TFunction) =>
         .min(
           8,
           t("validation.minLength") +
-            " " +
-            8 +
-            " " +
-            t("validation.characters") +
-            "."
+          " " +
+          8 +
+          " " +
+          t("validation.characters") +
+          "."
         )
         .max(
           50,
           t("validation.maxLength") +
-            " " +
-            50 +
-            " " +
-            t("validation.characters") +
-            "."
+          " " +
+          50 +
+          " " +
+          t("validation.characters") +
+          "."
         ),
       newPassword: z
         .string()
         .min(
           8,
           t("validation.minLength") +
-            " " +
-            8 +
-            " " +
-            t("validation.characters") +
-            "."
+          " " +
+          8 +
+          " " +
+          t("validation.characters") +
+          "."
         )
         .max(
           50,
           t("validation.maxLength") +
-            " " +
-            50 +
-            " " +
-            t("validation.characters") +
-            "."
+          " " +
+          50 +
+          " " +
+          t("validation.characters") +
+          "."
         ),
       confirmPassword: z
         .string()
         .min(
           8,
           t("validation.minLength") +
-            " " +
-            8 +
-            " " +
-            t("validation.characters") +
-            "."
+          " " +
+          8 +
+          " " +
+          t("validation.characters") +
+          "."
         )
         .max(
           50,
           t("validation.maxLength") +
-            " " +
-            50 +
-            " " +
-            t("validation.characters") +
-            "."
+          " " +
+          50 +
+          " " +
+          t("validation.characters") +
+          "."
         ),
     })
     .refine((data) => data.newPassword === data.confirmPassword, {
@@ -150,7 +150,7 @@ const ChangeUserPassword: FC = () => {
     <Form {...passwordChangeForm}>
       <form
         onSubmit={handlePasswordChangeSubmit}
-        className="flex flex-col gap-3 w-2/4"
+        className="flex flex-col gap-3 w-3/4"
       >
         <FormField
           control={passwordChangeForm.control}
@@ -197,7 +197,7 @@ const ChangeUserPassword: FC = () => {
         />
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button className="self-end mt-5">
+            <Button className=" mt-5">
               {t("changePasswordForm.submit")}
             </Button>
           </AlertDialogTrigger>
