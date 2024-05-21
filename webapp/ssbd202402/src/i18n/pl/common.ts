@@ -237,6 +237,7 @@ const mePage = {
   updateData: "Zmień swoje dane",
   changeEmail: "Zmień swój email",
   changePassword: "Zmień swoje hasło",
+  changeEmailDescription: "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
 };
 
 const registerSuccessPage = {
@@ -257,8 +258,8 @@ const roles = {
   tenant: "Najemnca",
   owner: "Właściciel",
 } satisfies {
-  [key in Role]: string;
-};
+    [key in Role]: string;
+  };
 
 export default {
   common,

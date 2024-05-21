@@ -1,3 +1,4 @@
+import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -108,8 +109,8 @@ const UserFilter: FC = () => {
                         {filterForm.getValues("verified") == null
                           ? t("userFilter.both")
                           : filterForm.getValues("verified") == true
-                          ? t("common.yes")
-                          : t("common.no")}
+                            ? t("common.yes")
+                            : t("common.no")}
                         <ChevronsUpDown />
                       </Button>
                     </DropdownMenuTrigger>
@@ -159,8 +160,8 @@ const UserFilter: FC = () => {
                         {filterForm.getValues("blocked") == null
                           ? t("userFilter.both")
                           : filterForm.getValues("blocked") == true
-                          ? t("common.yes")
-                          : t("common.no")}
+                            ? t("common.yes")
+                            : t("common.no")}
                         <ChevronsUpDown />
                       </Button>
                     </DropdownMenuTrigger>
@@ -233,8 +234,7 @@ const UserFilter: FC = () => {
                       >
                         <div className="flex gap-1">
                           {t(
-                            `userFilter.${
-                              filterForm.getValues("role").toLowerCase() as Role
+                            `userFilter.${filterForm.getValues("role").toLowerCase() as Role
                             }`
                           )}
                         </div>
@@ -260,6 +260,9 @@ const UserFilter: FC = () => {
             />
             <div className="flex self-end">
               <Button type="submit">{t("userFilter.submit")}</Button>
+            </div>
+            <div className="flex self-end">
+              <RefreshQueryButton queryKeys={["filteredUsers"]} />
             </div>
           </div>
         </form>

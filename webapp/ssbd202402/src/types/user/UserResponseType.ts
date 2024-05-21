@@ -1,5 +1,5 @@
 export type UserResponse = {
-  blocked: any;
+  blocked: boolean;
   id: string;
   firstName: string;
   lastName: string;

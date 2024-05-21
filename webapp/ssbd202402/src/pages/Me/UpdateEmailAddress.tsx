@@ -25,7 +25,7 @@ const UpdateEmailMyAddress: FC = () => {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="self-start">{t("mePage.updateEmailAddress")}</Button>
+        <Button>{t("mePage.updateEmailAddress")}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
