@@ -6,15 +6,11 @@
 
     <groupId>pl.lodz.p.it.ssbd2024</groupId>
     <artifactId>ssbd02</artifactId>
-    <version>0.0.4</version>
+    <version>0.3.0-SNAPSHOT</version>
     <name>ssbd02</name>
     <packaging>war</packaging>
 
     <developers>
-        <developer>
-            <name>Wiktoria Płonka</name>
-            <id>236627</id>
-        </developer>
         <developer>
             <name>Kacper Kafara</name>
             <id>242412</id>
