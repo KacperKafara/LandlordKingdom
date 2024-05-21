@@ -11,7 +11,7 @@ export const useVerifyAccount = () => {
   const { mutate, isSuccess } = useMutation({
     mutationKey: ["verify"],
     mutationFn: async () => {
-      await api.post("/auth/verify", { token });
+      await api.post("/me/verify", { token });
     },
     onError: () => {
       toast({
