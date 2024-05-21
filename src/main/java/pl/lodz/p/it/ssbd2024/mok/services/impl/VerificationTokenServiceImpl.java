@@ -1,12 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import com.eatthepath.otp.HmacOneTimePasswordGenerator;
-import com.eatthepath.otp.TimeBasedOneTimePasswordGenerator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +13,7 @@ import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OTPTokenRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.OTPTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 
@@ -26,7 +22,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2024.mok.repositories;
+package pl.lodz.p.it.ssbd2024.mok.authRepositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

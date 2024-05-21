@@ -13,10 +13,10 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VerificationToken;
-import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthAdministratorRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthOwnerRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
@@ -37,10 +37,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
 
-    private final UserRepository userRepository;
-    private final TenantRepository tenantRepository;
-    private final OwnerRepository ownerRepository;
-    private final AdministratorRepository administratorRepository;
+    private final AuthUserRepository userRepository;
+    private final AuthTenantRepository tenantRepository;
+    private final AuthOwnerRepository ownerRepository;
+    private final AuthAdministratorRepository administratorRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
@@ -63,20 +63,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         administratorRepository.findByUserIdAndActive(user.getId(), true).ifPresent(admin -> roles.add("ADMINISTRATOR"));
 
         return roles;
-    }
-
-    @Override
-    @Transactional(rollbackFor = {
-            VerificationTokenUsedException.class,
-            VerificationTokenExpiredException.class,
-            NotFoundException.class
-    })
-    public void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException {
-        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
-        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setVerified(true);
-        userRepository.saveAndFlush(user);
-        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override

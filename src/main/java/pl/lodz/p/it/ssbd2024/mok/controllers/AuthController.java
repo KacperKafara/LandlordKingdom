@@ -93,15 +93,6 @@ public class AuthController {
         }
     }
 
-    @PostMapping("/verify")
-    public ResponseEntity<Void> verify(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
-        try {
-            authenticationService.verify(request.token());
-            return ResponseEntity.ok().build();
-        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
-        }
-    }
 
     @PostMapping("/verify-2fa")
     public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid Verify2FATokenRequest request) {
