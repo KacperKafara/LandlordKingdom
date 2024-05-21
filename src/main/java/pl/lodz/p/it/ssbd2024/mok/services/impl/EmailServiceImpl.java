@@ -1,19 +1,12 @@
-package pl.lodz.p.it.ssbd2024.services.impl;
+package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
-import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.context.Context;
-import org.thymeleaf.spring6.SpringTemplateEngine;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.services.HtmlEmailService;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
@@ -23,47 +16,11 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
-    private final JavaMailSender mailSender;
-    private final SpringTemplateEngine templateEngine;
     private final ResourceBundleMessageSource mailMessageSource;
+    private final HtmlEmailService htmlEmailService;
 
     @Value("${app.url}")
     private String webUrl;
-
-    @Override
-    public void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-
-        mailSender.send(message);
-    }
-
-    @Override
-    public void sendHtmlEmail(String to, String subject, String body) {
-        MimeMessage message = mailSender.createMimeMessage();
-
-        try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            helper.setTo(to);
-            helper.setSubject(subject);
-            helper.setText(body, true);
-            mailSender.send(message);
-        } catch (MessagingException e) {
-            log.warn("Failed to send email.");
-            throw new RuntimeException(e);
-        }
-
-    }
-
-    @Override
-    public void sendHtmlEmail(String to, String subject, String templateName, Map<String, Object> templateModel, String lang) {
-        Context thymeleafContext = new Context(Locale.of(lang));
-        thymeleafContext.setVariables(templateModel);
-        String htmlBody = templateEngine.process(templateName, thymeleafContext);
-        sendHtmlEmail(to, subject, htmlBody);
-    }
 
     @Override
     public void sendAccountActivationEmail(String to, String name, String uri, String lang) {
@@ -72,7 +29,7 @@ public class EmailServiceImpl implements EmailService {
                 "url", uri);
         String subject = mailMessageSource.getMessage("accountConfirm.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "accountConfirm", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "accountConfirm", templateModel, lang);
     }
 
 
@@ -85,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
                 "ip", ip);
         String subject = mailMessageSource.getMessage("loginBlock.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "loginBlock", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "loginBlock", templateModel, lang);
     }
 
     @Override
@@ -96,7 +53,7 @@ public class EmailServiceImpl implements EmailService {
                 "status", status);
         String subject = mailMessageSource.getMessage("accountBlockChange.subjectBlock", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
     }
 
     @Override
@@ -107,7 +64,7 @@ public class EmailServiceImpl implements EmailService {
                 "status", status);
         String subject = mailMessageSource.getMessage("accountBlockChange.subjectUnblock", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
     }
 
     @Override
@@ -116,7 +73,7 @@ public class EmailServiceImpl implements EmailService {
                 "name", name, "url", webUrl);
         String subject = mailMessageSource.getMessage("accountActivated.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "accountActivated", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "accountActivated", templateModel, lang);
     }
 
     @Override
@@ -126,7 +83,7 @@ public class EmailServiceImpl implements EmailService {
                 "url", uri);
         String subject = mailMessageSource.getMessage("emailChange.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "emailChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "emailChange", templateModel, lang);
     }
 
     @Override
@@ -136,7 +93,7 @@ public class EmailServiceImpl implements EmailService {
                 "url", uri);
         String subject = mailMessageSource.getMessage("passwordChange.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "passwordChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "passwordChange", templateModel, lang);
     }
 
     @Override
@@ -149,7 +106,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectGain", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -162,7 +119,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectLost", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -175,7 +132,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectGain", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -188,7 +145,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectLost", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -201,7 +158,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectGain", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -214,7 +171,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectLost", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -223,7 +180,7 @@ public class EmailServiceImpl implements EmailService {
                 "name", name);
         String subject = mailMessageSource.getMessage("accountDelete.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "accountDelete", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "accountDelete", templateModel, lang);
     }
 
     @Override
@@ -233,7 +190,7 @@ public class EmailServiceImpl implements EmailService {
                 "ip", ip);
         String subject = mailMessageSource.getMessage("adminLogin.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "adminLogin", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "adminLogin", templateModel, lang);
     }
 
     @Override
@@ -243,6 +200,6 @@ public class EmailServiceImpl implements EmailService {
                 "otp", otp);
         String subject = mailMessageSource.getMessage("OTP.subject", null, Locale.of(lang));
 
-        sendHtmlEmail(to, subject, "OTP", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "OTP", templateModel, lang);
     }
 }
