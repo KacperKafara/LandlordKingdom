@@ -43,19 +43,19 @@ public class AuthController {
     private final HttpServletRequest servletRequest;
     private final JwtService jwtService;
 
-    @Value("${oauth2.authUrl}")
+    @Value("${oauth2.auth.url}")
     private String oAuth2Url;
 
-    @Value("${oauth2.client_id}")
+    @Value("${oauth2.client.id}")
     private String oAuthClientId;
 
-    @Value("${oauth2.client_secret}")
+    @Value("${oauth2.client.secret}")
     private String oAuthClientSecret;
 
-    @Value("${oauth2.redirect_uri}")
+    @Value("${oauth2.redirect.url}")
     private String oAuthRedirectUri;
 
-    @Value("${oauth2.token_uri}")
+    @Value("${oauth2.token.url}")
     private String oAuthTokenUri;
 
     @PostMapping("/signup")

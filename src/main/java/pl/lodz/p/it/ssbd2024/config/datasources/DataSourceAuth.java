@@ -19,13 +19,13 @@ public class DataSourceAuth {
 
     private final JpaVendorAdapter jpaVendorAdapter;
 
-    @Value("${driver_classname}")
+    @Value("${db.driverClassName}")
     private String driverClassName;
 
-    @Value("${url}")
+    @Value("${db.url}")
     private String url;
 
-    @Value("${default_transaction_isolation}")
+    @Value("${db.defaultTransactionIsolation}")
     private int transactionIsolation;
 
     @Value("${db.auth.username}")

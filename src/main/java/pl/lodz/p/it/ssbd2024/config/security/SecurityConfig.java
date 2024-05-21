@@ -36,7 +36,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     private PublicKey publicJwtKey;
-    @Value("${jwt.public_key_file_path}")
+    @Value("${jwt.publicKeyFilePath}")
     private String publicJwtKeyFilePath;
 
     @PostConstruct

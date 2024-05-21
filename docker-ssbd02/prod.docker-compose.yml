@@ -21,6 +21,8 @@ services:
       dockerfile: DockerfileTomcat
     container_name: ssbd02-tomcat
     restart: always
+    environment:
+      - ACTIVE_PROFILE=prod
     ports:
       - "8080:8080"
     networks:
