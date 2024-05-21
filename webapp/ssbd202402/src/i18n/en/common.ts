@@ -253,7 +253,15 @@ const roles = {
   [key in Role]: string;
 };
 
+const homePage = {
+  manageProperties: "Manage your properties with ease",
+  signIn: "Sign in",
+  signUp: "Create account",
+  or: "or",
+};
+
 export default {
+  homePage,
   common,
   roles,
   registerSuccessPage,
@@ -278,4 +286,4 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Confirm",
   cancel: "Cancel",
-};
+} as const;

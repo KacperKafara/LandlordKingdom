@@ -154,9 +154,7 @@ const UserListPage: FC = () => {
                           )}
                           <DropdownMenuSeparator />
                           <DropdownMenuItem
-                            onClick={() =>
-                              navigate(`/admin/users/user/${user.id}`)
-                            }
+                            onClick={() => navigate(`/admin/users/${user.id}`)}
                           >
                             {t("userListPage.viewDetails")}
                           </DropdownMenuItem>

@@ -260,7 +260,15 @@ const roles = {
   [key in Role]: string;
 };
 
+const homePage = {
+  manageProperties: "Zarządzaj swoimi nieruchomościami z łatwością",
+  signIn: "Zaloguj się",
+  signUp: "Zarejestruj się",
+  or: "lub",
+};
+
 export default {
+  homePage,
   common,
   roles,
   registerSuccessPage,
