@@ -1,10 +1,9 @@
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink, Navigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -23,6 +22,8 @@ import { useTenantRole } from "@/data/roles/useTenantRole";
 import { useOwnerRole } from "@/data/roles/useOwnerRole";
 import { useAdminRole } from "@/data/roles/useAdminRole";
 import UpdateUserDataDialog from "./updateUserDataDialog";
+import RefreshQueryButton from "@/components/RefreshQueryButton";
+import DataField from "@/pages/Me/DataField";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
@@ -46,8 +47,8 @@ const UserDetailsPage: FC = () => {
   };
 
   return (
-    <>
-      <NavLink to={`/admin/users`}>{t("userDetailsPage.goBack")}</NavLink>
+    <div className="flex flex-col  items-center">
+      {/* <NavLink to={`/admin/users`}>{t("userDetailsPage.goBack")}</NavLink> */}
       {openUpdateUserDataDialog && id && data && (
         <UpdateUserDataDialog
           id={id}
@@ -62,85 +63,98 @@ const UserDetailsPage: FC = () => {
         />
       )}
       {data && (
-        <Card>
-          <div className="flex justify-between items-start">
-            <div>
-              <div className="flex">
-                <CardHeader>
-                  <CardTitle>
-                    {data.data.firstName} {data.data.lastName}
-                  </CardTitle>
-                  <CardDescription>{data.data.email}</CardDescription>
-                </CardHeader>
-              </div>
-              <CardContent>
-                <p>
-                  {t("userDetailsPage.login")}: {data.data.login}
-                </p>
-                <p>
-                  {t("userDetailsPage.blocked")}:{" "}
-                  {data.data.blocked ? t("common.yes") : t("common.no")}
-                </p>
-                <p>
-                  {t("userDetailsPage.verified")}:{" "}
-                  {data.data.verified ? t("common.yes") : t("common.no")}
-                </p>
-                <p>
-                  {t("userDetailsPage.lastSuccessfulLogin")}:{" "}
-                  {data.data.lastSuccessfulLogin}
-                </p>
-                <p>
-                  {t("userDetailsPage.lastFailedLogin")}:{" "}
-                  {data.data.lastFailedLogin}
-                </p>
-                <p>
-                  {t("userDetailsPage.language")}: {data.data.language}
-                </p>
-              </CardContent>
-            </div>
-            <div className="ml-auto">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost">...</Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>
-                    {t("userDetailsPage.actions")}
-                  </DropdownMenuLabel>
-                  {data.data.blocked ? (
-                    <DropdownMenuItem
-                      onClick={async () => {
-                        await unblockUser(data.data.id);
-                      }}
-                    >
-                      {t("block.unblockUserAction")}
-                    </DropdownMenuItem>
-                  ) : (
-                    <DropdownMenuItem
-                      onClick={async () => {
-                        await blockUser(data.data.id);
-                      }}
-                    >
-                      {t("block.blockUserAction")}
-                    </DropdownMenuItem>
-                  )}
+        <Card className="relative mt-3 w-4/5 ">
+          <div className="absolute top-0 right-0 flex">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">...</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuLabel>
+                  {t("userDetailsPage.actions")}
+                </DropdownMenuLabel>
+                {data.data.blocked ? (
                   <DropdownMenuItem
-                    onClick={() => handleUpdateUserDataDialogOpen()}
+                    onClick={async () => {
+                      await unblockUser(data.data.id);
+                    }}
                   >
-                    {t("updateDataForm.updateUserData")}
+                    {t("block.unblockUserAction")}
                   </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                ) : (
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      await blockUser(data.data.id);
+                    }}
+                  >
+                    {t("block.blockUserAction")}
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  onClick={() => handleUpdateUserDataDialogOpen()}
+                >
+                  {t("updateDataForm.updateUserData")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <RefreshQueryButton queryKeys={["meData"]} />
+          </div>
+          <div>
+            <CardHeader className=" items-center">
+              <CardTitle>{t("mePage.basicInformation")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex justify-center">
+                <div className="grid grid-cols-2 grid- w-2/3 gap-2">
+                  <DataField
+                    label={t("userDetailsPage.firstName")}
+                    value={data?.data.firstName ?? "-"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.lastName")}
+                    value={data?.data.lastName ?? "-"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.email")}
+                    value={data?.data.email ?? "-"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.login")}
+                    value={data?.data.login ?? "-"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.blocked")}
+                    value={data?.data.blocked ? "true" : "false"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.verified")}
+                    value={data?.data.verified ? "true" : "false"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.lastSuccessfulLogin")}
+                    value={data?.data.lastSuccessfulLogin ?? "-"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.lastFailedLogin")}
+                    value={data?.data.lastFailedLogin ?? "-"}
+                  />
+                  <DataField
+                    label={t("userDetailsPage.language")}
+                    value={data?.data.language ?? "-"}
+                  />
+
+                </div>
+              </div>
+            </CardContent>
           </div>
         </Card>
       )}
-      <Card className="mt-3">
-        <CardHeader>
+      <Card className="mt-3 w-4/5">
+        <CardHeader className="items-center">
           <CardTitle>Roles</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-center">
             {data?.data.roles.includes("TENANT") ? (
               <Button onClick={() => removeTenantRole(data?.data.id || "")}>
                 Remove Tenant Role
@@ -171,7 +185,9 @@ const UserDetailsPage: FC = () => {
           </div>
         </CardContent>
       </Card>
-    </>
+
+
+    </div>
   );
 };
 

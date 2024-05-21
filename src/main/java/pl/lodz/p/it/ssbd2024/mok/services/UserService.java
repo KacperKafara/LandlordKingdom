@@ -31,6 +31,8 @@ public interface UserService {
 
     User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
 
+    void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException;
+
     User getUserByLogin(String login) throws NotFoundException;
 
     User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;

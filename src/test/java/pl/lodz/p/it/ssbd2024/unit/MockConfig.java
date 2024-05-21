@@ -9,8 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import org.thymeleaf.templateresolver.ITemplateResolver;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.*;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
-import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.Encoders;
@@ -99,4 +99,23 @@ public class MockConfig {
         return Mockito.mock(SignVerifier.class);
     }
 
+    @Bean
+    AuthUserRepository authUserRepository() {
+        return Mockito.mock(AuthUserRepository.class);
+    }
+
+    @Bean
+    AuthTenantRepository authTenantRepository() {
+        return Mockito.mock(AuthTenantRepository.class);
+    }
+
+    @Bean
+    AuthOwnerRepository authOwnerRepository() {
+        return Mockito.mock(AuthOwnerRepository.class);
+    }
+
+    @Bean
+    AuthAdministratorRepository authAdministratorRepository() {
+        return Mockito.mock(AuthAdministratorRepository.class);
+    }
 }

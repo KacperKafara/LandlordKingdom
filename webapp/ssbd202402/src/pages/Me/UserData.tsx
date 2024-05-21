@@ -53,7 +53,7 @@ const UserData: FC = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleUserSubmit} className="flex flex-col gap-3 w-2/4">
+      <form onSubmit={handleUserSubmit} className="flex flex-col gap-3 w-3/4">
         <FormField
           control={form.control}
           name="firstName"
@@ -106,7 +106,7 @@ const UserData: FC = () => {
             </FormItem>
           )}
         />
-        <Button className="mt-5 self-end" type="submit">
+        <Button className="mt-5" type="submit">
           Update
         </Button>
       </form>

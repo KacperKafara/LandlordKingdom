@@ -26,7 +26,6 @@ const loginPage = {
 };
 
 const userDetailsPage = {
-  goBack: "<-- Wróć placeholder",
   firstName: "First name",
   lastName: "Last name",
   login: "Login",
@@ -230,6 +229,7 @@ const mePage = {
   updateData: "Update your data",
   changeEmail: "Change your email",
   changePassword: "Change your password",
+  changeEmailDescription: "Click here to send email with link to change email.",
 };
 
 const registerSuccessPage = {
@@ -250,8 +250,8 @@ const roles = {
   tenant: "Tenant",
   owner: "Owner",
 } satisfies {
-  [key in Role]: string;
-};
+    [key in Role]: string;
+  };
 
 const homePage = {
   manageProperties: "Manage your properties with ease",
