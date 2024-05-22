@@ -49,10 +49,10 @@ public class AuthenticationServiceTest {
     @Autowired
     private EmailService emailService;
 
-    @Value("${login_max_attempts}")
+    @Value("${login.maxAttempts}")
     private int maxLoginAttempts;
 
-    @Value("${login_time_out}")
+    @Value("${login.timeOut}")
     private int loginTimeOut;
 
     String login;
