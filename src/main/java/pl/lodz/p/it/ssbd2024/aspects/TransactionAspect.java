@@ -86,6 +86,10 @@ public class TransactionAspect {
     }
 
     String parseReturnValue(Object args) {
+        if (args == null) {
+            return null;
+        }
+
         return switch (args) {
             case AbstractEntity entity -> entity.getClass().getName() + entity;
             case List<?> entities -> {
