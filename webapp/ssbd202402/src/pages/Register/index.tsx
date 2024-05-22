@@ -22,6 +22,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ToastAction } from "@radix-ui/react-toast";
 import { AxiosError } from "axios";
 import LanguageSelector from "@/components/LanguageSelector";
+import LoadingButton from "@/components/LoadingButton";
 
 const getRegistrationSchema = (t: TFunction) =>
   z
@@ -169,7 +170,7 @@ const RegisterPage: FC = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  const { mutateAsync: registerAsync } = useMutation({
+  const { mutateAsync: registerAsync, isPending } = useMutation({
     mutationFn: async (data: RegistrationRequest) => {
       const response = await api.post("/auth/signup", data);
       return response.data;
@@ -231,20 +232,20 @@ const RegisterPage: FC = () => {
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 bg-white rounded-md border-black p-7 w-6/12 flex flex-col shadow-2xl relative"
+          className="border-1 relative flex w-6/12 flex-col rounded-md border-black bg-white p-7 shadow-2xl"
         >
           <LanguageSelector />
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
           </h1>
-          <h2 className="self-center text-2xl pb-7 pt-3">
+          <h2 className="self-center pb-7 pt-3 text-2xl">
             {t("registerPage.registerHeader")}
           </h2>
-          <div className="grid grid-cols-2 gap-3 items-stretch">
+          <div className="grid grid-cols-2 items-stretch gap-3">
             <div className="grid grid-rows-3 gap-2">
               <FormField
                 control={form.control}
@@ -336,9 +337,12 @@ const RegisterPage: FC = () => {
               />
             </div>
           </div>
-          <Button type="submit" className="mt-5 p-2 w-5/12 self-center">
-            {t("registerPage.registerButton")}
-          </Button>
+          <LoadingButton
+            type="submit"
+            className="mt-5 w-5/12 self-center p-2"
+            isLoading={isPending}
+            text={t("registerPage.registerButton")}
+          />
           <Button variant="link" asChild className="w-fit self-center">
             <NavLink to={"/login"}>{t("loginPage.loginButton")}</NavLink>
           </Button>

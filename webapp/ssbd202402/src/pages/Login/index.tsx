@@ -22,6 +22,7 @@ import CodeInput from "@/pages/Login/CodeInput";
 import { Loader2 } from "lucide-react";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
 import LanguageSelector from "@/components/LanguageSelector";
+import LoadingButton from "@/components/LoadingButton";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -100,7 +101,7 @@ const Login2FaPage: FC = () => {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       {codeInputOpen ? (
         <CodeInput
           login={login || ""}
@@ -114,7 +115,7 @@ const Login2FaPage: FC = () => {
         <Form {...form}>
           <form
             onSubmit={onSubmit}
-            className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl relative"
+            className="border-1 relative flex w-1/4 flex-col rounded-md border-black bg-white p-7 shadow-2xl"
           >
             <div className="flex justify-center">
               <h1 className="w-fit text-3xl font-bold">
@@ -122,7 +123,7 @@ const Login2FaPage: FC = () => {
               </h1>
               <LanguageSelector />
             </div>
-            <h2 className="self-center text-2xl pb-7 pt-3">
+            <h2 className="self-center pb-7 pt-3 text-2xl">
               {t("loginPage.loginHeader")}
             </h2>
             <FormField
@@ -157,15 +158,16 @@ const Login2FaPage: FC = () => {
             />
             <NavLink
               to={"/reset-password-form"}
-              className="text-sm text-slate-600 self-end pb-2"
+              className="self-end pb-2 text-sm text-slate-600"
             >
               {t("loginPage.forgotPassword")}
             </NavLink>
             <div className="flex flex-col gap-3">
-              <Button type="submit" disabled={isPending}>
-                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                {t("loginPage.loginButton")}
-              </Button>
+              <LoadingButton
+                type="submit"
+                isLoading={isPending}
+                text={t("loginPage.loginButton")}
+              />
               <GoogleLoginButton />
               <Button variant="link" asChild className="w-fit self-center">
                 <NavLink to={"/register"}>{t("loginPage.register")}</NavLink>

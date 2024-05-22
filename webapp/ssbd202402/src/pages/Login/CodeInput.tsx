@@ -22,6 +22,7 @@ import { TFunction } from "i18next";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useVerifyCode } from "@/data/useAuthenticate.ts";
+import LoadingButton from "@/components/LoadingButton";
 
 const role_mapping: { [key: string]: string } = {
   ADMINISTRATOR: "admin",
@@ -63,7 +64,7 @@ const CodeInput: FC<CodeInputProps> = ({
     },
   });
   const navigate = useNavigate();
-  const { verifyCode } = useVerifyCode();
+  const { verifyCode, isPending } = useVerifyCode();
 
   const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
     const result = await verifyCode({ login, token: data.pin });
@@ -81,7 +82,7 @@ const CodeInput: FC<CodeInputProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="border-1 bg-white rounded-md border-black p-7 pb-1 w-fit flex flex-col shadow-2xl"
+          className="border-1 flex w-fit flex-col rounded-md border-black bg-white p-7 pb-1 shadow-2xl"
         >
           <FormField
             control={form.control}
@@ -110,9 +111,12 @@ const CodeInput: FC<CodeInputProps> = ({
               </FormItem>
             )}
           />
-          <Button className="mt-4" type="submit">
-            {t("loginPage.submit")}
-          </Button>
+          <LoadingButton
+            className="mt-4"
+            type="submit"
+            isLoading={isPending}
+            text={t("loginPage.submit")}
+          />
           <Button
             variant="link"
             className="w-fit self-center"
