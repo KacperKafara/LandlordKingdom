@@ -1,0 +1,69 @@
+app:
+  url: http://localhost:3000
+
+otp:
+  secret: 26Etz0ZMoBmiX7F9lHvb
+
+jws:
+  secret: 6f97ca1e5fdf4a418bf0ad0badd33dd716f63e7f593a4b7f9e4b4304316fd09a
+
+oauth2:
+  client:
+    id: 257952787210-936ggdjbdpketkkrfvrbf8ii3buvdu5s.apps.googleusercontent.com
+    secret: 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
+  auth:
+    url: https://accounts.google.com/o/oauth2/v2/auth
+  token:
+    url: https://oauth2.googleapis.com/token
+  redirect:
+    url: http://localhost:3000/auth/google/callback
+
+jwt:
+  privateKeyFilePath: /etc/ssbd02/privateJwt-key.pem
+  publicKeyFilePath: classpath:keys/publicJwt-key.pem
+  expiration: 1
+
+refreshToken:
+  privateKeyFilePath: /etc/ssbd02/privateRefresh-key.pem
+  publicKeyFilePath: classpath:keys/publicRefresh-key.pem
+  expiration: 24
+
+db:
+  driverClassName: org.postgresql.Driver
+  url: jdbc:postgresql://db:5432/ssbd02
+  defaultTransactionIsolation: 2
+  admin:
+    username: ssbd02admin
+    password: adminP@ssw0rd
+  auth:
+    username: ssbd02auth
+    password: authP@ssw0rd
+  mok:
+    username: ssbd02mok
+    password: mokP@ssw0rd
+  mol:
+    username: ssbd02mol
+    password: molP@ssw0rd
+
+login:
+  maxAttempts: 3
+  timeOut: 300
+
+mail:
+  host: smtp4dev
+  port: 25
+  username: user
+  password: user
+  smtp:
+    auth: false
+    starttls:
+      enable: false
+  transfer:
+    protocol: smtp
+
+scheduler:
+  threadPool:
+    size: 5
+
+account:
+  removeUnverifiedAccountAfterHours: 24

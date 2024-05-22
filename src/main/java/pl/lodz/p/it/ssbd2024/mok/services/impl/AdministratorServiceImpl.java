@@ -6,6 +6,7 @@ import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
@@ -29,6 +30,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final UserRepository userRepository;
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<Administrator> getAllFiltered(Specification<Administrator> specification, Pageable pageable) {
         return administratorRepository.findAll(specification, pageable);
@@ -36,6 +38,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Administrator removeAdministratorAccessLevel(UUID id) throws NotFoundException {
         Administrator administrator = administratorRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
@@ -48,6 +51,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Administrator addAdministratorAccessLevel(UUID id) throws NotFoundException {
         Optional<Administrator> administratorOptional = administratorRepository.findByUserId(id);
 

@@ -89,6 +89,7 @@ public class MeController {
     }
 
     @PostMapping("/change-password-with-token")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Void> changePasswordWithToken(@RequestBody @Valid ChangePasswordRequest request) {
         try {
             userService.changePasswordWithToken(request.password(), request.token());
@@ -101,7 +102,7 @@ public class MeController {
     }
 
     @PostMapping("/email-update-request")
-    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'OWNER', 'TENANT')")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Void> sendUpdateEmail() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
@@ -125,5 +126,16 @@ public class MeController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("/verify")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> verify(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
+        try {
+            userService.verify(request.token());
+            return ResponseEntity.ok().build();
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 }

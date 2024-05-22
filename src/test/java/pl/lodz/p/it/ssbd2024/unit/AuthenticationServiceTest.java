@@ -11,6 +11,10 @@ import pl.lodz.p.it.ssbd2024.exceptions.SignInBlockedException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserBlockedException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserNotVerifiedException;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthAdministratorRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthOwnerRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
@@ -35,24 +39,24 @@ public class AuthenticationServiceTest {
     private JwtService jwtService;
 
     @Autowired
-    private UserRepository userRepository;
+    private AuthUserRepository userRepository;
 
     @Autowired
-    private TenantRepository tenantRepository;
+    private AuthTenantRepository tenantRepository;
 
     @Autowired
-    private OwnerRepository ownerRepository;
+    private AuthOwnerRepository ownerRepository;
 
     @Autowired
-    private AdministratorRepository administratorRepository;
+    private AuthAdministratorRepository administratorRepository;
 
     @Autowired
     private EmailService emailService;
 
-    @Value("${login_max_attempts}")
+    @Value("${login.maxAttempts}")
     private int maxLoginAttempts;
 
-    @Value("${login_time_out}")
+    @Value("${login.timeOut}")
     private int loginTimeOut;
 
     String login;

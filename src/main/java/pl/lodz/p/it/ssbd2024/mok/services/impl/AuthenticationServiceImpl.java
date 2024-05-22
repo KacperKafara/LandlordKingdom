@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -13,10 +14,10 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VerificationToken;
-import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthAdministratorRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthOwnerRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
@@ -37,24 +38,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
 
-    private final UserRepository userRepository;
-    private final TenantRepository tenantRepository;
-    private final OwnerRepository ownerRepository;
-    private final AdministratorRepository administratorRepository;
+    private final AuthUserRepository userRepository;
+    private final AuthTenantRepository tenantRepository;
+    private final AuthOwnerRepository ownerRepository;
+    private final AuthAdministratorRepository administratorRepository;
 
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
     private final VerificationTokenService verificationTokenService;
 
-    @Value("${login_max_attempts:3}")
+    @Value("${login.maxAttempts}")
     private int maxLoginAttempts;
 
-    @Value("${login_time_out:86400}")
+    @Value("${login.timeOut}")
     private int loginTimeOut;
 
-    @Override
     @Transactional(propagation = Propagation.MANDATORY)
+    @PreAuthorize("permitAll()")
     public List<String> getUserRoles(User user) {
         List<String> roles = new ArrayList<>();
 
@@ -66,20 +67,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    @Transactional(rollbackFor = {
-            VerificationTokenUsedException.class,
-            VerificationTokenExpiredException.class,
-            NotFoundException.class
-    })
-    public void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException {
-        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
-        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setVerified(true);
-        userRepository.saveAndFlush(user);
-        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
-    }
-
-    @Override
+    @PreAuthorize("permitAll()")
     public void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
@@ -110,6 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public Map<String, String> verifyOTP(String token, String login, String ip) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException, LoginNotMatchToOTPException {
         VerificationToken verificationToken;
 
@@ -147,6 +136,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Transactional(propagation = Propagation.MANDATORY)
+    @PreAuthorize("permitAll()")
     protected void handleFailedLogin(User user, String ip) {
         user.setLastFailedLogin(LocalDateTime.now());
         user.setLastFailedLoginIp(ip);
@@ -160,6 +150,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public Map<String, String> refresh(String refreshToken) throws NotFoundException, RefreshTokenExpiredException {
         Jwt token = jwtService.decodeRefreshToken(refreshToken);
 

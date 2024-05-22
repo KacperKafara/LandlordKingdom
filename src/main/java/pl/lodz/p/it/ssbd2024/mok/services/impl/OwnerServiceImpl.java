@@ -6,6 +6,7 @@ import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
@@ -29,12 +30,14 @@ public class OwnerServiceImpl implements OwnerService {
     private final UserRepository userRepository;
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<Owner> getAllFiltered(Specification<Owner> specification, Pageable pageable) {
         return ownerRepository.findAll(specification, pageable);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Owner removeOwnerAccessLevel(UUID id) throws NotFoundException {
         Owner owner = ownerRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
@@ -47,6 +50,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Owner addOwnerAccessLevel(UUID id) throws NotFoundException {
         Optional<Owner> ownerOptional = ownerRepository.findByUserId(id);
 

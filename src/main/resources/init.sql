@@ -1,10 +1,11 @@
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.users TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.personal_data TO ssbd02mok;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.google_auth TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrators TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.tenants TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.owners TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_levels TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.google_auth TO ssbd02mok;
+GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02mok;
 
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.locals TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.addresses TO ssbd02mol;
@@ -15,13 +16,19 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.rents TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.role_requests TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.variable_fees TO ssbd02mol;
 
-GRANT SELECT ON TABLE public.users TO ssbd02auth;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO ssbd02auth;
+GRANT SELECT ON TABLE public.personal_data TO ssbd02auth;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.google_auth TO ssbd02auth;
+GRANT SELECT ON TABLE public.administrators TO ssbd02auth;
+GRANT SELECT ON TABLE public.tenants TO ssbd02auth;
+GRANT SELECT ON TABLE public.owners TO ssbd02auth;
+GRANT SELECT ON TABLE public.access_levels TO ssbd02auth;
+GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02auth;
 
 GRANT SELECT ON TABLE public.tenants TO ssbd02mol;
 GRANT SELECT ON TABLE public.owners TO ssbd02mol;
 GRANT SELECT ON TABLE public.access_levels TO ssbd02mol;
 
-GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02mok;
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at) VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'admin', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'en', NOW());
 INSERT INTO public.personal_data (user_id, email, first_name, last_name) VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'kacperkafara18@gmail.com', 'Admin', 'Admin');

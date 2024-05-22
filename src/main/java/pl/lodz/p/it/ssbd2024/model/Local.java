@@ -29,7 +29,7 @@ public class Local extends AbstractEntity {
     @Column(name = "size", nullable = false)
     private int size;
 
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.ORDINAL)
     @Setter
     @Column(name = "state", nullable = false)
     private LocalState state = LocalState.UNAPPROVED;

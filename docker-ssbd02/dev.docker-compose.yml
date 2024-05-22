@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:16.2
@@ -15,23 +13,23 @@ services:
     volumes:
       - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
 
-
   tomcat:
     build:
       context: ..
-      dockerfile: ./DockerfileTomcat
+      dockerfile: DockerfileTomcat
     container_name: ssbd02-tomcat
     restart: always
     ports:
       - "8080:8080"
     networks:
       - my_network
+    environment:
+      - ACTIVE_PROFILE=dev
     depends_on:
       - db
     volumes:
       - ./privateJwt-key.pem:/etc/ssbd02/privateJwt-key.pem
       - ./privateRefresh-key.pem:/etc/ssbd02/privateRefresh-key.pem
-
 
   smtp4dev:
     image: rnwood/smtp4dev
@@ -42,7 +40,6 @@ services:
       - "25:25"
     networks:
       - my_network
-
 
 networks:
   my_network:

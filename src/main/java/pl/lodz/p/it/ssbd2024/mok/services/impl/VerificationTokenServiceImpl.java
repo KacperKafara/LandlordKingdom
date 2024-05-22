@@ -1,12 +1,9 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import com.eatthepath.otp.HmacOneTimePasswordGenerator;
-import com.eatthepath.otp.TimeBasedOneTimePasswordGenerator;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Scope;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +14,7 @@ import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OTPTokenRepository;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.OTPTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 
@@ -26,7 +23,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -48,6 +44,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
 
     @Override
+    @PreAuthorize("permitAll()")
     public String generateAccountVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         accountTokenRepository.deleteByUserId(user.getId());
@@ -57,6 +54,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validateAccountVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         VerificationToken verificationToken = accountTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
@@ -68,6 +66,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public String generateEmailVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         emailTokenRepository.deleteEmailVerificationTokenByUserId(user.getId());
@@ -77,6 +76,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validateEmailVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         EmailVerificationToken verificationToken = emailTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
@@ -88,6 +88,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public String generatePasswordVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         passwordTokenRepository.deleteByUserId(user.getId());
@@ -97,6 +98,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         PasswordVerificationToken verificationToken = passwordTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
@@ -108,6 +110,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public String generateOTPToken(User user) throws InvalidKeyException {
         byte[] bytes = otpSecret.getBytes();
         SecretKey key = new SecretKeySpec(bytes, 0, bytes.length, "HmacSHA1");
@@ -119,6 +122,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(propagation = Propagation.MANDATORY)
     public VerificationToken validateOTPToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         OTPToken verificationToken = otpTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
@@ -129,6 +133,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         return verificationToken;
     }
 
+    @PreAuthorize("permitAll()")
     private String generateSafeToken() throws TokenGenerationException {
         String chars = "0123456789abcdefghijklmnopqrstuvwxyz-_ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         try {

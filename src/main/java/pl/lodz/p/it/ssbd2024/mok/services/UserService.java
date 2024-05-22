@@ -23,15 +23,13 @@ public interface UserService {
 
     User getUserById(UUID id) throws NotFoundException;
 
-    User getUserByEmail(String email) throws NotFoundException;
-
     User getUserByGoogleId(String googleId) throws NotFoundException;
 
     User createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
 
     User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
 
-    User getUserByLogin(String login) throws NotFoundException;
+    void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException;
 
     User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
@@ -48,10 +46,6 @@ public interface UserService {
     void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException;
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException;
-
-    void deleteNonVerifiedUsers();
-
-    void sendEmailVerifyAccount();
 
     List<String> getUserRoles(UUID id);
 }

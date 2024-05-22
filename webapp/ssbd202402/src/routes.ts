@@ -23,11 +23,12 @@ const VerifyAccountPage = loadable(() => import("./pages/VerifyAccount"));
 const UpdateEmailPage = loadable(() => import("./pages/UpdateEmail"));
 const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
+const HomePage = loadable(() => import("./pages/Home"));
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
-  { path: "users/user/:id", Component: UserDetailsPage },
+  { path: "users/:id", Component: UserDetailsPage },
 ];
 const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [
@@ -36,6 +37,7 @@ const TenantRoutes: RouteObject[] = [
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 
 export const UnprotectedRoutes: RouteObject[] = [
+  { index: true, Component: HomePage },
   { path: "/login", Component: LoginPage },
   { path: "/register", Component: RegisterPage },
   { path: "/register-success", Component: RegistrationSuccessPage },
