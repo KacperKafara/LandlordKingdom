@@ -7,4 +7,5 @@ public class ExceptionMessages {
     public static final String JDBC_ERROR = "Problem occurred while trying to connect to the database";
     public static final String INVALID_TOKEN = "Invalid token";
     public static final String UNCAUGHT = "Internal server error";
+    public static final String ACCESS_DENIED = "Access denied";
 }

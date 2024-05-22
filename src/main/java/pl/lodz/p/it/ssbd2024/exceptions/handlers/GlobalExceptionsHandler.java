@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.jwt.JwtValidationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.exceptions.TemplateInputException;
 import pl.lodz.p.it.ssbd2024.messages.ExceptionMessages;
-
 
 @ControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionsHandler {
@@ -52,8 +52,13 @@ public class GlobalExceptionsHandler {
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(ExceptionMessages.MEDIA_NOT_SUPPORTED);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    ResponseEntity<String> handleAccessDeniedException(AccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ExceptionMessages.ACCESS_DENIED);
+    }
+
     @ExceptionHandler(Exception.class)
-    ResponseEntity<?> handleException(Exception e) {
+    ResponseEntity<String> handleException(Exception e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ExceptionMessages.UNCAUGHT);
     }
 }
