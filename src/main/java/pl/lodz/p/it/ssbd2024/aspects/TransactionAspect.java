@@ -39,7 +39,13 @@ public class TransactionAspect {
         } else {
             log.info("Method {} called in transaction {}", callerMethod, txId);
         }
-        Object obj = jp.proceed();
+        Object obj;
+        try {
+            obj = jp.proceed();
+        } catch (Throwable e) {
+            log.error("Method {} failed in transaction {}", callerMethod, txId, e);
+            throw e;
+        }
         String returnValue = parseReturnValue(obj);
         if (returnValue != null) {
             log.info("Method {} returned in transaction {} with: {}", callerMethod, txId, returnValue);
