@@ -7,7 +7,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import i18next, { TFunction } from "i18next";
@@ -16,13 +15,10 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
-import { api } from "@/data/api";
 import { Toaster } from "@/components/ui/toaster";
-import { ToastAction } from "@radix-ui/react-toast";
-import { AxiosError } from "axios";
 import LanguageSelector from "@/components/LanguageSelector";
 import LoadingButton from "@/components/LoadingButton";
+import { useRegisterUser } from "@/data/useRegisterUser";
 
 const getRegistrationSchema = (t: TFunction) =>
   z
@@ -156,26 +152,10 @@ const getRegistrationSchema = (t: TFunction) =>
 
 type RegistrationSchema = z.infer<ReturnType<typeof getRegistrationSchema>>;
 
-interface RegistrationRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  login: string;
-  password: string;
-  language: string;
-}
-
 const RegisterPage: FC = () => {
   const { t } = useTranslation();
-  const { toast } = useToast();
   const navigate = useNavigate();
-
-  const { mutateAsync: registerAsync, isPending } = useMutation({
-    mutationFn: async (data: RegistrationRequest) => {
-      const response = await api.post("/auth/signup", data);
-      return response.data;
-    },
-  });
+  const { registerUserAsync, isPending } = useRegisterUser();
 
   const form = useForm<RegistrationSchema>({
     resolver: zodResolver(getRegistrationSchema(t)),
@@ -190,45 +170,16 @@ const RegisterPage: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    try {
-      await registerAsync({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        login: values.login,
-        password: values.password,
-        language: i18next.language,
-      });
-      toast({
-        description: t("registerPage.registerSuccess"),
-      });
-      navigate("/register-success");
-    } catch (error) {
-      const errorResponse = error as AxiosError;
+    await registerUserAsync({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      login: values.login,
+      password: values.password,
+      language: i18next.language,
+    });
 
-      if (errorResponse.response?.status === 422) {
-        toast({
-          variant: "destructive",
-          title: t("registerPage.registerError"),
-          description: t("registerPage.registerErrorIdenticalFields"),
-          action: (
-            <ToastAction altText={t("registerPage.tryAgain")}>
-              {t("registerPage.tryAgain")}
-            </ToastAction>
-          ),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("registerPage.registerError"),
-          action: (
-            <ToastAction altText={t("registerPage.tryAgain")}>
-              {t("registerPage.tryAgain")}
-            </ToastAction>
-          ),
-        });
-      }
-    }
+    navigate("/register-success");
   });
 
   return (
