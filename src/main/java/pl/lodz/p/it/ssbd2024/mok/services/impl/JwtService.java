@@ -24,20 +24,19 @@ public class JwtService {
     private final JwtEncoder refreshTokenEncoder;
     private PublicKey refreshTokenPublicKey;
 
-    @Value("${refreshToken.public_key_file_path}")
+    @Value("${refreshToken.publicKeyFilePath}")
     private String publicRefreshTokenKeyFilePath;
-
-    @PostConstruct
-    public void readKeys() throws IOException {
-        this.refreshTokenPublicKey = KeyReader.readPublicJwtKey(publicRefreshTokenKeyFilePath);
-    }
-
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
 
     @Value("${refreshToken.expiration}")
     private long refreshTokenExpiration;
+
+    @PostConstruct
+    public void readKeys() throws IOException {
+        this.refreshTokenPublicKey = KeyReader.readPublicJwtKey(publicRefreshTokenKeyFilePath);
+    }
 
     public String generateToken(UUID id, List<String> roles) {
         Instant now = Instant.now();

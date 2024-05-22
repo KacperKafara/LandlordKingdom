@@ -47,10 +47,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final VerificationTokenService verificationTokenService;
 
-    @Value("${login_max_attempts:3}")
+    @Value("${login.maxAttempts}")
     private int maxLoginAttempts;
 
-    @Value("${login_time_out:86400}")
+    @Value("${login.timeOut}")
     private int loginTimeOut;
 
     @Override
