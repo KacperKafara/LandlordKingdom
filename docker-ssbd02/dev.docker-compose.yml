@@ -16,13 +16,15 @@ services:
   tomcat:
     build:
       context: ..
-      dockerfile: ./DockerfileTomcat
+      dockerfile: DockerfileTomcat
     container_name: ssbd02-tomcat
     restart: always
     ports:
       - "8080:8080"
     networks:
       - my_network
+    environment:
+      - ACTIVE_PROFILE=dev
     depends_on:
       - db
     volumes:

@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     @Value("${app.url}")
     private String appUrl;
 
-    @Value("${account.removeUnverifiedAccountAfterHours:24}")
+    @Value("${account.removeUnverifiedAccountAfterHours}")
     private int removeUnverifiedAccountsAfterHours;
 
 

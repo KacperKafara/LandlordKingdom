@@ -34,13 +34,13 @@ public class Encoders {
     private PrivateKey privateRefreshTokenKey;
     private PublicKey publicRefreshTokenKey;
 
-    @Value("${jwt.private_key_file_path}")
+    @Value("${jwt.privateKeyFilePath}")
     private String privateJwtKeyFilePath;
-    @Value("${refreshToken.private_key_file_path}")
+    @Value("${refreshToken.privateKeyFilePath}")
     private String privateRefreshTokenKeyFilePath;
-    @Value("${jwt.public_key_file_path}")
+    @Value("${jwt.publicKeyFilePath}")
     private String publicJwtKeyFilePath;
-    @Value("${refreshToken.public_key_file_path}")
+    @Value("${refreshToken.publicKeyFilePath}")
     private String publicRefreshTokenKeyFilePath;
 
     @PostConstruct
