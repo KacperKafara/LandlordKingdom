@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2024.aspects;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -34,15 +33,25 @@ public class TransactionAspect {
         log.info("Transaction {} started by {} in {}.{}", txId, username, callerClass, callerMethod);
         log.info("Transaction {} info: propagation={}, isolation={}, readOnly={}, timeout={}", txId, transactional.propagation(), transactional.isolation(), transactional.readOnly(), transactional.timeout());
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationImpl(txId));
-        log.info("Method {} called with args: {}", callerMethod, parsArgs(jp.getArgs()));
+        String args = parsArgs(jp.getArgs());
+        if (args != null) {
+            log.info("Method {} called in transaction {} with args: {}", callerMethod, txId, args);
+        } else {
+            log.info("Method {} called in transaction {}", callerMethod, txId);
+        }
         Object obj = jp.proceed();
-        log.info("Method {} returned with: {}", callerMethod, parseReturnValue(obj));
+        String returnValue = parseReturnValue(obj);
+        if (returnValue != null) {
+            log.info("Method {} returned in transaction {} with: {}", callerMethod, txId, returnValue);
+        } else {
+            log.info("Method {} returned in transaction {}", callerMethod, txId);
+        }
         return obj;
     }
 
     String parsArgs(Object[] args) {
         if (args == null || args.length == 0) {
-            return "<empty>";
+            return null;
         }
         StringBuilder sb = new StringBuilder();
         for (Object arg : args) {
@@ -65,14 +74,13 @@ public class TransactionAspect {
             }
         }
         if (sb.isEmpty()) {
-            return "<empty>";
+            return null;
         }
         return sb.toString();
     }
 
     String parseReturnValue(Object args) {
         return switch (args) {
-            case null -> "<void>";
             case AbstractEntity entity -> entity.getClass().getName() + entity;
             case List<?> entities -> {
                 StringBuilder sb = new StringBuilder();
