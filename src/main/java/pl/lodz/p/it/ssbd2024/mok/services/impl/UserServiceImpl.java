@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,37 +57,32 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public List<User> getAll() {
         return repository.findAll();
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<User> getAllFiltered(Specification<User> specification, Pageable pageable) {
         return repository.findAll(specification, pageable);
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public User getUserById(UUID id) throws NotFoundException {
         return repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
     }
 
     @Override
-    public User getUserByEmail(String email) throws NotFoundException {
-        return repository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-    }
-
-    @Override
+    @PreAuthorize("permitAll()")
     public User getUserByGoogleId(String googleId) throws NotFoundException {
         return repository.findByGoogleId(googleId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
     }
 
     @Override
-    public User getUserByLogin(String login) throws NotFoundException {
-        return repository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-    }
-
-    @Override
+    @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public User createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException, CreationException {
         String encodedPassword = passwordEncoder.encode(password);
@@ -95,6 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException {
         Tenant newTenant = new Tenant();
@@ -120,6 +117,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {
             VerificationTokenUsedException.class,
             VerificationTokenExpiredException.class,
@@ -134,6 +132,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
@@ -148,6 +147,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         if(user.isBlocked()){
@@ -159,6 +159,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException {
         User user = getUserById(id);
         if (!user.isBlocked()) {
@@ -170,6 +171,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
         User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
@@ -180,6 +182,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
     public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
@@ -190,6 +193,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class, UserBlockedException.class, UserNotVerifiedException.class})
     public void sendChangePasswordEmail(String email) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
@@ -209,6 +213,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("isAuthenticated()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class})
     public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException {
         User user = getUserById(id);
@@ -222,6 +227,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {VerificationTokenUsedException.class, VerificationTokenExpiredException.class, UserBlockedException.class})
     public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException {
         VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
@@ -262,6 +268,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public List<String> getUserRoles(UUID id) {
         List<String> roles = new ArrayList<>();
         administratorRepository.findByUserIdAndActive(id, true).ifPresent(administrator -> roles.add("ADMIN"));

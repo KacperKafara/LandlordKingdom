@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface AuthenticationService {
-    List<String> getUserRoles(User user);
-
     void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException;
 
     Map<String, String> refresh(String refreshToken) throws NotFoundException, RefreshTokenExpiredException;

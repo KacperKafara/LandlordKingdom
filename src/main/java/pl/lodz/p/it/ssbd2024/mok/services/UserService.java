@@ -23,8 +23,6 @@ public interface UserService {
 
     User getUserById(UUID id) throws NotFoundException;
 
-    User getUserByEmail(String email) throws NotFoundException;
-
     User getUserByGoogleId(String googleId) throws NotFoundException;
 
     User createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
@@ -32,8 +30,6 @@ public interface UserService {
     User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
 
     void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException;
-
-    User getUserByLogin(String login) throws NotFoundException;
 
     User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 

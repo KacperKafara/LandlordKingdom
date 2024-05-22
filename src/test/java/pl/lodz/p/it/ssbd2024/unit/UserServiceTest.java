@@ -238,24 +238,6 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("Get user by login - user found")
-    void getUserByLogin_UserFound_ReturnUser() throws NotFoundException {
-        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-
-        User result = userService.getUserByLogin(login);
-
-        Assertions.assertEquals(user, result);
-    }
-
-    @Test
-    @DisplayName("Get user by login - user not found")
-    void getUserByLogin_UserNotFound_ThrowNotFoundException() {
-        when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class, () -> userService.getUserByLogin(login));
-    }
-
-    @Test
     @DisplayName("Get all users")
     void getAll_ReturnListOfUsers() {
         List<User> users = new ArrayList<>();
