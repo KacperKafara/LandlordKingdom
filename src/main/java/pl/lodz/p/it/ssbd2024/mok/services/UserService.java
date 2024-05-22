@@ -47,9 +47,5 @@ public interface UserService {
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException;
 
-    void deleteNonVerifiedUsers();
-
-    void sendEmailVerifyAccount();
-
     List<String> getUserRoles(UUID id);
 }

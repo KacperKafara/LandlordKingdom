@@ -37,48 +37,41 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final TenantRepository tenantRepository;
     private final OwnerRepository ownerRepository;
     private final AdministratorRepository administratorRepository;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
-    private final AccountVerificationTokenRepository accountVerificationTokenRepository;
-    private final UserRepository userRepository;
     private final SignVerifier signVerifier;
-
 
     @Value("${app.url}")
     private String appUrl;
 
-    @Value("${account.removeUnverifiedAccountAfterHours}")
-    private int removeUnverifiedAccountsAfterHours;
-
-
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public List<User> getAll() {
-        return repository.findAll();
+        return userRepository.findAll();
     }
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<User> getAllFiltered(Specification<User> specification, Pageable pageable) {
-        return repository.findAll(specification, pageable);
+        return userRepository.findAll(specification, pageable);
     }
 
     @Override
     @PreAuthorize("permitAll()")
     public User getUserById(UUID id) throws NotFoundException {
-        return repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
     }
 
     @Override
     @PreAuthorize("permitAll()")
     public User getUserByGoogleId(String googleId) throws NotFoundException {
-        return repository.findByGoogleId(googleId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        return userRepository.findByGoogleId(googleId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
     }
 
     @Override
@@ -134,7 +127,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     public User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
-        User userToUpdate = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
         if (!signVerifier.verifySignature(userToUpdate.getId(), userToUpdate.getVersion(), tagValue)) {
             throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA);
@@ -143,18 +136,18 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
         userToUpdate.setLanguage(user.getLanguage());
-        return repository.saveAndFlush(userToUpdate);
+        return userRepository.saveAndFlush(userToUpdate);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException {
-        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         if(user.isBlocked()){
             throw new UserAlreadyBlockedException(UserExceptionMessages.ALREADY_BLOCKED);
         }
         user.setBlocked(true);
-        repository.saveAndFlush(user);
+        userRepository.saveAndFlush(user);
         emailService.sendAccountBlockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
@@ -166,7 +159,7 @@ public class UserServiceImpl implements UserService {
             throw new UserAlreadyUnblockedException(UserExceptionMessages.ALREADY_UNBLOCKED);
         }
         user.setBlocked(false);
-        repository.saveAndFlush(user);
+        userRepository.saveAndFlush(user);
         emailService.sendAccountUnblockEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
@@ -174,7 +167,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
-        User user = repository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setBlocked(false);
         String token = verificationTokenService.generateEmailVerificationToken(user);
         URI uri = URI.create(appUrl + "/update-email/" + token);
@@ -186,9 +179,9 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
     public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
-        User user = repository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setEmail(email);
-        repository.saveAndFlush(user);
+        userRepository.saveAndFlush(user);
 
     }
 
@@ -239,32 +232,6 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(password));
         userRepository.saveAndFlush(user);
-    }
-
-    @Override
-    public void deleteNonVerifiedUsers() {
-        LocalDateTime beforeTime = LocalDateTime.now().minusHours(removeUnverifiedAccountsAfterHours);
-        List<User> users = repository.getUsersByCreatedAtBeforeAndVerifiedIsFalse(beforeTime);
-        users.forEach(user -> {
-            emailService.sendAccountDeletedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
-            repository.delete(user);
-            repository.flush();
-        });
-    }
-
-    @Override
-    public void sendEmailVerifyAccount() {
-        LocalDateTime beforeTime = LocalDateTime.now().minusHours(removeUnverifiedAccountsAfterHours / 2);
-        LocalDateTime afterTime = beforeTime.plusMinutes(10);
-        List<User> users = repository.getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(beforeTime, afterTime);
-        users.forEach(user -> {
-            Optional<AccountVerificationToken> token = accountVerificationTokenRepository.findByUserId(user.getId());
-            if (token.isEmpty()) {
-                return;
-            }
-            URI uri = URI.create(appUrl + "/verify/" + token);
-            emailService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
-        });
     }
 
     @Override
