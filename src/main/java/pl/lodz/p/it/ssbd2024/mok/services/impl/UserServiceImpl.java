@@ -238,7 +238,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("permitAll()")
     public List<String> getUserRoles(UUID id) {
         List<String> roles = new ArrayList<>();
-        administratorRepository.findByUserIdAndActive(id, true).ifPresent(administrator -> roles.add("ADMIN"));
+        administratorRepository.findByUserIdAndActive(id, true).ifPresent(administrator -> roles.add("ADMINISTRATOR"));
         ownerRepository.findByUserIdAndActive(id, true).ifPresent(owner -> roles.add("OWNER"));
         tenantRepository.findByUserIdAndActive(id, true).ifPresent(tenant -> roles.add("TENANT"));
 

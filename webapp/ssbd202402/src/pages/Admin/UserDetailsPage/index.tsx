@@ -173,13 +173,13 @@ const UserDetailsPage: FC = () => {
                 Add Owner Role
               </Button>
             )}
-            {data?.data.roles.includes("ADMIN") ? (
+            {data?.data.roles.includes("ADMINISTRATOR") ? (
               <Button onClick={() => removeAdminRole(data?.data.id || "")}>
-                Remove Admin Role
+                Remove Administrator Role
               </Button>
             ) : (
               <Button onClick={() => addAdminRole(data?.data.id || "")}>
-                Add Admin Role
+                Add Administrator Role
               </Button>
             )}
           </div>
