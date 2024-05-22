@@ -17,6 +17,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
@@ -116,6 +117,20 @@ public class UserServiceImpl implements UserService {
                 throw new CreationException(UserExceptionMessages.CREATION_FAILED);
             }
         }
+    }
+
+    @Override
+    @Transactional(rollbackFor = {
+            VerificationTokenUsedException.class,
+            VerificationTokenExpiredException.class,
+            NotFoundException.class
+    })
+    public void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException {
+        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
+        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setVerified(true);
+        userRepository.saveAndFlush(user);
+        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override

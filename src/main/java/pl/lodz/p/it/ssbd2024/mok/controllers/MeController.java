@@ -126,4 +126,14 @@ public class MeController {
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
+
+    @PostMapping("/verify")
+    public ResponseEntity<Void> verify(@RequestBody @Valid VerifyUserRequest request) throws NotFoundException {
+        try {
+            userService.verify(request.token());
+            return ResponseEntity.ok().build();
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
 }

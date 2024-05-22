@@ -20,6 +20,7 @@ import java.util.Objects;
         "pl.lodz.p.it.ssbd2024.mok.services",
         "pl.lodz.p.it.ssbd2024.mol.repositories",
         "pl.lodz.p.it.ssbd2024.mok.repositories",
+        "pl.lodz.p.it.ssbd2024.mok.authRepositories"
 })
 @EnableScheduling
 @Slf4j

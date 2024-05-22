@@ -48,13 +48,13 @@ const config = {
     accentColor: "bg-blue-300",
   },
 } satisfies {
-  [key in LayoutType]: {
-    nav: string;
-    footer: string;
-    hover: string;
-    accentColor: string;
+    [key in LayoutType]: {
+      nav: string;
+      footer: string;
+      hover: string;
+      accentColor: string;
+    };
   };
-};
 
 const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { t, i18n } = useTranslation();
