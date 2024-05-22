@@ -24,7 +24,6 @@ public abstract class AbstractEntity {
     @Version
     private Long version;
 
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -51,4 +50,11 @@ public abstract class AbstractEntity {
         this.modifiedBy = getCurrentUserId();
     }
 
+    @Override
+    public final String toString() {
+        return "{" +
+                "id=" + id +
+                ", version=" + version +
+                '}';
+    }
 }

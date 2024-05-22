@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountScheduler {
-    private final UserService userService;
+    private final SchedulerService userService;
 
     @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
     public void removeExpiredAccounts() {

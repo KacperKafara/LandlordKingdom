@@ -58,7 +58,7 @@ export const useVerifyCode = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
 
-  const { mutateAsync, isSuccess } = useMutation({
+  const { mutateAsync, isSuccess, isPending } = useMutation({
     mutationFn: async (data: CodeVerificationRequest) => {
       const response = await api.post<AuthenticateResponse>(
         "/auth/verify-2fa",
@@ -74,5 +74,5 @@ export const useVerifyCode = () => {
       });
     },
   });
-  return { verifyCode: mutateAsync, isSuccess };
+  return { verifyCode: mutateAsync, isSuccess, isPending };
 };

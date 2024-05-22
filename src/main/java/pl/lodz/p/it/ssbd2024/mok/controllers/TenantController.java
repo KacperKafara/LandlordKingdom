@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,14 +17,9 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/tenants")
+@RequiredArgsConstructor
 public class TenantController {
-
     private final TenantService tenantService;
-
-    @Autowired
-    public TenantController(TenantService tenantService) {
-        this.tenantService = tenantService;
-    }
 
     @PutMapping(path = "/{id}/add-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
