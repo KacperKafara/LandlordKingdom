@@ -12,7 +12,7 @@
            last_failed_login_ip="[NULL]"
            blocked="false"
            verified="false"
-           language="en"
+           language="EN"
            version="0"
            created_at="[NOW]"/>
 
@@ -43,7 +43,7 @@
            last_failed_login_ip="[NULL]"
            blocked="false"
            verified="true"
-           language="en"
+           language="EN"
            version="0"
            created_at="[NOW]"/>
 
@@ -74,7 +74,7 @@
            last_failed_login_ip="[NULL]"
            blocked="true"
            verified="true"
-           language="en"
+           language="EN"
            version="0"
            created_at="[NOW]"/>
 
@@ -105,7 +105,7 @@
            last_failed_login_ip="[NULL]"
            blocked="false"
            verified="true"
-           language="en"
+           language="EN"
            version="0"
            created_at="[NOW]"/>
 
