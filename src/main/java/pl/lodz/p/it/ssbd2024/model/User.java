@@ -73,6 +73,12 @@ public class User extends AbstractEntity {
     @Column(name = "google_id", table = "google_auth")
     private String googleId;
 
+    @ElementCollection
+    @CollectionTable(name = "old_passwords", joinColumns = @JoinColumn(name = "user_id"),
+            indexes = @Index(name = "idx_user_oldPassword", columnList = "user_id"))
+    @Column(name = "password")
+    private List<String> oldPasswords = new ArrayList<>();
+
     public User(String firstName,
                 String lastName,
                 String email,
