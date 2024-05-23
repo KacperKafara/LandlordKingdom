@@ -195,6 +195,8 @@ const userFilter = {
 const common = {
   yes: "tak",
   no: "nie",
+  update: "Zaktualizuj",
+  confirmDialogTitle: "Czy jesteś pewny?",
 };
 
 const navLinks = {
@@ -212,6 +214,7 @@ const userDataPage = {
   language: "Język*",
   error: "Błąd",
   success: "Dane zaktualizowane",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić dane personalne?",
 };
 
 const updateDataForm = {

@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import {
   FormField,
   FormItem,
@@ -53,7 +53,7 @@ const UserData: FC = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleUserSubmit} className="flex flex-col gap-3 w-3/4">
+      <form onSubmit={handleUserSubmit} className="flex w-3/4 flex-col gap-3">
         <FormField
           control={form.control}
           name="firstName"
@@ -106,9 +106,15 @@ const UserData: FC = () => {
             </FormItem>
           )}
         />
-        <Button className="mt-5" type="submit">
-          Update
-        </Button>
+        <ConfirmDialog
+          className="mt-5"
+          buttonText={t("common.update")}
+          dialogTitle={t("common.confirmDialogTitle")}
+          dialogDescription={t("userDataPage.confirmDialogDescription")}
+          confirmAction={() => {
+            handleUserSubmit();
+          }}
+        />
       </form>
     </Form>
   );

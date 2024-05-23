@@ -1,18 +1,7 @@
 import { FC } from "react";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useResetMyEmailAddress } from "@/data/useUpdateEmailAddress.ts";
-import {
-  AlertDialog,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogCancel,
-  AlertDialogAction,
-} from "@/components/ui/alert-dialog";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 const UpdateEmailMyAddress: FC = () => {
   const { t } = useTranslation();
@@ -23,29 +12,12 @@ const UpdateEmailMyAddress: FC = () => {
   };
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button>{t("mePage.updateEmailAddress")}</Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
-            {t("mePage.updateEmailAddressTitle")}
-          </AlertDialogTitle>
-          <AlertDialogDescription>
-            {t("mePage.updateEmailAddressDescription")}
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button type="submit" onClick={() => updateEmailAddressClick()}>
-              {t("confirm")}
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+    <ConfirmDialog
+      buttonText={t("mePage.updateEmailAddress")}
+      dialogTitle={t("mePage.updateEmailAddressTitle")}
+      dialogDescription={t("mePage.updateEmailAddressDescription")}
+      confirmAction={() => updateEmailAddressClick()}
+    />
   );
 };
 

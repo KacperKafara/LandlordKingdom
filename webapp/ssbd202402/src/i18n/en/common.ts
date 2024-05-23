@@ -130,7 +130,7 @@ const userListPage = {
   viewDetails: "Details",
   resetUserPasswordAction: "Reset password",
   resetUserPasswordTitle: "Reset user password",
-  resetUserPasswordDescription: "Are you sure you want to reset user password?",
+  resetUserPasswordDescription: "Are you sure you want to reset user password ",
   resetUserPasswordToastTitleSuccess: "Operation successful",
   resetUserPasswordToastDescriptionSuccess:
     "Password reset link has been sent to the user email address",
@@ -185,6 +185,8 @@ const userFilter = {
 const common = {
   yes: "yes",
   no: "no",
+  update: "Update",
+  confirmDialogTitle: "Are you sure?",
 };
 
 const navLinks = {
@@ -202,6 +204,7 @@ const userDataPage = {
   language: "Language*",
   error: "Error",
   success: "Data updated",
+  confirmDialogDescription: "Are you sure you want to chane personal data?",
 };
 
 const updateDataForm = {
