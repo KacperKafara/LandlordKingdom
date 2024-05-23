@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 
 @ActiveProfiles("unit")
 @SpringJUnitConfig({ToolConfig.class, MockConfig.class})
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserServiceTest {
 
     @Autowired
@@ -88,6 +89,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Block user - user is blocked")
+    @Order(1)
     void BlockUser_UserIsBlocked_ThrowException_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
@@ -102,6 +104,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Unblock user - user is not blocked")
+    @Order(2)
     void UnblockUser_UserIsNotBlocked_ThrowException_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
@@ -116,13 +119,18 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Block user - user is not blocked")
+    @Order(3)
     void BlockUser_UserIsNotBlocked_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
+        user.setEmail("");
+        user.setFirstName("");
+        user.setLanguage("pl");
         user.setBlocked(false);
 
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
         assertDoesNotThrow(() -> userService.blockUser(userId));
+        when(userRepository.saveAndFlush(user)).thenReturn(user);
         Assertions.assertTrue(user.isBlocked());
 
         verify(userRepository).saveAndFlush(user);
@@ -130,6 +138,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Unblock user - user is blocked")
+    @Order(4)
     void UnblockUser_UserIsBlocked_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
@@ -145,6 +154,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Create user - identical login")
+    @Order(5)
     void CreateUser_Identical_Login_Test() {
         User user = new User(firstName, lastName, email, login);
         doThrow(new ConstraintViolationException("", null, "personal_data_email_key")).when(tenantRepository).saveAndFlush(any());
@@ -153,6 +163,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Create user - identical email")
+    @Order(6)
     void CreateUser_Identical_Email_Test() {
         User user = new User(firstName, lastName, email, login);
         Tenant tenant = new Tenant();
@@ -163,6 +174,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Update user - user already modified")
+    @Order(7)
     void UpdateUserData_UserAlreadyModified_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
@@ -175,6 +187,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Change user email - verification token expired")
+    @Order(8)
     void ChangeUserEmail_VerificationTokenExpired_Test() {
         User user = new User();
         when(emailVerificationTokenRepository.findByToken("tagValue")).thenReturn(Optional.of(new EmailVerificationToken("tagValue", Instant.now().minusSeconds(60), user)));
@@ -185,6 +198,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Change user password - invalid password")
+    @Order(9)
     void ChangPassword_Invalid_Password_Test() {
         UUID userId = UUID.randomUUID();
         User user = new User();
@@ -197,6 +211,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Change password with token - verification token expired")
+    @Order(10)
     void ChangePasswordWithToken_VerificationTokenExpired_Test() {
         User user = new User();
         when(passwordVerificationTokenRepository.findByToken("token")).thenReturn(Optional.of(new PasswordVerificationToken("token", Instant.now().minusSeconds(60), user)));
@@ -207,6 +222,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Change password with token - user is blocked")
+    @Order(11)
     void ChangePasswordWithToken_UserIsBlocked_Test() {
         User user = new User();
         user.setBlocked(true);
@@ -218,6 +234,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Send change password email - user is blocked")
+    @Order(12)
     void SendChangePasswordEmail_UserIsBlocked_Test() {
         User user = new User();
         user.setBlocked(true);
@@ -229,6 +246,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Send change password email - user is not verified")
+    @Order(13)
     void SendChangePasswordEmail_UserIsNotVerified_Test() {
         User user = new User();
         user.setVerified(false);
@@ -240,6 +258,7 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Get all users")
+    @Order(14)
     void getAll_ReturnListOfUsers() {
         List<User> users = new ArrayList<>();
         users.add(new User());
@@ -254,10 +273,63 @@ class UserServiceTest {
 
     @Test
     @DisplayName("Send email update email - user not found")
+    @Order(15)
     void sendEmailUpdateEmail_UserNotFound_ThrowNotFoundException() {
         UUID userId = UUID.randomUUID();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> userService.sendEmailUpdateEmail(userId));
+    }
+
+    @Test
+    @DisplayName("Block user - should retry")
+    @Order(16)
+    void blockUser_throwsOptimisticLockException_shouldRetry() throws UserAlreadyBlockedException, NotFoundException {
+        reset(userRepository, emailService);
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        User user2 = new User();
+        user2.setEmail("");
+        user2.setFirstName("");
+        user2.setLanguage("pl");
+        user2.setBlocked(false);
+        user.setBlocked(false);
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user))
+                .thenReturn(Optional.of(user2));
+        when(userRepository.saveAndFlush(any()))
+                .thenThrow(OptimisticLockException.class)
+                .thenReturn(user2);
+        userService.blockUser(userId);
+
+        verify(userRepository, times(2)).saveAndFlush(any());
+        verify(emailService, times(1)).sendAccountBlockEmail(user2.getEmail(), user2.getFirstName(), user2.getLanguage());
+    }
+
+    @Test
+    @DisplayName("Unblock user - should retry")
+    @Order(17)
+    void unblockUser_throwsOptimisticLockException_shouldRetry() throws NotFoundException, UserAlreadyUnblockedException {
+        reset(userRepository, emailService);
+        UUID userId = UUID.randomUUID();
+        User user = new User();
+        User user2 = new User();
+        user2.setEmail("");
+        user2.setFirstName("");
+        user2.setLanguage("pl");
+        user2.setBlocked(true);
+        user.setBlocked(true);
+
+        when(userRepository.findById(userId))
+                .thenReturn(Optional.of(user))
+                .thenReturn(Optional.of(user2));
+        when(userRepository.saveAndFlush(any()))
+                .thenThrow(OptimisticLockException.class)
+                .thenReturn(user2);
+        userService.unblockUser(userId);
+
+        verify(userRepository, times(2)).saveAndFlush(any());
+        verify(emailService, times(1)).sendAccountUnblockEmail(user2.getEmail(), user2.getFirstName(), user2.getLanguage());
     }
 }

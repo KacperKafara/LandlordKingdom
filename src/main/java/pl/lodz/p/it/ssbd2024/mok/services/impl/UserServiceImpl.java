@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Retryable(maxAttempts = 2, retryFor = {OptimisticLockException.class})
+    @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Retryable(maxAttempts = 2, retryFor = {OptimisticLockException.class})
+    @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException {
         User user = getUserById(id);
@@ -172,7 +172,6 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setBlocked(false);
         String token = verificationTokenService.generateEmailVerificationToken(user);
         URI uri = URI.create(appUrl + "/update-email/" + token);
         emailService.sendEmailChangeEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
