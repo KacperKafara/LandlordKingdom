@@ -14,11 +14,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class TenantControllerIT extends BaseConfig {
     private static String TENANTS_URL = baseUrl;
+    private static String USERS_URL = baseUrl + "/users";
 
     private String adminToken;
 
@@ -26,6 +29,7 @@ public class TenantControllerIT extends BaseConfig {
     public void setUp() throws MessagingException, IOException, InterruptedException {
         String AUTH_URL = baseUrl + "/auth";
         TENANTS_URL = baseUrl + "/tenants";
+        USERS_URL = baseUrl + "/users";
 
         loadDataSet("src/test/resources/datasets/usersForTenantsIT.xml");
 
@@ -67,10 +71,30 @@ public class TenantControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a7")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", not(hasItem("TENANT")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
                 .put(TENANTS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a7" + "/add-role")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a7")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", hasItem("TENANT"));
     }
 
     @Test
@@ -93,10 +117,30 @@ public class TenantControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", hasItem("TENANT"));
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
                 .put(TENANTS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a6" + "/remove-role")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", not(hasItem("TENANT")));
     }
 
     @Test
