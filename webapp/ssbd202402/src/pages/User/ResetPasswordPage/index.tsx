@@ -15,7 +15,8 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { useChangeUserPasswordWithToken } from "@/data/useChangeUserPasswordWithToken";
+import { useChangeUserPasswordWithToken } from "@/data/useChangeUserPassword";
+import LoadingButton from "@/components/LoadingButton";
 
 const getPasswordResetSchema = (t: TFunction) =>
   z
@@ -90,27 +91,30 @@ const ResetPasswordPage: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    changePassword.mutate({
-      password: values.password,
-      token: token || "",
-    });
-
-    if (changePassword.isSuccess) {
-      navigate("/login");
-    }
+    await changePassword.mutateAsync(
+      {
+        password: values.password,
+        token: token || "",
+      },
+      {
+        onSuccess: () => {
+          navigate("/login");
+        },
+      }
+    );
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl"
+          className="border-1 flex w-1/4 flex-col rounded-md border-black bg-white p-7 shadow-2xl"
         >
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
           </h1>
-          <h2 className="self-center text-2xl pb-7 pt-3">
+          <h2 className="self-center pb-7 pt-3 text-2xl">
             {t("resetPasswordPage.header")}
           </h2>
           <div className="grid gap-2">
@@ -142,9 +146,11 @@ const ResetPasswordPage: FC = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">
-              {t("resetPasswordPage.confirmButton")}
-            </Button>
+            <LoadingButton
+              type="submit"
+              text={t("resetPasswordPage.confirmButton")}
+              isLoading={changePassword.isPending}
+            />
             <div className="flex justify-center">
               <Button variant="link" asChild className="w-fit self-center">
                 <NavLink to={"/"}>{t("resetPasswordPage.homeButton")}</NavLink>
