@@ -7,6 +7,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -23,6 +24,7 @@ import java.util.Objects;
         "pl.lodz.p.it.ssbd2024.mok.authRepositories"
 })
 @EnableScheduling
+@EnableRetry
 @Slf4j
 public class ToolConfig {
     @Value("${scheduler.threadPool.size}")

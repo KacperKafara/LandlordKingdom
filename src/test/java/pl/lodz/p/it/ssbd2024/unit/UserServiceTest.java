@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.unit;
 
+import jakarta.persistence.OptimisticLockException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
