@@ -24,7 +24,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.net.URI;
@@ -241,7 +241,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("permitAll()")
     public List<String> getUserRoles(UUID id) {
         List<String> roles = new ArrayList<>();
-        administratorRepository.findByUserIdAndActive(id, true).ifPresent(administrator -> roles.add("ADMIN"));
+        administratorRepository.findByUserIdAndActive(id, true).ifPresent(administrator -> roles.add("ADMINISTRATOR"));
         ownerRepository.findByUserIdAndActive(id, true).ifPresent(owner -> roles.add("OWNER"));
         tenantRepository.findByUserIdAndActive(id, true).ifPresent(tenant -> roles.add("TENANT"));
 

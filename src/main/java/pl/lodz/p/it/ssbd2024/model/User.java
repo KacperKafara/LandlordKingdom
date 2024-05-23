@@ -66,9 +66,6 @@ public class User extends AbstractEntity {
     @Column(name = "language", nullable = false)
     private Language language = Language.EN;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AccessLevel> accessLevels = new ArrayList<>();
 

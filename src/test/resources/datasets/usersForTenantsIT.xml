@@ -14,7 +14,10 @@
            verified="true"
            language="EN"
            version="0"
-           created_at="[NOW]"/>
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a5"
@@ -27,7 +30,11 @@
                    version="0"
                    id="22f34716-3b77-4e63-809d-35f9a4758011"
                    user_id="ba537227-d54f-42b3-aa58-10492cddf8a5"
-                   level="ADMINISTRATOR"/>
+                   level="ADMINISTRATOR"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"
+                   created_by="[NULL]"
+                   modified_by="[NULL]"/>
 
     <!-- Administrator -->
     <administrators id="22f34716-3b77-4e63-809d-35f9a4758011"/>
@@ -45,7 +52,10 @@
            verified="true"
            language="EN"
            version="0"
-           created_at="[NOW]"/>
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
@@ -58,7 +68,11 @@
                    version="0"
                    id="22f34716-3b77-4e63-809d-35f9a4758012"
                    user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
-                   level="TENANT"/>
+                   level="TENANT"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"
+                   created_by="[NULL]"
+                   modified_by="[NULL]"/>
 
     <!-- Tenant -->
     <tenants id="22f34716-3b77-4e63-809d-35f9a4758012"/>
@@ -76,7 +90,10 @@
            verified="true"
            language="EN"
            version="0"
-           created_at="[NOW]"/>
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a7"

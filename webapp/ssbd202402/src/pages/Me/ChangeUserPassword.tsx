@@ -19,10 +19,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { useChangeUserPassword } from "@/data/useChangeUserPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
 import { TFunction } from "i18next";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -37,60 +35,60 @@ const passwordChangeSchema = (t: TFunction) =>
         .min(
           8,
           t("validation.minLength") +
-          " " +
-          8 +
-          " " +
-          t("validation.characters") +
-          "."
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
         )
         .max(
           50,
           t("validation.maxLength") +
-          " " +
-          50 +
-          " " +
-          t("validation.characters") +
-          "."
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
         ),
       newPassword: z
         .string()
         .min(
           8,
           t("validation.minLength") +
-          " " +
-          8 +
-          " " +
-          t("validation.characters") +
-          "."
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
         )
         .max(
           50,
           t("validation.maxLength") +
-          " " +
-          50 +
-          " " +
-          t("validation.characters") +
-          "."
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
         ),
       confirmPassword: z
         .string()
         .min(
           8,
           t("validation.minLength") +
-          " " +
-          8 +
-          " " +
-          t("validation.characters") +
-          "."
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
         )
         .max(
           50,
           t("validation.maxLength") +
-          " " +
-          50 +
-          " " +
-          t("validation.characters") +
-          "."
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
         ),
     })
     .refine((data) => data.newPassword === data.confirmPassword, {
@@ -101,7 +99,6 @@ const passwordChangeSchema = (t: TFunction) =>
 type PasswordChangeSchema = z.infer<ReturnType<typeof passwordChangeSchema>>;
 
 const ChangeUserPassword: FC = () => {
-  const { toast } = useToast();
   const { t } = useTranslation();
   const { changePassword } = useChangeUserPassword();
   const passwordChangeForm = useForm<PasswordChangeSchema>({
@@ -114,43 +111,18 @@ const ChangeUserPassword: FC = () => {
   });
   const handlePasswordChangeSubmit = passwordChangeForm.handleSubmit(
     async (values) => {
-      try {
-        await changePassword({
-          oldPassword: values.oldPassword,
-          newPassword: values.newPassword,
-        });
-        toast({
-          title: t("changePasswordForm.success"),
-        });
-        passwordChangeForm.reset();
-      } catch (error) {
-        const errorResponse = error as AxiosError;
-        if (errorResponse.response?.status === 404) {
-          toast({
-            variant: "destructive",
-            title: t("changePasswordForm.errorTitle"),
-            description: t("changePasswordForm.errorDescriptionNotFound"),
-          });
-        } else if (errorResponse.response?.status === 400) {
-          toast({
-            variant: "destructive",
-            title: t("changePasswordForm.errorTitle"),
-            description: t("changePasswordForm.errorDescriptionBadRequest"),
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: t("changePasswordForm.errorTitle"),
-          });
-        }
-      }
+      await changePassword(values, {
+        onSuccess: () => {
+          passwordChangeForm.reset();
+        },
+      });
     }
   );
   return (
     <Form {...passwordChangeForm}>
       <form
         onSubmit={handlePasswordChangeSubmit}
-        className="flex flex-col gap-3 w-3/4"
+        className="flex w-3/4 flex-col gap-3"
       >
         <FormField
           control={passwordChangeForm.control}
@@ -197,9 +169,7 @@ const ChangeUserPassword: FC = () => {
         />
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button className=" mt-5">
-              {t("changePasswordForm.submit")}
-            </Button>
+            <Button className=" mt-5">{t("changePasswordForm.submit")}</Button>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>

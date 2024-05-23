@@ -13,11 +13,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AdministratorControllerIT extends BaseConfig {
     private static String ADMINS_URL = baseUrl + "/admins";
+    private static String USERS_URL = baseUrl + "/users";
 
     private String adminToken;
 
@@ -25,6 +28,7 @@ public class AdministratorControllerIT extends BaseConfig {
     public void setUp() throws MessagingException, IOException, InterruptedException {
         String AUTH_URL = baseUrl + "/auth";
         ADMINS_URL = baseUrl + "/admins";
+        USERS_URL = baseUrl + "/users";
 
         loadDataSet("src/test/resources/datasets/usersForAdministratorsIT.xml");
 
@@ -66,10 +70,30 @@ public class AdministratorControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a7")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", not(hasItem("ADMINISTRATOR")));
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
                 .put(ADMINS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a7" + "/add-role")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a7")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", hasItem("ADMINISTRATOR"));
     }
 
     @Test
@@ -92,10 +116,30 @@ public class AdministratorControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", hasItem("ADMINISTRATOR"));
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
                 .put(ADMINS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a6" + "/remove-role")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", not(hasItem("ADMINISTRATOR")));
     }
 
     @Test
@@ -105,7 +149,7 @@ public class AdministratorControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
-                .put(ADMINS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8b9" + "/remove-role")
+                .put(ADMINS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a8" + "/remove-role")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND.value());
@@ -118,9 +162,29 @@ public class AdministratorControllerIT extends BaseConfig {
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a5")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", hasItem("ADMINISTRATOR"));
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
                 .put(ADMINS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a5" + "/remove-role")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.FORBIDDEN.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .get(USERS_URL + "/ba537227-d54f-42b3-aa58-10492cddf8a5")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("roles", hasItem("ADMINISTRATOR"));
     }
 }

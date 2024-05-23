@@ -14,7 +14,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepositor
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.time.Instant;

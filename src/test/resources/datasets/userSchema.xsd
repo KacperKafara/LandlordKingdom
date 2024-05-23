@@ -29,6 +29,9 @@
             <xs:attribute name="language" type="xs:string" use="required"/>
             <xs:attribute name="version" type="xs:string" use="required"/>
             <xs:attribute name="created_at" type="xs:string" use="required"/>
+            <xs:attribute name="modified_at" type="xs:string" use="required"/>
+            <xs:attribute name="created_by" type="xs:string" use="optional"/>
+            <xs:attribute name="modified_by" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
@@ -48,6 +51,10 @@
             <xs:attribute name="level" type="xs:string" use="required"/>
             <xs:attribute name="active" type="xs:boolean" use="required"/>
             <xs:attribute name="version" type="xs:string" use="required"/>
+            <xs:attribute name="created_at" type="xs:string" use="required"/>
+            <xs:attribute name="modified_at" type="xs:string" use="required"/>
+            <xs:attribute name="created_by" type="xs:string" use="optional"/>
+            <xs:attribute name="modified_by" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 

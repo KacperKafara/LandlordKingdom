@@ -19,7 +19,6 @@ import { NavLink, Navigate } from "react-router-dom";
 import i18next, { TFunction } from "i18next";
 import { isTokenValid } from "@/utils/jwt";
 import CodeInput from "@/pages/Login/CodeInput";
-import { Loader2 } from "lucide-react";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
 import LanguageSelector from "@/components/LanguageSelector";
 import LoadingButton from "@/components/LoadingButton";

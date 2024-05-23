@@ -1,5 +1,12 @@
 import { Role } from "@/store/userStore";
 
+const error = {
+  baseTitle: "Error occured",
+  baseDescription: "Something went wrong...",
+  internalServerErrorDescription:
+    "Oops! Something went wrong on our end. Please try again later.",
+};
+
 const loginPage = {
   forgotPassword: "Forgot password?",
   loginButton: "Sign in",
@@ -250,8 +257,8 @@ const roles = {
   tenant: "Tenant",
   owner: "Owner",
 } satisfies {
-    [key in Role]: string;
-  };
+  [key in Role]: string;
+};
 
 const homePage = {
   manageProperties: "Manage your properties with ease",
@@ -261,6 +268,7 @@ const homePage = {
 };
 
 export default {
+  error,
   homePage,
   common,
   roles,

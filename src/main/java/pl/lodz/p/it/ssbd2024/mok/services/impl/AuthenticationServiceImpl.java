@@ -20,7 +20,7 @@ import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 
 import java.security.InvalidKeyException;
 import java.time.Duration;

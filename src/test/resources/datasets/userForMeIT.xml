@@ -14,7 +14,10 @@
            verified="true"
            language="EN"
            version="0"
-           created_at="[NOW]"/>
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
@@ -27,7 +30,11 @@
                    version="0"
                    id="22f34716-3b77-4e63-809d-35f9a4758011"
                    user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
-                   level="ADMINISTRATOR"/>
+                   level="ADMINISTRATOR"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"
+                   created_by="[NULL]"
+                   modified_by="[NULL]"/>
 
     <!-- Unblocked and Verified User -->
     <users id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
@@ -42,7 +49,10 @@
            verified="true"
            language="EN"
            version="0"
-           created_at="[NOW]"/>
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 
     <!-- Personal Data -->
     <personal_data user_id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
@@ -55,7 +65,11 @@
                    version="0"
                    id="22f34716-3b77-4e63-809d-35f9a4758012"
                    user_id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
-                   level="TENANT"/>
+                   level="TENANT"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"
+                   created_by="[NULL]"
+                   modified_by="[NULL]"/>
 
 
     <!-- Tenant (Blocked) -->
@@ -71,7 +85,10 @@
            verified="true"
            language="EN"
            version="0"
-           created_at="[NOW]"/>
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 
     <!-- Personal Data -->
     <personal_data user_id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
@@ -84,6 +101,10 @@
                    version="0"
                    id="22f34716-3b77-4e63-809d-35f9a4758013"
                    user_id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
-                   level="TENANT"/>
+                   level="TENANT"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"
+                   created_by="[NULL]"
+                   modified_by="[NULL]"/>
 
 </dataset>

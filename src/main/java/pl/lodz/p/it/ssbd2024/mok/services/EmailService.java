@@ -1,15 +1,8 @@
-package pl.lodz.p.it.ssbd2024.services;
+package pl.lodz.p.it.ssbd2024.mok.services;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 public interface EmailService {
-    void sendEmail(String to, String subject, String body);
-
-    void sendHtmlEmail(String to, String subject, String body);
-
-    void sendHtmlEmail(String to, String subject, String templateName, Map<String, Object> templateModel, String lang);
-
     void sendAccountActivationEmail(String to, String name, String uri, String lang);
 
     void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String ip, String lang);
@@ -39,7 +32,6 @@ public interface EmailService {
     void sendAccountDeletedEmail(String to, String name, String lang);
 
     void sendAdminLoginEmail(String to, String name, String ip, String lang);
-
 
     void sendOTPEmail(String to, String name, String otp, String lang);
 }
