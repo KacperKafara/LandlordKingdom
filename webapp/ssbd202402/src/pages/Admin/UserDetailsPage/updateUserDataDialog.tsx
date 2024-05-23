@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useUpdateUserMutation } from "@/data/fetchUser";
+import { useUpdateUserMutation } from "@/data/useUser";
 import { UserUpdateRequestType } from "@/types/user/UserUpdateRequestType";
 import { FC, useEffect } from "react";
 import { z } from "zod";

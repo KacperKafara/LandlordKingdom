@@ -34,7 +34,7 @@ import { useFilteredUsers } from "@/data/useFilteredUsers";
 import PageChanger from "./PageChanger";
 import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
 import { useBlockUser } from "@/data/useBlockUser.ts";
-import { useUnblockUser } from "@/data/useUnblockUser.ts";
+import { useUnblockUser } from "@/data/useBlockUser.ts";
 
 interface UserData {
   login: string;
@@ -58,7 +58,7 @@ const UserListPage: FC = () => {
   };
 
   const handlePasswordReset = async () => {
-    resetPassword.mutate({
+    await resetPassword.mutateAsync({
       email: userData?.email || "",
     });
 
@@ -67,7 +67,7 @@ const UserListPage: FC = () => {
 
   return (
     <>
-      <div className="flex justify-center m-5">
+      <div className="m-5 flex justify-center">
         <UserFilter />
       </div>
       <div className="flex justify-center">

@@ -1,4 +1,12 @@
 import { Role } from "@/store/userStore";
+
+const error = {
+  baseTitle: "Wystąpił błąd",
+  baseDescription: "Coś poszło nie tak...",
+  internalServerErrorDescription:
+    "Ups! Coś poszło nie tak po naszej stronie. Proszę spróbuj ponownie później.",
+};
+
 const loginPage = {
   forgotPassword: "Zapomniałeś hasła?",
   loginButton: "Zaloguj się",
@@ -237,7 +245,8 @@ const mePage = {
   updateData: "Zmień swoje dane",
   changeEmail: "Zmień swój email",
   changePassword: "Zmień swoje hasło",
-  changeEmailDescription: "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
+  changeEmailDescription:
+    "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
 };
 
 const registerSuccessPage = {
@@ -258,8 +267,8 @@ const roles = {
   tenant: "Najemnca",
   owner: "Właściciel",
 } satisfies {
-    [key in Role]: string;
-  };
+  [key in Role]: string;
+};
 
 const homePage = {
   manageProperties: "Zarządzaj swoimi nieruchomościami z łatwością",
@@ -269,6 +278,7 @@ const homePage = {
 };
 
 export default {
+  error,
   homePage,
   common,
   roles,

@@ -6,6 +6,7 @@ import org.hibernate.query.sqm.PathElementException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
@@ -15,7 +16,7 @@ import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -30,12 +31,14 @@ public class TenantServiceImpl implements TenantService {
     private final UserRepository userRepository;
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
     public Page<Tenant> getAllFiltered(Specification<Tenant> specification, Pageable pageable) {
         return tenantRepository.findAll(specification, pageable);
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Tenant removeTenantAccessLevel(UUID id) throws NotFoundException {
         Tenant tenant = tenantRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
@@ -48,6 +51,7 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Tenant addTenantAccessLevel(UUID id) throws NotFoundException {
         Optional<Tenant> tenantOptional = tenantRepository.findByUserId(id);
 

@@ -1,12 +1,7 @@
 import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Navigate, useParams } from "react-router-dom";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,9 +10,9 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useGetUserQuery } from "@/data/fetchUser";
+import { useGetUserQuery } from "@/data/useUser";
 import { useBlockUser } from "@/data/useBlockUser.ts";
-import { useUnblockUser } from "@/data/useUnblockUser.ts";
+import { useUnblockUser } from "@/data/useBlockUser.ts";
 import { useTenantRole } from "@/data/roles/useTenantRole";
 import { useOwnerRole } from "@/data/roles/useOwnerRole";
 import { useAdminRole } from "@/data/roles/useAdminRole";
@@ -64,7 +59,7 @@ const UserDetailsPage: FC = () => {
       )}
       {data && (
         <Card className="relative mt-3 w-4/5 ">
-          <div className="absolute top-0 right-0 flex">
+          <div className="absolute right-0 top-0 flex">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost">...</Button>
@@ -105,7 +100,7 @@ const UserDetailsPage: FC = () => {
             </CardHeader>
             <CardContent>
               <div className="flex justify-center">
-                <div className="grid grid-cols-2 grid- w-2/3 gap-2">
+                <div className="grid- grid w-2/3 grid-cols-2 gap-2">
                   <DataField
                     label={t("userDetailsPage.firstName")}
                     value={data?.data.firstName ?? "-"}
@@ -142,7 +137,6 @@ const UserDetailsPage: FC = () => {
                     label={t("userDetailsPage.language")}
                     value={data?.data.language ?? "-"}
                   />
-
                 </div>
               </div>
             </CardContent>
@@ -154,7 +148,7 @@ const UserDetailsPage: FC = () => {
           <CardTitle>Roles</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex gap-2 justify-center">
+          <div className="flex justify-center gap-2">
             {data?.data.roles.includes("TENANT") ? (
               <Button onClick={() => removeTenantRole(data?.data.id || "")}>
                 Remove Tenant Role
@@ -173,20 +167,18 @@ const UserDetailsPage: FC = () => {
                 Add Owner Role
               </Button>
             )}
-            {data?.data.roles.includes("ADMIN") ? (
+            {data?.data.roles.includes("ADMINISTRATOR") ? (
               <Button onClick={() => removeAdminRole(data?.data.id || "")}>
-                Remove Admin Role
+                Remove Administrator Role
               </Button>
             ) : (
               <Button onClick={() => addAdminRole(data?.data.id || "")}>
-                Add Admin Role
+                Add Administrator Role
               </Button>
             )}
           </div>
         </CardContent>
       </Card>
-
-
     </div>
   );
 };

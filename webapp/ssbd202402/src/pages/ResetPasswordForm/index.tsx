@@ -1,4 +1,5 @@
 import LanguageSelector from "@/components/LanguageSelector";
+import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -57,25 +58,25 @@ const ResetPasswordForm: FC = () => {
   });
 
   const onSubmit = form.handleSubmit(async (values) => {
-    resetPassword.mutate(values);
-
-    if (resetPassword.isSuccess) {
-      navigate("/login");
-    }
+    await resetPassword.mutateAsync(values, {
+      onSuccess: () => {
+        navigate("/login");
+      },
+    });
   });
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2x relative"
+          className="border-1 shadow-2x relative flex w-1/4 flex-col rounded-md border-black bg-white p-7"
         >
           <LanguageSelector />
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
           </h1>
-          <h2 className="self-center text-2xl pb-7 pt-3">
+          <h2 className="self-center pb-7 pt-3 text-2xl">
             {t("resetPasswordForm.resetPassword")}
           </h2>
           <p className="mb-2">{t("resetPasswordForm.description")}</p>
@@ -92,9 +93,12 @@ const ResetPasswordForm: FC = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="mt-3">
-            {t("resetPasswordForm.resetPassword")}
-          </Button>
+          <LoadingButton
+            type="submit"
+            className="mt-3"
+            text={t("resetPasswordForm.resetPassword")}
+            isLoading={resetPassword.isPending}
+          />
           <Button variant="link" asChild className="w-fit self-center">
             <NavLink to={"/login"}>
               {t("resetPasswordForm.loginButton")}

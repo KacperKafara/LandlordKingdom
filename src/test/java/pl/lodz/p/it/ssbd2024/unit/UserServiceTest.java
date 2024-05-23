@@ -13,7 +13,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepositor
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.time.Instant;
@@ -235,24 +235,6 @@ class UserServiceTest {
         assertThrows(UserNotVerifiedException.class, () -> userService.sendChangePasswordEmail("email"));
 
         verify(userRepository, never()).saveAndFlush(user);
-    }
-
-    @Test
-    @DisplayName("Get user by login - user found")
-    void getUserByLogin_UserFound_ReturnUser() throws NotFoundException {
-        when(userRepository.findByLogin(login)).thenReturn(Optional.of(user));
-
-        User result = userService.getUserByLogin(login);
-
-        Assertions.assertEquals(user, result);
-    }
-
-    @Test
-    @DisplayName("Get user by login - user not found")
-    void getUserByLogin_UserNotFound_ThrowNotFoundException() {
-        when(userRepository.findByLogin(login)).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class, () -> userService.getUserByLogin(login));
     }
 
     @Test

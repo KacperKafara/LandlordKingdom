@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,7 @@ public class JwtService {
         this.refreshTokenPublicKey = KeyReader.readPublicJwtKey(publicRefreshTokenKeyFilePath);
     }
 
+    @PreAuthorize("permitAll()")
     public String generateToken(UUID id, List<String> roles) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -52,6 +54,7 @@ public class JwtService {
         return jwtEncoder.encode(encoderParameters).getTokenValue();
     }
 
+    @PreAuthorize("permitAll()")
     public String generateRefreshToken(UUID id) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
@@ -65,10 +68,12 @@ public class JwtService {
         return refreshTokenEncoder.encode(encoderParameters).getTokenValue();
     }
 
+    @PreAuthorize("permitAll()")
     public boolean validateRefreshExpiration(Jwt refreshToken) {
         return Objects.requireNonNull(refreshToken.getExpiresAt()).isAfter(Instant.now());
     }
 
+    @PreAuthorize("permitAll()")
     public Jwt decodeRefreshToken(String token) {
         NimbusJwtDecoder decoder = NimbusJwtDecoder
                 .withPublicKey((RSAPublicKey) refreshTokenPublicKey)

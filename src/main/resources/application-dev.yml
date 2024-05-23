@@ -1,5 +1,5 @@
 app:
-  url: http://localhost:3000/
+  url: http://localhost:3000
 
 otp:
   secret: 26Etz0ZMoBmiX7F9lHvb
