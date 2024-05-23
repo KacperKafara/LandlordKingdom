@@ -9,7 +9,7 @@ import pl.lodz.p.it.ssbd2024.model.AccountVerificationToken;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 
 import java.net.URI;
 import java.time.LocalDateTime;

@@ -12,7 +12,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.*;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
-import pl.lodz.p.it.ssbd2024.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.Encoders;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
