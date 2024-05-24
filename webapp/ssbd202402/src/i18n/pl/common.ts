@@ -192,6 +192,12 @@ const userFilter = {
   administrator: "Administrator",
 };
 
+const pageChanger = {
+  numberOfElements: "Liczba elementów",
+  page: "Strona",
+  of: "z",
+};
+
 const common = {
   yes: "tak",
   no: "nie",
@@ -212,6 +218,7 @@ const userDataPage = {
   language: "Język*",
   error: "Błąd",
   success: "Dane zaktualizowane",
+  updateUserData: "Aktualizuj",
 };
 
 const updateDataForm = {
@@ -298,6 +305,7 @@ export default {
   userDataPage,
   updateEmailPage,
   validation,
+  pageChanger,
   sessionExpired: "Sesja wygasła",
   sessionExpiredDescription: "Twoja sesja wygasła, zaloguj się ponownie",
   footer: "Landlord Kingdom - SSBD202402",
