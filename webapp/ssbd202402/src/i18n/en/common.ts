@@ -182,6 +182,12 @@ const userFilter = {
   administrator: "Administrator",
 };
 
+const pageChanger = {
+  numberOfElements: "Number of elements",
+  page: "Page",
+  of: "of",
+};
+
 const common = {
   yes: "yes",
   no: "no",
@@ -202,6 +208,7 @@ const userDataPage = {
   language: "Language*",
   error: "Error",
   success: "Data updated",
+  updateUserData: "Update",
 };
 
 const updateDataForm = {
@@ -288,6 +295,7 @@ export default {
   userDataPage,
   updateEmailPage,
   validation,
+  pageChanger,
   sessionExpired: "Session expired",
   sessionExpiredDescription: "Session expired, please login again",
   footer: "Landlord Kingdom - SSBD202402",

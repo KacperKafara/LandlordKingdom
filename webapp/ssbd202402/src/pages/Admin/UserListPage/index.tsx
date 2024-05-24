@@ -165,10 +165,10 @@ const UserListPage: FC = () => {
                 ))}
             </TableBody>
           </Table>
+          <div className="flex justify-end">
+            <PageChanger />
+          </div>
         </div>
-      </div>
-      <div className="flex justify-center">
-        <PageChanger />
       </div>
     </>
   );

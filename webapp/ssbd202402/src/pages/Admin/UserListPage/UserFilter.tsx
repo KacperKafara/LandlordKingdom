@@ -230,11 +230,12 @@ const UserFilter: FC = () => {
                       <Button
                         variant={"outline"}
                         role="combobox"
-                        className="flex gap-1 w-48 justify-between"
+                        className="flex w-48 justify-between gap-1"
                       >
                         <div className="flex gap-1">
                           {t(
-                            `userFilter.${filterForm.getValues("role").toLowerCase() as Role
+                            `userFilter.${
+                              filterForm.getValues("role").toLowerCase() as Role
                             }`
                           )}
                         </div>
