@@ -190,6 +190,7 @@ const userFilter = {
   tenant: "Najemca",
   owner: "Właściciel",
   administrator: "Administrator",
+  clear: "Wyczyść",
 };
 
 const pageChanger = {

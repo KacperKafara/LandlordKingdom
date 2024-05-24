@@ -180,6 +180,7 @@ const userFilter = {
   tenant: "Tenant",
   owner: "Owner",
   administrator: "Administrator",
+  clear: "Clear",
 };
 
 const pageChanger = {
