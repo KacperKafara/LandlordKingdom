@@ -97,8 +97,8 @@ public class AuthController {
     @PostMapping("/verify-2fa")
     public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid Verify2FATokenRequest request) {
         try {
-            Map<String, String> tokens = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getRemoteAddr());
-            return ResponseEntity.ok(new AuthenticationResponse(tokens.get("token"), tokens.get("refreshToken")));
+            Map<String, String> authResponse = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getRemoteAddr());
+            return ResponseEntity.ok(new AuthenticationResponse(authResponse.get("token"), authResponse.get("refreshToken"), authResponse.get("theme")));
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (NotFoundException e) {
@@ -162,7 +162,8 @@ public class AuthController {
 
                 response = Map.of(
                         "token", userToken,
-                        "refreshToken", refreshToken);
+                        "refreshToken", refreshToken,
+                        "theme", user.getTheme().name().toLowerCase());
 
             } catch (NotFoundException e) {
                 User newUser = new User(
@@ -185,15 +186,18 @@ public class AuthController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e1.getMessage());
         }
 
-        return ResponseEntity.ok(new AuthenticationResponse(response.get("token"), response.get("refreshToken")));
+        return ResponseEntity.ok(new AuthenticationResponse(response.get("token"), response.get("refreshToken"), response.get("theme")));
     }
 
     @PostMapping("/refresh")
     @PreAuthorize("permitAll()")
     public ResponseEntity<AuthenticationResponse> refreshToken(@RequestBody RefreshTokenRequest refreshToken) {
         try {
-            Map<String, String> tokens = authenticationService.refresh(refreshToken.refreshToken());
-            return ResponseEntity.ok(new AuthenticationResponse(tokens.get("token"), tokens.get("refreshToken")));
+            Map<String, String> authResponse = authenticationService.refresh(refreshToken.refreshToken());
+            return ResponseEntity.ok(AuthenticationResponse.builder()
+                    .token(authResponse.get("token"))
+                    .refreshToken(authResponse.get("refreshToken"))
+                    .build());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (RefreshTokenExpiredException e) {

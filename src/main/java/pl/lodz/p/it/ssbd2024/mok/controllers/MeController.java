@@ -138,4 +138,17 @@ public class MeController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
+
+    @PostMapping("/theme")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ChangeThemeResponse> changeTheme(@RequestBody @Valid ChangeThemeRequest request) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            UUID id = UUID.fromString(jwt.getSubject());
+            return ResponseEntity.ok(new ChangeThemeResponse(userService.changeTheme(id, request.theme())));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
 }

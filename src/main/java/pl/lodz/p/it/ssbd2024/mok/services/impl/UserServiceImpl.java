@@ -247,4 +247,12 @@ public class UserServiceImpl implements UserService {
 
         return roles;
     }
+
+    @Override
+    @PreAuthorize("isAuthenticated()")
+    public String changeTheme(UUID id, String theme) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setTheme(Theme.valueOf(theme.toUpperCase()));
+        return userRepository.saveAndFlush(user).getTheme().name().toLowerCase();
+    }
 }

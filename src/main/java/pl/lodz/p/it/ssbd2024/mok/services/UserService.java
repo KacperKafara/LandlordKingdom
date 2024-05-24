@@ -48,4 +48,6 @@ public interface UserService {
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException;
 
     List<String> getUserRoles(UUID id);
+
+    String changeTheme(UUID id, String theme) throws NotFoundException;
 }
