@@ -81,6 +81,12 @@ public class User extends AbstractEntity {
         this.language = Language.valueOf(language.toUpperCase());
     }
 
+    @ElementCollection
+    @CollectionTable(name = "old_passwords", joinColumns = @JoinColumn(name = "user_id"),
+            indexes = @Index(name = "idx_user_oldPassword", columnList = "user_id"))
+    @Column(name = "password")
+    private List<String> oldPasswords = new ArrayList<>();
+
     public User(String firstName,
                 String lastName,
                 String email,
