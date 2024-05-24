@@ -43,7 +43,7 @@ public interface UserService {
 
     void sendChangePasswordEmail(String login) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException;
 
-    void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException;
+    void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException, PasswordRepetitionException;
 
     void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException;
 

@@ -13,4 +13,5 @@ public class UserExceptionMessages {
     public static final String ALREADY_BLOCKED = "User is already blocked";
     public static final String ALREADY_UNBLOCKED = "User is already unblocked";
     public static final String CREATION_FAILED = "User creation failed";
+    public static final String PASSWORD_REPEATED = "Password must be different than any other password used by this account";
 }
