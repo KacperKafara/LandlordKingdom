@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Title</title>
+</head>
+<body>
+    <h1 th:text="#{hello}  + ' ' + ${name} + '.'"/>
+    <p th:text="#{accountBlockedInactivity.information} + ' ' + ${status} + '.'"/>
+    <p th:text="#{accountBlockedInactivity.information2} +'.'"/>
+    <a th:text="#{accountBlockedInactivity.link} + '.'" th:href="@{${url}}"/>
+</body>
+</html>
