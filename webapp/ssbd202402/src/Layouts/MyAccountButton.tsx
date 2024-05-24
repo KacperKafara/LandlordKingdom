@@ -11,7 +11,7 @@ import { useUserStore } from "@/store/userStore";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { VscAccount } from "react-icons/vsc";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
 
 type MyAccountButtonProps = {
@@ -39,8 +39,8 @@ const MyAccountButton: FC<MyAccountButtonProps> = ({ hover }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>
-          <NavLink to="/account">{t("navLinks.account")}</NavLink>
+        <DropdownMenuItem onClick={() => navigate("/account")}>
+          {t("navLinks.account")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLoginButtonClick}>
           {t("navLinks.signOut")}

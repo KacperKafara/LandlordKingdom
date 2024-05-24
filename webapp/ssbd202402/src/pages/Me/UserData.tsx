@@ -53,7 +53,7 @@ const UserData: FC = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleUserSubmit} className="flex flex-col gap-3 w-3/4">
+      <form onSubmit={handleUserSubmit} className="flex w-3/4 flex-col gap-3">
         <FormField
           control={form.control}
           name="firstName"
@@ -107,7 +107,7 @@ const UserData: FC = () => {
           )}
         />
         <Button className="mt-5" type="submit">
-          Update
+          {t("userDataPage.updateUserData")}
         </Button>
       </form>
     </Form>
