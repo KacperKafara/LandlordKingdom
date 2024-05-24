@@ -195,6 +195,20 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("Change user password - password repetition")
+    void ChangPassword_PasswordRepetition_ThrowException() {
+        UUID userId = UUID.randomUUID();
+        String encoded2 = "$2a$12$yXC7QQeg3WVOGCvR/MxiAO8pSx2cqX5BJSFhZ/A2D2FyAwb0rRYhK";
+        User user = new User();
+        user.setPassword(encoded);
+        user.getOldPasswords().add(encoded2);
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        assertThrows(PasswordRepetitionException.class, () -> userService.changePassword(userId, password, "qwerasdf"));
+
+        verify(userRepository, never()).saveAndFlush(user);
+    }
+
+    @Test
     @DisplayName("Change password with token - verification token expired")
     void ChangePasswordWithToken_VerificationTokenExpired_Test() {
         User user = new User();

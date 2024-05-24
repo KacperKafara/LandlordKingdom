@@ -92,7 +92,7 @@ public class MeController {
         try {
             userService.changePasswordWithToken(request.password(), request.token());
             return ResponseEntity.ok().build();
-        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException | PasswordRepetitionException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (UserBlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
