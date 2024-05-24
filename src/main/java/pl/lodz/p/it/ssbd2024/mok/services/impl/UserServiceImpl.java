@@ -20,7 +20,6 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
-import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
@@ -28,10 +27,8 @@ import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -211,13 +208,18 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("isAuthenticated()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class})
-    public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException {
+    public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException, PasswordRepetitionException {
         User user = getUserById(id);
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
         }
-
+        for (String password : user.getOldPasswords()){
+            if (passwordEncoder.matches(newPassword, password)){
+                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED);
+            }
+        }
+        user.getOldPasswords().add(user.getPassword());
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(user);
     }
@@ -225,15 +227,19 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {VerificationTokenUsedException.class, VerificationTokenExpiredException.class, UserBlockedException.class})
-    public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException {
+    public void changePasswordWithToken(String newPassword, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException, PasswordRepetitionException {
         VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
         User user = verificationToken.getUser();
-
         if (user.isBlocked()) {
             throw new UserBlockedException(UserExceptionMessages.BLOCKED);
         }
-
-        user.setPassword(passwordEncoder.encode(password));
+        for (String password : user.getOldPasswords()){
+            if (passwordEncoder.matches(newPassword, password)){
+                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED);
+            }
+        }
+        user.getOldPasswords().add(user.getPassword());
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(user);
     }
 
