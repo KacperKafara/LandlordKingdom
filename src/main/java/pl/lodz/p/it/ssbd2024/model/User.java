@@ -62,9 +62,9 @@ public class User extends AbstractEntity {
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
 
-    @Setter
+    @Enumerated(EnumType.STRING)
     @Column(name = "language", nullable = false)
-    private String language = "en";
+    private Language language = Language.EN;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AccessLevel> accessLevels = new ArrayList<>();
@@ -72,6 +72,14 @@ public class User extends AbstractEntity {
     @Setter
     @Column(name = "google_id", table = "google_auth")
     private String googleId;
+
+    public String getLanguage() {
+        return language.getValue();
+    }
+
+    public void setLanguage(String language) {
+        this.language = Language.valueOf(language.toUpperCase());
+    }
 
     @ElementCollection
     @CollectionTable(name = "old_passwords", joinColumns = @JoinColumn(name = "user_id"),
@@ -126,7 +134,7 @@ public class User extends AbstractEntity {
         this.lastName = lastName;
         this.email = email;
         this.login = login;
-        this.language = language;
+        this.language = Language.valueOf(language.toUpperCase());
         this.password = "";
         this.loginAttempts = 0;
         this.lastSuccessfulLogin = null;
