@@ -5,6 +5,7 @@ import lombok.Builder;
 @Builder
 public record AuthenticationResponse(
         String token,
-        String refreshToken
+        String refreshToken,
+        String theme
 ) {
 }
