@@ -151,29 +151,29 @@ const UserDetailsPage: FC = () => {
           <div className="flex justify-center gap-2">
             {data?.data.roles.includes("TENANT") ? (
               <Button onClick={() => removeTenantRole(data?.data.id || "")}>
-                Remove Tenant Role
+                {t("userDetailsPage.role.remove.tenant")}
               </Button>
             ) : (
               <Button onClick={() => addTenantRole(data?.data.id || "")}>
-                Add Tenant Role
+                {t("userDetailsPage.role.add.tenant")}
               </Button>
             )}
             {data?.data.roles.includes("OWNER") ? (
               <Button onClick={() => removeOwnerRole(data?.data.id || "")}>
-                Remove Owner Role
+                {t("userDetailsPage.role.remove.owner")}
               </Button>
             ) : (
               <Button onClick={() => addOwnerRole(data?.data.id || "")}>
-                Add Owner Role
+                {t("userDetailsPage.role.add.owner")}
               </Button>
             )}
             {data?.data.roles.includes("ADMINISTRATOR") ? (
               <Button onClick={() => removeAdminRole(data?.data.id || "")}>
-                Remove Administrator Role
+                {t("userDetailsPage.role.remove.administrator")}
               </Button>
             ) : (
               <Button onClick={() => addAdminRole(data?.data.id || "")}>
-                Add Administrator Role
+                {t("userDetailsPage.role.add.tenant")}
               </Button>
             )}
           </div>

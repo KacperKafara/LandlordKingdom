@@ -44,6 +44,19 @@ const userDetailsPage = {
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
   actions: "Akcje",
+
+  role: {
+    add: {
+      tenant: "Przyznaj role najemcy",
+      owner: "Przyznaj role właściciela",
+      administrator: "Przyznaj role administratora",
+    },
+    remove: {
+      tenant: "Odbierz role najemcy",
+      owner: "Odbierz role właścicela",
+      administrator: "Odbierz role administratora",
+    },
+  },
 };
 
 const updateEmailPage = {

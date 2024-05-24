@@ -43,6 +43,19 @@ const userDetailsPage = {
   blocked: "Blocked",
   verified: "Verified",
   actions: "Actions",
+
+  role: {
+    add: {
+      tenant: "Add tenant role",
+      owner: "Add owner role",
+      administrator: "Add administrator role",
+    },
+    remove: {
+      tenant: "Remove tenant role",
+      owner: "Remove owner role",
+      administrator: "Remove administrator role",
+    },
+  },
 };
 
 const updateEmailPage = {
