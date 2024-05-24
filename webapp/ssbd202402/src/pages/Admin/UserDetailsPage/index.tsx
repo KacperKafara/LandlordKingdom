@@ -119,11 +119,15 @@ const UserDetailsPage: FC = () => {
                   />
                   <DataField
                     label={t("userDetailsPage.blocked")}
-                    value={data?.data.blocked ? "true" : "false"}
+                    value={
+                      data?.data.blocked ? t("common.yes") : t("common.no")
+                    }
                   />
                   <DataField
                     label={t("userDetailsPage.verified")}
-                    value={data?.data.verified ? "true" : "false"}
+                    value={
+                      data?.data.verified ? t("common.yes") : t("common.no")
+                    }
                   />
                   <DataField
                     label={t("userDetailsPage.lastSuccessfulLogin")}
