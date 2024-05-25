@@ -27,6 +27,7 @@ interface FilterUsers {
   blocked: boolean | null;
   login: string;
   email: string;
+  lastName: string;
   role: string;
 }
 
@@ -41,6 +42,7 @@ const UserFilter: FC = () => {
       blocked: null,
       login: "",
       email: "",
+      lastName: "",
       role: "ALL",
     },
   });
@@ -77,6 +79,14 @@ const UserFilter: FC = () => {
         filterKey: "email",
         operation: "cn",
         value: values.email,
+      });
+    }
+
+    if (values.lastName != "") {
+      criterias.push({
+        filterKey: "lastName",
+        operation: "cn",
+        value: values.lastName,
       });
     }
 
@@ -213,6 +223,18 @@ const UserFilter: FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("userFilter.email")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder=". . ." />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={filterForm.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("userFilter.lastName")}</FormLabel>
                   <FormControl>
                     <Input {...field} type="text" placeholder=". . ." />
                   </FormControl>
