@@ -22,6 +22,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
                    email="adminUser@test.com"
+                   temp_email="[NULL]"
                    first_name="AdminUser"
                    last_name="AdminUser"/>
 
@@ -57,6 +58,7 @@
     <!-- Personal Data -->
     <personal_data user_id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
                    email="user@test.com"
+                   temp_email="[NULL]"
                    first_name="User"
                    last_name="User"/>
 
@@ -93,6 +95,7 @@
     <!-- Personal Data -->
     <personal_data user_id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
                    email="blockedUser@test.com"
+                   temp_email="[NULL]"
                    first_name="Blocked"
                    last_name="User"/>
 

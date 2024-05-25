@@ -3,14 +3,16 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import useAxiosPrivate from "./useAxiosPrivate";
 
+
+
 export const useResetOtherUserEmailAddress = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { api } = useAxiosPrivate();
 
   const { mutateAsync } = useMutation({
-    mutationFn: async (id: string) => {
-      const response = await api.post(`/users/${id}/email-update-request`);
+    mutationFn: async (data: {id: string, email: string}) => {
+      const response = await api.post(`/users/${data.id}/email-update-request`, {email: data.email});
       return response.status;
     },
     onSettled: async (_, error) => {
@@ -30,14 +32,18 @@ export const useResetOtherUserEmailAddress = () => {
   return { updateEmail: mutateAsync };
 };
 
+type UpdateEmailAddressRequest = {
+  email: string;
+}
+
 export const useResetMyEmailAddress = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { api } = useAxiosPrivate();
 
   const { mutateAsync } = useMutation({
-    mutationFn: async () => {
-      const response = await api.post(`/me/email-update-request`);
+    mutationFn: async (data : UpdateEmailAddressRequest) => {
+      const response = await api.post(`/me/email-update-request`, data);
       return response.status;
     },
     onSettled: async (_, error) => {

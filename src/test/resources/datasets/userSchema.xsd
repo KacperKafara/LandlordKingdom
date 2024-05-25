@@ -39,6 +39,7 @@
         <xs:complexType>
             <xs:attribute name="user_id" type="xs:string" use="required"/>
             <xs:attribute name="email" type="xs:string" use="required"/>
+            <xs:attribute name="temp_email" type="xs:string" use="optional"/>
             <xs:attribute name="first_name" type="xs:string" use="required"/>
             <xs:attribute name="last_name" type="xs:string" use="required"/>
         </xs:complexType>

@@ -101,12 +101,12 @@ public class MeController {
 
     @PostMapping("/email-update-request")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> sendUpdateEmail() {
+    public ResponseEntity<Void> sendUpdateEmail(@RequestBody @Valid StartUpdateEmailRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());
         try {
-            userService.sendEmailUpdateEmail(id);
+            userService.sendEmailUpdateVerificationEmail(id, request.email());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (TokenGenerationException e) {
@@ -119,9 +119,11 @@ public class MeController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> updateUserEmail(@RequestBody @Valid UserEmailUpdateRequest request) {
         try {
-            userService.changeUserEmail(request.token(), request.email());
+            userService.changeUserEmail(request.token(), request.password());
         } catch (NotFoundException | VerificationTokenUsedException | VerificationTokenExpiredException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidPasswordException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
