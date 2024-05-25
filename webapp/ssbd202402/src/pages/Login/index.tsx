@@ -22,6 +22,7 @@ import CodeInput from "@/pages/Login/CodeInput";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
 import LanguageSelector from "@/components/LanguageSelector";
 import LoadingButton from "@/components/LoadingButton";
+import {ModeToggle} from "@/components/ui/toggle-theme.tsx";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -120,6 +121,9 @@ const Login2FaPage: FC = () => {
               <h1 className="w-fit text-3xl font-bold">
                 {t("logoPlaceholder")}
               </h1>
+              <div className="w-fit self-end absolute right-14 top-1">
+                <ModeToggle />
+              </div>
               <LanguageSelector />
             </div>
             <h2 className="self-center pb-7 pt-3 text-2xl">
