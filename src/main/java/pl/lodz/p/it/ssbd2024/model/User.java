@@ -35,10 +35,6 @@ public class User extends AbstractEntity {
     private String password;
 
     @Setter
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
-
-    @Setter
     @Column(name = "login_attempts", nullable = false)
     private int loginAttempts = 0;
 
@@ -65,6 +61,10 @@ public class User extends AbstractEntity {
     @Setter
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
+
+    @Setter
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "language", nullable = false)
@@ -116,6 +116,7 @@ public class User extends AbstractEntity {
         this.lastFailedLogin = lastFailedLogin;
         this.blocked = blocked;
         this.verified = verified;
+        this.active = true;
     }
 
     public User(String firstName,
@@ -132,6 +133,7 @@ public class User extends AbstractEntity {
         this.lastFailedLogin = null;
         this.blocked = false;
         this.verified = false;
+        this.active = true;
     }
 
     public User(String firstName,
@@ -150,5 +152,6 @@ public class User extends AbstractEntity {
         this.lastFailedLogin = null;
         this.blocked = false;
         this.verified = false;
+        this.active = true;
     }
 }
