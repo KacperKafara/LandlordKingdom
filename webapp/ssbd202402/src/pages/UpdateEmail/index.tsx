@@ -42,6 +42,30 @@ const updateEmailFormSchema = (t: TFunction) =>
           t("validation.characters") +
           "."
       ),
+      confirmPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: t("registerPage.passwordMatch"),
+    path: ["confirmPassword"],
   });
 
 type updateEmailFormValues = z.infer<ReturnType<typeof updateEmailFormSchema>>;
@@ -55,6 +79,7 @@ const UpdateEmailPage: FC = () => {
     resolver: zodResolver(updateEmailFormSchema(t)),
     values: {
       password: "",
+      confirmPassword: "",
     },
   });
 
@@ -103,7 +128,20 @@ const UpdateEmailPage: FC = () => {
                 <FormItem className="my-3">
                   <FormLabel>{t("updateEmailPage.password")} </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem className="my-3">
+                  <FormLabel>{t("updateEmailPage.confirmPassword")} </FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

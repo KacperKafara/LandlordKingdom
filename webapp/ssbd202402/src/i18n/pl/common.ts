@@ -44,6 +44,13 @@ const userDetailsPage = {
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
   actions: "Akcje",
+  changeEmail:  "Zmień adres email",
+  updateEmailAddress:
+  "Zaktualizuj adres email",
+updateEmailAddressTitle:
+ "Czy na pewno chcesz zaktualizować adres email tego użytkownika?",
+updateEmailAddressDescription:
+  "Na podany adres email zostanie wysłany link do zmiany adresu email",
 };
 
 const updateEmailPage = {
@@ -56,6 +63,7 @@ const updateEmailPage = {
   success: "Sukces",
   error: "Błąd",
   password: "Hasło*",
+  confirmPassword: "Powtórz hasło*",
 };
 
 const registerPage = {
@@ -148,7 +156,7 @@ const userListPage = {
     "Użytkownik jest nieaktywowany albo zablokowany.",
   resetUserEmailAction: "Zaktualizuj adres email",
   resetUserEmailSuccess:
-    "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+    "Wiadomość email do zmiany adresu została wysłana na podany adres email",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
   updateEmailAddressTitle:
     "Czy na pewno chcesz zaktualizować adres email użytkownika?",
@@ -255,10 +263,11 @@ const mePage = {
   lastFailedfullLoginDateLabel: "Data ostatniego nieudanego logowania",
   lastFailedfillLoginIPLabel: "Adres ip ostatniego nieudanego logowania",
   updateData: "Zmień swoje dane",
-  changeEmail: "Zmień swój email",
+  changeEmail: "Zmień swój adres email",
   changePassword: "Zmień swoje hasło",
   changeEmailDescription:
     "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
+    emailInput: "Email*",
 };
 
 const registerSuccessPage = {
