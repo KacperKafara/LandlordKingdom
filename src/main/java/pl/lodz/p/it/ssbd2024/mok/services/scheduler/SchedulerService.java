@@ -54,4 +54,16 @@ public class SchedulerService {
             emailService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
         });
     }
+
+    @PreAuthorize("permitAll()")
+    public void checkForInactiveUsers() {
+        List<User> users = userRepository.getUserByActiveIsTrue();
+
+        users.forEach(user -> {
+            if (user.getLastSuccessfulLogin().isBefore(LocalDateTime.now().minusMonths(1))) {
+                user.setActive(false);
+                userRepository.saveAndFlush(user);
+            }
+        });
+    }
 }
