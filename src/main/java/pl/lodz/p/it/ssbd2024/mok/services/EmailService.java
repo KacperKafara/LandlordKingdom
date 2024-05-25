@@ -3,15 +3,15 @@ package pl.lodz.p.it.ssbd2024.mok.services;
 import java.time.LocalDateTime;
 
 public interface EmailService {
-    void sendAccountActivationEmail(String to, String name, String uri, String lang);
+    void sendVerifyAccountEmail(String to, String name, String uri, String lang);
+
+    void sendAccountVerifiedEmail(String to, String name, String lang);
 
     void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String ip, String lang);
 
     void sendAccountBlockEmail(String to, String name, String lang);
 
     void sendAccountUnblockEmail(String to, String name, String lang);
-
-    void sendAccountActivatedEmail(String to, String name, String lang);
 
     void sendEmailChangeEmail(String to, String name, String uri, String lang);
 

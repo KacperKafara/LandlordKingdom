@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
             String token = verificationTokenService.generateAccountVerificationToken(newUser);
 
             URI uri = URI.create(appUrl + "/verify/" + token);
-            emailService.sendAccountActivationEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
+            emailService.sendVerifyAccountEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
             return tenant.getUser();
         } catch (ConstraintViolationException e) {
             String constraintName = e.getConstraintName();
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setVerified(true);
         userRepository.saveAndFlush(user);
-        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
+        emailService.sendAccountVerifiedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override

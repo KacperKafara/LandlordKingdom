@@ -51,7 +51,7 @@ public class SchedulerService {
                 return;
             }
             URI uri = URI.create(appUrl + "/verify/" + token);
-            emailService.sendAccountActivationEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
+            emailService.sendVerifyAccountEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
         });
     }
 }
