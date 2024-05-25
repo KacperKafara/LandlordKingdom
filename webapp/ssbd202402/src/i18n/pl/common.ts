@@ -58,13 +58,12 @@ const userDetailsPage = {
       administrator: "Odbierz role administratora",
     },
   },
-  changeEmail:  "Zmień adres email",
-  updateEmailAddress:
-  "Zaktualizuj adres email",
-updateEmailAddressTitle:
- "Czy na pewno chcesz zaktualizować adres email tego użytkownika?",
-updateEmailAddressDescription:
-  "Na podany adres email zostanie wysłany link do zmiany adresu email",
+  changeEmail: "Zmień adres email",
+  updateEmailAddress: "Zaktualizuj adres email",
+  updateEmailAddressTitle:
+    "Czy na pewno chcesz zaktualizować adres email tego użytkownika?",
+  updateEmailAddressDescription:
+    "Na podany adres email zostanie wysłany link do zmiany adresu email",
 };
 
 const updateEmailPage = {
@@ -167,7 +166,7 @@ const userListPage = {
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
   resetUserPasswordToastDescriptionNotFound: "Podany użytkownik nie istanieje.",
   resetUserPasswordToastDescriptionForbidden:
-    "Użytkownik jest nieaktywowany albo zablokowany.",
+    "Użytkownik jest niezweryfikowany albo zablokowany.",
   resetUserEmailAction: "Zaktualizuj adres email",
   resetUserEmailSuccess:
     "Wiadomość email do zmiany adresu została wysłana na podany adres email",
@@ -285,7 +284,7 @@ const mePage = {
   changePassword: "Zmień swoje hasło",
   changeEmailDescription:
     "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
-    emailInput: "Email*",
+  emailInput: "Email*",
 };
 
 const registerSuccessPage = {

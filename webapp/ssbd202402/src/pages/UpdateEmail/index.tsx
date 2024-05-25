@@ -15,33 +15,31 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
-import { AxiosError } from "axios";
-import { api } from "@/data/api";
+import LoadingButton from "@/components/LoadingButton";
+import { useChangeEmailAddress } from "@/data/useUpdateEmailAddress";
 const updateEmailFormSchema = (t: TFunction) =>
-  z.object({
-    password: z
-      .string()
-      .min(
-        8,
-        t("validation.minLength") +
-          " " +
-          8 +
-          " " +
-          t("validation.characters") +
-          "."
-      )
-      .max(
-        50,
-        t("validation.maxLength") +
-          " " +
-          50 +
-          " " +
-          t("validation.characters") +
-          "."
-      ),
+  z
+    .object({
+      password: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
       confirmPassword: z
         .string()
         .min(
@@ -62,19 +60,19 @@ const updateEmailFormSchema = (t: TFunction) =>
             t("validation.characters") +
             "."
         ),
-
-  }).refine((data) => data.password === data.confirmPassword, {
-    message: t("registerPage.passwordMatch"),
-    path: ["confirmPassword"],
-  });
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("registerPage.passwordMatch"),
+      path: ["confirmPassword"],
+    });
 
 type updateEmailFormValues = z.infer<ReturnType<typeof updateEmailFormSchema>>;
 
 const UpdateEmailPage: FC = () => {
   const { token } = useParams<{ token: string }>();
   const { t } = useTranslation();
-  const { toast } = useToast();
   const navigate = useNavigate();
+  const { changeEmailAddress, isPending } = useChangeEmailAddress();
   const form = useForm<updateEmailFormValues>({
     resolver: zodResolver(updateEmailFormSchema(t)),
     values: {
@@ -86,28 +84,17 @@ const UpdateEmailPage: FC = () => {
   const handleUserSubmit: SubmitHandler<updateEmailFormValues> = async (
     data: updateEmailFormValues
   ) => {
-    try {
-      await api.post("/me/update-email", {
-        token: token,
+    await changeEmailAddress(
+      {
+        token: token ? token : "",
         password: data.password,
-      });
-      toast({
-        variant: "default",
-        title: t("updateEmailPage.updateEmailSuccess"),
-      });
-      navigate("/login");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        toast({
-          variant: "destructive",
-          title: t("updateEmailPage.updateEmailError"),
-          description: axiosError.message,
-        });
-      } else {
-        console.log(error);
+      },
+      {
+        onSuccess: () => {
+          navigate("/login");
+        },
       }
-    }
+    );
   };
 
   return (
@@ -134,7 +121,7 @@ const UpdateEmailPage: FC = () => {
                 </FormItem>
               )}
             />
-             <FormField
+            <FormField
               control={form.control}
               name="confirmPassword"
               render={({ field }) => (
@@ -147,9 +134,11 @@ const UpdateEmailPage: FC = () => {
                 </FormItem>
               )}
             />
-            <Button type="submit">
-              {t("updateEmailPage.updateEmailButton")}
-            </Button>
+            <LoadingButton
+              type="submit"
+              text={t("updateEmailPage.updateEmailButton")}
+              isLoading={isPending}
+            />
           </form>
         </Form>
       </div>

@@ -58,13 +58,11 @@ const userDetailsPage = {
     },
   },
   changeEmail: "Change email address",
-  updateEmailAddress:
-    "Update email address",
+  updateEmailAddress: "Update email address",
   updateEmailAddressTitle:
     "Are you sure you want to update this user's email address?",
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the given email address",
-
 };
 
 const updateEmailPage = {
@@ -159,6 +157,9 @@ const userListPage = {
   resetUserPasswordToastDescriptionSuccess:
     "Password reset link has been sent to the user email address",
   resetUserPasswordToastTitleFail: "Operation failed",
+  resetUserPasswordToastDescriptionNotFound: "Not found given user.",
+  resetUserPasswordToastDescriptionForbidden:
+    "User is not verified or blocked.",
   resetUserPasswordToastDescriptionFail: "Something went wrong...",
   resetUserEmailAction: "Update email",
   resetUserEmailSuccess:
