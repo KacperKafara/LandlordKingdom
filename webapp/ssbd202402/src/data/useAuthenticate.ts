@@ -36,8 +36,8 @@ export const useAuthenticate = () => {
           description: t("loginPage.invalidCredentials"),
         });
       } else if (error.response?.status === 403) {
-        const msg = error.response.data as string;
-        if (msg.toLowerCase().includes("inactive")) {
+        const message: string = error.response?.data["message"] as string;
+        if (message.toLowerCase().includes("inactivity")) {
           toast({
             variant: "destructive",
             title: t("error.baseTitle"),

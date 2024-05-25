@@ -210,6 +210,6 @@ public class EmailServiceImpl implements EmailService {
                 "name", name, "url", uri);
         String subject = mailMessageSource.getMessage("accountBlockedInactivity.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockedInactivity", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockedAfterInactivity", templateModel, lang);
     }
 }
