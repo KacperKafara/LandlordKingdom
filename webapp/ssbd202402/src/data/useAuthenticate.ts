@@ -16,6 +16,10 @@ type CodeVerificationRequest = {
   token: string;
 };
 
+type ErrorResponse = {
+  message: string;
+};
+
 export const useAuthenticate = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
@@ -36,7 +40,8 @@ export const useAuthenticate = () => {
           description: t("loginPage.invalidCredentials"),
         });
       } else if (error.response?.status === 403) {
-        const message: string = error.response?.data["message"] as string;
+        const errResp = error.response?.data as ErrorResponse;
+        const message = errResp.message;
         if (message.toLowerCase().includes("inactivity")) {
           toast({
             variant: "destructive",
