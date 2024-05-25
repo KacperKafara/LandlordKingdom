@@ -149,7 +149,7 @@ const UserDetailsPage: FC = () => {
       )}
       <Card className="mt-3 w-4/5">
         <CardHeader className="items-center">
-          <CardTitle>Roles</CardTitle>
+          <CardTitle>{t("userDetailsPage.role.title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex justify-center gap-2">

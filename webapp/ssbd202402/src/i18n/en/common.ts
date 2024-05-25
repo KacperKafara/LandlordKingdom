@@ -45,6 +45,7 @@ const userDetailsPage = {
   actions: "Actions",
 
   role: {
+    title: "Roles",
     add: {
       tenant: "Add tenant role",
       owner: "Add owner role",
