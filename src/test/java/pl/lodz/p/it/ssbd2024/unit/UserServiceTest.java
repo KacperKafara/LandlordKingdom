@@ -9,6 +9,8 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import pl.lodz.p.it.ssbd2024.config.ToolConfig;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.model.tokens.EmailVerificationToken;
+import pl.lodz.p.it.ssbd2024.model.tokens.PasswordVerificationToken;
 import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;

@@ -13,7 +13,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthAdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthOwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
