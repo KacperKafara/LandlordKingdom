@@ -30,14 +30,18 @@ export const useResetOtherUserEmailAddress = () => {
   return { updateEmail: mutateAsync };
 };
 
+type UpdateEmailAddressRequest = {
+  email: string;
+}
+
 export const useResetMyEmailAddress = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { api } = useAxiosPrivate();
 
   const { mutateAsync } = useMutation({
-    mutationFn: async () => {
-      const response = await api.post(`/me/email-update-request`);
+    mutationFn: async (data : UpdateEmailAddressRequest) => {
+      const response = await api.post(`/me/email-update-request`, data);
       return response.status;
     },
     onSettled: async (_, error) => {

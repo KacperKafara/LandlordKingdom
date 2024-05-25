@@ -22,14 +22,13 @@ import { AxiosError } from "axios";
 import { api } from "@/data/api";
 const updateEmailFormSchema = (t: TFunction) =>
   z.object({
-    email: z
+    password: z
       .string()
-      .email(t("updateEmailPage.emailNotValid"))
       .min(
-        5,
+        8,
         t("validation.minLength") +
           " " +
-          5 +
+          8 +
           " " +
           t("validation.characters") +
           "."
@@ -55,7 +54,7 @@ const UpdateEmailPage: FC = () => {
   const form = useForm<updateEmailFormValues>({
     resolver: zodResolver(updateEmailFormSchema(t)),
     values: {
-      email: "",
+      password: "",
     },
   });
 
@@ -65,7 +64,7 @@ const UpdateEmailPage: FC = () => {
     try {
       await api.post("/me/update-email", {
         token: token,
-        email: data.email,
+        password: data.password,
       });
       toast({
         variant: "default",
@@ -99,10 +98,10 @@ const UpdateEmailPage: FC = () => {
             </h1>
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem className="my-3">
-                  <FormLabel>{t("updateEmailPage.email")} </FormLabel>
+                  <FormLabel>{t("updateEmailPage.password")} </FormLabel>
                   <FormControl>
                     <Input {...field} />
                   </FormControl>

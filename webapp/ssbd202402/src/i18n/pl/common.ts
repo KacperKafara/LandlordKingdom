@@ -52,9 +52,10 @@ const updateEmailPage = {
   updateEmailButton: "Zaktualizuj email",
   updateEmailSuccess: "Email został zaktualizowany",
   updateEmailError: "Wystąpił błąd podczas aktualizacji emaila",
-  updateEmailTitle: "Wprowadź nowy adres email",
+  updateEmailTitle: "Wprowadź swoje hasło",
   success: "Sukces",
   error: "Błąd",
+  password: "Hasło*",
 };
 
 const registerPage = {
@@ -219,6 +220,10 @@ const userDataPage = {
   error: "Błąd",
   success: "Dane zaktualizowane",
   updateUserData: "Aktualizuj",
+  emailNotValid: "Email nie jest poprawny",
+  email: "Email*",
+  emailNotEmpty: "Email nie może być pusty",
+  emailTooLong: "Email jest za długi",
 };
 
 const updateDataForm = {

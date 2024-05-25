@@ -22,6 +22,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
                    email="adminUser@test.com"
+                   temp_email="[NULL]"
                    first_name="AdminUser"
                    last_name="AdminUser"/>
 

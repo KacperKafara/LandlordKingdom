@@ -51,9 +51,10 @@ const updateEmailPage = {
   updateEmailButton: "Update email",
   updateEmailSuccess: "Email has been updated",
   updateEmailError: "Error while updating email",
-  updateEmailTitle: "Enter new email address",
+  updateEmailTitle: "Enter your password",
   success: "Success",
   error: "Error",
+  password: "Password*",
 };
 
 const registerPage = {
@@ -209,6 +210,10 @@ const userDataPage = {
   error: "Error",
   success: "Data updated",
   updateUserData: "Update",
+  emailNotValid: "Email is not valid",
+  email: "Email*",
+  emailNotEmpty: "Email cannot be empty",
+  emailTooLong: "Email is too long",
 };
 
 const updateDataForm = {
