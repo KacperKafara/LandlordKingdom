@@ -5,11 +5,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.model.tokens.AccountVerificationToken;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 
 import java.net.URI;
 import java.time.LocalDateTime;
@@ -24,9 +26,12 @@ public class SchedulerService {
     private int removeUnverifiedAccountsAfterHours;
     @Value("${app.url}")
     private String appUrl;
+    @Value("${account.deactivateAccountAfterDays}")
+    private int deactivateAccountAfterDays;
 
     private final UserRepository userRepository;
     private final AccountVerificationTokenRepository accountVerificationTokenRepository;
+    private final VerificationTokenService verificationTokenService;
     private final EmailService emailService;
 
     @PreAuthorize("permitAll()")
@@ -56,14 +61,13 @@ public class SchedulerService {
     }
 
     @PreAuthorize("permitAll()")
-    public void checkForInactiveUsers() {
-        List<User> users = userRepository.getUserByActiveIsTrue();
-
-        users.forEach(user -> {
-            if (user.getLastSuccessfulLogin().isBefore(LocalDateTime.now().minusMonths(1))) {
-                user.setActive(false);
-                userRepository.saveAndFlush(user);
-            }
-        });
+    public void checkForInactiveUsers() throws TokenGenerationException {
+        List<User> users = userRepository.getUserByActiveIsTrueAndLastSuccessfulLogin(LocalDateTime.now().minusDays(deactivateAccountAfterDays));
+        for(User user : users) {
+            user.setActive(false);
+            String token = verificationTokenService.generateAccountActivateToken(user);
+            emailService.sendAccountActivateAfterBlock(user.getEmail(), user.getFirstName(), token, user.getLanguage());
+            userRepository.saveAndFlush(user);
+        }
     }
 }

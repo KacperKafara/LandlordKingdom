@@ -118,13 +118,12 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         String tokenVal = generateSafeToken();
         accountActivateTokenRepository.deleteByUserId(user.getId());
         accountActivateTokenRepository.flush();
-        AccountActivateToken token = new AccountActivateToken(tokenVal, Instant.now().plus(AccountVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
+        AccountActivateToken token = new AccountActivateToken(tokenVal, Instant.now().plus(AccountActivateToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
         return accountActivateTokenRepository.saveAndFlush(token).getToken();
     }
 
     @Override
     @PreAuthorize("permitAll()")
-
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validateAccountActivateToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         AccountActivateToken verificationToken = accountActivateTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
