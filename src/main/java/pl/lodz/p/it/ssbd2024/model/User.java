@@ -35,6 +35,10 @@ public class User extends AbstractEntity {
     private String password;
 
     @Setter
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
+
+    @Setter
     @Column(name = "login_attempts", nullable = false)
     private int loginAttempts = 0;
 

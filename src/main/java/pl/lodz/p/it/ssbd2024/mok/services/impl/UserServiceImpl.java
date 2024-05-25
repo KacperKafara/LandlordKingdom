@@ -261,4 +261,12 @@ public class UserServiceImpl implements UserService {
         user.setTheme(Theme.valueOf(theme.toUpperCase()));
         return userRepository.saveAndFlush(user).getTheme().name().toLowerCase();
     }
+
+    @Override
+    @PreAuthorize("permitAll()")
+    public User inactivateUser(UUID id) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setActive(false);
+        return userRepository.saveAndFlush(user);
+    }
 }
