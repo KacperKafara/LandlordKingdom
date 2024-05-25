@@ -129,10 +129,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String jwt = jwtService.generateToken(verificationToken.getUser().getId(), getUserRoles(verificationToken.getUser()));
         String refreshToken = jwtService.generateRefreshToken(verificationToken.getUser().getId());
+        String theme = user.getTheme().name().toLowerCase();
 
         return Map.of(
                 "token", jwt,
-                "refreshToken", refreshToken);
+                "refreshToken", refreshToken,
+                "theme", theme);
     }
 
     @Transactional(propagation = Propagation.MANDATORY)

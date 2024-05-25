@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { useResetMyEmailAddress } from "@/data/useUpdateEmailAddress.ts";
+import { useResetOtherUserEmailAddress } from "@/data/useUpdateEmailAddress.ts";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -13,10 +13,6 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
-import { z } from "zod";
-import { TFunction } from "i18next";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   FormField,
   FormItem,
@@ -26,9 +22,14 @@ import {
   Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TFunction } from "i18next";
 
 
-const UpdateEmailAddressSchema = (t: TFunction) =>
+
+const UpdateEmailAddressSchema = (t: TFunction) => 
   z.object({
     email: z.string().min(3, t("userDataPage.emailNotEmpty")).max(50, t("userDataPage.emailTooLong")).email( t("userDataPage.emailNotValid")),
   });
@@ -36,9 +37,13 @@ const UpdateEmailAddressSchema = (t: TFunction) =>
 
 type UpdateEmailAddressType = z.infer<ReturnType<typeof UpdateEmailAddressSchema>>;
 
-const UpdateEmailMyAddress: FC = () => {
+type UpdateEmailAddressProps = {
+  id: string
+}
+
+const UpdateUserEmailAddress: FC<UpdateEmailAddressProps> = ({id}) => {
   const { t } = useTranslation();
-  const { updateEmail } = useResetMyEmailAddress();
+  const { updateEmail } = useResetOtherUserEmailAddress();
   const form = useForm<UpdateEmailAddressType>({
     resolver: zodResolver(UpdateEmailAddressSchema(t)),
     values: {
@@ -46,22 +51,24 @@ const UpdateEmailMyAddress: FC = () => {
     },
     mode: "onBlur",
   });
+
   const updateEmailAddressClick  = form.handleSubmit(
     async (data: UpdateEmailAddressType) => {
-    await updateEmail(data);
+    await updateEmail({id: id, email: data.email});
     form.reset();
 });
 
-  return (
 
-      <Form {...form}>
+  return (
+  
+     <Form {...form}>
       <form onSubmit={(updateEmailAddressClick)} className="flex w-3/4 flex-col gap-3">
         <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("mePage.emailInput")} </FormLabel>
+              <FormLabel>{t("userDetailsPage.email")} </FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -71,15 +78,15 @@ const UpdateEmailMyAddress: FC = () => {
         />
         <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button >{t("mePage.updateEmailAddress")}</Button>
+          <Button >{t("userDetailsPage.updateEmailAddress")}</Button>
         </AlertDialogTrigger>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {t("mePage.updateEmailAddressTitle")}
+              {t("userDetailsPage.updateEmailAddressTitle")}
             </AlertDialogTitle>
             <AlertDialogDescription>
-              {t("mePage.updateEmailAddressDescription")}
+              {t("userDetailsPage.updateEmailAddressDescription")}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -94,9 +101,8 @@ const UpdateEmailMyAddress: FC = () => {
       </AlertDialog>
         </form>
       </Form>
-
-
+    
   );
 };
 
-export default UpdateEmailMyAddress;
+export default UpdateUserEmailAddress;

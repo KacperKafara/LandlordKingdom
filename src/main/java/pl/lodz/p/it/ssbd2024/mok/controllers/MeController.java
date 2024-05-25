@@ -12,12 +12,10 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
-import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
-import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
 import java.util.List;
@@ -83,7 +81,7 @@ public class MeController {
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (InvalidPasswordException e) {
+        } catch (InvalidPasswordException | PasswordRepetitionException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
@@ -94,7 +92,7 @@ public class MeController {
         try {
             userService.changePasswordWithToken(request.password(), request.token());
             return ResponseEntity.ok().build();
-        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException | PasswordRepetitionException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (UserBlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
@@ -103,12 +101,12 @@ public class MeController {
 
     @PostMapping("/email-update-request")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Void> sendUpdateEmail() {
+    public ResponseEntity<Void> sendUpdateEmail(@RequestBody @Valid StartUpdateEmailRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());
         try {
-            userService.sendEmailUpdateEmail(id);
+            userService.sendEmailUpdateVerificationEmail(id, request.email());
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (TokenGenerationException e) {
@@ -121,9 +119,11 @@ public class MeController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> updateUserEmail(@RequestBody @Valid UserEmailUpdateRequest request) {
         try {
-            userService.changeUserEmail(request.token(), request.email());
+            userService.changeUserEmail(request.token(), request.password());
         } catch (NotFoundException | VerificationTokenUsedException | VerificationTokenExpiredException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidPasswordException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
         return ResponseEntity.status(HttpStatus.OK).build();
     }
@@ -136,6 +136,19 @@ public class MeController {
             return ResponseEntity.ok().build();
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+    }
+
+    @PostMapping("/theme")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ChangeThemeResponse> changeTheme(@RequestBody @Valid ChangeThemeRequest request) {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            UUID id = UUID.fromString(jwt.getSubject());
+            return ResponseEntity.ok(new ChangeThemeResponse(userService.changeTheme(id, request.theme())));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 }

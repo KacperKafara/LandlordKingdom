@@ -12,7 +12,7 @@
            last_failed_login_ip="[NULL]"
            blocked="false"
            verified="true"
-           language="en"
+           language="EN"
            version="0"
            created_at="[NOW]"
            modified_at="[NOW]"
@@ -22,6 +22,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a5"
                    email="adminUser@test.com"
+                   temp_email="[NULL]"
                    first_name="AdminUser"
                    last_name="AdminUser"/>
 
@@ -50,7 +51,7 @@
            last_failed_login_ip="[NULL]"
            blocked="false"
            verified="true"
-           language="en"
+           language="EN"
            version="0"
            created_at="[NOW]"
            modified_at="[NOW]"
@@ -60,6 +61,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
                    email="adimnUser2@test.com"
+                   temp_email="[NULL]"
                    first_name="User"
                    last_name="Owner"/>
 
@@ -88,7 +90,7 @@
            last_failed_login_ip="[NULL]"
            blocked="false"
            verified="true"
-           language="en"
+           language="EN"
            version="0"
            created_at="[NOW]"
            modified_at="[NOW]"
@@ -98,6 +100,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a7"
                    email="user@test.com"
+                   temp_email="[NULL]"
                    first_name="User"
                    last_name="User"/>
 </dataset>

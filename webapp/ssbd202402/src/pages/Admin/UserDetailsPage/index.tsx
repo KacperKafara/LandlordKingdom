@@ -19,6 +19,7 @@ import { useAdminRole } from "@/data/roles/useAdminRole";
 import UpdateUserDataDialog from "./updateUserDataDialog";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import DataField from "@/pages/Me/DataField";
+import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
 
 const UserDetailsPage: FC = () => {
   const { t } = useTranslation();
@@ -182,6 +183,16 @@ const UserDetailsPage: FC = () => {
             )}
           </div>
         </CardContent>
+      </Card>
+      <Card className="mt-3 w-4/5">
+          <CardHeader className="items-center">
+                <CardTitle >{t("userDetailsPage.changeEmail")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-center">
+              <UpdateUserEmailAddress id={id!}  />
+            </div>
+          </CardContent>
       </Card>
     </div>
   );

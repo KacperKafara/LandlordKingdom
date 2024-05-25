@@ -32,7 +32,6 @@ import { useNavigate } from "react-router-dom";
 import UserFilter from "./UserFilter";
 import { useFilteredUsers } from "@/data/useFilteredUsers";
 import PageChanger from "./PageChanger";
-import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
 import { useBlockUser } from "@/data/useBlockUser.ts";
 import { useUnblockUser } from "@/data/useBlockUser.ts";
 
@@ -97,7 +96,7 @@ const UserListPage: FC = () => {
           </AlertDialog>
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-white">
+              <TableRow>
                 <TableHead>{t("userListPage.firstName")}</TableHead>
                 <TableHead>{t("userListPage.lastName")}</TableHead>
                 <TableHead>{t("userListPage.login")}</TableHead>
@@ -132,9 +131,6 @@ const UserListPage: FC = () => {
                           >
                             {t("userListPage.resetUserPasswordAction")}
                           </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
-                            <UpdateUserEmailAddress />
-                          </DropdownMenuItem>
                           {user.blocked ? (
                             <DropdownMenuItem
                               onClick={async () => {
@@ -165,10 +161,10 @@ const UserListPage: FC = () => {
                 ))}
             </TableBody>
           </Table>
+          <div className="flex justify-end">
+            <PageChanger />
+          </div>
         </div>
-      </div>
-      <div className="flex justify-center">
-        <PageChanger />
       </div>
     </>
   );

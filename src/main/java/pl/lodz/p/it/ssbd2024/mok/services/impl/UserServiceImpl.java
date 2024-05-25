@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
+import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +20,6 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
-import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
@@ -26,10 +27,8 @@ import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -140,6 +139,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
@@ -152,6 +152,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException {
         User user = getUserById(id);
@@ -166,21 +167,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
-    public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
+    public void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setBlocked(false);
+        user.setTemporaryEmail(tempEmail);
+        userRepository.saveAndFlush(user);
         String token = verificationTokenService.generateEmailVerificationToken(user);
         URI uri = URI.create(appUrl + "/update-email/" + token);
-        emailService.sendEmailChangeEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
+        emailService.sendEmailChangeEmail(tempEmail, user.getFirstName(), uri.toString(), user.getLanguage());
     }
 
     @Override
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
-    public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
+    public void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException {
+        User checkPasswordUser = verificationTokenService.getUserByToken(token);
+        if (!passwordEncoder.matches(password, checkPasswordUser.getPassword())){
+            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
+        }
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setEmail(email);
+        user.setEmail(user.getTemporaryEmail());
+        user.setTemporaryEmail(null);
         userRepository.saveAndFlush(user);
 
     }
@@ -208,13 +215,18 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("isAuthenticated()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class})
-    public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException {
+    public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException, PasswordRepetitionException {
         User user = getUserById(id);
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
         }
-
+        for (String password : user.getOldPasswords()){
+            if (passwordEncoder.matches(newPassword, password)){
+                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED);
+            }
+        }
+        user.getOldPasswords().add(user.getPassword());
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(user);
     }
@@ -222,15 +234,19 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {VerificationTokenUsedException.class, VerificationTokenExpiredException.class, UserBlockedException.class})
-    public void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException {
+    public void changePasswordWithToken(String newPassword, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException, PasswordRepetitionException {
         VerificationToken verificationToken = verificationTokenService.validatePasswordVerificationToken(token);
         User user = verificationToken.getUser();
-
         if (user.isBlocked()) {
             throw new UserBlockedException(UserExceptionMessages.BLOCKED);
         }
-
-        user.setPassword(passwordEncoder.encode(password));
+        for (String password : user.getOldPasswords()){
+            if (passwordEncoder.matches(newPassword, password)){
+                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED);
+            }
+        }
+        user.getOldPasswords().add(user.getPassword());
+        user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.saveAndFlush(user);
     }
 
@@ -243,5 +259,13 @@ public class UserServiceImpl implements UserService {
         tenantRepository.findByUserIdAndActive(id, true).ifPresent(tenant -> roles.add("TENANT"));
 
         return roles;
+    }
+
+    @Override
+    @PreAuthorize("isAuthenticated()")
+    public String changeTheme(UUID id, String theme) throws NotFoundException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setTheme(Theme.valueOf(theme.toUpperCase()));
+        return userRepository.saveAndFlush(user).getTheme().name().toLowerCase();
     }
 }

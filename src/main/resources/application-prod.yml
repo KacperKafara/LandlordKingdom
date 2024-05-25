@@ -50,14 +50,14 @@ login:
   timeOut: 300
 
 mail:
-  host: smtp4dev
-  port: 25
-  username: user
-  password: user
+  host: smtp.gmail.com
+  port: 587
+  username: landlordkingdomssbd02@gmail.com
+  password: xbig gjqb fhsu ziqz
   smtp:
-    auth: false
+    auth: true
     starttls:
-      enable: false
+      enable: true
   transfer:
     protocol: smtp
 

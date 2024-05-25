@@ -57,6 +57,14 @@ const userDetailsPage = {
       administrator: "Remove administrator role",
     },
   },
+  changeEmail: "Change email address",
+  updateEmailAddress:
+    "Update email address",
+  updateEmailAddressTitle:
+    "Are you sure you want to update this user's email address?",
+  updateEmailAddressDescription:
+    "A link to change the email address will be sent to the given email address",
+
 };
 
 const updateEmailPage = {
@@ -65,9 +73,11 @@ const updateEmailPage = {
   updateEmailButton: "Update email",
   updateEmailSuccess: "Email has been updated",
   updateEmailError: "Error while updating email",
-  updateEmailTitle: "Enter new email address",
+  updateEmailTitle: "Enter your password",
   success: "Success",
   error: "Error",
+  password: "Password*",
+  confirmPassword: "Repeat password*",
 };
 
 const registerPage = {
@@ -152,7 +162,7 @@ const userListPage = {
   resetUserPasswordToastDescriptionFail: "Something went wrong...",
   resetUserEmailAction: "Update email",
   resetUserEmailSuccess:
-    "An email for changing current address has been sent to the user's email address",
+    "An email for changing current address has been sent to the given email address",
   resetUserEmailError: "Error while initializing email change",
   resetUserEmailTitle: "Are you sure you want to update user email address?",
   resetUserEmailDescription:
@@ -194,6 +204,13 @@ const userFilter = {
   tenant: "Tenant",
   owner: "Owner",
   administrator: "Administrator",
+  clear: "Clear",
+};
+
+const pageChanger = {
+  numberOfElements: "Number of elements",
+  page: "Page",
+  of: "of",
 };
 
 const common = {
@@ -218,6 +235,11 @@ const userDataPage = {
   language: "Language*",
   error: "Error",
   success: "Data updated",
+  updateUserData: "Update",
+  emailNotValid: "Email is not valid",
+  email: "Email*",
+  emailNotEmpty: "Email cannot be empty",
+  emailTooLong: "Email is too long",
   confirmDialogDescription: "Are you sure you want to chane personal data?",
 };
 
@@ -251,9 +273,10 @@ const mePage = {
   lastFailedfullLoginDateLabel: "Last failed Login Date",
   lastFailedfillLoginIPLabel: "Last failed Login IP",
   updateData: "Update your data",
-  changeEmail: "Change your email",
+  changeEmail: "Change your email address",
   changePassword: "Change your password",
   changeEmailDescription: "Click here to send email with link to change email.",
+  emailInput: "Email*",
 };
 
 const registerSuccessPage = {
@@ -305,6 +328,7 @@ export default {
   userDataPage,
   updateEmailPage,
   validation,
+  pageChanger,
   sessionExpired: "Session expired",
   sessionExpiredDescription: "Session expired, please login again",
   footer: "Landlord Kingdom - SSBD202402",

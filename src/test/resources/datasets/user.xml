@@ -12,7 +12,7 @@
            last_failed_login_ip="[NULL]"
            blocked="false"
            verified="true"
-           language="en"
+           language="EN"
            version="0"
            created_at="2024-05-04 14:33:01.413581"
            modified_at="2024-05-04 14:33:01.413581"
@@ -23,6 +23,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
                    email="test_email1@test.com"
+                   temp_email="[NULL]"
                    first_name="test_first_name1"
                    last_name="test_last_name1"/>
 

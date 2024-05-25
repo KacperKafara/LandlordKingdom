@@ -22,14 +22,13 @@ import { AxiosError } from "axios";
 import { api } from "@/data/api";
 const updateEmailFormSchema = (t: TFunction) =>
   z.object({
-    email: z
+    password: z
       .string()
-      .email(t("updateEmailPage.emailNotValid"))
       .min(
-        5,
+        8,
         t("validation.minLength") +
           " " +
-          5 +
+          8 +
           " " +
           t("validation.characters") +
           "."
@@ -43,6 +42,30 @@ const updateEmailFormSchema = (t: TFunction) =>
           t("validation.characters") +
           "."
       ),
+      confirmPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+
+  }).refine((data) => data.password === data.confirmPassword, {
+    message: t("registerPage.passwordMatch"),
+    path: ["confirmPassword"],
   });
 
 type updateEmailFormValues = z.infer<ReturnType<typeof updateEmailFormSchema>>;
@@ -55,7 +78,8 @@ const UpdateEmailPage: FC = () => {
   const form = useForm<updateEmailFormValues>({
     resolver: zodResolver(updateEmailFormSchema(t)),
     values: {
-      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
@@ -65,7 +89,7 @@ const UpdateEmailPage: FC = () => {
     try {
       await api.post("/me/update-email", {
         token: token,
-        email: data.email,
+        password: data.password,
       });
       toast({
         variant: "default",
@@ -88,23 +112,36 @@ const UpdateEmailPage: FC = () => {
 
   return (
     <>
-      <div className="h-screen flex flex-col justify-center items-center bg-gray-100">
+      <div className="flex h-screen flex-col items-center justify-center">
         <Form {...form}>
           <form
-            className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl relative"
+            className="border-1 relative flex w-1/4 flex-col rounded-md p-7 shadow-2xl"
             onSubmit={form.handleSubmit(handleUserSubmit)}
           >
-            <h1 className="text-3xl mb-10 text-center">
+            <h1 className="mb-10 text-center text-3xl">
               {t("updateEmailPage.updateEmailTitle")}
             </h1>
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem className="my-3">
-                  <FormLabel>{t("updateEmailPage.email")} </FormLabel>
+                  <FormLabel>{t("updateEmailPage.password")} </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+             <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem className="my-3">
+                  <FormLabel>{t("updateEmailPage.confirmPassword")} </FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

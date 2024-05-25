@@ -66,11 +66,11 @@ const ResetPasswordForm: FC = () => {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center">
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 shadow-2x relative flex w-1/4 flex-col rounded-md border-black bg-white p-7"
+          className="border-1 shadow-2x relative flex w-1/4 flex-col rounded-md p-7"
         >
           <LanguageSelector />
           <h1 className="self-center text-3xl font-bold">

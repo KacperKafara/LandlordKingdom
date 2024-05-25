@@ -18,6 +18,7 @@ import { Role } from "@/store/userStore";
 import { useUsersFilterStore } from "@/store/usersFilterStore";
 import { SearchCriteria } from "@/types/filter/SearchCriteria";
 import { ChevronsUpDown } from "lucide-react";
+import { LuFilterX } from "react-icons/lu";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -87,6 +88,16 @@ const UserFilter: FC = () => {
     });
     store.setPageNumber(0);
   });
+
+  const handleClearFilters = () => {
+    filterForm.reset();
+    store.setSearchCriteriaList({
+      dataOption: "all",
+      searchCriteriaList: [],
+      role: "ALL",
+    });
+    store.setPageNumber(0);
+  };
 
   return (
     <>
@@ -230,11 +241,12 @@ const UserFilter: FC = () => {
                       <Button
                         variant={"outline"}
                         role="combobox"
-                        className="flex gap-1 w-48 justify-between"
+                        className="flex w-48 justify-between gap-1"
                       >
                         <div className="flex gap-1">
                           {t(
-                            `userFilter.${filterForm.getValues("role").toLowerCase() as Role
+                            `userFilter.${
+                              filterForm.getValues("role").toLowerCase() as Role
                             }`
                           )}
                         </div>
@@ -260,6 +272,17 @@ const UserFilter: FC = () => {
             />
             <div className="flex self-end">
               <Button type="submit">{t("userFilter.submit")}</Button>
+            </div>
+            <div className="flex self-end">
+            <Button
+                type="button"
+                variant="ghost"
+                className="flex gap-2 items-center"
+                onClick={handleClearFilters}
+               > 
+                <LuFilterX size={20}/>
+                {t("userFilter.clear")}
+              </Button>
             </div>
             <div className="flex self-end">
               <RefreshQueryButton queryKeys={["filteredUsers"]} />
