@@ -30,6 +30,7 @@ const loginPage = {
     description: "Wprowadzono niepoprawny żeton",
   },
   googleLoginButton: "Zaloguj się z Google",
+  inactiveAccount: "Twoje konto jest nieaktywne, by kontynuować sprawdź skrzynkę pocztową",
 };
 
 const userDetailsPage = {

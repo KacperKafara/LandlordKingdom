@@ -24,6 +24,9 @@ public interface VerificationTokenService {
 
     VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
+    String generateAccountActivateToken(User user) throws TokenGenerationException;
+
+    VerificationToken validateAccountActivateToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
     String generateOTPToken(User user) throws InvalidKeyException;
 

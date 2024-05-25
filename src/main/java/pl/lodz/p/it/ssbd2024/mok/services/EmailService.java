@@ -34,4 +34,6 @@ public interface EmailService {
     void sendAdminLoginEmail(String to, String name, String ip, String lang);
 
     void sendOTPEmail(String to, String name, String otp, String lang);
+
+    void sendAccountActivateAfterBlock(String to, String name, String token, String lang);
 }

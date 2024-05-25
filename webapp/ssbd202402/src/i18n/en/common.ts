@@ -30,6 +30,7 @@ const loginPage = {
     description: "Provided incorrect token",
   },
   googleLoginButton: "Sign in with Google",
+  inactiveAccount: "Your account is inactive, check you e-mail to continue",
 };
 
 const userDetailsPage = {

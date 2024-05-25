@@ -36,11 +36,20 @@ export const useAuthenticate = () => {
           description: t("loginPage.invalidCredentials"),
         });
       } else if (error.response?.status === 403) {
-        toast({
-          variant: "destructive",
-          title: t("loginPage.loginError"),
-          description: t("loginPage.loginNotAllowed"),
-        });
+        const msg = error.response.data as string;
+        if (msg.toLowerCase().includes("inactive")) {
+          toast({
+            variant: "destructive",
+            title: t("error.baseTitle"),
+            description: t("loginPage.inactiveAccount"),
+          });
+        } else {
+          toast({
+            variant: "destructive",
+            title: t("loginPage.loginError"),
+            description: t("loginPage.loginNotAllowed"),
+          });
+        }
       } else {
         toast({
           variant: "destructive",
