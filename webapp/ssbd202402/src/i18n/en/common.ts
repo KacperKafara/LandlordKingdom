@@ -42,6 +42,7 @@ const userDetailsPage = {
   lastFailedLogin: "Last failed login",
   blocked: "Blocked",
   verified: "Verified",
+  active: "Active",
   actions: "Actions",
 };
 

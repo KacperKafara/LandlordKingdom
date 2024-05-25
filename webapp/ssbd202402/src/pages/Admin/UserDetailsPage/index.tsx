@@ -126,6 +126,10 @@ const UserDetailsPage: FC = () => {
                     value={data?.data.verified ? "true" : "false"}
                   />
                   <DataField
+                    label={t("userDetailsPage.active")}
+                    value={data?.data.active ? "true" : "false"}
+                  />
+                  <DataField
                     label={t("userDetailsPage.lastSuccessfulLogin")}
                     value={data?.data.lastSuccessfulLogin ?? "-"}
                   />

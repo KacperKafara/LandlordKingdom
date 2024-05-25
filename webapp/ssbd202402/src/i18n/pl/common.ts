@@ -43,6 +43,7 @@ const userDetailsPage = {
   lastFailedLogin: "Ostatnie nieudane logowanie",
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
+  active: "Aktywny",
   actions: "Akcje",
 };
 
