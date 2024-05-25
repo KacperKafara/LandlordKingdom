@@ -29,4 +29,5 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
 
     List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
     List<User> getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(LocalDateTime createdAt, LocalDateTime createdAt2);
+    List<User> getUserByActiveIsTrue();
 }
