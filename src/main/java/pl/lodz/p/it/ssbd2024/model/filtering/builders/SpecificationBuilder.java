@@ -11,5 +11,7 @@ public interface SpecificationBuilder<T> {
 
     SpecificationBuilder<T> with(SearchCriteria searchCriteria);
 
+    SpecificationBuilder<T> with(List<SearchCriteria> searchCriteria);
+
     Specification<T> build() throws InvalidDataException;
 }
