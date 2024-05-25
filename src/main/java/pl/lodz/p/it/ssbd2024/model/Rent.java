@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(
@@ -41,6 +43,13 @@ public class Rent extends AbstractEntity {
     @Column(name = "balance", nullable = false, precision = 10, scale = 2)
     @Setter
     private BigDecimal balance;
+
+    @OneToMany(mappedBy = "payment")
+    private List<Payment> payments = new ArrayList<>();
+    @OneToMany(mappedBy = "variable_fee")
+    private List<VariableFee> variableFees = new ArrayList<>();
+    @OneToMany(mappedBy = "fixed_fee")
+    private List<FixedFee> fixedFees = new ArrayList<>();
 
     public Rent(Local local,
                 Tenant tenant,
