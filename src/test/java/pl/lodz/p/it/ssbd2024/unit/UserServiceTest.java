@@ -190,8 +190,10 @@ class UserServiceTest {
     @Order(8)
     void ChangeUserEmail_VerificationTokenExpired_Test() {
         User user = new User();
+        user.setPassword("$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.");
         when(emailVerificationTokenRepository.findByToken("tagValue")).thenReturn(Optional.of(new EmailVerificationToken("tagValue", Instant.now().minusSeconds(60), user)));
-        assertThrows(VerificationTokenExpiredException.class, () -> userService.changeUserEmail("tagValue", "new@mail.com" ));
+
+        assertThrows(VerificationTokenExpiredException.class, () -> userService.changeUserEmail("tagValue", "password" ));
 
         verify(userRepository, never()).saveAndFlush(user);
     }
@@ -292,7 +294,7 @@ class UserServiceTest {
         UUID userId = UUID.randomUUID();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userService.sendEmailUpdateVerificationEmail(userId, ));
+        assertThrows(NotFoundException.class, () -> userService.sendEmailUpdateVerificationEmail(userId, "temp@mail.com" ));
     }
 
     @Test
