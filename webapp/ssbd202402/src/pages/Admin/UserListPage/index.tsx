@@ -97,7 +97,7 @@ const UserListPage: FC = () => {
           </AlertDialog>
           <Table>
             <TableHeader>
-              <TableRow className="hover:bg-white">
+              <TableRow>
                 <TableHead>{t("userListPage.firstName")}</TableHead>
                 <TableHead>{t("userListPage.lastName")}</TableHead>
                 <TableHead>{t("userListPage.login")}</TableHead>

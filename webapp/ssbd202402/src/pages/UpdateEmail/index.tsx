@@ -88,13 +88,13 @@ const UpdateEmailPage: FC = () => {
 
   return (
     <>
-      <div className="h-screen flex flex-col justify-center items-center bg-gray-100">
+      <div className="flex h-screen flex-col items-center justify-center">
         <Form {...form}>
           <form
-            className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl relative"
+            className="border-1 relative flex w-1/4 flex-col rounded-md p-7 shadow-2xl"
             onSubmit={form.handleSubmit(handleUserSubmit)}
           >
-            <h1 className="text-3xl mb-10 text-center">
+            <h1 className="mb-10 text-center text-3xl">
               {t("updateEmailPage.updateEmailTitle")}
             </h1>
             <FormField

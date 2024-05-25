@@ -183,11 +183,11 @@ const RegisterPage: FC = () => {
   });
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center">
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 relative flex w-6/12 flex-col rounded-md border-black bg-white p-7 shadow-2xl"
+          className="border-1 relative flex w-6/12 flex-col rounded-md p-7 shadow-2xl"
         >
           <LanguageSelector />
           <h1 className="self-center text-3xl font-bold">

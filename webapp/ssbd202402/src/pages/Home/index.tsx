@@ -15,14 +15,14 @@ const HomePage: FC = () => {
   }
 
   return (
-    <div className="relative flex min-h-screen w-screen flex-col items-center justify-center bg-gray-100">
+    <div className="relative flex min-h-screen w-screen flex-col items-center justify-center">
       <LanguageSelector />
       <div className="flex flex-row items-center">
         <img
           src={homeImage}
           className="hidden w-[400px] rounded-md shadow-2xl sm:block lg:w-[600px]"
         />
-        <div className="flex aspect-square w-[300px] flex-col items-center justify-center gap-2 rounded-md bg-white p-10 shadow-2xl sm:-translate-x-10 lg:w-[500px]">
+        <div className="flex aspect-square w-[300px] flex-col items-center justify-center gap-2 rounded-md p-10 shadow-2xl sm:-translate-x-10 lg:w-[500px]">
           <h1 className="text-center text-4xl font-bold">
             {t("logoPlaceholder")}
           </h1>
