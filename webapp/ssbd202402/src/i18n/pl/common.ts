@@ -216,6 +216,7 @@ const userFilter = {
   owner: "Właściciel",
   administrator: "Administrator",
   clear: "Wyczyść",
+  firstName: "Imię",
   lastName: "Nazwisko",
 };
 

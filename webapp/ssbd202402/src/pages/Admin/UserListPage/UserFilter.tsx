@@ -29,6 +29,7 @@ interface FilterUsers {
   login: string;
   email: string;
   lastName: string;
+  firstName: string;
   role: string;
 }
 
@@ -44,6 +45,7 @@ const UserFilter: FC = () => {
       login: "",
       email: "",
       lastName: "",
+      firstName: "",
       role: "ALL",
     },
   });
@@ -91,6 +93,14 @@ const UserFilter: FC = () => {
       });
     }
 
+    if (values.firstName != "") {
+      criterias.push({
+        filterKey: "firstName",
+        operation: "cn",
+        value: values.firstName,
+      });
+    }
+
     store.setSearchCriteriaList({
       dataOption: "all",
       searchCriteriaList: criterias,
@@ -113,7 +123,7 @@ const UserFilter: FC = () => {
     <>
       <Form {...filterForm}>
         <form onSubmit={handleFilterSubmit}>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap justify-center gap-3">
             <FormField
               control={filterForm.control}
               name="verified"
@@ -132,7 +142,7 @@ const UserFilter: FC = () => {
                           : filterForm.getValues("verified") == true
                             ? t("common.yes")
                             : t("common.no")}
-                        <ChevronsUpDown />
+                        <ChevronsUpDown className="size-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -183,7 +193,7 @@ const UserFilter: FC = () => {
                           : filterForm.getValues("blocked") == true
                             ? t("common.yes")
                             : t("common.no")}
-                        <ChevronsUpDown />
+                        <ChevronsUpDown className="size-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -218,6 +228,70 @@ const UserFilter: FC = () => {
             />
             <FormField
               control={filterForm.control}
+              name="role"
+              render={() => (
+                <FormItem>
+                  <FormLabel>{t("userFilter.role")}</FormLabel>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        role="combobox"
+                        className="flex w-36 justify-between gap-1"
+                      >
+                        <div className="flex gap-1">
+                          {t(
+                            `userFilter.${
+                              filterForm.getValues("role").toLowerCase() as Role
+                            }`
+                          )}
+                        </div>
+                        <ChevronsUpDown className="size-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {allRoles.map((role) => (
+                        <DropdownMenuCheckboxItem
+                          key={role}
+                          checked={filterForm.getValues("role") === role}
+                          onCheckedChange={() =>
+                            filterForm.setValue("role", role)
+                          }
+                        >
+                          {t(`userFilter.${role.toLowerCase() as Role}`)}
+                        </DropdownMenuCheckboxItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={filterForm.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("userFilter.firstName")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder=". . ." />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={filterForm.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("userFilter.lastName")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder=". . ." />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={filterForm.control}
               name="login"
               render={({ field }) => (
                 <FormItem>
@@ -240,74 +314,24 @@ const UserFilter: FC = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={filterForm.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("userFilter.lastName")}</FormLabel>
-                  <FormControl>
-                    <Input {...field} type="text" placeholder=". . ." />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={filterForm.control}
-              name="role"
-              render={() => (
-                <FormItem>
-                  <FormLabel>{t("userFilter.role")}</FormLabel>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        role="combobox"
-                        className="flex w-48 justify-between gap-1"
-                      >
-                        <div className="flex gap-1">
-                          {t(
-                            `userFilter.${
-                              filterForm.getValues("role").toLowerCase() as Role
-                            }`
-                          )}
-                        </div>
-                        <ChevronsUpDown />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {allRoles.map((role) => (
-                        <DropdownMenuCheckboxItem
-                          key={role}
-                          checked={filterForm.getValues("role") === role}
-                          onCheckedChange={() =>
-                            filterForm.setValue("role", role)
-                          }
-                        >
-                          {t(`userFilter.${role.toLowerCase() as Role}`)}
-                        </DropdownMenuCheckboxItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </FormItem>
-              )}
-            />
-            <div className="flex self-end">
-              <Button type="submit">{t("userFilter.submit")}</Button>
-            </div>
-            <div className="flex self-end">
-            <Button
-                type="button"
-                variant="ghost"
-                className="flex gap-2 items-center"
-                onClick={handleClearFilters}
-               > 
-                <LuFilterX size={20}/>
-                {t("userFilter.clear")}
-              </Button>
-            </div>
-            <div className="flex self-end">
-              <RefreshQueryButton queryKeys={["filteredUsers"]} />
+            <div className="flex gap-3">
+              <div className="flex self-end">
+                <Button type="submit">{t("userFilter.submit")}</Button>
+              </div>
+              <div className="flex self-end">
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="flex items-center gap-2"
+                  onClick={handleClearFilters}
+                >
+                  <LuFilterX size={20} />
+                  {t("userFilter.clear")}
+                </Button>
+              </div>
+              <div className="flex self-end">
+                <RefreshQueryButton queryKeys={["filteredUsers"]} />
+              </div>
             </div>
           </div>
         </form>
