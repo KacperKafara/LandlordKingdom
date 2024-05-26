@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
@@ -15,6 +17,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/me")
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.NEVER)
 public class MeOwnerController {
     private final LocalService localService;
     private final ApplicationService applicationService;

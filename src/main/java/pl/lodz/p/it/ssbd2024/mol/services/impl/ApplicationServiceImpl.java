@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.mol.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalAlreadyRentedException;
@@ -17,6 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ApplicationServiceImpl implements ApplicationService {
     private final ApplicationRepository applicationRepository;
     private final RentRepository rentRepository;
