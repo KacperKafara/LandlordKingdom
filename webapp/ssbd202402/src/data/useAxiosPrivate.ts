@@ -21,7 +21,6 @@ const useAxiosPrivate = () => {
   useEffect(() => {
     const requestInterceptor = api.interceptors.request.use(
       (config) => {
-        console.log("requestInterceptor");
         const token = localStorage.getItem("token");
         if (token && !config.url?.includes("auth")) {
           config.headers.Authorization = `Bearer ${token}`;
@@ -40,7 +39,6 @@ const useAxiosPrivate = () => {
         const prevRequest = error.config;
         error = error as AxiosError;
         if (error.response?.status === 401) {
-          console.log("401 error");
           const response = api.post("/auth/refresh", {
             refreshToken,
           });

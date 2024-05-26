@@ -18,6 +18,7 @@ public record DetailedUserResponse(
         boolean blocked,
         boolean verified,
         boolean active,
-        List<String> roles
+        List<String> roles,
+        String theme
 ) {
 }
