@@ -1,13 +1,11 @@
 package pl.lodz.p.it.ssbd2024.mok.services;
 
-import java.time.LocalDateTime;
-
 public interface EmailService {
     void sendVerifyAccountEmail(String to, String name, String uri, String lang);
 
     void sendAccountVerifiedEmail(String to, String name, String lang);
 
-    void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String ip, String lang);
+    void sendLoginBlockEmail(String to, int loginNumber, String failedLoginTime, String unblockTime, String ip, String lang);
 
     void sendAccountBlockEmail(String to, String name, String lang);
 

@@ -45,6 +45,11 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Value("${otp.secret}")
     private String otpSecret;
 
+    @Override
+    @PreAuthorize("permitAll()")
+    public User getUserByToken(String token) throws VerificationTokenUsedException {
+        return emailTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED)).getUser();
+    }
 
     @Override
     @PreAuthorize("permitAll()")

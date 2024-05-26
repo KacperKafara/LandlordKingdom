@@ -24,6 +24,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a5"
                    email="adminUser@test.com"
+                   temp_email="[NULL]"
                    first_name="AdminUser"
                    last_name="AdminUser"/>
 
@@ -64,6 +65,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
                    email="userTenant@test.com"
+                   temp_email="[NULL]"
                    first_name="User"
                    last_name="Tenant"/>
 
@@ -104,6 +106,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a7"
                    email="user@test.com"
+                   temp_email="[NULL]"
                    first_name="User"
                    last_name="User"/>
 </dataset>

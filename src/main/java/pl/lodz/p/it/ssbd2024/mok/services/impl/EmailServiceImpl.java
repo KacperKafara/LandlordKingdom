@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.services.HtmlEmailService;
 
-import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Map;
 
@@ -43,7 +42,7 @@ public class EmailServiceImpl implements EmailService {
 
 
     @Override
-    public void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String ip, String lang) {
+    public void sendLoginBlockEmail(String to, int loginNumber, String failedLoginTime, String unblockTime, String ip, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "loginNumber", loginNumber,
                 "failedLoginTime", failedLoginTime,

@@ -24,6 +24,7 @@
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
                    email="userNotVerified@test.com"
+                   temp_email="[NULL]"
                    first_name="test_first_name1"
                    last_name="test_last_name1"/>
 
@@ -64,6 +65,7 @@
     <!-- Personal Data -->
     <personal_data user_id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
                    email="userVerified@test.com"
+                   temp_email="[NULL]"
                    first_name="test_first_name2"
                    last_name="test_last_name2"/>
 
@@ -104,6 +106,7 @@
     <!-- Personal Data -->
     <personal_data user_id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
                    email="userBlocked@test.com"
+                   temp_email="[NULL]"
                    first_name="test_first_name3"
                    last_name="test_last_name3"/>
 
@@ -144,6 +147,7 @@
     <!-- Personal Data -->
     <personal_data user_id="594d67c2-6820-4724-8f22-512dd097dc5e"
                    email="userWithAttempts2DaysAgo@test.com"
+                   temp_email="[NULL]"
                    first_name="test_first_name5"
                    last_name="test_last_name5"/>
 

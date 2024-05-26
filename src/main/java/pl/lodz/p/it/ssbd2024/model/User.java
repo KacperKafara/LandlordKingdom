@@ -27,6 +27,10 @@ public class User extends AbstractEntity {
     @Column(name = "email", table = "personal_data", nullable = false, unique = true, length = 50)
     private String email;
 
+    @Setter
+    @Column(name = "temp_email", table = "personal_data", length = 50)
+    private String temporaryEmail;
+
     @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
     private String login;
 
@@ -95,6 +99,10 @@ public class User extends AbstractEntity {
             indexes = @Index(name = "idx_user_oldPassword", columnList = "user_id"))
     @Column(name = "password")
     private List<String> oldPasswords = new ArrayList<>();
+
+    @Setter
+    @ManyToOne
+    private Timezone timezone;
 
     public User(String firstName,
                 String lastName,

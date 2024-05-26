@@ -45,6 +45,26 @@ const userDetailsPage = {
   verified: "Verified",
   active: "Active",
   actions: "Actions",
+
+  role: {
+    title: "Roles",
+    add: {
+      tenant: "Add tenant role",
+      owner: "Add owner role",
+      administrator: "Add administrator role",
+    },
+    remove: {
+      tenant: "Remove tenant role",
+      owner: "Remove owner role",
+      administrator: "Remove administrator role",
+    },
+  },
+  changeEmail: "Change email address",
+  updateEmailAddress: "Update email address",
+  updateEmailAddressTitle:
+    "Are you sure you want to update this user's email address?",
+  updateEmailAddressDescription:
+    "A link to change the email address will be sent to the given email address",
 };
 
 const updateEmailPage = {
@@ -53,9 +73,11 @@ const updateEmailPage = {
   updateEmailButton: "Update email",
   updateEmailSuccess: "Email has been updated",
   updateEmailError: "Error while updating email",
-  updateEmailTitle: "Enter new email address",
+  updateEmailTitle: "Enter your password",
   success: "Success",
   error: "Error",
+  password: "Password*",
+  confirmPassword: "Repeat password*",
 };
 
 const registerPage = {
@@ -132,15 +154,18 @@ const userListPage = {
   viewDetails: "Details",
   resetUserPasswordAction: "Reset password",
   resetUserPasswordTitle: "Reset user password",
-  resetUserPasswordDescription: "Are you sure you want to reset user password?",
+  resetUserPasswordDescription: "Are you sure you want to reset user password ",
   resetUserPasswordToastTitleSuccess: "Operation successful",
   resetUserPasswordToastDescriptionSuccess:
     "Password reset link has been sent to the user email address",
   resetUserPasswordToastTitleFail: "Operation failed",
+  resetUserPasswordToastDescriptionNotFound: "Not found given user.",
+  resetUserPasswordToastDescriptionForbidden:
+    "User is not verified or blocked.",
   resetUserPasswordToastDescriptionFail: "Something went wrong...",
   resetUserEmailAction: "Update email",
   resetUserEmailSuccess:
-    "An email for changing current address has been sent to the user's email address",
+    "An email for changing current address has been sent to the given email address",
   resetUserEmailError: "Error while initializing email change",
   resetUserEmailTitle: "Are you sure you want to update user email address?",
   resetUserEmailDescription:
@@ -182,6 +207,7 @@ const userFilter = {
   tenant: "Tenant",
   owner: "Owner",
   administrator: "Administrator",
+  clear: "Clear",
 };
 
 const pageChanger = {
@@ -193,6 +219,8 @@ const pageChanger = {
 const common = {
   yes: "yes",
   no: "no",
+  update: "Update",
+  confirmDialogTitle: "Are you sure?",
 };
 
 const navLinks = {
@@ -211,6 +239,11 @@ const userDataPage = {
   error: "Error",
   success: "Data updated",
   updateUserData: "Update",
+  emailNotValid: "Email is not valid",
+  email: "Email*",
+  emailNotEmpty: "Email cannot be empty",
+  emailTooLong: "Email is too long",
+  confirmDialogDescription: "Are you sure you want to chane personal data?",
 };
 
 const updateDataForm = {
@@ -243,9 +276,10 @@ const mePage = {
   lastFailedfullLoginDateLabel: "Last failed Login Date",
   lastFailedfillLoginIPLabel: "Last failed Login IP",
   updateData: "Update your data",
-  changeEmail: "Change your email",
+  changeEmail: "Change your email address",
   changePassword: "Change your password",
   changeEmailDescription: "Click here to send email with link to change email.",
+  emailInput: "Email*",
 };
 
 const registerSuccessPage = {
