@@ -12,13 +12,17 @@ public class UserMapper {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public static UserResponse toUserResponse(User user) {
+        String timezone = user.getTimezone() != null ?
+                user.getTimezone().getName() : null;
+
         return new UserResponse(user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
                 user.getLogin(),
                 user.getLanguage(),
-                user.isBlocked());
+                user.isBlocked(),
+                timezone);
     }
 
     public static DetailedUserResponse toDetailedUserResponse(User user, List<String> roles) {
@@ -26,6 +30,8 @@ public class UserMapper {
                 user.getLastSuccessfulLogin().format(formatter) : null;
         String lastFailedLogin = user.getLastFailedLogin() != null ?
                 user.getLastFailedLogin().format(formatter) : null;
+        String timezone = user.getTimezone() != null ?
+                user.getTimezone().getName() : null;
 
         return new DetailedUserResponse(user.getId(),
                 user.getFirstName(),
@@ -37,6 +43,7 @@ public class UserMapper {
                 lastFailedLogin,
                 user.getLastSuccessfulLoginIp(),
                 user.getLastFailedLoginIp(),
+                timezone,
                 user.isBlocked(),
                 user.isVerified(),
                 roles);

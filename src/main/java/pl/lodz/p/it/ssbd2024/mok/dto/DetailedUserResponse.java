@@ -14,6 +14,7 @@ public record DetailedUserResponse(
         String lastFailedLogin,
         String lastSuccessfulLoginIP,
         String lastFailedLoginIP,
+        String timezone,
         boolean blocked,
         boolean verified,
         List<String> roles
