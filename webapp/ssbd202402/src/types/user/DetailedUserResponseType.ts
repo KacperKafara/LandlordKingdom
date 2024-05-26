@@ -7,6 +7,7 @@ export type DetailedUserResponse = {
   language: string;
   lastSuccessfulLogin: string;
   lastFailedLogin: string;
+  timezone: string;
   blocked: boolean;
   verified: boolean;
   roles: string[];
