@@ -15,7 +15,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/me")
 @RequiredArgsConstructor
-public class MeMolController {
+public class MeOwnerController {
     private final LocalService localService;
     private final ApplicationService applicationService;
     private final RentService rentService;
@@ -77,12 +77,6 @@ public class MeMolController {
     @PatchMapping("/rents/{id}/endDate")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<RentResponse> setEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @PostMapping("/getRole")
-    @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<GetRoleResponse> getRole() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

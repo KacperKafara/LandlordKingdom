@@ -11,4 +11,5 @@ public interface RentService {
     List<Rent> getCurrentRents(UUID ownerId);
     Rent payForRent(UUID rentId, UUID ownerId, Payment payment);
     Rent editEndDate(UUID rentId, UUID ownerId, Rent rent) throws WrongEndDateException;
+    List<Rent> getCurrentRentsForTenant(UUID tenantId);
 }
