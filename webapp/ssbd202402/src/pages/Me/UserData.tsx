@@ -22,9 +22,7 @@ import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
-import { useTimezoneSelect, allTimezones } from "react-timezone-select"
-
-
+import { useTimezoneSelect, allTimezones } from "react-timezone-select";
 
 const updateUserSchema = (t: TFunction) =>
   z.object({
@@ -37,7 +35,11 @@ const updateUserSchema = (t: TFunction) =>
 type UpdateUserSchema = z.infer<ReturnType<typeof updateUserSchema>>;
 
 const UserData: FC = () => {
-  const { options, parseTimezone} = useTimezoneSelect({ labelStyle : "abbrev", timezones: allTimezones, displayValue: "UTC" });
+  const { options, parseTimezone } = useTimezoneSelect({
+    labelStyle: "abbrev",
+    timezones: allTimezones,
+    displayValue: "UTC",
+  });
   const { t } = useTranslation();
   const { data } = useMeQuery();
   const putMutation = useMeMutation();
@@ -47,112 +49,109 @@ const UserData: FC = () => {
       firstName: data?.data.firstName || "",
       lastName: data?.data.lastName || "",
       language: data?.data.language || "",
-      timezone: parseTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone).value, // dodac wartosc pobrana z be
+      timezone: parseTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
+        .value, // dodac wartosc pobrana z be
     },
   });
 
   const handleUserSubmit = form.handleSubmit((request) => {
     // usunac jak bedzie zmienione query
-    request = { 
+    request = {
       firstName: request.firstName,
-      lastName:  request.lastName,
-      language:  request.language,
-    }
+      lastName: request.lastName,
+      language: request.language,
+    };
     let etag: string = data?.headers.etag;
     etag = etag.substring(1, etag.length - 1);
     putMutation.mutate({ request, etag });
   });
 
   return (
-      <Form {...form}>
-        <form onSubmit={handleUserSubmit} className="flex w-3/4 flex-col gap-3">
-          <FormField
-            control={form.control}
-            name="firstName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("userDataPage.firstName")} </FormLabel>
+    <Form {...form}>
+      <form onSubmit={handleUserSubmit} className="flex w-3/4 flex-col gap-3">
+        <FormField
+          control={form.control}
+          name="firstName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("userDataPage.firstName")} </FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="lastName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("userDataPage.lastName")} </FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="language"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("userDataPage.language")}</FormLabel>
+              <div>
                 <FormControl>
-                  <Input {...field} />
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pl">Polski</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="lastName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("userDataPage.lastName")} </FormLabel>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="timezone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>{t("userDataPage.timeZone")}</FormLabel>
+              <div>
                 <FormControl>
-                  <Input {...field} />
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <SelectTrigger className="">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {options.map((option) => (
+                        //jesli chcemy skrot to zmienic option.value na option.abbr
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="language"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("userDataPage.language")}</FormLabel>
-                <div>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="pl">Polski</SelectItem>
-                        <SelectItem value="en">English</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-              
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="timezone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>test</FormLabel>
-                <div>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <SelectTrigger className="">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                          {
-                            options.map((option) => (
-                              //jesli chcemy skrot to zmienic option.value na option.abbr
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}                  
-                              </SelectItem>
-                            ))
-                          }
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                </div>
-                <FormMessage />
-              </FormItem>
-              
-            )}
-          />
-                  <ConfirmDialog
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <ConfirmDialog
           className="mt-5"
           buttonText={t("common.update")}
           dialogTitle={t("common.confirmDialogTitle")}
@@ -161,7 +160,7 @@ const UserData: FC = () => {
             handleUserSubmit();
           }}
         />
-        </form>
+      </form>
     </Form>
   );
 };

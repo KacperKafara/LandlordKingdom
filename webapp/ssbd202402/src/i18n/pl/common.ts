@@ -217,6 +217,7 @@ const userFilter = {
   owner: "Właściciel",
   administrator: "Administrator",
   clear: "Wyczyść",
+  firstName: "Imię",
   lastName: "Nazwisko",
 };
 
@@ -254,6 +255,7 @@ const userDataPage = {
   emailNotEmpty: "Email nie może być pusty",
   emailTooLong: "Email jest za długi",
   confirmDialogDescription: "Czy na pewno chcesz zmienić dane personalne?",
+  timeZone: "Strefa czasowa",
 };
 
 const updateDataForm = {
