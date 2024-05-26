@@ -10,11 +10,11 @@ import { decodeJwt } from "@/utils/jwt";
 
 const SessionExpiredDialog: FC = () => {
   const [isOpen, setOpen] = useState(false);
-  const { refreshToken } = useUserStore();
+  const { token } = useUserStore();
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const payload = decodeJwt(refreshToken ?? "");
+      const payload = decodeJwt(token ?? "");
       if (Date.now() + 1000 * 60 * 5 > payload.exp * 1000) {
         setOpen(true);
       }
@@ -23,7 +23,7 @@ const SessionExpiredDialog: FC = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [refreshToken]);
+  }, [token]);
 
   return (
     <Dialog open={isOpen} onOpenChange={setOpen}>
