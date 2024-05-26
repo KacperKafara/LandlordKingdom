@@ -34,4 +34,10 @@ public class LocalServiceImpl implements LocalService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Local editLocal(UUID id, Local local) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

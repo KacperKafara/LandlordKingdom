@@ -10,4 +10,5 @@ public interface LocalService {
     Local addLocal(Local local);
     List<Local> getOwnLocals(UUID id);
     LocalReportResponse getLocalReport(UUID id);
+    Local editLocal(UUID id, Local local);
 }
