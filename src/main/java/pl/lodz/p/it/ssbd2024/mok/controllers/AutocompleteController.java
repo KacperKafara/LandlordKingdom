@@ -28,7 +28,7 @@ public class AutocompleteController {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<List<String>> getLoginAutocomplete(@RequestParam String query) {
         SpecificationBuilder<User> specificationBuilder = new UserSpecificationBuilder();
-        specificationBuilder.with("login", "like", "%" + query + "%");
+        specificationBuilder.with("login", "cn", query);
         try {
             List<User> result = userService.getAllFiltered(specificationBuilder.build());
             return ResponseEntity.ok(result.stream().map(User::getLogin).toList());
