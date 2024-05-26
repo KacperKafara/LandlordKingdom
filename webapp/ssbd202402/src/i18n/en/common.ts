@@ -41,6 +41,7 @@ const userDetailsPage = {
   language: "Language",
   lastSuccessfulLogin: "Last successful login",
   lastFailedLogin: "Last failed login",
+  timezone: "Timezone",
   blocked: "Blocked",
   verified: "Verified",
   active: "Active",
@@ -207,6 +208,7 @@ const userFilter = {
   tenant: "Tenant",
   owner: "Owner",
   administrator: "Administrator",
+  firstName: "First Name",
   lastName: "Last Name",
   clear: "Clear",
 };
@@ -245,6 +247,7 @@ const userDataPage = {
   emailNotEmpty: "Email cannot be empty",
   emailTooLong: "Email is too long",
   confirmDialogDescription: "Are you sure you want to chane personal data?",
+  timeZone: "Time zone",
 };
 
 const updateDataForm = {
@@ -281,6 +284,7 @@ const mePage = {
   changePassword: "Change your password",
   changeEmailDescription: "Click here to send email with link to change email.",
   emailInput: "Email*",
+  timezone: "Timezone",
 };
 
 const registerSuccessPage = {
@@ -311,7 +315,15 @@ const homePage = {
   or: "or",
 };
 
+const sessionExpiredDialog = {
+  title: "Session will expire soon!",
+  description:
+    "Your session will expire in less than 5 minutes. Do you want to extend it?",
+    signOut: "Logout",
+};
+
 export default {
+  sessionExpiredDialog,
   error,
   homePage,
   common,

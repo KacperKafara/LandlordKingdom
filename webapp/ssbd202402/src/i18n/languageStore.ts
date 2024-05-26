@@ -10,15 +10,18 @@ const LSLanguage = localStorage.getItem("language");
 
 export const useLanguageStore = create<LanguageStore>((set) => ({
   language: LSLanguage === null ? undefined : LSLanguage,
-  setLanguage: (language: string) =>
-    set(() => {
-      if (language !== "en" && language !== "pl") {
+  setLanguage: (newLanguage: string) =>
+    set(({ language }) => {
+      if (language === newLanguage) {
+        return { language };
+      }
+      if (newLanguage !== "en" && newLanguage !== "pl") {
         localStorage.setItem("language", "en");
         i18next.changeLanguage("en");
         return { language: "en" };
       }
-      localStorage.setItem("language", language);
-      i18next.changeLanguage(language);
-      return { language };
+      localStorage.setItem("language", newLanguage);
+      i18next.changeLanguage(newLanguage);
+      return { language: newLanguage };
     }),
 }));

@@ -14,11 +14,11 @@ const LanguageSelector: FC = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="w-fit self-end absolute right-1 top-1"
+        className="absolute right-1 top-1 w-fit self-end"
         asChild
       >
         <Button variant="ghost">
-          <IoLanguage className="w-5 h-5" />
+          <IoLanguage className="h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

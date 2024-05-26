@@ -43,6 +43,7 @@ const userDetailsPage = {
   language: "Język",
   lastSuccessfulLogin: "Ostatnie udane logowanie",
   lastFailedLogin: "Ostatnie nieudane logowanie",
+  timezone: "Strefa czasowa",
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
   active: "Aktywny",
@@ -216,6 +217,7 @@ const userFilter = {
   owner: "Właściciel",
   administrator: "Administrator",
   clear: "Wyczyść",
+  firstName: "Imię",
   lastName: "Nazwisko",
 };
 
@@ -253,6 +255,7 @@ const userDataPage = {
   emailNotEmpty: "Email nie może być pusty",
   emailTooLong: "Email jest za długi",
   confirmDialogDescription: "Czy na pewno chcesz zmienić dane personalne?",
+  timeZone: "Strefa czasowa",
 };
 
 const updateDataForm = {
@@ -289,6 +292,7 @@ const mePage = {
   changeEmailDescription:
     "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
   emailInput: "Email*",
+  timezone: "Strefa czasowa",
 };
 
 const registerSuccessPage = {
@@ -319,7 +323,15 @@ const homePage = {
   or: "lub",
 };
 
+const sessionExpiredDialog = {
+  title: "Sesja wktórce wygaśnie",
+  description:
+    "Twoja sesja wygaśnie za 5 minut. Kliknij przycisk, aby ją przedłużyć",
+  signOut: "Wyloguj",
+};
+
 export default {
+  sessionExpiredDialog,
   error,
   homePage,
   common,
