@@ -323,6 +323,7 @@ const sessionExpiredDialog = {
   title: "Sesja wktórce wygaśnie",
   description:
     "Twoja sesja wygaśnie za 5 minut. Kliknij przycisk, aby ją przedłużyć",
+  signOut: "Wyloguj",
 };
 
 export default {
