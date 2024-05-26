@@ -1,10 +1,12 @@
 package pl.lodz.p.it.ssbd2024.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.UUID;
 
-@Entity
+@Entity(name = "timezones")
+@Getter
 public class Timezone {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
