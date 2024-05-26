@@ -9,6 +9,8 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import pl.lodz.p.it.ssbd2024.config.ToolConfig;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.model.tokens.EmailVerificationToken;
+import pl.lodz.p.it.ssbd2024.model.tokens.PasswordVerificationToken;
 import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.PasswordVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
@@ -190,8 +192,10 @@ class UserServiceTest {
     @Order(8)
     void ChangeUserEmail_VerificationTokenExpired_Test() {
         User user = new User();
+        user.setPassword("$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.");
         when(emailVerificationTokenRepository.findByToken("tagValue")).thenReturn(Optional.of(new EmailVerificationToken("tagValue", Instant.now().minusSeconds(60), user)));
-        assertThrows(VerificationTokenExpiredException.class, () -> userService.changeUserEmail("tagValue", "new@mail.com"));
+
+        assertThrows(VerificationTokenExpiredException.class, () -> userService.changeUserEmail("tagValue", "password" ));
 
         verify(userRepository, never()).saveAndFlush(user);
     }
@@ -288,11 +292,11 @@ class UserServiceTest {
     @Test
     @DisplayName("Send email update email - user not found")
     @Order(15)
-    void sendEmailUpdateEmail_UserNotFound_ThrowNotFoundException() {
+    void sendEmailUpdateVerificationEmail_UserNotFound_ThrowNotFoundException() {
         UUID userId = UUID.randomUUID();
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> userService.sendEmailUpdateEmail(userId));
+        assertThrows(NotFoundException.class, () -> userService.sendEmailUpdateVerificationEmail(userId, "temp@mail.com" ));
     }
 
     @Test

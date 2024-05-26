@@ -16,6 +16,7 @@ public record DetailedUserResponse(
         String lastFailedLoginIP,
         boolean blocked,
         boolean verified,
+        boolean active,
         List<String> roles
 ) {
 }

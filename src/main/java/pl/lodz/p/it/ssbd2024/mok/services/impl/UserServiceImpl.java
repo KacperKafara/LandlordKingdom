@@ -20,6 +20,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
             String token = verificationTokenService.generateAccountVerificationToken(newUser);
 
             URI uri = URI.create(appUrl + "/verify/" + token);
-            emailService.sendAccountActivationEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
+            emailService.sendVerifyAccountEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
             return tenant.getUser();
         } catch (ConstraintViolationException e) {
             String constraintName = e.getConstraintName();
@@ -120,7 +121,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setVerified(true);
         userRepository.saveAndFlush(user);
-        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
+        emailService.sendAccountVerifiedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
@@ -167,20 +168,27 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
-    public void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException {
+    public void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        user.setTemporaryEmail(tempEmail);
+        userRepository.saveAndFlush(user);
         String token = verificationTokenService.generateEmailVerificationToken(user);
         URI uri = URI.create(appUrl + "/update-email/" + token);
-        emailService.sendEmailChangeEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
+        emailService.sendEmailChangeEmail(tempEmail, user.getFirstName(), uri.toString(), user.getLanguage());
     }
 
     @Override
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
-    public void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException {
+    public void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException {
+        User checkPasswordUser = verificationTokenService.getUserByToken(token);
+        if (!passwordEncoder.matches(password, checkPasswordUser.getPassword())){
+            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
+        }
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setEmail(email);
+        user.setEmail(user.getTemporaryEmail());
+        user.setTemporaryEmail(null);
         userRepository.saveAndFlush(user);
 
     }

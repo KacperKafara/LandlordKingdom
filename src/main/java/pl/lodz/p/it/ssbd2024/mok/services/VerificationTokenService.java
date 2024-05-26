@@ -1,16 +1,19 @@
 package pl.lodz.p.it.ssbd2024.mok.services;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 
 import java.security.InvalidKeyException;
 
 public interface VerificationTokenService {
+
+    User getUserByToken(String token) throws VerificationTokenUsedException;
 
     String generateAccountVerificationToken(User user) throws TokenGenerationException;
 
@@ -24,6 +27,9 @@ public interface VerificationTokenService {
 
     VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
+    String generateAccountActivateToken(User user) throws TokenGenerationException;
+
+    VerificationToken validateAccountActivateToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
     String generateOTPToken(User user) throws InvalidKeyException;
 

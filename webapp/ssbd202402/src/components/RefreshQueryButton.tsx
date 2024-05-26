@@ -19,7 +19,7 @@ const RefreshQueryButton: FC<RefreshQueryButtonProps> = ({ queryKeys, children, 
     };
 
     return <Button {...tags} variant="ghost" className="flex gap-2 align-middle " onClick={refresh}>
-        <FiRefreshCw />
+        <FiRefreshCw size={20} />
         {children}
     </Button>;
 };

@@ -6,8 +6,7 @@ import pl.lodz.p.it.ssbd2024.messages.FilterMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
 import pl.lodz.p.it.ssbd2024.model.filtering.SearchOperation;
-import pl.lodz.p.it.ssbd2024.model.filtering.SpecificationBuilder;
-import pl.lodz.p.it.ssbd2024.model.filtering.SpecificationImpl;
+import pl.lodz.p.it.ssbd2024.model.filtering.specifications.BasicSpecification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,18 +28,24 @@ public class UserSpecificationBuilder implements SpecificationBuilder<User> {
         return this;
     }
 
+    @Override
+    public UserSpecificationBuilder with(List<SearchCriteria> searchCriteria) {
+        params.addAll(searchCriteria);
+        return this;
+    }
+
     public Specification<User> build() throws InvalidDataException {
         try {
             if (params.isEmpty()) {
                 return null;
             }
 
-            Specification<User> result = new SpecificationImpl<>(params.getFirst());
+            Specification<User> result = new BasicSpecification<>(params.getFirst());
             for (int i = 1; i < params.size(); i++) {
                 SearchCriteria criteria = params.get(i);
                 result = SearchOperation.getDataOption(criteria.getDataOption()).equals(SearchOperation.ALL) ?
-                        Specification.where(result).and(new SpecificationImpl<>(criteria)) :
-                        Specification.where(result).or(new SpecificationImpl<>(criteria));
+                        Specification.where(result).and(new BasicSpecification<>(criteria)) :
+                        Specification.where(result).or(new BasicSpecification<>(criteria));
             }
 
             return result;

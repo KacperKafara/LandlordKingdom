@@ -22,6 +22,7 @@ import CodeInput from "@/pages/Login/CodeInput";
 import GoogleLoginButton from "@/components/GoogleLoginButton";
 import LanguageSelector from "@/components/LanguageSelector";
 import LoadingButton from "@/components/LoadingButton";
+import {ModeToggle} from "@/components/ui/toggle-theme.tsx";
 
 const getLoginSchema = (t: TFunction) =>
   z.object({
@@ -100,7 +101,7 @@ const Login2FaPage: FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center">
       {codeInputOpen ? (
         <CodeInput
           login={login || ""}
@@ -114,12 +115,15 @@ const Login2FaPage: FC = () => {
         <Form {...form}>
           <form
             onSubmit={onSubmit}
-            className="border-1 relative flex w-1/4 flex-col rounded-md border-black bg-white p-7 shadow-2xl"
+            className="border-1 relative flex w-1/4 flex-col rounded-md p-7 shadow-2xl"
           >
             <div className="flex justify-center">
               <h1 className="w-fit text-3xl font-bold">
                 {t("logoPlaceholder")}
               </h1>
+              <div className="w-fit self-end absolute right-14 top-1">
+                <ModeToggle />
+              </div>
               <LanguageSelector />
             </div>
             <h2 className="self-center pb-7 pt-3 text-2xl">

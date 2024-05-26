@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import MyAccountButton from "./MyAccountButton";
 import { IoMdArrowDropdown } from "react-icons/io";
+import {ModeToggle} from "@/components/ui/toggle-theme";
 
 export type NavigationLink = {
   path: string;
@@ -48,13 +49,13 @@ const config = {
     accentColor: "bg-blue-300",
   },
 } satisfies {
-    [key in LayoutType]: {
-      nav: string;
-      footer: string;
-      hover: string;
-      accentColor: string;
-    };
+  [key in LayoutType]: {
+    nav: string;
+    footer: string;
+    hover: string;
+    accentColor: string;
   };
+};
 
 const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { t, i18n } = useTranslation();
@@ -74,10 +75,10 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col">
       <nav
         className={cn(
-          "h-20 flex flex-row justify-between items-center px-10",
+          "flex h-20 flex-row items-center justify-between px-10",
           config[type].nav
         )}
       >
@@ -86,14 +87,14 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
             {t("logoPlaceholder")}
           </p>
         </div>
-        <div className="flex flex-row gap-3 items-center">
+        <div className="flex flex-row items-center gap-3">
           {links.map((link, idx) => (
             <NavLink
               key={link.path + idx}
               to={link.path}
               className={({ isActive }) =>
                 cn(
-                  "px-2 py-1 rounded-md",
+                  "rounded-md px-2 py-1",
                   colors.hover,
                   isActive && colors.accentColor
                 )
@@ -102,6 +103,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
               {link.label}
             </NavLink>
           ))}
+          <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -138,7 +140,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
       <main className="flex-1 px-10">{children}</main>
       <footer
         className={cn(
-          "h-12 flex justify-center items-center text-xl px-10",
+          "flex h-12 items-center justify-center px-10 text-xl",
           config[type].footer
         )}
       >

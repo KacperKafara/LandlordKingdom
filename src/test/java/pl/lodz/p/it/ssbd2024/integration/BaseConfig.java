@@ -120,7 +120,7 @@ public class BaseConfig {
 
             DatabaseOperation.REFRESH.execute(connection, replacementDataSet);
         } catch (Exception e) {
-            System.err.println("Error executing DBUnit operation: " + e.getMessage());
+            System.err.println("Error executing DBUnit operation" + "in path "+ filePath + ": " + e.getMessage());
         }
     }
 

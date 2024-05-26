@@ -18,6 +18,7 @@ import { Role } from "@/store/userStore";
 import { useUsersFilterStore } from "@/store/usersFilterStore";
 import { SearchCriteria } from "@/types/filter/SearchCriteria";
 import { ChevronsUpDown } from "lucide-react";
+import { LuFilterX } from "react-icons/lu";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -27,6 +28,7 @@ interface FilterUsers {
   blocked: boolean | null;
   login: string;
   email: string;
+  lastName: string;
   role: string;
 }
 
@@ -41,6 +43,7 @@ const UserFilter: FC = () => {
       blocked: null,
       login: "",
       email: "",
+      lastName: "",
       role: "ALL",
     },
   });
@@ -80,6 +83,14 @@ const UserFilter: FC = () => {
       });
     }
 
+    if (values.lastName != "") {
+      criterias.push({
+        filterKey: "lastName",
+        operation: "cn",
+        value: values.lastName,
+      });
+    }
+
     store.setSearchCriteriaList({
       dataOption: "all",
       searchCriteriaList: criterias,
@@ -87,6 +98,16 @@ const UserFilter: FC = () => {
     });
     store.setPageNumber(0);
   });
+
+  const handleClearFilters = () => {
+    filterForm.reset();
+    store.setSearchCriteriaList({
+      dataOption: "all",
+      searchCriteriaList: [],
+      role: "ALL",
+    });
+    store.setPageNumber(0);
+  };
 
   return (
     <>
@@ -221,6 +242,18 @@ const UserFilter: FC = () => {
             />
             <FormField
               control={filterForm.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("userFilter.lastName")}</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="text" placeholder=". . ." />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={filterForm.control}
               name="role"
               render={() => (
                 <FormItem>
@@ -261,6 +294,17 @@ const UserFilter: FC = () => {
             />
             <div className="flex self-end">
               <Button type="submit">{t("userFilter.submit")}</Button>
+            </div>
+            <div className="flex self-end">
+            <Button
+                type="button"
+                variant="ghost"
+                className="flex gap-2 items-center"
+                onClick={handleClearFilters}
+               > 
+                <LuFilterX size={20}/>
+                {t("userFilter.clear")}
+              </Button>
             </div>
             <div className="flex self-end">
               <RefreshQueryButton queryKeys={["filteredUsers"]} />
