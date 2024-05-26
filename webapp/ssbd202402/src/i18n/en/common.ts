@@ -308,7 +308,14 @@ const homePage = {
   or: "or",
 };
 
+const sessionExpiredDialog = {
+  title: "Session will expire soon!",
+  description:
+    "Your session will expire in less than 5 minutes. Do you want to extend it?",
+};
+
 export default {
+  sessionExpiredDialog,
   error,
   homePage,
   common,
