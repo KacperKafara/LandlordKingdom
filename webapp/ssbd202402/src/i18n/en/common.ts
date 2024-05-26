@@ -246,6 +246,7 @@ const userDataPage = {
   emailNotEmpty: "Email cannot be empty",
   emailTooLong: "Email is too long",
   confirmDialogDescription: "Are you sure you want to chane personal data?",
+  timeZone: "Time zone",
 };
 
 const updateDataForm = {
