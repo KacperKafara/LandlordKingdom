@@ -109,7 +109,7 @@ const ResetPasswordPage: FC = () => {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 flex w-1/4 flex-col rounded-md p-7 shadow-2xl"
+          className="bg-card border-1 flex min-w-fit w-1/4 flex-col rounded-md p-7 shadow-2xl shadow-shadowColor"
         >
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
