@@ -96,6 +96,10 @@ public class User extends AbstractEntity {
     @Column(name = "password")
     private List<String> oldPasswords = new ArrayList<>();
 
+    @Setter
+    @ManyToOne
+    private Timezone timezone;
+
     public User(String firstName,
                 String lastName,
                 String email,

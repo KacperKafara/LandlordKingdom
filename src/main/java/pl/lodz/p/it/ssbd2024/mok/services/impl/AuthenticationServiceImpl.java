@@ -21,6 +21,7 @@ import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
 
 import java.security.InvalidKeyException;
 import java.time.Duration;
@@ -37,15 +38,12 @@ import java.util.UUID;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
-
     private final AuthUserRepository userRepository;
     private final AuthTenantRepository tenantRepository;
     private final AuthOwnerRepository ownerRepository;
     private final AuthAdministratorRepository administratorRepository;
-
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-
     private final VerificationTokenService verificationTokenService;
 
     @Value("${login.maxAttempts}")
@@ -146,8 +144,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userRepository.saveAndFlush(user);
 
         if (user.getLoginAttempts() >= maxLoginAttempts) {
-            LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
-            emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
+            String timezone = "UTC";
+            if(user.getTimezone() != null){
+                timezone = user.getTimezone().getName();
+            }
+            String unblockDate = TimezoneMapper.convertUTCToAnotherTimezoneSimple(LocalDateTime.now().plusSeconds(loginTimeOut), timezone, user.getLanguage());
+            String lastFailedLogin = TimezoneMapper.convertUTCToAnotherTimezoneSimple(user.getLastFailedLogin(), timezone, user.getLanguage());
+            emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), lastFailedLogin, unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
         }
     }
 
