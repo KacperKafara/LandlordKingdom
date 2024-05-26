@@ -28,7 +28,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 
-const UpdateEmailAddressSchema = (t: TFunction) => 
+const UpdateEmailAddressSchema = (t: TFunction) =>
   z.object({
     email: z.string().min(3, t("userDataPage.emailNotEmpty")).max(50, t("userDataPage.emailTooLong")).email( t("userDataPage.emailNotValid")),
   });
@@ -94,8 +94,8 @@ const UpdateEmailMyAddress: FC = () => {
       </AlertDialog>
         </form>
       </Form>
-      
-  
+
+
   );
 };
 
