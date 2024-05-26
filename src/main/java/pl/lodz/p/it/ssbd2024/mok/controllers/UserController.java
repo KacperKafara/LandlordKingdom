@@ -24,14 +24,14 @@ import pl.lodz.p.it.ssbd2024.model.Administrator;
 import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
-import pl.lodz.p.it.ssbd2024.model.filtering.builders.AdministratorSpecificationBuilder;
-import pl.lodz.p.it.ssbd2024.model.filtering.builders.OwnerSpecificationBuilder;
-import pl.lodz.p.it.ssbd2024.model.filtering.builders.TenantSpecificationBuilder;
+import pl.lodz.p.it.ssbd2024.model.filtering.builders.RoleSpecificationBuilder;
+import pl.lodz.p.it.ssbd2024.model.filtering.builders.SpecificationBuilder;
 import pl.lodz.p.it.ssbd2024.model.filtering.builders.UserSpecificationBuilder;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
+import pl.lodz.p.it.ssbd2024.mok.mappers.FilteredUsersMapper;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
 import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
 import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
@@ -40,6 +40,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,73 +68,55 @@ public class UserController {
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<SearchCriteria> criteriaList = request.searchCriteriaList();
+        List<String> roles = Arrays.asList("TENANT", "OWNER", "ADMINISTRATOR");
+
+        if (criteriaList == null) {
+            criteriaList = new ArrayList<>();
+        }
+
+        if (roles.contains(request.role())) {
+            criteriaList.add(new SearchCriteria("active", "eq", true));
+        }
+
+        criteriaList.forEach(x -> {
+            x.setDataOption(request.dataOption());
+        });
+
         FilteredUsersResponse response;
         try {
             switch (request.role()) {
                 case "TENANT" -> {
-                    TenantSpecificationBuilder builder = new TenantSpecificationBuilder();
+                    SpecificationBuilder<Tenant> builder = new RoleSpecificationBuilder<>();
 
-                    if (criteriaList == null) {
-                        criteriaList = new ArrayList<>();
-                    }
-
-                    criteriaList.add(new SearchCriteria("active", "eq", true));
-                    criteriaList.forEach(x -> {
-                        x.setDataOption(request.dataOption());
-                        builder.with(x);
-                    });
+                    builder.with(criteriaList);
 
                     Page<Tenant> result = tenantService.getAllFiltered(builder.build(), pageable);
                     response = new FilteredUsersResponse(result.stream().map(Tenant::getUser).map(UserMapper::toUserResponse).toList(),
                             result.getTotalPages());
                 }
                 case "OWNER" -> {
-                    OwnerSpecificationBuilder builder = new OwnerSpecificationBuilder();
+                    SpecificationBuilder<Owner> builder = new RoleSpecificationBuilder<>();
 
-                    if (criteriaList == null) {
-                        criteriaList = new ArrayList<>();
-                    }
-
-                    criteriaList.add(new SearchCriteria("active", "eq", true));
-                    criteriaList.forEach(x -> {
-                        x.setDataOption(request.dataOption());
-                        builder.with(x);
-                    });
+                    builder.with(criteriaList);
 
                     Page<Owner> result = ownerService.getAllFiltered(builder.build(), pageable);
-                    response = new FilteredUsersResponse(result.stream().map(Owner::getUser).map(UserMapper::toUserResponse).toList(),
-                            result.getTotalPages());
+                    response = FilteredUsersMapper.accesslevelToFilteredUsersResponse(result);
                 }
                 case "ADMINISTRATOR" -> {
-                    AdministratorSpecificationBuilder builder = new AdministratorSpecificationBuilder();
+                    SpecificationBuilder<Administrator> builder = new RoleSpecificationBuilder<>();
 
-                    if (criteriaList == null) {
-                        criteriaList = new ArrayList<>();
-                    }
-
-                    criteriaList.add(new SearchCriteria("active", "eq", true));
-                    criteriaList.forEach(x -> {
-                        x.setDataOption(request.dataOption());
-                        builder.with(x);
-                    });
+                    builder.with(criteriaList);
 
                     Page<Administrator> result = administratorService.getAllFiltered(builder.build(), pageable);
-                    response = new FilteredUsersResponse(result.stream().map(Administrator::getUser).map(UserMapper::toUserResponse).toList(),
-                            result.getTotalPages());
+                    response =  FilteredUsersMapper.accesslevelToFilteredUsersResponse(result);
                 }
                 default -> {
-                    UserSpecificationBuilder builder = new UserSpecificationBuilder();
+                    SpecificationBuilder<User> builder = new UserSpecificationBuilder();
 
-                    if (criteriaList != null) {
-                        criteriaList.forEach(x -> {
-                            x.setDataOption(request.dataOption());
-                            builder.with(x);
-                        });
-                    }
+                    builder.with(criteriaList);
 
                     Page<User> result = userService.getAllFiltered(builder.build(), pageable);
-                    response = new FilteredUsersResponse(result.stream().map(UserMapper::toUserResponse).toList(),
-                            result.getTotalPages());
+                    response = FilteredUsersMapper.userToFilteredUsersResponse(result);
                 }
             }
 

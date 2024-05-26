@@ -30,6 +30,8 @@ const loginPage = {
     description: "Wprowadzono niepoprawny żeton",
   },
   googleLoginButton: "Zaloguj się z Google",
+  inactiveAccount:
+    "Twoje konto jest nieaktywne, by kontynuować sprawdź skrzynkę pocztową",
 };
 
 const userDetailsPage = {
@@ -44,6 +46,7 @@ const userDetailsPage = {
   timezone: "Strefa czasowa",
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
+  active: "Aktywny",
   actions: "Akcje",
 
   role: {
@@ -214,6 +217,7 @@ const userFilter = {
   owner: "Właściciel",
   administrator: "Administrator",
   clear: "Wyczyść",
+  lastName: "Nazwisko",
 };
 
 const pageChanger = {

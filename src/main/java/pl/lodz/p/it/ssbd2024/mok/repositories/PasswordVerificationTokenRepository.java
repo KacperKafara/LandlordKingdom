@@ -6,7 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.model.PasswordVerificationToken;
+import pl.lodz.p.it.ssbd2024.model.tokens.PasswordVerificationToken;
 
 
 import java.util.Optional;

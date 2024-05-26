@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.services.HtmlEmailService;
 
-import java.time.LocalDateTime;
 import java.util.Locale;
 import java.util.Map;
 
@@ -23,18 +22,27 @@ public class EmailServiceImpl implements EmailService {
     private String webUrl;
 
     @Override
-    public void sendAccountActivationEmail(String to, String name, String uri, String lang) {
+    public void sendVerifyAccountEmail(String to, String name, String uri, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "name", name,
                 "url", uri);
-        String subject = mailMessageSource.getMessage("accountConfirm.subject", null, Locale.of(lang));
+        String subject = mailMessageSource.getMessage("verifyAccount.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "accountConfirm", templateModel, lang);
+        htmlEmailService.sendHtmlEmail(to, subject, "verifyAccount", templateModel, lang);
+    }
+
+    @Override
+    public void sendAccountVerifiedEmail(String to, String name, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name, "url", webUrl);
+        String subject = mailMessageSource.getMessage("accountVerified.subject", null, Locale.of(lang));
+
+        htmlEmailService.sendHtmlEmail(to, subject, "accountVerified", templateModel, lang);
     }
 
 
     @Override
-    public void sendLoginBlockEmail(String to, int loginNumber, LocalDateTime failedLoginTime, LocalDateTime unblockTime, String ip, String lang) {
+    public void sendLoginBlockEmail(String to, int loginNumber, String failedLoginTime, String unblockTime, String ip, String lang) {
         Map<String, Object> templateModel = Map.of(
                 "loginNumber", loginNumber,
                 "failedLoginTime", failedLoginTime,
@@ -65,15 +73,6 @@ public class EmailServiceImpl implements EmailService {
         String subject = mailMessageSource.getMessage("accountBlockChange.subjectUnblock", null, Locale.of(lang));
 
         htmlEmailService.sendHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
-    }
-
-    @Override
-    public void sendAccountActivatedEmail(String to, String name, String lang) {
-        Map<String, Object> templateModel = Map.of(
-                "name", name, "url", webUrl);
-        String subject = mailMessageSource.getMessage("accountActivated.subject", null, Locale.of(lang));
-
-        htmlEmailService.sendHtmlEmail(to, subject, "accountActivated", templateModel, lang);
     }
 
     @Override
@@ -201,5 +200,15 @@ public class EmailServiceImpl implements EmailService {
         String subject = mailMessageSource.getMessage("OTP.subject", null, Locale.of(lang));
 
         htmlEmailService.sendHtmlEmail(to, subject, "OTP", templateModel, lang);
+    }
+
+    @Override
+    public void sendAccountActivateAfterBlock(String to, String name, String token, String lang) {
+        String uri = webUrl + "/activate-after-inactive?token=" + token;
+        Map<String, Object> templateModel = Map.of(
+                "name", name, "url", uri);
+        String subject = mailMessageSource.getMessage("accountBlockedInactivity.subject", null, Locale.of(lang));
+
+        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockedAfterInactivity", templateModel, lang);
     }
 }

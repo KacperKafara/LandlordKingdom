@@ -10,5 +10,6 @@ export type DetailedUserResponse = {
   timezone: string;
   blocked: boolean;
   verified: boolean;
+  active: boolean;
   roles: string[];
 };

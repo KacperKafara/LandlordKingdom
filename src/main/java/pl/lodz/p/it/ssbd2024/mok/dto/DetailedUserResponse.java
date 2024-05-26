@@ -17,6 +17,7 @@ public record DetailedUserResponse(
         String timezone,
         boolean blocked,
         boolean verified,
+        boolean active,
         List<String> roles
 ) {
 }

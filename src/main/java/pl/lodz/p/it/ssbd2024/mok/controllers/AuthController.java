@@ -84,12 +84,12 @@ public class AuthController {
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        } catch (UserNotVerifiedException | SignInBlockedException | UserBlockedException e) {
+        } catch (UserNotVerifiedException | SignInBlockedException | UserBlockedException | UserInactiveException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         } catch (InvalidLoginDataException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
-        } catch (InvalidKeyException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There was an error generating OTP");
+        } catch (InvalidKeyException | TokenGenerationException  e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There was an error generating token");
         }
     }
 
