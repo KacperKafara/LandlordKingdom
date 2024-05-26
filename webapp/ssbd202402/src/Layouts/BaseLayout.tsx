@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import MyAccountButton from "./MyAccountButton";
 import { IoMdArrowDropdown } from "react-icons/io";
+import {ModeToggle} from "@/components/ui/toggle-theme";
 
 export type NavigationLink = {
   path: string;
@@ -102,6 +103,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
               {link.label}
             </NavLink>
           ))}
+          <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button

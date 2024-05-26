@@ -67,3 +67,4 @@ scheduler:
 
 account:
   removeUnverifiedAccountAfterHours: 24
+  deactivateAccountAfterDays: 31

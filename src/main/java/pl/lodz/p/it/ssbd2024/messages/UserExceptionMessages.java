@@ -14,4 +14,5 @@ public class UserExceptionMessages {
     public static final String ALREADY_UNBLOCKED = "User is already unblocked";
     public static final String CREATION_FAILED = "User creation failed";
     public static final String PASSWORD_REPEATED = "Password must be different than any other password used by this account";
+    public static final String INACTIVE = "User cannot perform action because is blocked due to inactivity";
 }
