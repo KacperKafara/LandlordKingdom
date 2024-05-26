@@ -207,6 +207,7 @@ const userFilter = {
   tenant: "Tenant",
   owner: "Owner",
   administrator: "Administrator",
+  lastName: "Last Name",
   clear: "Clear",
 };
 

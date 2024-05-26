@@ -216,6 +216,7 @@ const userFilter = {
   owner: "Właściciel",
   administrator: "Administrator",
   clear: "Wyczyść",
+  lastName: "Nazwisko",
 };
 
 const pageChanger = {
