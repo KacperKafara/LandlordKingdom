@@ -19,7 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.FilterMessages;
-import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.Administrator;
 import pl.lodz.p.it.ssbd2024.model.Owner;
@@ -211,24 +210,13 @@ public class UserController {
 
     @PostMapping("/{id}/email-update-request")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> sendUpdateEmail(@PathVariable UUID id) {
+    public ResponseEntity<Void> sendUpdateEmail(@PathVariable UUID id, @RequestBody @Valid StartUpdateEmailRequest request) {
         try {
-            userService.sendEmailUpdateEmail(id);
+            userService.sendEmailUpdateVerificationEmail(id, request.email());
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (TokenGenerationException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
-        }
-    }
-
-    @PatchMapping("/update-email")
-    @PreAuthorize("permitAll()")
-    public ResponseEntity<Void> updateUserEmail(@RequestBody @Valid UserEmailUpdateRequest request) {
-        try {
-            userService.changeUserEmail(request.token(), request.email());
-            return ResponseEntity.status(HttpStatus.OK).build();
-        } catch (VerificationTokenUsedException | NotFoundException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

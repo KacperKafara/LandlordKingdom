@@ -12,6 +12,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.model.tokens.*;
+import pl.lodz.p.it.ssbd2024.mok.authRepositories.AccountActivateTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.AccountVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.EmailVerificationTokenRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.OTPTokenRepository;
@@ -35,6 +37,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     private final AccountVerificationTokenRepository accountTokenRepository;
     private final EmailVerificationTokenRepository emailTokenRepository;
     private final PasswordVerificationTokenRepository passwordTokenRepository;
+    private final AccountActivateTokenRepository accountActivateTokenRepository;
     private final OTPTokenRepository otpTokenRepository;
     private final HmacOneTimePasswordGenerator hotp = new HmacOneTimePasswordGenerator(8);
     private long counter = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC) / 30;
@@ -42,6 +45,11 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Value("${otp.secret}")
     private String otpSecret;
 
+    @Override
+    @PreAuthorize("permitAll()")
+    public User getUserByToken(String token) throws VerificationTokenUsedException {
+        return emailTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED)).getUser();
+    }
 
     @Override
     @PreAuthorize("permitAll()")
@@ -102,6 +110,28 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     public VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
         PasswordVerificationToken verificationToken = passwordTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
+        if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
+            throw new VerificationTokenExpiredException(VerificationTokenMessages.VERIFICATION_TOKEN_EXPIRED);
+        }
+        passwordTokenRepository.deleteById(verificationToken.getId());
+        return verificationToken;
+    }
+
+    @Override
+    @PreAuthorize("permitAll()")
+    public String generateAccountActivateToken(User user) throws TokenGenerationException {
+        String tokenVal = generateSafeToken();
+        accountActivateTokenRepository.deleteByUserId(user.getId());
+        accountActivateTokenRepository.flush();
+        AccountActivateToken token = new AccountActivateToken(tokenVal, Instant.now().plus(AccountActivateToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
+        return accountActivateTokenRepository.saveAndFlush(token).getToken();
+    }
+
+    @Override
+    @PreAuthorize("permitAll()")
+    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
+    public VerificationToken validateAccountActivateToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException {
+        AccountActivateToken verificationToken = accountActivateTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED));
         if (verificationToken.getExpirationDate().isBefore(Instant.now())) {
             throw new VerificationTokenExpiredException(VerificationTokenMessages.VERIFICATION_TOKEN_EXPIRED);
         }

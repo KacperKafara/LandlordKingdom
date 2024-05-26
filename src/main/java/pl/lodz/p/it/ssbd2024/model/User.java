@@ -27,6 +27,10 @@ public class User extends AbstractEntity {
     @Column(name = "email", table = "personal_data", nullable = false, unique = true, length = 50)
     private String email;
 
+    @Setter
+    @Column(name = "temp_email", table = "personal_data", length = 50)
+    private String temporaryEmail;
+
     @Column(name = "login", nullable = false, updatable = false, unique = true, length = 50)
     private String login;
 
@@ -62,6 +66,10 @@ public class User extends AbstractEntity {
     @Column(name = "verified", nullable = false)
     private boolean verified = false;
 
+    @Setter
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "language", nullable = false)
     private Language language = Language.EN;
@@ -92,6 +100,10 @@ public class User extends AbstractEntity {
     @Column(name = "password")
     private List<String> oldPasswords = new ArrayList<>();
 
+    @Setter
+    @ManyToOne
+    private Timezone timezone;
+
     public User(String firstName,
                 String lastName,
                 String email,
@@ -112,6 +124,7 @@ public class User extends AbstractEntity {
         this.lastFailedLogin = lastFailedLogin;
         this.blocked = blocked;
         this.verified = verified;
+        this.active = true;
     }
 
     public User(String firstName,
@@ -128,6 +141,7 @@ public class User extends AbstractEntity {
         this.lastFailedLogin = null;
         this.blocked = false;
         this.verified = false;
+        this.active = true;
     }
 
     public User(String firstName,
@@ -146,5 +160,6 @@ public class User extends AbstractEntity {
         this.lastFailedLogin = null;
         this.blocked = false;
         this.verified = false;
+        this.active = true;
     }
 }

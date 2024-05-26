@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2024.model;
+package pl.lodz.p.it.ssbd2024.model.tokens;
 
 
 import jakarta.persistence.*;
@@ -6,10 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2024.model.AbstractEntity;
+import pl.lodz.p.it.ssbd2024.model.User;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDate;
 
 @Table(name = "tokens",
 uniqueConstraints = {

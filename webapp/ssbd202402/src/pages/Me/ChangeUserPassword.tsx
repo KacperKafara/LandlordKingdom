@@ -1,15 +1,4 @@
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+import ConfirmDialog from "@/components/ConfirmDialog";
 import {
   Form,
   FormControl,
@@ -167,32 +156,13 @@ const ChangeUserPassword: FC = () => {
             </FormItem>
           )}
         />
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button className=" mt-5">{t("changePasswordForm.submit")}</Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>
-                {t("changePasswordForm.alertDialogTitle")}
-              </AlertDialogTitle>
-              <AlertDialogDescription>
-                {t("changePasswordForm.alertDialogDescription")}
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-              <AlertDialogAction asChild>
-                <Button
-                  type="submit"
-                  onClick={() => handlePasswordChangeSubmit()}
-                >
-                  {t("confirm")}
-                </Button>
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <ConfirmDialog
+          className="mt-5"
+          buttonText={t("common.update")}
+          dialogTitle={t("changePasswordForm.alertDialogTitle")}
+          dialogDescription={t("changePasswordForm.alertDialogDescription")}
+          confirmAction={() => handlePasswordChangeSubmit()}
+        />
       </form>
     </Form>
   );

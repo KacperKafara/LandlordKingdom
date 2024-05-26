@@ -30,6 +30,8 @@ const loginPage = {
     description: "Wprowadzono niepoprawny żeton",
   },
   googleLoginButton: "Zaloguj się z Google",
+  inactiveAccount:
+    "Twoje konto jest nieaktywne, by kontynuować sprawdź skrzynkę pocztową",
 };
 
 const userDetailsPage = {
@@ -43,7 +45,28 @@ const userDetailsPage = {
   lastFailedLogin: "Ostatnie nieudane logowanie",
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
+  active: "Aktywny",
   actions: "Akcje",
+
+  role: {
+    title: "Role",
+    add: {
+      tenant: "Przyznaj role najemcy",
+      owner: "Przyznaj role właściciela",
+      administrator: "Przyznaj role administratora",
+    },
+    remove: {
+      tenant: "Odbierz role najemcy",
+      owner: "Odbierz role właścicela",
+      administrator: "Odbierz role administratora",
+    },
+  },
+  changeEmail: "Zmień adres email",
+  updateEmailAddress: "Zaktualizuj adres email",
+  updateEmailAddressTitle:
+    "Czy na pewno chcesz zaktualizować adres email tego użytkownika?",
+  updateEmailAddressDescription:
+    "Na podany adres email zostanie wysłany link do zmiany adresu email",
 };
 
 const updateEmailPage = {
@@ -52,9 +75,11 @@ const updateEmailPage = {
   updateEmailButton: "Zaktualizuj email",
   updateEmailSuccess: "Email został zaktualizowany",
   updateEmailError: "Wystąpił błąd podczas aktualizacji emaila",
-  updateEmailTitle: "Wprowadź nowy adres email",
+  updateEmailTitle: "Wprowadź swoje hasło",
   success: "Sukces",
   error: "Błąd",
+  password: "Hasło*",
+  confirmPassword: "Powtórz hasło*",
 };
 
 const registerPage = {
@@ -144,10 +169,10 @@ const userListPage = {
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
   resetUserPasswordToastDescriptionNotFound: "Podany użytkownik nie istanieje.",
   resetUserPasswordToastDescriptionForbidden:
-    "Użytkownik jest nieaktywowany albo zablokowany.",
+    "Użytkownik jest niezweryfikowany albo zablokowany.",
   resetUserEmailAction: "Zaktualizuj adres email",
   resetUserEmailSuccess:
-    "Wiadomość email do zmiany adresu została wysłana na adres użytkownika",
+    "Wiadomość email do zmiany adresu została wysłana na podany adres email",
   resetUserEmailError: "Błąd podczas inicjalizacji zmiany adresu email  ",
   updateEmailAddressTitle:
     "Czy na pewno chcesz zaktualizować adres email użytkownika?",
@@ -190,6 +215,7 @@ const userFilter = {
   tenant: "Najemca",
   owner: "Właściciel",
   administrator: "Administrator",
+  clear: "Wyczyść",
   lastName: "Nazwisko",
 };
 
@@ -202,6 +228,8 @@ const pageChanger = {
 const common = {
   yes: "tak",
   no: "nie",
+  update: "Zaktualizuj",
+  confirmDialogTitle: "Czy jesteś pewny?",
 };
 
 const navLinks = {
@@ -220,6 +248,11 @@ const userDataPage = {
   error: "Błąd",
   success: "Dane zaktualizowane",
   updateUserData: "Aktualizuj",
+  emailNotValid: "Email nie jest poprawny",
+  email: "Email*",
+  emailNotEmpty: "Email nie może być pusty",
+  emailTooLong: "Email jest za długi",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić dane personalne?",
 };
 
 const updateDataForm = {
@@ -251,10 +284,11 @@ const mePage = {
   lastFailedfullLoginDateLabel: "Data ostatniego nieudanego logowania",
   lastFailedfillLoginIPLabel: "Adres ip ostatniego nieudanego logowania",
   updateData: "Zmień swoje dane",
-  changeEmail: "Zmień swój email",
+  changeEmail: "Zmień swój adres email",
   changePassword: "Zmień swoje hasło",
   changeEmailDescription:
     "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
+  emailInput: "Email*",
 };
 
 const registerSuccessPage = {

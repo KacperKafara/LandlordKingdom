@@ -37,9 +37,9 @@ public interface UserService {
 
     void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException;
 
-    void sendEmailUpdateEmail(UUID id) throws NotFoundException, TokenGenerationException;
+    void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException;
 
-    void changeUserEmail(String token, String email) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException;
+    void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException;
 
     void sendChangePasswordEmail(String login) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException;
 

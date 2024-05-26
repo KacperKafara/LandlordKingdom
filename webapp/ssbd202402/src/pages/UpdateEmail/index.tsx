@@ -15,104 +15,130 @@ import {
 } from "@/components/ui/form";
 
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
-import { AxiosError } from "axios";
-import { api } from "@/data/api";
+import LoadingButton from "@/components/LoadingButton";
+import { useChangeEmailAddress } from "@/data/useUpdateEmailAddress";
 const updateEmailFormSchema = (t: TFunction) =>
-  z.object({
-    email: z
-      .string()
-      .email(t("updateEmailPage.emailNotValid"))
-      .min(
-        5,
-        t("validation.minLength") +
-          " " +
-          5 +
-          " " +
-          t("validation.characters") +
-          "."
-      )
-      .max(
-        50,
-        t("validation.maxLength") +
-          " " +
-          50 +
-          " " +
-          t("validation.characters") +
-          "."
-      ),
-  });
+  z
+    .object({
+      password: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+      confirmPassword: z
+        .string()
+        .min(
+          8,
+          t("validation.minLength") +
+            " " +
+            8 +
+            " " +
+            t("validation.characters") +
+            "."
+        )
+        .max(
+          50,
+          t("validation.maxLength") +
+            " " +
+            50 +
+            " " +
+            t("validation.characters") +
+            "."
+        ),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("registerPage.passwordMatch"),
+      path: ["confirmPassword"],
+    });
 
 type updateEmailFormValues = z.infer<ReturnType<typeof updateEmailFormSchema>>;
 
 const UpdateEmailPage: FC = () => {
   const { token } = useParams<{ token: string }>();
   const { t } = useTranslation();
-  const { toast } = useToast();
   const navigate = useNavigate();
+  const { changeEmailAddress, isPending } = useChangeEmailAddress();
   const form = useForm<updateEmailFormValues>({
     resolver: zodResolver(updateEmailFormSchema(t)),
     values: {
-      email: "",
+      password: "",
+      confirmPassword: "",
     },
   });
 
   const handleUserSubmit: SubmitHandler<updateEmailFormValues> = async (
     data: updateEmailFormValues
   ) => {
-    try {
-      await api.post("/me/update-email", {
-        token: token,
-        email: data.email,
-      });
-      toast({
-        variant: "default",
-        title: t("updateEmailPage.updateEmailSuccess"),
-      });
-      navigate("/login");
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const axiosError = error as AxiosError;
-        toast({
-          variant: "destructive",
-          title: t("updateEmailPage.updateEmailError"),
-          description: axiosError.message,
-        });
-      } else {
-        console.log(error);
+    await changeEmailAddress(
+      {
+        token: token ? token : "",
+        password: data.password,
+      },
+      {
+        onSuccess: () => {
+          navigate("/login");
+        },
       }
-    }
+    );
   };
 
   return (
     <>
-      <div className="h-screen flex flex-col justify-center items-center bg-gray-100">
+      <div className="flex h-screen flex-col items-center justify-center">
         <Form {...form}>
           <form
-            className="border-1 bg-white rounded-md border-black p-7 w-1/4 flex flex-col shadow-2xl relative"
+            className="border-1 relative flex w-1/4 flex-col rounded-md p-7 shadow-2xl"
             onSubmit={form.handleSubmit(handleUserSubmit)}
           >
-            <h1 className="text-3xl mb-10 text-center">
+            <h1 className="mb-10 text-center text-3xl">
               {t("updateEmailPage.updateEmailTitle")}
             </h1>
             <FormField
               control={form.control}
-              name="email"
+              name="password"
               render={({ field }) => (
                 <FormItem className="my-3">
-                  <FormLabel>{t("updateEmailPage.email")} </FormLabel>
+                  <FormLabel>{t("updateEmailPage.password")} </FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type="password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">
-              {t("updateEmailPage.updateEmailButton")}
-            </Button>
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem className="my-3">
+                  <FormLabel>{t("updateEmailPage.confirmPassword")} </FormLabel>
+                  <FormControl>
+                    <Input type="password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <LoadingButton
+              type="submit"
+              text={t("updateEmailPage.updateEmailButton")}
+              isLoading={isPending}
+            />
           </form>
         </Form>
       </div>

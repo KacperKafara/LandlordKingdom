@@ -17,11 +17,14 @@
            created_at="[NOW]"
            modified_at="[NOW]"
            created_by="[NULL]"
-           modified_by="[NULL]"/>
+           modified_by="[NULL]"
+           active="true"
+           theme="LIGHT"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a5"
                    email="adminUser@test.com"
+                   temp_email="[NULL]"
                    first_name="AdminUser"
                    last_name="AdminUser"/>
 
@@ -55,11 +58,14 @@
            created_at="[NOW]"
            modified_at="[NOW]"
            created_by="[NULL]"
-           modified_by="[NULL]"/>
+           modified_by="[NULL]"
+           active="true"
+           theme="LIGHT"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
                    email="userOwner@test.com"
+                   temp_email="[NULL]"
                    first_name="User"
                    last_name="Owner"/>
 
@@ -93,11 +99,14 @@
            created_at="[NOW]"
            modified_at="[NOW]"
            created_by="[NULL]"
-           modified_by="[NULL]"/>
+           modified_by="[NULL]"
+           active="true"
+           theme="LIGHT"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a7"
                    email="user@test.com"
+                   temp_email="[NULL]"
                    first_name="User"
                    last_name="User"/>
 </dataset>
