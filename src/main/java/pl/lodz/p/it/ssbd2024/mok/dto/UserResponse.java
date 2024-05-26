@@ -9,6 +9,7 @@ public record UserResponse(
         String email,
         String login,
         String language,
-        boolean blocked
+        boolean blocked,
+        String timezone
 ) {
 }

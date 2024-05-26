@@ -143,6 +143,10 @@ const UserDetailsPage: FC = () => {
                     value={data?.data.lastFailedLogin ?? "-"}
                   />
                   <DataField
+                    label={t("userDetailsPage.timezone")}
+                    value={data?.data.timezone ?? "-"}
+                  />
+                  <DataField
                     label={t("userDetailsPage.language")}
                     value={data?.data.language ?? "-"}
                   />

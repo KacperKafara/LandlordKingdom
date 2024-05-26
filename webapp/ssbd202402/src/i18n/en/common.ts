@@ -41,6 +41,7 @@ const userDetailsPage = {
   language: "Language",
   lastSuccessfulLogin: "Last successful login",
   lastFailedLogin: "Last failed login",
+  timezone: "Timezone",
   blocked: "Blocked",
   verified: "Verified",
   active: "Active",
@@ -281,6 +282,7 @@ const mePage = {
   changePassword: "Change your password",
   changeEmailDescription: "Click here to send email with link to change email.",
   emailInput: "Email*",
+  timezone: "Timezone",
 };
 
 const registerSuccessPage = {

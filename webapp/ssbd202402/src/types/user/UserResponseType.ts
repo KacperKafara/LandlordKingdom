@@ -10,5 +10,6 @@ export type UserResponse = {
   lastSuccessfulLogin?: string;
   lastFailedLoginIP?: string;
   lastSuccessfulLoginIP?: string;
+  timezone?: string; 
   roles: string[];
 };

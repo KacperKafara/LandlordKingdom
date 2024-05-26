@@ -10,20 +10,22 @@ import java.util.List;
 
 public class UserMapper {
     public static UserResponse toUserResponse(User user) {
+        String timezone = user.getTimezone() != null ?
+                user.getTimezone().getName() : null;
+
         return new UserResponse(user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),
                 user.getLogin(),
                 user.getLanguage(),
-                user.isBlocked());
+                user.isBlocked(),
+                timezone);
     }
 
     public static DetailedUserResponse toDetailedUserResponse(User user, List<String> roles) {
-        String timezone = "UTC";
-        if(user.getTimezone() != null) {
-            timezone = user.getTimezone().getName();
-        }
+        String timezone = user.getTimezone() != null ?
+                user.getTimezone().getName() : "UTC";
 
         String lastSuccessfulLogin = null;
         String lastFailedLogin = null;
@@ -46,6 +48,7 @@ public class UserMapper {
                 lastFailedLogin,
                 user.getLastSuccessfulLoginIp(),
                 user.getLastFailedLoginIp(),
+                timezone,
                 user.isBlocked(),
                 user.isVerified(),
                 user.isActive(),

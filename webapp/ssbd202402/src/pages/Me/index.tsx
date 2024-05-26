@@ -74,6 +74,10 @@ const MePage: FC = () => {
                         label={t("mePage.lastFailedfillLoginIPLabel")}
                         value={data?.data.lastFailedLoginIP ?? "-"}
                       />
+                      <DataField
+                        label={t("mePage.timezone")}
+                        value={data?.data.timezone ?? "-"}
+                      />
                     </div>
                   </div>
                 </CardContent>

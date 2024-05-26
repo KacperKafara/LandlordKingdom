@@ -43,6 +43,7 @@ const userDetailsPage = {
   language: "Język",
   lastSuccessfulLogin: "Ostatnie udane logowanie",
   lastFailedLogin: "Ostatnie nieudane logowanie",
+  timezone: "Strefa czasowa",
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
   active: "Aktywny",
@@ -289,6 +290,7 @@ const mePage = {
   changeEmailDescription:
     "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
   emailInput: "Email*",
+  timezone: "Strefa czasowa",
 };
 
 const registerSuccessPage = {
