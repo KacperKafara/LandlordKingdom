@@ -8,7 +8,7 @@ public class PublicProperties {
         properties.put("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
         properties.put("hibernate.show_sql", "true");
         properties.put("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        properties.put("javax.persistence.transactionType", "JTA");
+        properties.put("jakarta.persistence.transactionType", "JTA");
         return properties;
     }
 }
