@@ -47,7 +47,7 @@ public class JwtService {
                 .issuedAt(now)
                 .expiresAt(now.plus(jwtExpiration, ChronoUnit.HOURS))
                 .subject(id.toString())
-                .claim("authorities",  roles)
+                .claim("authorities", roles)
                 .build();
 
         var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(SignatureAlgorithm.RS256).build(), claims);
