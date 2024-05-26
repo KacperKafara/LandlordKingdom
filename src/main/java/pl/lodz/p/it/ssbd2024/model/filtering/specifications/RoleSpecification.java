@@ -1,17 +1,21 @@
-package pl.lodz.p.it.ssbd2024.model.filtering;
+package pl.lodz.p.it.ssbd2024.model.filtering.specifications;
 
 import jakarta.persistence.criteria.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
+import pl.lodz.p.it.ssbd2024.model.filtering.SearchOperation;
 
 import java.util.Objects;
 
 @Slf4j
-public class RoleSpecification<T> extends SpecificationImpl<T> {
+public class RoleSpecification<T> implements Specification<T> {
+    private final SearchCriteria searchCriteria;
 
     public RoleSpecification(SearchCriteria searchCriteria) {
-        super(searchCriteria);
+        this.searchCriteria = searchCriteria;
     }
 
     @Override

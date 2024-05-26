@@ -7,7 +7,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 
 import java.security.InvalidKeyException;
 
@@ -27,6 +27,9 @@ public interface VerificationTokenService {
 
     VerificationToken validatePasswordVerificationToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
+    String generateAccountActivateToken(User user) throws TokenGenerationException;
+
+    VerificationToken validateAccountActivateToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 
     String generateOTPToken(User user) throws InvalidKeyException;
 

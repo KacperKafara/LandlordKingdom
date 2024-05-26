@@ -35,7 +35,7 @@ public class MeTenantController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PostMapping("/rents/{id}/payment")
+    @PostMapping("/rents/{id}/variableFee")
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<RentResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest) {
         throw new UnsupportedOperationException("Not supported yet.");

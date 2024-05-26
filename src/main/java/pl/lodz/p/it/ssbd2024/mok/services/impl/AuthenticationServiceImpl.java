@@ -13,7 +13,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
-import pl.lodz.p.it.ssbd2024.model.VerificationToken;
+import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthAdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthOwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
@@ -21,6 +21,7 @@ import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
 
 import java.security.InvalidKeyException;
 import java.time.Duration;
@@ -37,15 +38,12 @@ import java.util.UUID;
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
-
     private final AuthUserRepository userRepository;
     private final AuthTenantRepository tenantRepository;
     private final AuthOwnerRepository ownerRepository;
     private final AuthAdministratorRepository administratorRepository;
-
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-
     private final VerificationTokenService verificationTokenService;
 
     @Value("${login.maxAttempts}")
@@ -68,7 +66,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @PreAuthorize("permitAll()")
-    public void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException {
+    public void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException, TokenGenerationException, UserInactiveException {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
         if (!user.isVerified()) {
@@ -86,6 +84,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         }
 
         if (passwordEncoder.matches(password, user.getPassword())) {
+            if (!user.isActive()) {
+                String token = verificationTokenService.generateAccountActivateToken(user);
+                emailService.sendAccountActivateAfterBlock(user.getEmail(), user.getFirstName(), token, language);
+                throw new UserInactiveException(UserExceptionMessages.INACTIVE);
+            }
+
             user.setLanguage(language);
             userRepository.saveAndFlush(user);
 
@@ -146,8 +150,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         userRepository.saveAndFlush(user);
 
         if (user.getLoginAttempts() >= maxLoginAttempts) {
-            LocalDateTime unblockDate = LocalDateTime.now().plusSeconds(loginTimeOut);
-            emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), user.getLastFailedLogin(), unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
+            String timezone = "UTC";
+            if(user.getTimezone() != null){
+                timezone = user.getTimezone().getName();
+            }
+            String unblockDate = TimezoneMapper.convertUTCToAnotherTimezoneSimple(LocalDateTime.now().plusSeconds(loginTimeOut), timezone, user.getLanguage());
+            String lastFailedLogin = TimezoneMapper.convertUTCToAnotherTimezoneSimple(user.getLastFailedLogin(), timezone, user.getLanguage());
+            emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), lastFailedLogin, unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
         }
     }
 

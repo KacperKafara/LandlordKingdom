@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2024.model.filtering;
+package pl.lodz.p.it.ssbd2024.model.filtering.specifications;
 
 
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -6,13 +6,15 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
+import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
+import pl.lodz.p.it.ssbd2024.model.filtering.SearchOperation;
 
 import java.util.Objects;
 
-public class SpecificationImpl<T> implements Specification<T> {
-    protected final SearchCriteria searchCriteria;
+public class BasicSpecification<T> implements Specification<T> {
+    private final SearchCriteria searchCriteria;
 
-    public SpecificationImpl(SearchCriteria searchCriteria) {
+    public BasicSpecification(SearchCriteria searchCriteria) {
         this.searchCriteria = searchCriteria;
     }
 

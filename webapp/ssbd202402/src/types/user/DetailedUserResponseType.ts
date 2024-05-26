@@ -9,5 +9,6 @@ export type DetailedUserResponse = {
   lastFailedLogin: string;
   blocked: boolean;
   verified: boolean;
+  active: boolean;
   roles: string[];
 };
