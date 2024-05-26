@@ -14,7 +14,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/me")
 @RequiredArgsConstructor
-public class MeController {
+public class MeMolController {
     private final LocalService localService;
     private final ApplicationService applicationService;
 

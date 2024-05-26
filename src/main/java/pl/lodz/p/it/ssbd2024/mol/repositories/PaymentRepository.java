@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mol.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import pl.lodz.p.it.ssbd2024.model.Payment;
@@ -12,5 +14,6 @@ import java.util.UUID;
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
-    List<Payment> findByLocalId(UUID id);
+    @Query("SELECT p FROM Payment p WHERE p.rent.local.id = :localId")
+    List<Payment> findByLocalId(@Param("localId") UUID localId);
 }

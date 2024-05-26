@@ -44,11 +44,11 @@ public class Rent extends AbstractEntity {
     @Setter
     private BigDecimal balance;
 
-    @OneToMany(mappedBy = "payment")
+    @OneToMany(mappedBy = "rent")
     private List<Payment> payments = new ArrayList<>();
-    @OneToMany(mappedBy = "variable_fee")
+    @OneToMany(mappedBy = "rent")
     private List<VariableFee> variableFees = new ArrayList<>();
-    @OneToMany(mappedBy = "fixed_fee")
+    @OneToMany(mappedBy = "rent")
     private List<FixedFee> fixedFees = new ArrayList<>();
 
     public Rent(Local local,
