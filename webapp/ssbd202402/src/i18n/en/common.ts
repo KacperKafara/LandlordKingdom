@@ -43,14 +43,26 @@ const userDetailsPage = {
   blocked: "Blocked",
   verified: "Verified",
   actions: "Actions",
+
+  role: {
+    title: "Roles",
+    add: {
+      tenant: "Add tenant role",
+      owner: "Add owner role",
+      administrator: "Add administrator role",
+    },
+    remove: {
+      tenant: "Remove tenant role",
+      owner: "Remove owner role",
+      administrator: "Remove administrator role",
+    },
+  },
   changeEmail: "Change email address",
-  updateEmailAddress:
-    "Update email address",
+  updateEmailAddress: "Update email address",
   updateEmailAddressTitle:
     "Are you sure you want to update this user's email address?",
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the given email address",
-
 };
 
 const updateEmailPage = {
@@ -140,11 +152,14 @@ const userListPage = {
   viewDetails: "Details",
   resetUserPasswordAction: "Reset password",
   resetUserPasswordTitle: "Reset user password",
-  resetUserPasswordDescription: "Are you sure you want to reset user password?",
+  resetUserPasswordDescription: "Are you sure you want to reset user password ",
   resetUserPasswordToastTitleSuccess: "Operation successful",
   resetUserPasswordToastDescriptionSuccess:
     "Password reset link has been sent to the user email address",
   resetUserPasswordToastTitleFail: "Operation failed",
+  resetUserPasswordToastDescriptionNotFound: "Not found given user.",
+  resetUserPasswordToastDescriptionForbidden:
+    "User is not verified or blocked.",
   resetUserPasswordToastDescriptionFail: "Something went wrong...",
   resetUserEmailAction: "Update email",
   resetUserEmailSuccess:
@@ -202,6 +217,8 @@ const pageChanger = {
 const common = {
   yes: "yes",
   no: "no",
+  update: "Update",
+  confirmDialogTitle: "Are you sure?",
 };
 
 const navLinks = {
@@ -224,6 +241,7 @@ const userDataPage = {
   email: "Email*",
   emailNotEmpty: "Email cannot be empty",
   emailTooLong: "Email is too long",
+  confirmDialogDescription: "Are you sure you want to chane personal data?",
 };
 
 const updateDataForm = {

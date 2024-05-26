@@ -44,13 +44,26 @@ const userDetailsPage = {
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
   actions: "Akcje",
-  changeEmail:  "Zmień adres email",
-  updateEmailAddress:
-  "Zaktualizuj adres email",
-updateEmailAddressTitle:
- "Czy na pewno chcesz zaktualizować adres email tego użytkownika?",
-updateEmailAddressDescription:
-  "Na podany adres email zostanie wysłany link do zmiany adresu email",
+
+  role: {
+    title: "Role",
+    add: {
+      tenant: "Przyznaj role najemcy",
+      owner: "Przyznaj role właściciela",
+      administrator: "Przyznaj role administratora",
+    },
+    remove: {
+      tenant: "Odbierz role najemcy",
+      owner: "Odbierz role właścicela",
+      administrator: "Odbierz role administratora",
+    },
+  },
+  changeEmail: "Zmień adres email",
+  updateEmailAddress: "Zaktualizuj adres email",
+  updateEmailAddressTitle:
+    "Czy na pewno chcesz zaktualizować adres email tego użytkownika?",
+  updateEmailAddressDescription:
+    "Na podany adres email zostanie wysłany link do zmiany adresu email",
 };
 
 const updateEmailPage = {
@@ -153,7 +166,7 @@ const userListPage = {
   resetUserPasswordToastDescriptionFail: "Coś poszło nie tak...",
   resetUserPasswordToastDescriptionNotFound: "Podany użytkownik nie istanieje.",
   resetUserPasswordToastDescriptionForbidden:
-    "Użytkownik jest nieaktywowany albo zablokowany.",
+    "Użytkownik jest niezweryfikowany albo zablokowany.",
   resetUserEmailAction: "Zaktualizuj adres email",
   resetUserEmailSuccess:
     "Wiadomość email do zmiany adresu została wysłana na podany adres email",
@@ -211,6 +224,8 @@ const pageChanger = {
 const common = {
   yes: "tak",
   no: "nie",
+  update: "Zaktualizuj",
+  confirmDialogTitle: "Czy jesteś pewny?",
 };
 
 const navLinks = {
@@ -233,6 +248,7 @@ const userDataPage = {
   email: "Email*",
   emailNotEmpty: "Email nie może być pusty",
   emailTooLong: "Email jest za długi",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić dane personalne?",
 };
 
 const updateDataForm = {
@@ -268,7 +284,7 @@ const mePage = {
   changePassword: "Zmień swoje hasło",
   changeEmailDescription:
     "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
-    emailInput: "Email*",
+  emailInput: "Email*",
 };
 
 const registerSuccessPage = {

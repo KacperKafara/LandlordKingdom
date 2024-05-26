@@ -5,6 +5,7 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrators TO ssbd02mok
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.tenants TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.owners TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_levels TO ssbd02mok;
+GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.old_passwords TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02mok;
 
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.locals TO ssbd02mol;
