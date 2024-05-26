@@ -3,6 +3,7 @@ import { Role } from "@/store/userStore";
 const error = {
   baseTitle: "Wystąpił błąd",
   baseDescription: "Coś poszło nie tak...",
+  userBlocked: "Twoje konto jest zablokowane",
   internalServerErrorDescription:
     "Ups! Coś poszło nie tak po naszej stronie. Proszę spróbuj ponownie później.",
 };
@@ -142,10 +143,14 @@ const changePasswordForm = {
   newPassword: "Nowe hasło*",
   confirmPassword: "Potwierdź nowe hasło*",
   submit: "Zmień",
-  success: "Hasło zmieniono pomyślnie",
+  success: "Sukces",
+  successDescription: "Hasło zostało zmienione",
   errorTitle: "Wystąpił błąd",
   errorDescriptionNotFound: "Nie znaleziono użytkownika",
   errorDescriptionBadRequest: "Wprowadzono niepoprawne hasło",
+  errorDescriptionConflict: "Hasło musi być unikalne względem poprzednich",
+  errorDescriptionTokenNotValid:
+    "Podany żeton nie jest poprawny, wymagane ponowne wysłanie maila.",
   alertDialogTitle: "Potwierdzenie zmiany hasła",
   alertDialogDescription: "Czy na pewno chcesz zmienić hasło?",
   alertDialogCancel: "Nie",
