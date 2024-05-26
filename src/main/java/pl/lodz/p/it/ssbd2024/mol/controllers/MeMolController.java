@@ -61,4 +61,28 @@ public class MeMolController {
     public ResponseEntity<RentResponse> payRent(@PathVariable UUID id, @RequestBody NewPaymentRequest newPaymentRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @PatchMapping("/locals/{id}/leave")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<LeaveLocalResponse> leaveLocal(@PathVariable UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PatchMapping("/locals/{id}/fixedFee")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<SetFixedFeeResponse> setFixedFee(@PathVariable UUID id, @RequestBody SetFixedFeeRequest setFixedFeeRequest) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PatchMapping("/rents/{id}/endDate")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<RentResponse> setEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PostMapping("/getRole")
+    @PreAuthorize("hasRole('TENANT')")
+    public ResponseEntity<GetRoleResponse> getRole() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

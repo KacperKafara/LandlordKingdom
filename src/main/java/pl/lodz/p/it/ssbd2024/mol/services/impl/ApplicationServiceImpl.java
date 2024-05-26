@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
+import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalAlreadyRentedException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.ApplicationRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.FixedFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
@@ -30,7 +31,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Rent acceptApplication(UUID applicationId) {
+    public Rent acceptApplication(UUID applicationId) throws LocalAlreadyRentedException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

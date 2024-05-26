@@ -5,9 +5,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
+import pl.lodz.p.it.ssbd2024.mol.exceptions.GivenAddressAssignedToOtherLocalException;
+import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalIsNotInactiveException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +21,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local addLocal(Local local) {
+    public Local addLocal(Local local) throws GivenAddressAssignedToOtherLocalException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -37,6 +40,18 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public Local editLocal(UUID id, Local local) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Local leaveLocal(UUID ownerId, UUID localId) throws LocalIsNotInactiveException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

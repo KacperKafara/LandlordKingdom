@@ -5,6 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
+import pl.lodz.p.it.ssbd2024.mol.exceptions.WrongEndDateException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.PaymentRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
@@ -26,8 +27,15 @@ public class RentServiceImpl implements RentService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Rent payForRent(UUID rentId, Payment payment) {
+    public Rent payForRent(UUID rentId, UUID ownerId, Payment payment) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Rent editEndDate(UUID rentId, UUID ownerId, Rent rent) throws WrongEndDateException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }

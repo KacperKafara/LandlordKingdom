@@ -16,4 +16,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     List<Local> findByOwnerId(UUID id);
+
+    @PreAuthorize("hasRole('OWNER')")
+    Local findByOwnerIdAndId(UUID ownerId, UUID id);
 }
