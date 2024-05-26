@@ -48,6 +48,7 @@ public class UserMapper {
                 user.getLastFailedLoginIp(),
                 user.isBlocked(),
                 user.isVerified(),
+                user.isActive(),
                 roles);
     }
 

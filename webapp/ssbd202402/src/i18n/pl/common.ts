@@ -30,6 +30,8 @@ const loginPage = {
     description: "Wprowadzono niepoprawny żeton",
   },
   googleLoginButton: "Zaloguj się z Google",
+  inactiveAccount:
+    "Twoje konto jest nieaktywne, by kontynuować sprawdź skrzynkę pocztową",
 };
 
 const userDetailsPage = {
@@ -43,6 +45,7 @@ const userDetailsPage = {
   lastFailedLogin: "Ostatnie nieudane logowanie",
   blocked: "Zablokowany",
   verified: "Zweryfikowany",
+  active: "Aktywny",
   actions: "Akcje",
 
   role: {

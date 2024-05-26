@@ -20,6 +20,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
@@ -96,7 +97,7 @@ public class UserServiceImpl implements UserService {
             String token = verificationTokenService.generateAccountVerificationToken(newUser);
 
             URI uri = URI.create(appUrl + "/verify/" + token);
-            emailService.sendAccountActivationEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
+            emailService.sendVerifyAccountEmail(newUser.getEmail(), newUser.getFirstName(), uri.toString(), newUser.getLanguage());
             return tenant.getUser();
         } catch (ConstraintViolationException e) {
             String constraintName = e.getConstraintName();
@@ -120,7 +121,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
         user.setVerified(true);
         userRepository.saveAndFlush(user);
-        emailService.sendAccountActivatedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
+        emailService.sendAccountVerifiedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override

@@ -30,6 +30,7 @@ const loginPage = {
     description: "Provided incorrect token",
   },
   googleLoginButton: "Sign in with Google",
+  inactiveAccount: "Your account is inactive, check you e-mail to continue",
 };
 
 const userDetailsPage = {
@@ -42,6 +43,7 @@ const userDetailsPage = {
   lastFailedLogin: "Last failed login",
   blocked: "Blocked",
   verified: "Verified",
+  active: "Active",
   actions: "Actions",
 
   role: {
