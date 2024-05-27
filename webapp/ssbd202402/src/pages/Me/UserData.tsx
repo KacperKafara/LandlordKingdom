@@ -35,7 +35,7 @@ const updateUserSchema = (t: TFunction) =>
 type UpdateUserSchema = z.infer<ReturnType<typeof updateUserSchema>>;
 
 const UserData: FC = () => {
-  const { options, parseTimezone } = useTimezoneSelect({
+  const { options } = useTimezoneSelect({
     labelStyle: "abbrev",
     timezones: allTimezones,
     displayValue: "UTC",
@@ -49,8 +49,7 @@ const UserData: FC = () => {
       firstName: data?.data.firstName || "",
       lastName: data?.data.lastName || "",
       language: data?.data.language || "",
-      timezone: parseTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
-        .value, // dodac wartosc pobrana z be
+      timezone: data?.data.timezone ?? "",
     },
   });
 

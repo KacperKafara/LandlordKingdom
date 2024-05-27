@@ -34,6 +34,7 @@ import { useFilteredUsers } from "@/data/useFilteredUsers";
 import PageChanger from "./PageChanger";
 import { useBlockUser } from "@/data/useBlockUser.ts";
 import { useUnblockUser } from "@/data/useBlockUser.ts";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 interface UserData {
   login: string;
@@ -50,6 +51,10 @@ const UserListPage: FC = () => {
   const { blockUser } = useBlockUser();
   const { unblockUser } = useUnblockUser();
   const [userData, setUserData] = useState<UserData>();
+  const test = useBreadcrumbs([
+    { title: "Admin", path: "/admin" },
+    { title: "Users", path: "/admin/users" },
+  ]);
 
   const handlePasswordResetClick = (data: UserData) => {
     setUserData(data);
@@ -66,11 +71,12 @@ const UserListPage: FC = () => {
 
   return (
     <>
-      <div className="m-5 flex justify-center">
-        <UserFilter />
-      </div>
       <div className="flex justify-center">
-        <div className="w-3/5">
+        <div className="w-10/12 pt-10">
+          {test}
+          <div className="m-5 flex justify-center">
+            <UserFilter />
+          </div>
           <AlertDialog open={openPaswordResetDialog}>
             <AlertDialogContent>
               <AlertDialogHeader>
