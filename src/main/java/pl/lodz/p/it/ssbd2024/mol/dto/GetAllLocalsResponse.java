@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2024.mok.dto;
+package pl.lodz.p.it.ssbd2024.mol.dto;
 
 public record GetAllLocalsResponse() {
 }
