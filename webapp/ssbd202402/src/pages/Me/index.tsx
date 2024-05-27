@@ -17,7 +17,6 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTimezoneSelect, allTimezones } from "react-timezone-select";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Ghost } from "lucide-react";
 const MePage: FC = () => {
   const { options } = useTimezoneSelect({
     labelStyle: "abbrev",
