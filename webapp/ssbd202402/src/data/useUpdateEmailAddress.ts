@@ -3,7 +3,7 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { api } from "./api";
-import { AxiosError } from "axios";
+import { ErrorCode } from "@/@types/errorCode";
 
 type ChangePasswordRequest = {
   token: string;
@@ -28,7 +28,9 @@ export const useResetOtherUserEmailAddress = () => {
         toast({
           variant: "destructive",
           title: t("userListPage.resetUserEmailError"),
-          description: error.message,
+          description: t(
+            `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+          ),
         });
       } else {
         toast({
@@ -59,7 +61,9 @@ export const useResetMyEmailAddress = () => {
         toast({
           variant: "destructive",
           title: t("userListPage.resetUserEmailError"),
-          description: error.message,
+          description: t(
+            `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+          ),
         });
       } else {
         toast({
@@ -86,11 +90,13 @@ export const useChangeEmailAddress = () => {
         title: t("updateEmailPage.updateEmailSuccess"),
       });
     },
-    onError: (error: AxiosError) => {
+    onError: (error) => {
       toast({
         variant: "destructive",
         title: t("updateEmailPage.updateEmailError"),
-        description: error.message,
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
       });
     },
   });

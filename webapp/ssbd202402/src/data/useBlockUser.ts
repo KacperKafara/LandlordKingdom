@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "./api";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
-import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
 
 export const useBlockUser = () => {
