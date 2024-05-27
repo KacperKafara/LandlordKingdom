@@ -9,7 +9,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.AdministratorOwnRoleRemovalException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Administrator;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -39,8 +42,11 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Administrator removeAdministratorAccessLevel(UUID id) throws NotFoundException {
+    public Administrator removeAdministratorAccessLevel(UUID id, UUID administratorId) throws NotFoundException, AdministratorOwnRoleRemovalException {
         Administrator administrator = administratorRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        if(administrator.getUser().getId().equals(administratorId)){
+            throw new AdministratorOwnRoleRemovalException(AdministratorMessages.OWN_ADMINISTRATOR_ROLE_REMOVAL, ErrorCodes.ADMINISTRATOR_OWN_ROLE_REMOVAL);
+        }
 
         administrator.setActive(false);
         User user = administrator.getUser();

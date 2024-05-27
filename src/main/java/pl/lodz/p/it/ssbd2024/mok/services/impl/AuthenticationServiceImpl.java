@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
@@ -70,15 +71,15 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
 
         if (!user.isVerified()) {
-            throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED);
+            throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED, ErrorCodes.USER_NOT_VERIFIED);
         }
 
         if (user.isBlocked()) {
-            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
+            throw new UserBlockedException(UserExceptionMessages.BLOCKED, ErrorCodes.USER_BLOCKED);
         }
 
         if (user.getLoginAttempts() >= maxLoginAttempts && Duration.between(user.getLastFailedLogin(), LocalDateTime.now()).toSeconds() <= loginTimeOut) {
-            throw new SignInBlockedException(UserExceptionMessages.SIGN_IN_BLOCKED);
+            throw new SignInBlockedException(UserExceptionMessages.SIGN_IN_BLOCKED, ErrorCodes.SIGN_IN_BLOCKED);
         } else if (user.getLoginAttempts() >= maxLoginAttempts) {
             user.setLoginAttempts(0);
         }
@@ -87,7 +88,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if (!user.isActive()) {
                 String token = verificationTokenService.generateAccountActivateToken(user);
                 emailService.sendAccountActivateAfterBlock(user.getEmail(), user.getFirstName(), token, language);
-                throw new UserInactiveException(UserExceptionMessages.INACTIVE);
+                throw new UserInactiveException(UserExceptionMessages.INACTIVE, ErrorCodes.USER_INACTIVE);
             }
 
             user.setLanguage(language);
@@ -97,7 +98,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             emailService.sendOTPEmail(user.getEmail(), user.getFirstName(), token, user.getLanguage());
         } else {
             handleFailedLogin(user, ip);
-            throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA);
+            throw new InvalidLoginDataException(UserExceptionMessages.INVALID_LOGIN_DATA, ErrorCodes.INVALID_LOGIN_DATA);
         }
     }
 
@@ -118,7 +119,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (!user.getLogin().equals(login)) {
             handleFailedLogin(user, ip);
-            throw new LoginNotMatchToOTPException(UserExceptionMessages.LOGIN_NOT_MATCH_TO_OTP);
+            throw new LoginNotMatchToOTPException(UserExceptionMessages.LOGIN_NOT_MATCH_TO_OTP, ErrorCodes.LOGIN_NOT_MATCH_TO_OTP);
         }
 
         user.setLastSuccessfulLogin(LocalDateTime.now());
@@ -175,6 +176,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     "refreshToken", refreshToken);
         }
 
-        throw new RefreshTokenExpiredException(UserExceptionMessages.REFRESH_TOKEN_EXPIRED);
+        throw new RefreshTokenExpiredException(UserExceptionMessages.REFRESH_TOKEN_EXPIRED, ErrorCodes.INVALID_REFRESH_TOKEN);
     }
 }

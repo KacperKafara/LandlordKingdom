@@ -116,7 +116,7 @@ public class UserController {
             }
 
         } catch (InvalidDataException | SemanticException | PathElementException | NullPointerException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FilterMessages.INVALID_DATA);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FilterMessages.INVALID_DATA, e);
         }
 
         return ResponseEntity.ok(response);
@@ -133,7 +133,7 @@ public class UserController {
                     .header(HttpHeaders.ETAG, signer.generateSignature(user.getId(), user.getVersion()))
                     .body(UserMapper.toDetailedUserResponse(user, roles));
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -143,17 +143,15 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID administratorId = UUID.fromString(jwt.getSubject());
-
-        if (administratorId.equals(id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, AdministratorMessages.OWN_ADMINISTRATOR_BLOCK);
-        }
         try {
-            userService.blockUser(id);
+            userService.blockUser(id, administratorId);
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (UserAlreadyBlockedException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (AdministratorOwnBlockException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
@@ -164,9 +162,9 @@ public class UserController {
             userService.unblockUser(id);
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (UserAlreadyUnblockedException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -181,11 +179,11 @@ public class UserController {
             User user = userService.updateUserData(id, UserMapper.toUser(request, timezone), tagValue);
             return ResponseEntity.ok(UserMapper.toUserResponse(user));
         } catch (NotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ApplicationOptimisticLockException e) {
-            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
         } catch (TimezoneNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
@@ -196,9 +194,9 @@ public class UserController {
             userService.sendEmailUpdateVerificationEmail(id, request.email());
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (TokenGenerationException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED, e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -209,11 +207,11 @@ public class UserController {
             userService.sendChangePasswordEmail(request.email());
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (TokenGenerationException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED, e);
         } catch (UserBlockedException | UserNotVerifiedException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         }
     }
 }

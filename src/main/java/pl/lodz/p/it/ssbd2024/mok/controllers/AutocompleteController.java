@@ -33,7 +33,7 @@ public class AutocompleteController {
             List<User> result = userService.getAllFiltered(specificationBuilder.build());
             return ResponseEntity.ok(result.stream().map(User::getLogin).toList());
         } catch (InvalidDataException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FilterMessages.INVALID_DATA);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FilterMessages.INVALID_DATA, e);
         }
     }
 }
