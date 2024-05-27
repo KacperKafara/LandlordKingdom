@@ -1,8 +1,9 @@
 import { Role } from "@/store/userStore";
 
 const error = {
-  baseTitle: "Error occured",
+  baseTitle: "Error occurred",
   baseDescription: "Something went wrong...",
+  userBlocked: "Your account is blocked",
   internalServerErrorDescription:
     "Oops! Something went wrong on our end. Please try again later.",
 };
@@ -137,10 +138,15 @@ const changePasswordForm = {
   confirmPassword: "Confirm new password*",
   submit: "Change",
   success: "Success",
+  successDescription: "Password has been changed",
   errorTitle: "Error",
   errorDescriptionNotFound: "User not found",
   errorDescriptionBadRequest: "Incorrect password",
+  errorDescriptionConflict:
+    "The password must be unique compared to previous ones",
   alertDialogTitle: "Change password",
+  errorDescriptionTokenNotValid:
+    "The provided token is invalid, email resend required.",
   alertDialogDescription: "Are you sure you want to change your password?",
   alertDialogCancel: "No",
   alertDialogAction: "Yes",
@@ -184,8 +190,8 @@ const block = {
     },
 
     description: {
-      blockSuccess: "User sucessfully blocked.",
-      unblockSuccess: "User sucessfully unblocked.",
+      blockSuccess: "User successfully blocked.",
+      unblockSuccess: "User successfully unblocked.",
       notFound: "Users not found.",
       alreadyBlocked: "User already blocked.",
       alreadyUnblocked: "User already unblocked.",
@@ -271,7 +277,7 @@ const mePage = {
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the user's email address",
   title: "My account",
-  basicInformation: "Basic informations",
+  basicInformation: "Basic information's",
   firstNameLabel: "First name",
   lastNamelabel: "Last name",
   emailLabel: "Email",
@@ -319,7 +325,7 @@ const sessionExpiredDialog = {
   title: "Session will expire soon!",
   description:
     "Your session will expire in less than 5 minutes. Do you want to extend it?",
-    signOut: "Logout",
+  signOut: "Logout",
 };
 
 export default {

@@ -29,7 +29,7 @@ const updateUserSchema = (t: TFunction) =>
     firstName: z.string().max(50).min(1, t("userDataPage.firstNameNotEmpty")),
     lastName: z.string().max(50).min(1, t("userDataPage.lastNameNotEmpty")),
     language: z.string().regex(/^(en|pl)$/),
-    timezone: z.string().optional(),
+    timezone: z.string(),
   });
 
 type UpdateUserSchema = z.infer<ReturnType<typeof updateUserSchema>>;
@@ -55,12 +55,6 @@ const UserData: FC = () => {
   });
 
   const handleUserSubmit = form.handleSubmit((request) => {
-    // usunac jak bedzie zmienione query
-    request = {
-      firstName: request.firstName,
-      lastName: request.lastName,
-      language: request.language,
-    };
     let etag: string = data?.headers.etag;
     etag = etag.substring(1, etag.length - 1);
     putMutation.mutate({ request, etag });
@@ -138,7 +132,6 @@ const UserData: FC = () => {
                     </SelectTrigger>
                     <SelectContent>
                       {options.map((option) => (
-                        //jesli chcemy skrot to zmienic option.value na option.abbr
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>

@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useVerifyCode } from "@/data/useAuthenticate.ts";
 import LoadingButton from "@/components/LoadingButton";
+import { useTheme } from "@/components/ThemeProvider";
 
 const role_mapping: { [key: string]: string } = {
   ADMINISTRATOR: "admin",
@@ -65,11 +66,13 @@ const CodeInput: FC<CodeInputProps> = ({
   });
   const navigate = useNavigate();
   const { verifyCode, isPending } = useVerifyCode();
+  const { setTheme } = useTheme();
 
   const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
     const result = await verifyCode({ login, token: data.pin });
     setToken(result.token);
     setRefreshToken(result.refreshToken);
+    setTheme(result.theme);
     if (roles == undefined) {
       return navigate("/login");
     } else {
@@ -82,7 +85,7 @@ const CodeInput: FC<CodeInputProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="border-1 flex w-fit flex-col rounded-md p-7 pb-1 shadow-2xl"
+          className="bg-card border-1 flex w-fit flex-col rounded-md p-7 pb-3 shadow-2xl shadow-shadowColor"
         >
           <FormField
             control={form.control}

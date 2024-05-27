@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.mappers;
 
+import pl.lodz.p.it.ssbd2024.model.Timezone;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
@@ -11,7 +12,7 @@ import java.util.List;
 public class UserMapper {
     public static UserResponse toUserResponse(User user) {
         String timezone = user.getTimezone() != null ?
-                user.getTimezone().getName() : null;
+                user.getTimezone().getName() : "UTC";
 
         return new UserResponse(user.getId(),
                 user.getFirstName(),
@@ -26,6 +27,9 @@ public class UserMapper {
     public static DetailedUserResponse toDetailedUserResponse(User user, List<String> roles) {
         String timezone = user.getTimezone() != null ?
                 user.getTimezone().getName() : "UTC";
+
+        String theme = user.getTheme() != null ?
+                user.getTheme().getType() : "LIGHT";
 
         String lastSuccessfulLogin = null;
         String lastFailedLogin = null;
@@ -52,14 +56,16 @@ public class UserMapper {
                 user.isBlocked(),
                 user.isVerified(),
                 user.isActive(),
-                roles);
+                roles,
+                theme);
     }
 
-    public static User toUser(UpdateUserDataRequest userRequest) {
+    public static User toUser(UpdateUserDataRequest userRequest, Timezone timezone) {
         User user = new User();
         user.setFirstName(userRequest.firstName());
         user.setLastName(userRequest.lastName());
         user.setLanguage(userRequest.language());
+        user.setTimezone(timezone);
         return user;
     }
 }

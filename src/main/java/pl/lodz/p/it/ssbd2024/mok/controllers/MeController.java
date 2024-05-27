@@ -12,9 +12,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
+import pl.lodz.p.it.ssbd2024.model.Timezone;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
+import pl.lodz.p.it.ssbd2024.mok.services.TimezoneService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
@@ -28,6 +30,7 @@ public class MeController {
 
     private final UserService userService;
     private final Signer signer;
+    private final TimezoneService timezoneService;
 
     @GetMapping
     @PreAuthorize("isAuthenticated()")
@@ -59,12 +62,16 @@ public class MeController {
             Jwt jwt = (Jwt) authentication.getPrincipal();
             UUID id = UUID.fromString(jwt.getSubject());
 
-            User user = userService.updateUserData(id, UserMapper.toUser(request), tagValue);
+            Timezone timezone = timezoneService.findByTimezoneName(request.timezone());
+
+            User user = userService.updateUserData(id, UserMapper.toUser(request, timezone), tagValue);
             return ResponseEntity.ok(UserMapper.toUserResponse(user));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ApplicationOptimisticLockException e) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage());
+        } catch (TimezoneNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
@@ -81,8 +88,10 @@ public class MeController {
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (InvalidPasswordException | PasswordRepetitionException e) {
+        } catch (InvalidPasswordException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (PasswordRepetitionException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -92,8 +101,10 @@ public class MeController {
         try {
             userService.changePasswordWithToken(request.password(), request.token());
             return ResponseEntity.ok().build();
-        } catch (VerificationTokenUsedException | VerificationTokenExpiredException | PasswordRepetitionException e) {
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (PasswordRepetitionException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (UserBlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }

@@ -48,11 +48,7 @@ const UserDetailsPage: FC = () => {
       {openUpdateUserDataDialog && id && data && (
         <UpdateUserDataDialog
           id={id}
-          userData={{
-            firstName: data.data.firstName,
-            lastName: data.data.lastName,
-            language: data.data.language,
-          }}
+          userData={data.data}
           etag={data.headers.etag}
           setOpenUpdateUserDataDialog={setOpenUpdateUserDataDialog}
           openUpdateUserDataDialog={openUpdateUserDataDialog}
@@ -193,14 +189,14 @@ const UserDetailsPage: FC = () => {
         </CardContent>
       </Card>
       <Card className="mt-3 w-4/5">
-          <CardHeader className="items-center">
-                <CardTitle >{t("userDetailsPage.changeEmail")}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-center">
-              <UpdateUserEmailAddress id={id!}  />
-            </div>
-          </CardContent>
+        <CardHeader className="items-center">
+          <CardTitle>{t("userDetailsPage.changeEmail")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-center">
+            <UpdateUserEmailAddress id={id!} />
+          </div>
+        </CardContent>
       </Card>
     </div>
   );

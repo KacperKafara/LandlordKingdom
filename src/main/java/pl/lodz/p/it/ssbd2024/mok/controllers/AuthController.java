@@ -159,11 +159,14 @@ public class AuthController {
                 List<String> roles = userService.getUserRoles(user.getId());
                 String userToken = jwtService.generateToken(user.getId(), roles);
                 String refreshToken = jwtService.generateRefreshToken(user.getId());
+                String theme = user.getTheme() != null ?
+                        user.getTheme().getType().toLowerCase() : "light";
+
 
                 response = Map.of(
                         "token", userToken,
                         "refreshToken", refreshToken,
-                        "theme", user.getTheme().name().toLowerCase());
+                        "theme", theme);
 
             } catch (NotFoundException e) {
                 User newUser = new User(

@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { ModeToggle } from "@/components/ui/toggle-theme";
 import { useResetPassword } from "@/data/useResetPassword";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFunction } from "i18next";
@@ -70,9 +71,12 @@ const ResetPasswordForm: FC = () => {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 shadow-2x relative flex w-1/4 flex-col rounded-md p-7"
+          className="bg-card border-1 shadow-2xl shadow-shadowColor min-w-fit relative flex w-1/4 flex-col rounded-md p-7 pt-9"
         >
           <LanguageSelector />
+          <div className="w-fit self-end absolute right-14 top-1">
+            <ModeToggle />
+          </div>
           <h1 className="self-center text-3xl font-bold">
             {t("logoPlaceholder")}
           </h1>

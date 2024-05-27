@@ -21,12 +21,12 @@ const router = createBrowserRouter([
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
     <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router}></RouterProvider>
-        <Toaster />
-      </QueryClientProvider>
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router}></RouterProvider>
+          <Toaster />
+        </QueryClientProvider>
+      </ThemeProvider>
     </React.StrictMode>
-  </ThemeProvider>
 );

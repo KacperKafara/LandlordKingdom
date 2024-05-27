@@ -26,25 +26,32 @@ export const useChangeUserPassword = () => {
     onSuccess: () => {
       toast({
         title: t("changePasswordForm.success"),
+        description: t("changePasswordForm.successDescription"),
       });
     },
     onError: (error: AxiosError) => {
       if (error.response?.status === 404) {
         toast({
           variant: "destructive",
-          title: t("changePasswordForm.errorTitle"),
+          title: t("error.baseTitle"),
           description: t("changePasswordForm.errorDescriptionNotFound"),
         });
       } else if (error.response?.status === 400) {
         toast({
           variant: "destructive",
-          title: t("changePasswordForm.errorTitle"),
+          title: t("error.baseTitle"),
           description: t("changePasswordForm.errorDescriptionBadRequest"),
+        });
+      } else if (error.response?.status === 409) {
+        toast({
+          variant: "destructive",
+          title: t("error.baseTitle"),
+          description: t("changePasswordForm.errorDescriptionConflict"),
         });
       } else {
         toast({
           variant: "destructive",
-          title: t("changePasswordForm.errorTitle"),
+          title: t("error.baseTitle"),
         });
       }
     },
@@ -64,36 +71,34 @@ export const useChangeUserPasswordWithToken = () => {
     },
     onSuccess: () => {
       toast({
-        title: t("resetPasswordPage.changePasswordToastTitleSuccess"),
-        description: t(
-          "resetPasswordPage.changePasswordToastDescriptionSuccess"
-        ),
+        title: t("changePasswordForm.success"),
+        description: t("changePasswordForm.successDescription"),
       });
     },
     onError: (error: AxiosError) => {
       if (error.response?.status === 404) {
         toast({
           variant: "destructive",
-          title: t("resetPasswordPage.changePasswordToastTitleFail"),
-          description: t(
-            "resetPasswordPage.changePasswordToastDescriptionTokenNotValid"
-          ),
+          title: t("error.baseTitle"),
+          description: t("changePasswordForm.errorDescriptionTokenNotValid"),
         });
       } else if (error.response?.status === 403) {
         toast({
           variant: "destructive",
-          title: t("resetPasswordPage.changePasswordToastTitleFail"),
-          description: t(
-            "resetPasswordPage.changePasswordToastDescriptionForbidden"
-          ),
+          title: t("error.baseTitle"),
+          description: t("error.userBlocked"),
+        });
+      } else if (error.response?.status === 409) {
+        toast({
+          variant: "destructive",
+          title: t("error.baseTitle"),
+          description: t("changePasswordForm.errorDescriptionConflict"),
         });
       } else {
         toast({
           variant: "destructive",
-          title: t("resetPasswordPage.changePasswordToastTitleFail"),
-          description: t(
-            "resetPasswordPage.changePasswordToastDescriptionFail"
-          ),
+          title: t("error.baseTitle"),
+          description: t("error.baseDescription"),
         });
       }
     },
