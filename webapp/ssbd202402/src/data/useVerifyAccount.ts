@@ -2,6 +2,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useParams } from "react-router-dom";
 import useAxiosPrivate from "./useAxiosPrivate";
+import { t } from "i18next";
+import { ErrorCode } from "@/@types/errorCode";
 
 export const useVerifyAccount = () => {
   const { token } = useParams<{ token: string }>();
@@ -13,17 +15,18 @@ export const useVerifyAccount = () => {
     mutationFn: async () => {
       await api.post("/me/verify", { token });
     },
-    onError: () => {
+    onError: (error) => {
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "There was an error during account verification",
+        title: t("error.baseTitle"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
       });
     },
     onSuccess: () => {
       toast({
-        variant: "default",
-        title: "success",
+        title: t("success"),
       });
     },
   });

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.exceptions.TemplateInputException;
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
 import pl.lodz.p.it.ssbd2024.messages.ExceptionMessages;
 
 import java.sql.SQLException;
@@ -28,56 +29,63 @@ public class GlobalExceptionsHandler {
         for (FieldError error: e.getFieldErrors()) {
             sb.append(error.getDefaultMessage()).append(", ");
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ExceptionMessages.VALIDATION_ERROR + sb));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ExceptionMessages.VALIDATION_ERROR + sb, ErrorCodes.VALIDATION_ERROR));
     }
 
     @ExceptionHandler(TemplateInputException.class)
     ResponseEntity<ExceptionResponse> handleEmailTemplateException(TemplateInputException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TEMPLATE_ERROR));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TEMPLATE_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(GenericJDBCException.class)
     ResponseEntity<ExceptionResponse> handleJDBCException(GenericJDBCException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(JwtValidationException.class)
     ResponseEntity<ExceptionResponse> handleJwtValidationException(JwtValidationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(ExceptionMessages.INVALID_TOKEN));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(ExceptionMessages.INVALID_TOKEN, ErrorCodes.JWT_TOKEN_INVALID));
     }
 
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<ExceptionResponse> handleResponseStatusException(ResponseStatusException e) {
-        return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getReason()));
+        if(e.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT, ErrorCodes.INTERNAL_SERVER_ERROR));
+        }
+
+        if(e.getCause() instanceof ApplicationBaseException ex) {
+            return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getReason(), ex.getCode()));
+        }
+        return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getReason(), ErrorCodes.SOMETHING_WENT_WRONG));
     }
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     ResponseEntity<ExceptionResponse> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
-        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(new ExceptionResponse(ExceptionMessages.MEDIA_NOT_SUPPORTED));
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(new ExceptionResponse(ExceptionMessages.MEDIA_NOT_SUPPORTED, ErrorCodes.INVALID_DATA));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException e) {
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(ExceptionMessages.ACCESS_DENIED));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(ExceptionMessages.ACCESS_DENIED, ErrorCodes.ACCESS_DENIED));
     }
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<ExceptionResponse> handleException(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(OptimisticLockException.class)
     ResponseEntity<ExceptionResponse> handleOptimisticLockException(OptimisticLockException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(ExceptionMessages.OPTIMISTIC_LOCK));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK));
     }
 
     @ExceptionHandler(PersistenceException.class)
     ResponseEntity<ExceptionResponse> handlePersistenceException(PersistenceException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.PERSISTENCE_ERROR));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.PERSISTENCE_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(SQLException.class)
     ResponseEntity<ExceptionResponse> handleSQLException(SQLException e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 }

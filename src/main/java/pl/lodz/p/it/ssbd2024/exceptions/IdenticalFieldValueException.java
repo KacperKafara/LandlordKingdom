@@ -3,12 +3,13 @@ package pl.lodz.p.it.ssbd2024.exceptions;
 import lombok.Getter;
 
 @Getter
-public class IdenticalFieldValueException extends Exception {
+public class IdenticalFieldValueException extends ApplicationBaseException {
 
-    String constraintName;
+    public IdenticalFieldValueException(String message, String code) {
+        super(message, code);
+    }
 
-    public IdenticalFieldValueException(String message, String constraintName) {
-        super(message);
-        this.constraintName = constraintName;
+    public IdenticalFieldValueException(String message, Throwable cause, String code) {
+        super(message, cause, code);
     }
 }

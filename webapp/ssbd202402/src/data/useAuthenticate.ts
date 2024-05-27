@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { AuthenticateResponse } from "@/types/AuthenticateResponse";
+import { ErrorCode } from "@/@types/errorCode";
 
 type AuthenticateRequest = {
   login: string;
@@ -16,10 +17,6 @@ type CodeVerificationRequest = {
   token: string;
 };
 
-type ErrorResponse = {
-  message: string;
-};
-
 export const useAuthenticate = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
@@ -29,39 +26,13 @@ export const useAuthenticate = () => {
       await api.post("/auth/signin-2fa", data);
     },
     onError: (error: AxiosError) => {
-      if (
-        error.response?.status === 401 ||
-        error.response?.status === 404 ||
-        error.response?.status === 400
-      ) {
-        toast({
-          variant: "destructive",
-          title: t("loginPage.loginError"),
-          description: t("loginPage.invalidCredentials"),
-        });
-      } else if (error.response?.status === 403) {
-        const errResp = error.response?.data as ErrorResponse;
-        const message = errResp.message;
-        if (message.toLowerCase().includes("inactivity")) {
-          toast({
-            variant: "destructive",
-            title: t("error.baseTitle"),
-            description: t("loginPage.inactiveAccount"),
-          });
-        } else {
-          toast({
-            variant: "destructive",
-            title: t("loginPage.loginError"),
-            description: t("loginPage.loginNotAllowed"),
-          });
-        }
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("loginPage.loginError"),
-          description: t("loginPage.tryAgain"),
-        });
-      }
+      toast({
+        variant: "destructive",
+        title: t("loginPage.loginError"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
+      });
     },
   });
 
@@ -80,11 +51,13 @@ export const useVerifyCode = () => {
       );
       return response.data;
     },
-    onError: () => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("loginPage.tokenError.title"),
-        description: t("loginPage.tokenError.description"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
       });
     },
   });

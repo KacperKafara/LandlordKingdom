@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
-import { AxiosError } from "axios";
 import useAxiosPrivate from "./useAxiosPrivate";
+import { ErrorCode } from "@/@types/errorCode";
 
 type ResetPasswordRequest = {
   email: string;
@@ -23,30 +23,14 @@ export const useResetPassword = () => {
         description: t("userListPage.resetUserPasswordToastDescriptionSuccess"),
       });
     },
-    onError: (error: AxiosError) => {
-      if (error.response?.status === 404) {
-        toast({
-          variant: "destructive",
-          title: t("userListPage.resetUserPasswordToastTitleFail"),
-          description: t(
-            "userListPage.resetUserPasswordToastDescriptionNotFound"
-          ),
-        });
-      } else if (error.response?.status === 403) {
-        toast({
-          variant: "destructive",
-          title: t("userListPage.resetUserPasswordToastTitleFail"),
-          description: t(
-            "userListPage.resetUserPasswordToastDescriptionForbidden"
-          ),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("userListPage.resetUserPasswordToastTitleFail"),
-          description: t("userListPage.resetUserPasswordToastDescriptionFail"),
-        });
-      }
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: t("userListPage.resetUserPasswordToastTitleFail"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
+      });
     },
   });
 

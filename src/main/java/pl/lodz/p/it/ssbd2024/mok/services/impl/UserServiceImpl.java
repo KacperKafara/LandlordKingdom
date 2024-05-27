@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
@@ -72,13 +74,13 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     public User getUserById(UUID id) throws NotFoundException {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
     }
 
     @Override
     @PreAuthorize("permitAll()")
     public User getUserByGoogleId(String googleId) throws NotFoundException {
-        return userRepository.findByGoogleId(googleId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        return userRepository.findByGoogleId(googleId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
     }
 
     @Override
@@ -110,9 +112,9 @@ public class UserServiceImpl implements UserService {
         } catch (ConstraintViolationException e) {
             String constraintName = e.getConstraintName();
             if (constraintName.equals("users_login_key") || constraintName.equals("personal_data_email_key")) {
-                throw new IdenticalFieldValueException(UserExceptionMessages.LOGIN_OR_EMAIL_EXISTS, "login_email");
+                throw new IdenticalFieldValueException(UserExceptionMessages.LOGIN_OR_EMAIL_EXISTS, ErrorCodes.IDENTICAL_LOGIN_OR_EMAIL);
             } else {
-                throw new CreationException(UserExceptionMessages.CREATION_FAILED);
+                throw new CreationException(UserExceptionMessages.CREATION_FAILED, ErrorCodes.REGISTRATION_ERROR);
             }
         }
     }
@@ -126,7 +128,7 @@ public class UserServiceImpl implements UserService {
     })
     public void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException {
         VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
-        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         user.setVerified(true);
         userRepository.saveAndFlush(user);
         emailService.sendAccountVerifiedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
@@ -135,10 +137,10 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     public User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
-        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User userToUpdate = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         if (!signVerifier.verifySignature(userToUpdate.getId(), userToUpdate.getVersion(), tagValue)) {
-            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA);
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
         }
 
         userToUpdate.setFirstName(user.getFirstName());
@@ -151,10 +153,15 @@ public class UserServiceImpl implements UserService {
     @Override
     @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+    public void blockUser(UUID id, UUID administratorId) throws NotFoundException, UserAlreadyBlockedException, AdministratorOwnBlockException {
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+
+        if(user.getId().equals(administratorId)) {
+            throw new AdministratorOwnBlockException(AdministratorMessages.OWN_ADMINISTRATOR_BLOCK, ErrorCodes.ADMINISTRATOR_OWN_BLOCK);
+        }
+
         if (user.isBlocked()) {
-            throw new UserAlreadyBlockedException(UserExceptionMessages.ALREADY_BLOCKED);
+            throw new UserAlreadyBlockedException(UserExceptionMessages.ALREADY_BLOCKED, ErrorCodes.USER_ALREADY_BLOCKED);
         }
         user.setBlocked(true);
         userRepository.saveAndFlush(user);
@@ -167,7 +174,7 @@ public class UserServiceImpl implements UserService {
     public void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException {
         User user = getUserById(id);
         if (!user.isBlocked()) {
-            throw new UserAlreadyUnblockedException(UserExceptionMessages.ALREADY_UNBLOCKED);
+            throw new UserAlreadyUnblockedException(UserExceptionMessages.ALREADY_UNBLOCKED, ErrorCodes.USER_ALREADY_UNBLOCKED);
         }
         user.setBlocked(false);
         userRepository.saveAndFlush(user);
@@ -178,7 +185,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
     public void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         user.setTemporaryEmail(tempEmail);
         userRepository.saveAndFlush(user);
         String token = verificationTokenService.generateEmailVerificationToken(user);
@@ -192,10 +199,10 @@ public class UserServiceImpl implements UserService {
     public void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException {
         User checkPasswordUser = verificationTokenService.getUserByEmailToken(token);
         if (!passwordEncoder.matches(password, checkPasswordUser.getPassword())) {
-            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
+            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD, ErrorCodes.INVALID_PASSWORD);
         }
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
-        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         user.setEmail(user.getTemporaryEmail());
         user.setTemporaryEmail(null);
         userRepository.saveAndFlush(user);
@@ -206,14 +213,14 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class, UserBlockedException.class, UserNotVerifiedException.class})
     public void sendChangePasswordEmail(String email) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         if (user.isBlocked()) {
-            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
+            throw new UserBlockedException(UserExceptionMessages.BLOCKED, ErrorCodes.USER_BLOCKED);
         }
 
         if (!user.isVerified()) {
-            throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED);
+            throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED, ErrorCodes.USER_NOT_VERIFIED);
         }
 
         String token = verificationTokenService.generatePasswordVerificationToken(user);
@@ -229,11 +236,11 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
-            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
+            throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD, ErrorCodes.INVALID_PASSWORD);
         }
         for (String password : user.getOldPasswords()) {
             if (passwordEncoder.matches(newPassword, password)) {
-                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED);
+                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED, ErrorCodes.PASSWORD_REPETITION);
             }
         }
 
@@ -249,12 +256,12 @@ public class UserServiceImpl implements UserService {
         User user = verificationTokenService.getUserByPasswordToken(token);
 
         if (user.isBlocked()) {
-            throw new UserBlockedException(UserExceptionMessages.BLOCKED);
+            throw new UserBlockedException(UserExceptionMessages.BLOCKED, ErrorCodes.USER_BLOCKED);
         }
 
         for (String password : user.getOldPasswords()) {
             if (passwordEncoder.matches(newPassword, password)) {
-                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED);
+                throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED, ErrorCodes.PASSWORD_REPETITION);
             }
         }
 
@@ -279,9 +286,18 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("isAuthenticated()")
     public String changeTheme(UUID id, String theme) throws NotFoundException {
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        Theme themeEnt = themeRepository.findByType(theme).orElseThrow(() -> new NotFoundException(UserExceptionMessages.THEME_NOT_FOUND));
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        Theme themeEnt = themeRepository.findByType(theme).orElseThrow(() -> new NotFoundException(UserExceptionMessages.THEME_NOT_FOUND, ErrorCodes.THEME_NOT_FOUND));
         user.setTheme(themeEnt);
         return userRepository.saveAndFlush(user).getTheme().getType();
+    }
+
+    @Override
+    @PreAuthorize("permitAll()")
+    public void reactivateUser(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
+        User user = userRepository.getReferenceById(verificationToken.getUser().getId());
+        user.setActive(true);
+        userRepository.saveAndFlush(user);
     }
 }

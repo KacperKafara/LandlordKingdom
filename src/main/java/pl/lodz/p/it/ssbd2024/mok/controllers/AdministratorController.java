@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.AdministratorOwnRoleRemovalException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
@@ -29,14 +30,12 @@ public class AdministratorController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID administratorId = UUID.fromString(jwt.getSubject());
 
-        if (administratorId.equals(id)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, AdministratorMessages.OWN_ADMINISTRATOR_ROLE_REMOVAL);
-        }
-
         try {
-            administratorService.removeAdministratorAccessLevel(id);
+            administratorService.removeAdministratorAccessLevel(id, administratorId);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (AdministratorOwnRoleRemovalException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();
