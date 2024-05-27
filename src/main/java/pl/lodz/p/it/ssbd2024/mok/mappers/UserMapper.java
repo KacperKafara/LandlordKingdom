@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.mappers;
 
+import pl.lodz.p.it.ssbd2024.model.Timezone;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
@@ -52,14 +53,16 @@ public class UserMapper {
                 user.isBlocked(),
                 user.isVerified(),
                 user.isActive(),
-                roles);
+                roles,
+                user.getTheme().toString());
     }
 
-    public static User toUser(UpdateUserDataRequest userRequest) {
+    public static User toUser(UpdateUserDataRequest userRequest, Timezone timezone) {
         User user = new User();
         user.setFirstName(userRequest.firstName());
         user.setLastName(userRequest.lastName());
         user.setLanguage(userRequest.language());
+        user.setTimezone(timezone);
         return user;
     }
 }

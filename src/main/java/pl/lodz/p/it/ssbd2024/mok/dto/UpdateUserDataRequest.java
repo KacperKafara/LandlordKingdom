@@ -15,6 +15,9 @@ public record UpdateUserDataRequest(
 
         @NotBlank(message = "Language name cannot be blank.")
         @Pattern(regexp = "^(en|pl)$", message = "Language name must be 'en' or 'pl'.")
-        String language
+        String language,
+
+        @NotBlank(message = "Timezone cannot be blank.")
+        String timezone
 ) {
 }

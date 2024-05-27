@@ -102,7 +102,7 @@ const UpdateEmailPage: FC = () => {
       <div className="flex h-screen flex-col items-center justify-center">
         <Form {...form}>
           <form
-            className="border-1 relative flex w-1/4 flex-col rounded-md p-7 shadow-2xl"
+            className="bg-card border-1 relative flex min-w-fit w-1/4 flex-col rounded-md p-7 shadow-2xl shadow-shadowColor"
             onSubmit={form.handleSubmit(handleUserSubmit)}
           >
             <h1 className="mb-10 text-center text-3xl">

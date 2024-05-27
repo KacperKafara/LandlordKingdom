@@ -8,7 +8,7 @@ const RegistrationSuccessPage: FC = () => {
   const { t } = useTranslation();
   return (
     <div className="flex min-h-screen items-center justify-center">
-      <div className="border-1 relative flex w-1/4 flex-col gap-3 rounded-md p-7 shadow-2xl">
+      <div className="bg-card border-1 relative flex w-1/4 min-w-fit flex-col gap-3 rounded-md p-7 shadow-2xl shadow-shadowColor">
         <LanguageSelector />
         <h1 className="w-fit text-3xl font-bold">
           {t("registerSuccessPage.title")}

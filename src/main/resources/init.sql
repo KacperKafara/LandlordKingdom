@@ -8,6 +8,7 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_levels TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.old_passwords TO ssbd02mok;
 GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02mok;
 GRANT SELECT ON TABLE public.timezones TO ssbd02mok;
+GRANT SELECT ON TABLE public.themes TO ssbd02mok;
 
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.locals TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.addresses TO ssbd02mol;
@@ -24,6 +25,8 @@ GRANT SELECT ON TABLE public.access_levels TO ssbd02mol;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO ssbd02auth;
 GRANT SELECT ON TABLE public.personal_data TO ssbd02auth;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.google_auth TO ssbd02auth;
+GRANT SELECT ON TABLE public.timezones TO ssbd02auth;
+GRANT SELECT ON TABLE public.themes TO ssbd02auth;
 GRANT SELECT ON TABLE public.administrators TO ssbd02auth;
 GRANT SELECT ON TABLE public.tenants TO ssbd02auth;
 GRANT SELECT ON TABLE public.owners TO ssbd02auth;

@@ -20,23 +20,17 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.AdministratorMessages;
 import pl.lodz.p.it.ssbd2024.messages.FilterMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
-import pl.lodz.p.it.ssbd2024.model.Administrator;
-import pl.lodz.p.it.ssbd2024.model.Owner;
-import pl.lodz.p.it.ssbd2024.model.Tenant;
+import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
 import pl.lodz.p.it.ssbd2024.model.filtering.builders.RoleSpecificationBuilder;
 import pl.lodz.p.it.ssbd2024.model.filtering.builders.SpecificationBuilder;
 import pl.lodz.p.it.ssbd2024.model.filtering.builders.UserSpecificationBuilder;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
-import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.FilteredUsersMapper;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
-import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
-import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
-import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
-import pl.lodz.p.it.ssbd2024.mok.services.UserService;
+import pl.lodz.p.it.ssbd2024.mok.services.*;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
 import java.util.ArrayList;
@@ -53,6 +47,7 @@ public class UserController {
     private final OwnerService ownerService;
     private final AdministratorService administratorService;
     private final Signer signer;
+    private final TimezoneService timezoneService;
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping
@@ -108,7 +103,7 @@ public class UserController {
                     builder.with(criteriaList);
 
                     Page<Administrator> result = administratorService.getAllFiltered(builder.build(), pageable);
-                    response =  FilteredUsersMapper.accesslevelToFilteredUsersResponse(result);
+                    response = FilteredUsersMapper.accesslevelToFilteredUsersResponse(result);
                 }
                 default -> {
                     SpecificationBuilder<User> builder = new UserSpecificationBuilder();
@@ -182,12 +177,15 @@ public class UserController {
                                                        @RequestHeader(HttpHeaders.IF_MATCH) String tagValue
     ) {
         try {
-            User user = userService.updateUserData(id, UserMapper.toUser(request), tagValue);
+            Timezone timezone = timezoneService.findByTimezoneName(request.timezone());
+            User user = userService.updateUserData(id, UserMapper.toUser(request, timezone), tagValue);
             return ResponseEntity.ok(UserMapper.toUserResponse(user));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (ApplicationOptimisticLockException e) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage());
+        } catch (TimezoneNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
