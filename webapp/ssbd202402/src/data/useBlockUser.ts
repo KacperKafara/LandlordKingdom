@@ -22,7 +22,7 @@ export const useBlockUser = () => {
         description: t("block.toast.description.blockSuccess"),
       });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("block.toast.title.fail"),
@@ -53,7 +53,7 @@ export const useUnblockUser = () => {
         description: t("block.toast.description.unblockSuccess"),
       });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("block.toast.title.fail"),

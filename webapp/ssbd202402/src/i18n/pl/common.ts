@@ -1,3 +1,4 @@
+import { ExceptionCode } from "@/@types/errorCode";
 import { Role } from "@/store/userStore";
 
 const error = {
@@ -363,6 +364,8 @@ const errors = {
   accessDenied: "Brak dostępu",
   jwtTokenInvalid: "Sesja wygasła",
   validationError: "Błąd walidacji",
+} satisfies {
+  [key in ExceptionCode]: string;
 };
 
 export default {
