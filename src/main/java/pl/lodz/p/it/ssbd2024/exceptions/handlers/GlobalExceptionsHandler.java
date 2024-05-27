@@ -55,8 +55,6 @@ public class GlobalExceptionsHandler {
 
         if(e.getCause() instanceof ApplicationBaseException ex) {
             return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getReason(), ex.getCode()));
-        } else if(e.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-            return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getMessage(), ErrorCodes.NOT_FOUND));
         }
         return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getReason(), ErrorCodes.SOMETHING_WENT_WRONG));
     }

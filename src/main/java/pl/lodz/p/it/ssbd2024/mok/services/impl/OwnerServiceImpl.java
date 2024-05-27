@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -39,7 +40,7 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Owner removeOwnerAccessLevel(UUID id) throws NotFoundException {
-        Owner owner = ownerRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        Owner owner = ownerRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         owner.setActive(false);
         User user = owner.getUser();
@@ -58,7 +59,7 @@ public class OwnerServiceImpl implements OwnerService {
         if (ownerOptional.isPresent()) {
             owner = ownerOptional.get();
         } else {
-            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
             owner = new Owner();
             owner.setUser(user);
         }

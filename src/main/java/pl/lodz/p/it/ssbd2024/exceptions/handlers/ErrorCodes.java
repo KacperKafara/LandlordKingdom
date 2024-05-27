@@ -23,8 +23,11 @@ public class ErrorCodes {
     public static final String ADMINISTRATOR_OWN_ROLE_REMOVAL = "administratorOwnRoleRemoval";
     public static final String ADMINISTRATOR_OWN_BLOCK = "administratorOwnBlock";
     public static final String NOT_FOUND = "notFound";
+    public static final String USER_NOT_FOUND = "userNotFound";
+    public static final String THEME_NOT_FOUND = "themeNotFound";
     public static final String SOMETHING_WENT_WRONG = "somethingWentWrong";
     public static final String ACCESS_DENIED = "accessDenied";
     public static final String JWT_TOKEN_INVALID = "jwtTokenInvalid";
     public static final String VALIDATION_ERROR = "validationError";
+
 }

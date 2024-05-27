@@ -68,7 +68,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     @PreAuthorize("permitAll()")
     public void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException, TokenGenerationException, UserInactiveException {
-        User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         if (!user.isVerified()) {
             throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED, ErrorCodes.USER_NOT_VERIFIED);
@@ -110,7 +110,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         try {
             verificationToken = verificationTokenService.validateOTPToken(token);
         } catch (VerificationTokenUsedException e) {
-            User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+            User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
             handleFailedLogin(user, ip);
             throw e;
         }
@@ -168,7 +168,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Jwt token = jwtService.decodeRefreshToken(refreshToken);
 
         UUID userId = UUID.fromString(token.getSubject());
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         if (jwtService.validateRefreshExpiration(token)) {
             return Map.of(
