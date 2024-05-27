@@ -47,4 +47,10 @@ public class RentServiceImpl implements RentService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    @PreAuthorize("hasRole('TENANT')")
+    public List<Rent> getArchivalRentsForTenant(UUID tenantId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

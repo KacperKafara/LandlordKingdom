@@ -111,5 +111,11 @@ public class LocalServiceImpl implements LocalService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public List<LocalReportResponse> getAllReports(UUID ownerId) {
+        return List.of();
+    }
+
 
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalAlreadyRentedException;
@@ -32,9 +33,32 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    @PreAuthorize("hasRole('OWNER')")
-    public Rent acceptApplication(UUID applicationId) throws LocalAlreadyRentedException {
+    @PreAuthorize("hasRole('TENANT')")
+    public List<Application> getUserApplication(UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Rent acceptApplication(UUID applicationId) throws NotFoundException, LocalAlreadyRentedException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public void rejectApplication(UUID applicationId) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('TENANT')")
+    public void createApplication(Application application) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('TENANT')")
+    public void removeApplication(Application application) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

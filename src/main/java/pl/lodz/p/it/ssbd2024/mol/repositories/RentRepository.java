@@ -9,12 +9,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public interface RentRepository extends JpaRepository<Rent, UUID>{
+
+    @PreAuthorize("hasRole('TENANT')")
+    List<Rent> findAllByTenantIdAndEndDateBefore(UUID tenantId, LocalDateTime endDate);
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT r FROM Rent r WHERE r.owner.id = :ownerId AND r.endDate >= CURRENT_DATE")

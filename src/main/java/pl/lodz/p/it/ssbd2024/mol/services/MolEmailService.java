@@ -4,6 +4,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 public interface MolEmailService {
 
+    void sendApplicationForRoleAcceptedEmail(String to, String name, String property,  String lang);
 
-    void sendApplicationAcceptedEmail(String to, String name, String lang);
+    void sendApplicationForRoleRemovedEmail(String to, String name, String property,  String lang);
 }

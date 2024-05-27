@@ -6,9 +6,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import pl.lodz.p.it.ssbd2024.mol.dto.GetRoleResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.RentResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.VariableFeeRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
@@ -35,9 +33,21 @@ public class MeTenantController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @GetMapping("/rents/archival")
+    @PreAuthorize("hasRole('TENANT')")
+    public ResponseEntity<List<RentResponse>> getArchivalRents() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @GetMapping("/applications")
+    @PreAuthorize("hasRole('TENANT')")
+    public ResponseEntity<List<ApplicationResponse>> getApplications() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     @PostMapping("/rents/{id}/variableFee")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<RentResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest) {
+    public ResponseEntity<VariableFeeResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

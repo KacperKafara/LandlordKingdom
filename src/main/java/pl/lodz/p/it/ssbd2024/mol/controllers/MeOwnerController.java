@@ -82,4 +82,10 @@ public class MeOwnerController {
     public ResponseEntity<RentResponse> setEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @GetMapping("/locals/reports")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<List<LocalReportResponse>> getAllReports() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

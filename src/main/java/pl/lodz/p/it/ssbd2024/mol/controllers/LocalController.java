@@ -72,4 +72,9 @@ public class LocalController {
     public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestBody EditLocalRequest editLocalRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @PatchMapping("/archive/{id}")
+    public ResponseEntity<LocalResponse> archiveLocal(@PathVariable UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

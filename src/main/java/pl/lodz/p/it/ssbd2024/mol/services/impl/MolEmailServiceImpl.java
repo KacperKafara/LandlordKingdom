@@ -14,7 +14,13 @@ public class MolEmailServiceImpl implements MolEmailService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public void sendApplicationAcceptedEmail(String to, String name, String lang){
+    public void sendApplicationForRoleAcceptedEmail(String to, String name, String property, String lang){
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public void sendApplicationForRoleRemovedEmail(String to, String name, String property, String lang) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
