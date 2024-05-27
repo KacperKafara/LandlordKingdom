@@ -52,4 +52,6 @@ public interface UserService {
     List<String> getUserRoles(UUID id);
 
     String changeTheme(UUID id, String theme) throws NotFoundException;
+
+    void reactivateUser(String token) throws  VerificationTokenUsedException, VerificationTokenExpiredException;
 }

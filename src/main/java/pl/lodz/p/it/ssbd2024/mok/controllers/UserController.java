@@ -216,4 +216,15 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }
     }
+
+    @PostMapping("/reactivate")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> reactiveUser(@RequestParam String token) {
+        try {
+            userService.reactivateUser(token);
+            return ResponseEntity.ok().build();
+        } catch (VerificationTokenExpiredException | VerificationTokenUsedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+        }
+    }
 }
