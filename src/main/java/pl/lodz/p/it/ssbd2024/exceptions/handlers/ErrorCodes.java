@@ -4,6 +4,7 @@ public class ErrorCodes {
     public final static String OPTIMISTIC_LOCK = "optimisticLock";
     public final static String REGISTRATION_ERROR = "registrationError";
     public final static String IDENTICAL_LOGIN_OR_EMAIL = "identicalLoginOrEmail";
+    public final static String IDENTICAL_EMAIL = "identicalEmail";
     public final static String INVALID_DATA = "invalidData";
     public final static String INVALID_LOGIN_DATA = "invalidLoginData";
     public final static String INVALID_PASSWORD = "invalidPassword";

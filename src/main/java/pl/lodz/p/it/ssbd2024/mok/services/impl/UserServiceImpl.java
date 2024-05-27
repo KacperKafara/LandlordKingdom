@@ -184,8 +184,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
-    public void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException {
+    public void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException, IdenticalFieldValueException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        if (userRepository.findByEmail(tempEmail).isPresent()){
+            throw new IdenticalFieldValueException(UserExceptionMessages.EMAIL_EXISTS, ErrorCodes.IDENTICAL_EMAIL);
+        }
         user.setTemporaryEmail(tempEmail);
         userRepository.saveAndFlush(user);
         String token = verificationTokenService.generateEmailVerificationToken(user);
@@ -195,18 +198,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
-    public void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException {
+    @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class, IdenticalFieldValueException.class})
+    public void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException, IdenticalFieldValueException {
         User checkPasswordUser = verificationTokenService.getUserByEmailToken(token);
         if (!passwordEncoder.matches(password, checkPasswordUser.getPassword())) {
             throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD, ErrorCodes.INVALID_PASSWORD);
         }
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
-        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
-        user.setEmail(user.getTemporaryEmail());
-        user.setTemporaryEmail(null);
-        userRepository.saveAndFlush(user);
 
+        User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        try {
+            user.setEmail(user.getTemporaryEmail());
+            user.setTemporaryEmail(null);
+            userRepository.saveAndFlush(user);
+        }catch (ConstraintViolationException constraintViolationException){
+            throw new IdenticalFieldValueException(UserExceptionMessages.EMAIL_EXISTS,constraintViolationException, ErrorCodes.IDENTICAL_EMAIL);
+        }
     }
 
     @Override
