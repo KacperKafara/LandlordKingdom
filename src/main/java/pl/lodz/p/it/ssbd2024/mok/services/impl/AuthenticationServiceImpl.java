@@ -152,7 +152,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (user.getLoginAttempts() >= maxLoginAttempts) {
             String timezone = "UTC";
-            if(user.getTimezone() != null){
+            if (user.getTimezone() != null) {
                 timezone = user.getTimezone().getName();
             }
             String unblockDate = TimezoneMapper.convertUTCToAnotherTimezoneSimple(LocalDateTime.now().plusSeconds(loginTimeOut), timezone, user.getLanguage());
