@@ -21,8 +21,8 @@ public class UserFilter {
     private String email;
     private String firstName;
     private String lastName;
-    private boolean blocked;
-    private boolean verified;
+    private Boolean blocked = null;
+    private Boolean verified = null;
     private String role;
 
     @ManyToOne(optional = false)

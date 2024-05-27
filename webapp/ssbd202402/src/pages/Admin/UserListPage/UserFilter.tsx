@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAutocompletionQuery } from "@/data/useAutocompletion";
 import { useDebounce } from "use-debounce";
+import { useUserFilter } from "@/data/useUserFilter";
 
 interface FilterUsers {
   verified: boolean | null;
@@ -42,6 +43,7 @@ const UserFilter: FC = () => {
   const [loginPattern, setLoginPattern] = useState<string>("");
   const [debouncedLoginPattern] = useDebounce(loginPattern, 500);
   const { data } = useAutocompletionQuery(debouncedLoginPattern);
+  const { userFilter } = useUserFilter();
 
   useEffect(() => {
     console.log(data);
@@ -49,13 +51,13 @@ const UserFilter: FC = () => {
 
   const filterForm = useForm<FilterUsers>({
     values: {
-      verified: null,
-      blocked: null,
-      login: "",
-      email: "",
-      lastName: "",
-      firstName: "",
-      role: "ALL",
+      verified: userFilter?.verified ?? null,
+      blocked: userFilter?.blocked ?? null,
+      login: userFilter?.login ?? "",
+      email: userFilter?.email ?? "",
+      lastName: userFilter?.lastName ?? "",
+      firstName: userFilter?.firstName ?? "",
+      role: userFilter?.role ?? "ALL",
     },
   });
 
@@ -119,7 +121,15 @@ const UserFilter: FC = () => {
   });
 
   const handleClearFilters = () => {
-    filterForm.reset();
+    filterForm.reset({
+      verified: null,
+      blocked: null,
+      login: "",
+      email: "",
+      lastName: "",
+      firstName: "",
+      role: "ALL",
+    });
     store.setSearchCriteriaList({
       dataOption: "all",
       searchCriteriaList: [],

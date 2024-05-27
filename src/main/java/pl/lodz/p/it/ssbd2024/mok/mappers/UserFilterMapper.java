@@ -27,10 +27,10 @@ public class UserFilterMapper {
                     filter.setLogin(value);
                     break;
                 case "blocked":
-                    filter.setBlocked(value != null ? Boolean.parseBoolean(value) : null);
+                    filter.setBlocked(Boolean.parseBoolean(value));
                     break;
                 case "verified":
-                    filter.setVerified(value != null ? Boolean.parseBoolean(value) : null);
+                    filter.setVerified(Boolean.parseBoolean(value));
                     break;
                 default:
                     break;
@@ -46,8 +46,8 @@ public class UserFilterMapper {
                 userFilter.getEmail(),
                 userFilter.getFirstName(),
                 userFilter.getLastName(),
-                userFilter.isBlocked(),
-                userFilter.isVerified(),
+                userFilter.getBlocked(),
+                userFilter.getVerified(),
                 userFilter.getRole()
         );
 

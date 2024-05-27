@@ -4,7 +4,7 @@ public record UserFilterResponse(String login,
                                  String email,
                                  String firstName,
                                  String lastName,
-                                 boolean blocked,
-                                 boolean verified,
+                                 Boolean blocked,
+                                 Boolean verified,
                                  String role) {
 }
