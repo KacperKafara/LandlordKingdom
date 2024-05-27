@@ -28,7 +28,7 @@ public class OwnerController {
         try {
             ownerService.removeOwnerAccessLevel(id);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();
@@ -40,7 +40,7 @@ public class OwnerController {
         try {
             ownerService.addOwnerAccessLevel(id);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();

@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -40,7 +41,7 @@ public class TenantServiceImpl implements TenantService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Tenant removeTenantAccessLevel(UUID id) throws NotFoundException {
-        Tenant tenant = tenantRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+        Tenant tenant = tenantRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         tenant.setActive(false);
         User user = tenant.getUser();
@@ -59,7 +60,7 @@ public class TenantServiceImpl implements TenantService {
         if (tenantOptional.isPresent()) {
             tenant = tenantOptional.get();
         } else {
-            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
             tenant = new Tenant();
             tenant.setUser(user);
         }

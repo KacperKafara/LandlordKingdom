@@ -5,7 +5,8 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import { useLanguageStore } from "@/i18n/languageStore";
 import useAxiosPrivate from "./useAxiosPrivate";
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance } from "axios";
+import { ErrorCode } from "@/@types/errorCode";
 
 const getMeData = async (
   changeLanguage: (lang: string) => void,
@@ -47,10 +48,13 @@ export const useMeMutation = () => {
     mutationFn: (data: UserUpdateRequest) => putMeData(data, api),
     onSettled: async (_, error) => {
       if (error) {
+        const axiosError = error as AxiosError;
         toast({
           variant: "destructive",
           title: t("userDataPage.error"),
-          description: error.message,
+          description: t(
+            `errors.${(axiosError.response?.data as ErrorCode).exceptionCode}`
+          ),
         });
       } else {
         await queryClient.invalidateQueries({ queryKey: ["meData"] });

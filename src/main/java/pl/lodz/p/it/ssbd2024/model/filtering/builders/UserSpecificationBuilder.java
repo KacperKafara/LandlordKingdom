@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.model.filtering.builders;
 
 import org.springframework.data.jpa.domain.Specification;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidDataException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.FilterMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.filtering.SearchCriteria;
@@ -50,7 +51,7 @@ public class UserSpecificationBuilder implements SpecificationBuilder<User> {
 
             return result;
         } catch (Exception e) {
-            throw new InvalidDataException(FilterMessages.INVALID_DATA);
+            throw new InvalidDataException(FilterMessages.INVALID_DATA, ErrorCodes.INVALID_DATA);
         }
     }
 }

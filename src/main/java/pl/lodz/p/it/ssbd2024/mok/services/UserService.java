@@ -35,7 +35,7 @@ public interface UserService {
 
     User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
-    void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException;
+    void blockUser(UUID id, UUID administratorId) throws NotFoundException, UserAlreadyBlockedException, AdministratorOwnBlockException;
 
     void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException;
 

@@ -27,7 +27,7 @@ public class TenantController {
         try {
             tenantService.addTenantAccessLevel(id);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();
@@ -39,7 +39,7 @@ public class TenantController {
         try {
             tenantService.removeTenantAccessLevel(id);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();
