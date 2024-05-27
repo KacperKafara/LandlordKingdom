@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/card";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTimezoneSelect, allTimezones } from "react-timezone-select";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Ghost } from "lucide-react";
 const MePage: FC = () => {
   const { options } = useTimezoneSelect({
     labelStyle: "abbrev",
@@ -23,9 +26,20 @@ const MePage: FC = () => {
   });
   const { t } = useTranslation();
   const { data } = useMeQuery();
+  const [searchParams] = useSearchParams();
+  const origin = searchParams.get("origin") ?? "/";
+  const navigate = useNavigate();
+
   return (
     <div className="flex w-full justify-center">
       <div className="flex w-10/12 flex-col gap-2 pb-6">
+        <Button
+          onClick={() => navigate(origin)}
+          variant="ghost"
+          className="self-start"
+        >
+          Go back
+        </Button>
         <Card className=" mt-3 flex justify-center">
           <CardHeader>
             <CardTitle>{t("mePage.title")}</CardTitle>

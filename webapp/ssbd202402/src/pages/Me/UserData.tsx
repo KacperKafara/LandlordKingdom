@@ -49,7 +49,7 @@ const UserData: FC = () => {
       firstName: data?.data.firstName || "",
       lastName: data?.data.lastName || "",
       language: data?.data.language || "",
-      timezone: data?.data.timezone ?? "", // dodac wartosc pobrana z be
+      timezone: data?.data.timezone ?? "",
     },
   });
 

@@ -11,7 +11,7 @@ import { useUserStore } from "@/store/userStore";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { VscAccount } from "react-icons/vsc";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
 
 type MyAccountButtonProps = {
@@ -23,6 +23,7 @@ const MyAccountButton: FC<MyAccountButtonProps> = ({ hover }) => {
   const userStore = useUserStore();
   const navigate = useNavigate();
   const { data: user } = useMeQuery();
+  const { pathname } = useLocation();
 
   const handleLoginButtonClick = () => {
     userStore.clearToken();
@@ -39,7 +40,9 @@ const MyAccountButton: FC<MyAccountButtonProps> = ({ hover }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => navigate("/account")}>
+        <DropdownMenuItem
+          onClick={() => navigate(`/account?origin=${pathname}`)}
+        >
           {t("navLinks.account")}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={handleLoginButtonClick}>
