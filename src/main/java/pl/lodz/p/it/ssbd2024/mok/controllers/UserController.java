@@ -29,7 +29,9 @@ import pl.lodz.p.it.ssbd2024.mok.dto.*;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
 import pl.lodz.p.it.ssbd2024.mok.mappers.FilteredUsersMapper;
+import pl.lodz.p.it.ssbd2024.mok.mappers.UserFilterMapper;
 import pl.lodz.p.it.ssbd2024.mok.mappers.UserMapper;
+import pl.lodz.p.it.ssbd2024.mok.repositories.UserFilterRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.*;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 
@@ -48,6 +50,8 @@ public class UserController {
     private final AdministratorService administratorService;
     private final Signer signer;
     private final TimezoneService timezoneService;
+    private final UserFilterRepository userFilterRepository;
+    private final UserFilterService userFilterService;
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @GetMapping
@@ -59,7 +63,7 @@ public class UserController {
     @PostMapping("/filtered")
     public ResponseEntity<FilteredUsersResponse> getAllFiltered(@RequestBody FilteredUsersRequest request,
                                                                 @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
-                                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) {
+                                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize) throws NotFoundException {
 
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         List<SearchCriteria> criteriaList = request.searchCriteriaList();
@@ -118,6 +122,10 @@ public class UserController {
         } catch (InvalidDataException | SemanticException | PathElementException | NullPointerException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FilterMessages.INVALID_DATA, e);
         }
+
+        UserFilter userFilter = UserFilterMapper.toUserFilter(request);
+        userFilterService.createOrUpdate(userFilter);
+
 
         return ResponseEntity.ok(response);
     }
