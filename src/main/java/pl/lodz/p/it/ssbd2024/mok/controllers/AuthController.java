@@ -163,7 +163,7 @@ public class AuthController {
                 response = Map.of(
                         "token", userToken,
                         "refreshToken", refreshToken,
-                        "theme", user.getTheme().name().toLowerCase());
+                        "theme", user.getTheme().getType().toLowerCase());
 
             } catch (NotFoundException e) {
                 User newUser = new User(
