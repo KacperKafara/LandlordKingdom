@@ -364,6 +364,8 @@ const errors = {
   accessDenied: "Brak dostępu",
   jwtTokenInvalid: "Sesja wygasła",
   validationError: "Błąd walidacji",
+  identicalEmail: "Użytkownik o podanym adresie email już istnieje",
+  internalServerError: "Coś poszło nie tak po naszej stronie",
 } satisfies {
   [key in ExceptionCode]: string;
 };
