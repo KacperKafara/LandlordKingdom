@@ -21,7 +21,7 @@ export const useBreadcrumbs = (
                 <NavLink to={breadcrumb.path}>{breadcrumb.title}</NavLink>
               </BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator />
+            {index === breadcrumbs.length - 1 ? null : <BreadcrumbSeparator />}
           </React.Fragment>
         ))}
       </BreadcrumbList>

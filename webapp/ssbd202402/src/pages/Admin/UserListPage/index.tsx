@@ -71,12 +71,12 @@ const UserListPage: FC = () => {
 
   return (
     <>
-      {test}
-      <div className="m-5 flex justify-center">
-        <UserFilter />
-      </div>
       <div className="flex justify-center">
-        <div className="w-3/5">
+        <div className="w-10/12 pt-10">
+          {test}
+          <div className="m-5 flex justify-center">
+            <UserFilter />
+          </div>
           <AlertDialog open={openPaswordResetDialog}>
             <AlertDialogContent>
               <AlertDialogHeader>
