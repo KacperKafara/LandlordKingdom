@@ -202,10 +202,10 @@ const block = {
 
 const userFilter = {
   yes: "Yes",
-  no: "Nie",
+  no: "No",
   both: "Both",
   verified: "Verified",
-  blocked: "Not verified",
+  blocked: "Blocked",
   login: "Login",
   email: "Email",
   submit: "Filter",

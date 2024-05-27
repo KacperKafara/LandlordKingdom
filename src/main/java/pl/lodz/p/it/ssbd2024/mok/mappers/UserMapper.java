@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mok.mappers;
 
+import lombok.extern.slf4j.Slf4j;
 import pl.lodz.p.it.ssbd2024.model.Timezone;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
@@ -9,6 +10,7 @@ import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
 
 import java.util.List;
 
+@Slf4j
 public class UserMapper {
     public static UserResponse toUserResponse(User user) {
         String timezone = user.getTimezone() != null ?
