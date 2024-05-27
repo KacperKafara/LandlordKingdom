@@ -23,8 +23,8 @@ import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAutocompletionQuery } from "@/data/useAutocompletion";
-import { useDebounce } from "use-debounce";
 import { useUserFilter } from "@/data/useUserFilter";
+import LoginInput from "./LoginInput";
 
 interface FilterUsers {
   verified: boolean | null;
@@ -40,9 +40,11 @@ const UserFilter: FC = () => {
   const { t } = useTranslation();
   const allRoles = ["ALL", "TENANT", "OWNER", "ADMINISTRATOR"];
   const store = useUsersFilterStore();
-  const [loginPattern, setLoginPattern] = useState<string>("");
-  const [debouncedLoginPattern] = useDebounce(loginPattern, 500);
-  const { data } = useAutocompletionQuery(debouncedLoginPattern);
+  const [debouncedLoginPattern, setDebouncedLoginPattern] =
+    useState<string>("");
+  const { data: autocompleteData } = useAutocompletionQuery(
+    debouncedLoginPattern
+  );
   const { userFilter } = useUserFilter();
 
   useEffect(() => {
@@ -315,15 +317,14 @@ const UserFilter: FC = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("userFilter.login")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="text"
-                      value={loginPattern}
-                      onChange={(e) => setLoginPattern(e.target.value)}
-                      placeholder=". . ."
-                    />
-                  </FormControl>
+                  <LoginInput
+                    {...field}
+                    onLoginChange={(login) => {
+                      field.onChange(login);
+                      setDebouncedLoginPattern(login);
+                    }}
+                    autocompleteData={autocompleteData}
+                  />
                 </FormItem>
               )}
             />
