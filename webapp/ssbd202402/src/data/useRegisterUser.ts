@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { api } from "./api";
 import { AxiosError } from "axios";
+import { ErrorCode } from "@/@types/errorCode";
 
 type RegistrationRequest = {
   firstName: string;
@@ -27,18 +28,13 @@ export const useRegisterUser = () => {
       });
     },
     onError: (error: AxiosError) => {
-      if (error.response?.status === 422) {
-        toast({
-          variant: "destructive",
-          title: t("registerPage.registerError"),
-          description: t("registerPage.registerErrorIdenticalFields"),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("registerPage.registerError"),
-        });
-      }
+      toast({
+        variant: "destructive",
+        title: t("registerPage.registerError"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
+      });
     },
   });
 

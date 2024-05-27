@@ -252,7 +252,7 @@ const userDataPage = {
   email: "Email*",
   emailNotEmpty: "Email cannot be empty",
   emailTooLong: "Email is too long",
-  confirmDialogDescription: "Are you sure you want to chane personal data?",
+  confirmDialogDescription: "Are you sure you want to change personal data?",
   timeZone: "Time zone",
 };
 
@@ -328,9 +328,41 @@ const sessionExpiredDialog = {
   signOut: "Logout",
 };
 
+const errors = {
+  optimisticLock: "You are not working on the latest data",
+  registrationError: "Error while registering",
+  identicalLoginOrEmail: "Account with this login or email already exists",
+  invalidData: "Invalid data",
+  invalidLoginData: "User with provided login and password not found",
+  invalidPassword: "User with provided login and password not found",
+  loginNotMatchToOTP: "One-time password does not match",
+  passwordRepetition: "You must provide password other than the previous one",
+  invalidRefreshToken: "Error while refreshing session, login required",
+  signInBlocked:
+    "You give incorrect data too many times, your account is blocked, check email",
+  timezoneNotFound: "Timezone not found",
+  userAlreadyBlocked: "User already blocked",
+  userAlreadyUnblocked: "User already unblocked",
+  userBlocked: "You are blocked",
+  userInactive: "You have been inactive for too long, check your email",
+  userNotVerified: "You are not verified, chceck your email",
+  verificationTokenExpired: "Code expired",
+  verificationTokenUsed: "Invalid code",
+  administratorOwnRoleRemoval: "You cannot remove your own administrator role",
+  administratorOwnBlock: "You cannot block yourself",
+  notFound: "Not found",
+  userNotFound: "User not found",
+  themeNotFound: "Theme not found",
+  somethingWentWrong: "Something went wrong...",
+  accessDenied: "Access denied",
+  jwtTokenInvalid: "Session expired",
+  validationError: "Validation error",
+};
+
 export default {
   sessionExpiredDialog,
   error,
+  errors,
   homePage,
   common,
   roles,

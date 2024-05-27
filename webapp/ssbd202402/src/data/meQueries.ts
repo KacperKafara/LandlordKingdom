@@ -50,7 +50,9 @@ export const useMeMutation = () => {
         toast({
           variant: "destructive",
           title: t("userDataPage.error"),
-          description: error.message,
+          description: t(
+            `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+          ),
         });
       } else {
         await queryClient.invalidateQueries({ queryKey: ["meData"] });
