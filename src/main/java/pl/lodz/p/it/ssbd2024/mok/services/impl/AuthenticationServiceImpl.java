@@ -133,7 +133,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         String jwt = jwtService.generateToken(verificationToken.getUser().getId(), getUserRoles(verificationToken.getUser()));
         String refreshToken = jwtService.generateRefreshToken(verificationToken.getUser().getId());
-        String theme = user.getTheme().getType().toLowerCase();
+        String theme = user.getTheme() != null ?
+                user.getTheme().getType().toLowerCase() : "light";
 
         return Map.of(
                 "token", jwt,

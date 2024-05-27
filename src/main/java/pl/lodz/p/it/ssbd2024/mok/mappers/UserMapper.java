@@ -12,7 +12,7 @@ import java.util.List;
 public class UserMapper {
     public static UserResponse toUserResponse(User user) {
         String timezone = user.getTimezone() != null ?
-                user.getTimezone().getName() : null;
+                user.getTimezone().getName() : "UTC";
 
         return new UserResponse(user.getId(),
                 user.getFirstName(),
@@ -27,6 +27,9 @@ public class UserMapper {
     public static DetailedUserResponse toDetailedUserResponse(User user, List<String> roles) {
         String timezone = user.getTimezone() != null ?
                 user.getTimezone().getName() : "UTC";
+
+        String theme = user.getTheme() != null ?
+                user.getTheme().getType() : "LIGHT";
 
         String lastSuccessfulLogin = null;
         String lastFailedLogin = null;
@@ -54,7 +57,7 @@ public class UserMapper {
                 user.isVerified(),
                 user.isActive(),
                 roles,
-                user.getTheme().toString());
+                theme);
     }
 
     public static User toUser(UpdateUserDataRequest userRequest, Timezone timezone) {
