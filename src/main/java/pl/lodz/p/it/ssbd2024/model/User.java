@@ -78,9 +78,8 @@ public class User extends AbstractEntity {
     private List<AccessLevel> accessLevels = new ArrayList<>();
 
     @Setter
-    @Enumerated(EnumType.STRING)
-    @Column(name = "theme", nullable = false)
-    Theme theme = Theme.LIGHT;
+    @ManyToOne
+    private Theme theme;
 
     @Setter
     @Column(name = "google_id", table = "google_auth")
