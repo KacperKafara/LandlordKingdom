@@ -24,6 +24,7 @@ public class UserFilter {
     private Boolean blocked = null;
     private Boolean verified = null;
     private String role;
+    private int pageSize;
 
     @ManyToOne(optional = false)
     private User user;

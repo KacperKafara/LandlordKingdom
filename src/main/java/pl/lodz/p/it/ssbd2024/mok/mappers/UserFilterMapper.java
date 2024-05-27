@@ -8,9 +8,10 @@ public class UserFilterMapper {
     private UserFilterMapper() {
     }
 
-    public static UserFilter toUserFilter(FilteredUsersRequest request) {
+    public static UserFilter toUserFilter(FilteredUsersRequest request, int pageSize) {
         UserFilter filter = new UserFilter();
         filter.setRole(request.role());
+        filter.setPageSize(pageSize);
         request.searchCriteriaList().forEach(criteria -> {
             String value = criteria.getValue().toString();
             switch (criteria.getFilterKey()) {
@@ -48,7 +49,8 @@ public class UserFilterMapper {
                 userFilter.getLastName(),
                 userFilter.getBlocked(),
                 userFilter.getVerified(),
-                userFilter.getRole()
+                userFilter.getRole(),
+                userFilter.getPageSize()
         );
 
     }

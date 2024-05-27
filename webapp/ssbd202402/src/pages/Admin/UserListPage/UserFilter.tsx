@@ -46,8 +46,8 @@ const UserFilter: FC = () => {
   const { userFilter } = useUserFilter();
 
   useEffect(() => {
-    console.log(data);
-  }, [data]);
+    store.setPageSize(userFilter?.pageSize ?? 10);
+  }, [userFilter?.pageSize]);
 
   const filterForm = useForm<FilterUsers>({
     values: {

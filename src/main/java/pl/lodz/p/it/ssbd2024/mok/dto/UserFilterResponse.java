@@ -6,5 +6,6 @@ public record UserFilterResponse(String login,
                                  String lastName,
                                  Boolean blocked,
                                  Boolean verified,
-                                 String role) {
+                                 String role,
+                                 int pageSize) {
 }

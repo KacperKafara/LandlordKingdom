@@ -38,6 +38,7 @@ public class UserFilterServiceImpl implements UserFilterService {
         optionalUserFilter.setRole(userFilter.getRole());
         optionalUserFilter.setBlocked(userFilter.getBlocked());
         optionalUserFilter.setVerified(userFilter.getVerified());
+        optionalUserFilter.setPageSize(userFilter.getPageSize());
 
         userFilterRepository.saveAndFlush(optionalUserFilter);
     }

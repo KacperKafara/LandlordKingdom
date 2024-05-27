@@ -9,6 +9,7 @@ type UserFilterResponse = {
   role: string;
   blocked: boolean;
   verified: boolean;
+  pageSize: number;
 };
 
 export const useUserFilter = () => {

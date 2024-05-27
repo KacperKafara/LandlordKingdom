@@ -123,7 +123,7 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, FilterMessages.INVALID_DATA, e);
         }
 
-        UserFilter userFilter = UserFilterMapper.toUserFilter(request);
+        UserFilter userFilter = UserFilterMapper.toUserFilter(request, pageSize);
         userFilterService.createOrUpdate(userFilter);
 
 
