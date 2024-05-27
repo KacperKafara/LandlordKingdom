@@ -21,6 +21,8 @@ public interface UserService {
 
     Page<User> getAllFiltered(Specification<User> specification, Pageable pageable);
 
+    List<User> getAllFiltered(Specification<User> specification);
+
     User getUserById(UUID id) throws NotFoundException;
 
     User getUserByGoogleId(String googleId) throws NotFoundException;

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import MyAccountButton from "./MyAccountButton";
 import { IoMdArrowDropdown } from "react-icons/io";
-import {ModeToggle} from "@/components/ui/toggle-theme";
+import { ModeToggle } from "@/components/ui/toggle-theme";
 
 export type NavigationLink = {
   path: string;
@@ -33,29 +33,29 @@ const config = {
   admin: {
     footer: "bg-orange-500",
     nav: "border-b-4 border-orange-500",
-    hover: "hover:bg-orange-300",
-    accentColor: "bg-orange-300",
+    hover: "hover:bg-orange-500 hover:text-black",
+    accentColor: "bg-orange-500",
   },
   tenant: {
     footer: "bg-green-500",
     nav: "border-b-4 border-green-500",
-    hover: "hover:bg-green-300",
-    accentColor: "bg-green-300",
+    hover: "hover:bg-green-500 hover:text-black" ,
+    accentColor: "bg-green-500",
   },
   owner: {
     footer: "bg-blue-500",
     nav: "border-b-4 border-blue-500",
-    hover: "hover:bg-blue-300",
-    accentColor: "bg-blue-300",
+    hover: "hover:bg-blue-500 hover:text-black",
+    accentColor: "bg-blue-500",
   },
 } satisfies {
-  [key in LayoutType]: {
-    nav: string;
-    footer: string;
-    hover: string;
-    accentColor: string;
+    [key in LayoutType]: {
+      nav: string;
+      footer: string;
+      hover: string;
+      accentColor: string;
+    };
   };
-};
 
 const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { t, i18n } = useTranslation();
@@ -108,7 +108,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className={cn("px-2 py-1 capitalize", colors.hover)}
+                className={cn("px-2 py-1 capitalize ", colors.hover)}
               >
                 {i18n.exists(`roles.${activeRole?.toLowerCase()}`)
                   ? t(`roles.${activeRole?.toLowerCase() as Role}`)
@@ -140,7 +140,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
       <main className="flex-1 px-10">{children}</main>
       <footer
         className={cn(
-          "flex h-12 items-center justify-center px-10 text-xl",
+          "flex h-12 items-center justify-center px-10 text-xl text-black",
           config[type].footer
         )}
       >

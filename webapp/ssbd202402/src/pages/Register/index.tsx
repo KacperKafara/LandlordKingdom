@@ -187,7 +187,7 @@ const RegisterPage: FC = () => {
       <Form {...form}>
         <form
           onSubmit={onSubmit}
-          className="border-1 relative flex w-6/12 flex-col rounded-md p-7 shadow-2xl"
+          className="bg-card border-1 relative flex w-6/12 flex-col rounded-md p-7 shadow-2xl shadow-shadowColor"
         >
           <LanguageSelector />
           <h1 className="self-center text-3xl font-bold">

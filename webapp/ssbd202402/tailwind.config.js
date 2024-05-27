@@ -60,6 +60,7 @@ module.exports = {
         animation: {
           "caret-blink": "caret-blink 1.25s ease-out infinite",
         },
+        shadowColor: "var(--card-shadow)",
       },
       borderRadius: {
         lg: "var(--radius)",

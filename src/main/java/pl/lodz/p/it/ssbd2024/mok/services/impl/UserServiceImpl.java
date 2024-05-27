@@ -63,6 +63,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public List<User> getAllFiltered(Specification<User> specification) {
+        return userRepository.findAll(specification);
+    }
+
+    @Override
     @PreAuthorize("permitAll()")
     public User getUserById(UUID id) throws NotFoundException {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
@@ -137,6 +143,7 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setLastName(user.getLastName());
         userToUpdate.setLanguage(user.getLanguage());
+        userToUpdate.setTimezone(user.getTimezone());
         return userRepository.saveAndFlush(userToUpdate);
     }
 
@@ -145,7 +152,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        if(user.isBlocked()){
+        if (user.isBlocked()) {
             throw new UserAlreadyBlockedException(UserExceptionMessages.ALREADY_BLOCKED);
         }
         user.setBlocked(true);
@@ -183,7 +190,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class})
     public void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException {
         User checkPasswordUser = verificationTokenService.getUserByEmailToken(token);
-        if (!passwordEncoder.matches(password, checkPasswordUser.getPassword())){
+        if (!passwordEncoder.matches(password, checkPasswordUser.getPassword())) {
             throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
         }
         VerificationToken verificationToken = verificationTokenService.validateEmailVerificationToken(token);
@@ -223,8 +230,8 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD);
         }
-        for (String password : user.getOldPasswords()){
-            if (passwordEncoder.matches(newPassword, password)){
+        for (String password : user.getOldPasswords()) {
+            if (passwordEncoder.matches(newPassword, password)) {
                 throw new PasswordRepetitionException(UserExceptionMessages.PASSWORD_REPEATED);
             }
         }

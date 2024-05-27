@@ -101,7 +101,7 @@ const Login2FaPage: FC = () => {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
+    <div className=" flex min-h-screen items-center justify-center">
       {codeInputOpen ? (
         <CodeInput
           login={login || ""}
@@ -115,7 +115,7 @@ const Login2FaPage: FC = () => {
         <Form {...form}>
           <form
             onSubmit={onSubmit}
-            className="border-1 relative flex w-1/4 flex-col rounded-md p-7 shadow-2xl"
+            className="bg-card border-1 relative flex w-1/4 min-w-fit flex-col rounded-md p-7 pt-9 shadow-2xl shadow-shadowColor"
           >
             <div className="flex justify-center">
               <h1 className="w-fit text-3xl font-bold">
@@ -161,7 +161,7 @@ const Login2FaPage: FC = () => {
             />
             <NavLink
               to={"/reset-password-form"}
-              className="self-end pb-2 text-sm text-slate-600"
+              className="self-end pb-2 text-sm text-slate-600 dark:text-slate-400"
             >
               {t("loginPage.forgotPassword")}
             </NavLink>
