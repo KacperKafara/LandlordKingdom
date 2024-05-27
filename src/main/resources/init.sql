@@ -76,6 +76,11 @@ VALUES ('397cf3c5-f369-4783-9892-6fc781fd2b0d', '2d56f6d5-2dfd-4003-89d9-9e9ac6c
 INSERT INTO public.owners (id)
 VALUES ('397cf3c5-f369-4783-9892-6fc781fd2b0d');
 
+INSERT INTO public.themes
+    (id, type)
+VALUES (gen_random_uuid(), 'light'),
+       (gen_random_uuid(), 'dark');
+
 INSERT INTO public.timezones
     (id, name)
 VALUES (gen_random_uuid(), 'Pacific/Midway'),
