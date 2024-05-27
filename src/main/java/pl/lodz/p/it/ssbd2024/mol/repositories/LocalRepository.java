@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -28,4 +29,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     @PreAuthorize("hasRole('OWNER')")
     Optional<Local> findByOwnerIdAndId(UUID ownerId, UUID id);
 
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @NonNull
+    List<Local> findAll();
 }

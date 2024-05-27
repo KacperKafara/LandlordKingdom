@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/locals")
@@ -51,6 +52,24 @@ public class LocalController {
     @PatchMapping("/state")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<LocalResponse> approveLocal(@RequestBody ApproveRequest request) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<List<GetAllLocalsResponse>> getAllLocals() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PatchMapping("/{id}/address")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<EditLocalResponse> changeLocalAddress(@PathVariable UUID id, @RequestBody EditLocalAddressRequest request) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestBody EditLocalRequest editLocalRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
