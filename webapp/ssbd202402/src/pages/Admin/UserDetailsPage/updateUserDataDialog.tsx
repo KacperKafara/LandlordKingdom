@@ -29,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { allTimezones, useTimezoneSelect } from "react-timezone-select";
 
 interface props {
   id: string;
@@ -43,6 +44,7 @@ const updateUserSchema = (t: TFunction) =>
     firstName: z.string().max(50).min(1, t("userDataPage.firstNameNotEmpty")),
     lastName: z.string().max(50).min(1, t("userDataPage.lastNameNotEmpty")),
     language: z.string().regex(/^(en|pl)$/),
+    timezone: z.string(),
   });
 
 type UpdateUserSchema = z.infer<ReturnType<typeof updateUserSchema>>;
@@ -54,6 +56,11 @@ const UpdateUserDataDialog: FC<props> = ({
   setOpenUpdateUserDataDialog,
   openUpdateUserDataDialog,
 }) => {
+  const { options } = useTimezoneSelect({
+    labelStyle: "abbrev",
+    timezones: allTimezones,
+    displayValue: "UTC",
+  });
   const putMutation = useUpdateUserMutation();
   const { t } = useTranslation();
 
@@ -63,8 +70,11 @@ const UpdateUserDataDialog: FC<props> = ({
       firstName: userData.firstName,
       lastName: userData.lastName,
       language: userData.language,
+      timezone: userData.timezone,
     },
   });
+
+  console.log(userData);
 
   useEffect(() => {
     form.reset({
@@ -132,6 +142,35 @@ const UpdateUserDataDialog: FC<props> = ({
                         <SelectContent>
                           <SelectItem value="pl">Polski</SelectItem>
                           <SelectItem value="en">English</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="timezone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("userDataPage.timeZone")}</FormLabel>
+                  <div>
+                    <FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger className="">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {options.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
                         </SelectContent>
                       </Select>
                     </FormControl>
