@@ -4,9 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.GivenAddressAssignedToOtherLocalException;
+import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidLocalState;
+import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidRelationException;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalIsNotInactiveException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
@@ -24,6 +28,18 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public Local addLocal(Local local) throws GivenAddressAssignedToOtherLocalException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("isAuthenticated()")
+    public List<Local> getActiveLocals() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public List<Local> getUnapprovedLocals() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -56,5 +72,24 @@ public class LocalServiceImpl implements LocalService {
     public Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    @PreAuthorize("hasRole('TENANT')")
+    public Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('TENANT')")
+    public void deleteApplication(UUID applicationId, UUID userId) throws NotFoundException, InvalidRelationException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public Local approveLocal(UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 
 }
