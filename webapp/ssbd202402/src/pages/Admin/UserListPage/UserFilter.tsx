@@ -314,24 +314,18 @@ const UserFilter: FC = () => {
                 </FormItem>
               )}
             />
-            <div className="flex gap-3">
-              <div className="flex self-end">
-                <Button type="submit">{t("userFilter.submit")}</Button>
-              </div>
-              <div className="flex self-end">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="flex items-center gap-2"
-                  onClick={handleClearFilters}
-                >
-                  <LuFilterX size={20} />
-                  {t("userFilter.clear")}
-                </Button>
-              </div>
-              <div className="flex self-end">
-                <RefreshQueryButton queryKeys={["filteredUsers"]} />
-              </div>
+            <div className="flex items-end gap-3">
+              <Button type="submit">{t("userFilter.submit")}</Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="flex items-center gap-2"
+                onClick={handleClearFilters}
+              >
+                <LuFilterX size={20} />
+                {t("userFilter.clear")}
+              </Button>
+              <RefreshQueryButton queryKeys={["filteredUsers"]} />
             </div>
           </div>
         </form>

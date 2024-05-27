@@ -196,10 +196,10 @@ const block = {
 
 const userFilter = {
   yes: "Yes",
-  no: "Nie",
+  no: "No",
   both: "Both",
   verified: "Verified",
-  blocked: "Not verified",
+  blocked: "Blocked",
   login: "Login",
   email: "Email",
   submit: "Filter",
@@ -319,7 +319,7 @@ const sessionExpiredDialog = {
   title: "Session will expire soon!",
   description:
     "Your session will expire in less than 5 minutes. Do you want to extend it?",
-    signOut: "Logout",
+  signOut: "Logout",
 };
 
 export default {
