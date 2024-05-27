@@ -284,4 +284,13 @@ public class UserServiceImpl implements UserService {
         user.setTheme(themeEnt);
         return userRepository.saveAndFlush(user).getTheme().getType();
     }
+
+    @Override
+    @PreAuthorize("permitAll()")
+    public void reactivateUser(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
+        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
+        User user = userRepository.getReferenceById(verificationToken.getUser().getId());
+        user.setActive(true);
+        userRepository.saveAndFlush(user);
+    }
 }
