@@ -16,4 +16,5 @@ public class UserExceptionMessages {
     public static final String PASSWORD_REPEATED = "Password must be different than any other password used by this account";
     public static final String INACTIVE = "User cannot perform action because is blocked due to inactivity";
     public static final String THEME_NOT_FOUND = "Theme not found";
+    public static final String EMAIL_EXISTS = "User with this email already exists";
 }

@@ -358,6 +358,8 @@ const errors = {
   accessDenied: "Access denied",
   jwtTokenInvalid: "Session expired",
   validationError: "Validation error",
+  identicalEmail: "User with given email address already exists",
+  internalServerError: "Something went wrong on our end. Please try again later.",
 } satisfies {
   [key in ExceptionCode]: string;
 };

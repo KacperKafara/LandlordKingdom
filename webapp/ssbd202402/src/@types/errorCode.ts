@@ -30,4 +30,6 @@ export type ExceptionCode =
   | "somethingWentWrong"
   | "accessDenied"
   | "jwtTokenInvalid"
-  | "validationError";
+  | "validationError"
+  | "identicalEmail"
+  | "internalServerError";
