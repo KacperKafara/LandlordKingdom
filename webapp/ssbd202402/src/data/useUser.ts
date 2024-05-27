@@ -1,10 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DetailedUserResponse } from "@/types/user/DetailedUserResponseType";
-import { AxiosError, AxiosInstance } from "axios";
+import { AxiosInstance } from "axios";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { UserUpdateRequestType } from "@/types/user/UserUpdateRequestType";
 import { toast } from "@/components/ui/use-toast";
 import { t } from "i18next";
+import { ErrorCode } from "@/@types/errorCode";
 
 interface UpdateUserRequest {
   id: string;
@@ -47,19 +48,14 @@ export const useUpdateUserMutation = () => {
         title: t("updateDataForm.success"),
       });
     },
-    onError: (error: AxiosError) => {
-      if (error.response?.status === 412) {
-        toast({
-          variant: "destructive",
-          title: t("updateDataForm.error"),
-          description: t("updateDataForm.precondinationFailed"),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("updateDataForm.error"),
-        });
-      }
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: t("updateDataForm.error"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
+      });
     },
   });
 };

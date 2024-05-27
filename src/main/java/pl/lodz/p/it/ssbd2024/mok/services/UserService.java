@@ -35,7 +35,7 @@ public interface UserService {
 
     User updateUserData(UUID id, User user, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
-    void blockUser(UUID id) throws NotFoundException, UserAlreadyBlockedException;
+    void blockUser(UUID id, UUID administratorId) throws NotFoundException, UserAlreadyBlockedException, AdministratorOwnBlockException;
 
     void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException;
 
@@ -52,4 +52,6 @@ public interface UserService {
     List<String> getUserRoles(UUID id);
 
     String changeTheme(UUID id, String theme) throws NotFoundException;
+
+    void reactivateUser(String token) throws  VerificationTokenUsedException, VerificationTokenExpiredException;
 }

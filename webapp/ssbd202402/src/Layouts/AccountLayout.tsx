@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const AccountLayout: FC = () => {
   return (
-    <BaseLayout type="admin">
+    <BaseLayout type="me">
       <Outlet />
     </BaseLayout>
   );

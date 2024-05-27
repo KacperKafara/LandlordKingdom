@@ -17,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -71,9 +72,9 @@ public class AuthController {
             userService.createUser(newUser, newUserData.password());
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (TokenGenerationException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED, e);
         } catch (IdenticalFieldValueException | CreationException e) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 
@@ -83,13 +84,13 @@ public class AuthController {
             authenticationService.generateOTP(request.login(), request.password(), request.language(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (UserNotVerifiedException | SignInBlockedException | UserBlockedException | UserInactiveException e) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
         } catch (InvalidLoginDataException e) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, e.getMessage(), e);
         } catch (InvalidKeyException | TokenGenerationException  e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There was an error generating token");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "There was an error generating token", e);
         }
     }
 
@@ -100,9 +101,9 @@ public class AuthController {
             Map<String, String> authResponse = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getRemoteAddr());
             return ResponseEntity.ok(new AuthenticationResponse(authResponse.get("token"), authResponse.get("refreshToken"), authResponse.get("theme")));
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -153,7 +154,7 @@ public class AuthController {
                 user = userService.getUserByGoogleId(payload.getSub());
 
                 if (!user.isVerified()) {
-                    throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED);
+                    throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED, ErrorCodes.USER_NOT_VERIFIED);
                 }
 
                 List<String> roles = userService.getUserRoles(user.getId());
@@ -182,11 +183,11 @@ public class AuthController {
             }
 
         } catch (TokenGenerationException e1) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED, e1);
         } catch (IdenticalFieldValueException | CreationException e1) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage());
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage(), e1);
         } catch (UserNotVerifiedException e1) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e1.getMessage());
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e1.getMessage(), e1);
         }
 
         return ResponseEntity.ok(new AuthenticationResponse(response.get("token"), response.get("refreshToken"), response.get("theme")));
@@ -202,9 +203,9 @@ public class AuthController {
                     .refreshToken(authResponse.get("refreshToken"))
                     .build());
         } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (RefreshTokenExpiredException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 }

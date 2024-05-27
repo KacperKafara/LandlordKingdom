@@ -1,3 +1,4 @@
+import { ExceptionCode } from "@/@types/errorCode";
 import { Role } from "@/store/userStore";
 
 const error = {
@@ -335,9 +336,42 @@ const sessionExpiredDialog = {
   signOut: "Wyloguj",
 };
 
+const errors = {
+  optimisticLock: "Nie pracujesz na najnowszych danych",
+  registrationError: "Błąd podczas rejestracji",
+  identicalLoginOrEmail: "Użytkownik o podanym loginie lub emailu już istnieje",
+  invalidData: "Nieprawidłowe dane",
+  invalidLoginData: "Nieprawidłowe dane logowania",
+  invalidPassword: "Nieprawidłowe dane logowania",
+  loginNotMatchToOTP: "Nieprawidłowy kod uwierzytelniania dwufazowego",
+  passwordRepetition: "Hasło musi się różnić od poprzednich haseł",
+  invalidRefreshToken: "Bład podczas odświeżania sesji",
+  signInBlocked: "Logowanie jest zablokowane, sprawdź email",
+  timezoneNotFound: "Strefa czasowa niepraawidłowa",
+  userAlreadyBlocked: "Użytkownik jest już zablokowany",
+  userAlreadyUnblocked: "Użytkownik jest już odblokowany",
+  userBlocked: "Twoje konto jest zablokowane",
+  userInactive: "Twoje konto jest nieaktywne, sprawdź email",
+  userNotVerified: "Twoje konto nie jest zweryfikowane, sprawdź email",
+  verificationTokenExpired: "Twój kod wygasł",
+  verificationTokenUsed: "Nieprawidłowy kod logowania",
+  administratorOwnRoleRemoval: "Nie możesz usunąć swojej roli administratora",
+  administratorOwnBlock: "Nie możesz zablokować swojego konta",
+  notFound: "Nie znaleziono",
+  userNotFound: "Użytkownik nie znaleziony",
+  themeNotFound: "Nie znaleziono motywu",
+  somethingWentWrong: "Coś poszło nie tak...",
+  accessDenied: "Brak dostępu",
+  jwtTokenInvalid: "Sesja wygasła",
+  validationError: "Błąd walidacji",
+} satisfies {
+  [key in ExceptionCode]: string;
+};
+
 export default {
   sessionExpiredDialog,
   error,
+  errors,
   homePage,
   common,
   roles,
@@ -358,6 +392,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  success: "Operacja powiodła się",
   sessionExpired: "Sesja wygasła",
   sessionExpiredDescription: "Twoja sesja wygasła, zaloguj się ponownie",
   footer: "Landlord Kingdom - SSBD202402",

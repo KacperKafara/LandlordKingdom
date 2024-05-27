@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
-import { AxiosError } from "axios";
+import { ErrorCode } from "@/@types/errorCode";
 type ChangePasswordType = {
   oldPassword: string;
   newPassword: string;
@@ -29,31 +29,14 @@ export const useChangeUserPassword = () => {
         description: t("changePasswordForm.successDescription"),
       });
     },
-    onError: (error: AxiosError) => {
-      if (error.response?.status === 404) {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-          description: t("changePasswordForm.errorDescriptionNotFound"),
-        });
-      } else if (error.response?.status === 400) {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-          description: t("changePasswordForm.errorDescriptionBadRequest"),
-        });
-      } else if (error.response?.status === 409) {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-          description: t("changePasswordForm.errorDescriptionConflict"),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-        });
-      }
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: t("error.baseTitle"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
+      });
     },
   });
 
@@ -75,32 +58,14 @@ export const useChangeUserPasswordWithToken = () => {
         description: t("changePasswordForm.successDescription"),
       });
     },
-    onError: (error: AxiosError) => {
-      if (error.response?.status === 404) {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-          description: t("changePasswordForm.errorDescriptionTokenNotValid"),
-        });
-      } else if (error.response?.status === 403) {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-          description: t("error.userBlocked"),
-        });
-      } else if (error.response?.status === 409) {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-          description: t("changePasswordForm.errorDescriptionConflict"),
-        });
-      } else {
-        toast({
-          variant: "destructive",
-          title: t("error.baseTitle"),
-          description: t("error.baseDescription"),
-        });
-      }
+    onError: (error) => {
+      toast({
+        variant: "destructive",
+        title: t("error.baseTitle"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
+      });
     },
   });
 

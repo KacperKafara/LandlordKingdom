@@ -13,17 +13,18 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form";
-
 import { Input } from "@/components/ui/input";
 import { Role } from "@/store/userStore";
 import { useUsersFilterStore } from "@/store/usersFilterStore";
 import { SearchCriteria } from "@/types/filter/SearchCriteria";
 import { ChevronsUpDown } from "lucide-react";
 import { LuFilterX } from "react-icons/lu";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useAutocompletionQuery } from "@/data/useAutocompletion";
+import { useDebounce } from "use-debounce";
+import { useUserFilter } from "@/data/useUserFilter";
 import LoginInput from "./LoginInput";
 
 interface FilterUsers {
@@ -40,21 +41,24 @@ const UserFilter: FC = () => {
   const { t } = useTranslation();
   const allRoles = ["ALL", "TENANT", "OWNER", "ADMINISTRATOR"];
   const store = useUsersFilterStore();
-  const [debouncedLoginPattern, setDebouncedLoginPattern] =
-    useState<string>("");
-  const { data: autocompleteData } = useAutocompletionQuery(
-    debouncedLoginPattern
-  );
+  const [loginPattern, setLoginPattern] = useState<string>("");
+  const [debouncedLoginPattern] = useDebounce(loginPattern, 500);
+  const { data } = useAutocompletionQuery(debouncedLoginPattern);
+  const { userFilter } = useUserFilter();
+
+  useEffect(() => {
+    store.setPageSize(userFilter?.pageSize ?? 10);
+  }, [userFilter?.pageSize]);
 
   const filterForm = useForm<FilterUsers>({
     values: {
-      verified: null,
-      blocked: null,
-      login: "",
-      email: "",
-      lastName: "",
-      firstName: "",
-      role: "ALL",
+      verified: userFilter?.verified ?? null,
+      blocked: userFilter?.blocked ?? null,
+      login: userFilter?.login ?? "",
+      email: userFilter?.email ?? "",
+      lastName: userFilter?.lastName ?? "",
+      firstName: userFilter?.firstName ?? "",
+      role: userFilter?.role ?? "ALL",
     },
   });
 
@@ -118,7 +122,15 @@ const UserFilter: FC = () => {
   });
 
   const handleClearFilters = () => {
-    filterForm.reset();
+    filterForm.reset({
+      verified: null,
+      blocked: null,
+      login: "",
+      email: "",
+      lastName: "",
+      firstName: "",
+      role: "ALL",
+    });
     store.setSearchCriteriaList({
       dataOption: "all",
       searchCriteriaList: [],
@@ -327,24 +339,18 @@ const UserFilter: FC = () => {
                 </FormItem>
               )}
             />
-            <div className="flex gap-3">
-              <div className="flex self-end">
-                <Button type="submit">{t("userFilter.submit")}</Button>
-              </div>
-              <div className="flex self-end">
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="flex items-center gap-2"
-                  onClick={handleClearFilters}
-                >
-                  <LuFilterX size={20} />
-                  {t("userFilter.clear")}
-                </Button>
-              </div>
-              <div className="flex self-end">
-                <RefreshQueryButton queryKeys={["filteredUsers"]} />
-              </div>
+            <div className="flex items-end gap-3">
+              <Button type="submit">{t("userFilter.submit")}</Button>
+              <Button
+                type="button"
+                variant="ghost"
+                className="flex items-center gap-2"
+                onClick={handleClearFilters}
+              >
+                <LuFilterX size={20} />
+                {t("userFilter.clear")}
+              </Button>
+              <RefreshQueryButton queryKeys={["filteredUsers"]} />
             </div>
           </div>
         </form>

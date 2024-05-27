@@ -21,7 +21,7 @@ export type NavigationLink = {
   path: string;
   label: string;
 };
-type LayoutType = "admin" | "tenant" | "owner";
+type LayoutType = "admin" | "tenant" | "owner" | "me";
 
 type BaseLayoutProps = {
   type: LayoutType;
@@ -31,15 +31,15 @@ type BaseLayoutProps = {
 
 const config = {
   admin: {
-    footer: "bg-orange-500",
-    nav: "border-b-4 border-orange-500",
-    hover: "hover:bg-orange-500 hover:text-black",
-    accentColor: "bg-orange-500",
+    footer: "bg-red-500",
+    nav: "border-b-4 border-red-500",
+    hover: "hover:bg-red-500 hover:text-black",
+    accentColor: "bg-red-500 text-black",
   },
   tenant: {
     footer: "bg-green-500",
     nav: "border-b-4 border-green-500",
-    hover: "hover:bg-green-500 hover:text-black" ,
+    hover: "hover:bg-green-500 hover:text-black",
     accentColor: "bg-green-500",
   },
   owner: {
@@ -48,14 +48,20 @@ const config = {
     hover: "hover:bg-blue-500 hover:text-black",
     accentColor: "bg-blue-500",
   },
+  me: {
+    footer: "bg-purple-500",
+    nav: "border-b-4 border-purple-500",
+    hover: "hover:bg-purple-500 hover:text-black",
+    accentColor: "bg-purple-500",
+  },
 } satisfies {
-    [key in LayoutType]: {
-      nav: string;
-      footer: string;
-      hover: string;
-      accentColor: string;
-    };
+  [key in LayoutType]: {
+    nav: string;
+    footer: string;
+    hover: string;
+    accentColor: string;
   };
+};
 
 const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { t, i18n } = useTranslation();

@@ -204,7 +204,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendAccountActivateAfterBlock(String to, String name, String token, String lang) {
-        String uri = webUrl + "/activate-after-inactive?token=" + token;
+        String uri = webUrl + "/reactivate?token=" + token;
         Map<String, Object> templateModel = Map.of(
                 "name", name, "url", uri);
         String subject = mailMessageSource.getMessage("accountBlockedInactivity.subject", null, Locale.of(lang));
