@@ -88,8 +88,10 @@ public class MeController {
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (InvalidPasswordException | PasswordRepetitionException e) {
+        } catch (InvalidPasswordException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        } catch (PasswordRepetitionException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         }
     }
 
@@ -99,8 +101,10 @@ public class MeController {
         try {
             userService.changePasswordWithToken(request.password(), request.token());
             return ResponseEntity.ok().build();
-        } catch (VerificationTokenUsedException | VerificationTokenExpiredException | PasswordRepetitionException e) {
+        } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (PasswordRepetitionException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (UserBlockedException e) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage());
         }

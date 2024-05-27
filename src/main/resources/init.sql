@@ -35,9 +35,9 @@ GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02auth;
 
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
-                          modified_at, created_by, modified_by, theme, active)
+                          modified_at, created_by, modified_by, active)
 VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'admin', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
-        false, true, 0, 1, 'EN', NOW(), NOW(), null, null, 'DARK',true);
+        false, true, 0, 1, 'EN', NOW(), NOW(), null, null,true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
 VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'kacperkafara18@gmail.com', null, 'Admin', 'Admin');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
@@ -47,10 +47,10 @@ INSERT INTO public.administrators (id)
 VALUES ('22f34716-3b77-4e63-809d-35f9a4758011');
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
-                          modified_at, created_by, modified_by, theme,active)
+                          modified_at, created_by, modified_by,active)
 VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', 'tenant',
         '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null,
-        null, 'LIGHT', true);
+        null, true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
 VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', 'tenant@test.com', null, 'Tenant', 'Tenant');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
@@ -60,9 +60,9 @@ INSERT INTO public.tenants (id)
 VALUES ('4b329d71-2a92-4e90-8f0b-f673e4f79529');
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
-                          modified_at, created_by, modified_by, theme, active)
+                          modified_at, created_by, modified_by, active)
 VALUES ('2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9', 'test', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
-        false, true, 0, 1, 'EN', NOW(), NOW(), null, null, 'DARK',true);
+        false, true, 0, 1, 'EN', NOW(), NOW(), null, null,true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
 VALUES ('2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9', 'test@test.com', null, 'test', 'test');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
@@ -75,6 +75,11 @@ VALUES ('397cf3c5-f369-4783-9892-6fc781fd2b0d', '2d56f6d5-2dfd-4003-89d9-9e9ac6c
         null, null);
 INSERT INTO public.owners (id)
 VALUES ('397cf3c5-f369-4783-9892-6fc781fd2b0d');
+
+INSERT INTO public.themes
+    (id, type)
+VALUES (gen_random_uuid(), 'light'),
+       (gen_random_uuid(), 'dark');
 
 INSERT INTO public.timezones
     (id, name)

@@ -47,8 +47,12 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
     @Override
     @PreAuthorize("permitAll()")
-    public User getUserByToken(String token) throws VerificationTokenUsedException {
+    public User getUserByEmailToken(String token) throws VerificationTokenUsedException {
         return emailTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED)).getUser();
+    }
+
+    public User getUserByPasswordToken(String token) throws VerificationTokenUsedException {
+        return passwordTokenRepository.findByToken(token).orElseThrow(() -> new VerificationTokenUsedException(VerificationTokenMessages.VERIFICATION_TOKEN_USED)).getUser();
     }
 
     @Override

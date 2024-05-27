@@ -5,14 +5,14 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.model.Timezone;
+import pl.lodz.p.it.ssbd2024.model.Theme;
 
 import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface TimezoneRepository extends JpaRepository<Timezone, UUID> {
+public interface ThemeRepository extends JpaRepository<Theme, UUID> {
     @PreAuthorize("isAuthenticated()")
-    Optional<Timezone> findByName(String name);
+    Optional<Theme> findByType(String value);
 }
