@@ -63,6 +63,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public List<User> getAllFiltered(Specification<User> specification) {
+        return userRepository.findAll(specification);
+    }
+
+    @Override
     @PreAuthorize("permitAll()")
     public User getUserById(UUID id) throws NotFoundException {
         return userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
