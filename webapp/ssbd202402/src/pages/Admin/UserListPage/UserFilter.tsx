@@ -19,9 +19,11 @@ import { useUsersFilterStore } from "@/store/usersFilterStore";
 import { SearchCriteria } from "@/types/filter/SearchCriteria";
 import { ChevronsUpDown } from "lucide-react";
 import { LuFilterX } from "react-icons/lu";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { useAutocompletionQuery } from "@/data/useAutocompletion";
+import { useDebounce } from "use-debounce";
 
 interface FilterUsers {
   verified: boolean | null;
@@ -37,6 +39,13 @@ const UserFilter: FC = () => {
   const { t } = useTranslation();
   const allRoles = ["ALL", "TENANT", "OWNER", "ADMINISTRATOR"];
   const store = useUsersFilterStore();
+  const [loginPattern, setLoginPattern] = useState<string>("");
+  const [debouncedLoginPattern] = useDebounce(loginPattern, 500);
+  const { data } = useAutocompletionQuery(debouncedLoginPattern);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const filterForm = useForm<FilterUsers>({
     values: {
@@ -297,7 +306,13 @@ const UserFilter: FC = () => {
                 <FormItem>
                   <FormLabel>{t("userFilter.login")}</FormLabel>
                   <FormControl>
-                    <Input {...field} type="text" placeholder=". . ." />
+                    <Input
+                      {...field}
+                      type="text"
+                      value={loginPattern}
+                      onChange={(e) => setLoginPattern(e.target.value)}
+                      placeholder=". . ."
+                    />
                   </FormControl>
                 </FormItem>
               )}
