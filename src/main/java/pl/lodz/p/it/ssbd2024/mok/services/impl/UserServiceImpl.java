@@ -43,6 +43,7 @@ public class UserServiceImpl implements UserService {
     private final OwnerRepository ownerRepository;
     private final AdministratorRepository administratorRepository;
     private final EmailService emailService;
+    private final ThemeRepository themeRepository;
     private final VerificationTokenService verificationTokenService;
     private final SignVerifier signVerifier;
 
@@ -279,7 +280,8 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("isAuthenticated()")
     public String changeTheme(UUID id, String theme) throws NotFoundException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND));
-        user.setTheme(Theme.valueOf(theme.toUpperCase()));
-        return userRepository.saveAndFlush(user).getTheme().name().toLowerCase();
+        Theme themeEnt = themeRepository.findByType(theme).orElseThrow(() -> new NotFoundException(UserExceptionMessages.THEME_NOT_FOUND));
+        user.setTheme(themeEnt);
+        return userRepository.saveAndFlush(user).getTheme().getType();
     }
 }
