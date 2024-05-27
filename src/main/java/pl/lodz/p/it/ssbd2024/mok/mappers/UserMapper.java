@@ -53,7 +53,8 @@ public class UserMapper {
                 user.isBlocked(),
                 user.isVerified(),
                 user.isActive(),
-                roles);
+                roles,
+                user.getTheme().toString());
     }
 
     public static User toUser(UpdateUserDataRequest userRequest, Timezone timezone) {
