@@ -389,6 +389,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  success: "Operacja powiodła się",
   sessionExpired: "Sesja wygasła",
   sessionExpiredDescription: "Twoja sesja wygasła, zaloguj się ponownie",
   footer: "Landlord Kingdom - SSBD202402",

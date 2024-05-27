@@ -4,6 +4,7 @@ import { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { AuthenticateResponse } from "@/types/AuthenticateResponse";
+import { ErrorCode } from "@/@types/errorCode";
 
 type AuthenticateRequest = {
   login: string;
