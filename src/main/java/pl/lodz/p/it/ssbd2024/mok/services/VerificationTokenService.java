@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2024.mok.services;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
@@ -13,7 +12,9 @@ import java.security.InvalidKeyException;
 
 public interface VerificationTokenService {
 
-    User getUserByToken(String token) throws VerificationTokenUsedException;
+    User getUserByEmailToken(String token) throws VerificationTokenUsedException;
+
+    User getUserByPasswordToken(String token) throws VerificationTokenUsedException;
 
     String generateAccountVerificationToken(User user) throws TokenGenerationException;
 
