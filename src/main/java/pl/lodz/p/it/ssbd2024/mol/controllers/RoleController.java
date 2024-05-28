@@ -10,6 +10,7 @@ import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestResponse;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/roles")
@@ -24,9 +25,15 @@ public class RoleController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @DeleteMapping
+    @PostMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> deleteRoleRequest() {
+    public ResponseEntity<Void> acceptRoleRequest(@PathVariable UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<Void> deleteRoleRequest(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

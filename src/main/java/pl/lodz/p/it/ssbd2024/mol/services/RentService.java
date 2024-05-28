@@ -9,6 +9,8 @@ import java.util.UUID;
 
 public interface RentService {
 
+    Rent getRent(UUID id);
+
     List<Rent> getCurrentRents(UUID ownerId);
 
     Rent payForRent(UUID rentId, UUID ownerId, Payment payment);

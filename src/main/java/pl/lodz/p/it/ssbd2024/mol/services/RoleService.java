@@ -13,5 +13,7 @@ public interface RoleService {
 
     GetRoleResponse getRole(UUID tenantId) throws RoleRequestAlreadyExistsException, UserIsOwnerAlreadyException;
 
+    void accept(UUID id) throws NotFoundException;
+
     void delete(UUID id) throws NotFoundException;
 }
