@@ -2,7 +2,7 @@ package pl.lodz.p.it.ssbd2024.mol.services;
 
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.WrongEndDateException;
+import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 
 import java.util.List;
 import java.util.UUID;

@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalAlreadyRentedException;
+import pl.lodz.p.it.ssbd2024.exceptions.LocalAlreadyRentedException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.ApplicationRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.FixedFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;

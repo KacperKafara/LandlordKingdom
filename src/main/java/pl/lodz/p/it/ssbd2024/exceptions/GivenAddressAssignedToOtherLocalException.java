@@ -1,8 +1,7 @@
-package pl.lodz.p.it.ssbd2024.mol.exceptions;
+package pl.lodz.p.it.ssbd2024.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 public class GivenAddressAssignedToOtherLocalException extends ApplicationBaseException {

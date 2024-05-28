@@ -1,6 +1,5 @@
-package pl.lodz.p.it.ssbd2024.mol.exceptions;
+package pl.lodz.p.it.ssbd2024.exceptions;
 
-import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
 
 public class InvalidLocalState extends ApplicationBaseException {

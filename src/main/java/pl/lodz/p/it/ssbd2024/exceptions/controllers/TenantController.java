@@ -1,5 +1,4 @@
-package pl.lodz.p.it.ssbd2024.mok.controllers;
-
+package pl.lodz.p.it.ssbd2024.exceptions.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,22 +10,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
+import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/owners")
+@RequestMapping("/tenants")
 @RequiredArgsConstructor
-public class OwnerController {
+public class TenantController {
+    private final TenantService tenantService;
 
-    private final OwnerService ownerService;
-
-    @PutMapping(path = "/{id}/remove-role")
+    @PutMapping(path = "/{id}/add-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> removeAccessLevel(@PathVariable UUID id) {
+    public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) {
         try {
-            ownerService.removeOwnerAccessLevel(id);
+            tenantService.addTenantAccessLevel(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -34,11 +32,11 @@ public class OwnerController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(path = "/{id}/add-role")
+    @PutMapping(path = "/{id}/remove-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) {
+    public ResponseEntity<Void> removeAccessLevel(@PathVariable UUID id) {
         try {
-            ownerService.addOwnerAccessLevel(id);
+            tenantService.removeTenantAccessLevel(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }

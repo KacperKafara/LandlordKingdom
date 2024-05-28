@@ -1,6 +1,4 @@
-package pl.lodz.p.it.ssbd2024.mol.exceptions;
-
-import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
+package pl.lodz.p.it.ssbd2024.exceptions;
 
 public class InvalidRelationException extends ApplicationBaseException {
     public InvalidRelationException(String message, String code) {

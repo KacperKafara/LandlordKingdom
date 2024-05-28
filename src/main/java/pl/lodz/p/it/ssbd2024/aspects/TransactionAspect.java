@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.aspects;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -8,7 +9,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import pl.lodz.p.it.ssbd2024.model.AbstractEntity;
 
@@ -18,6 +21,7 @@ import java.util.UUID;
 @Slf4j
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class TransactionAspect {
     @Pointcut("@within(transactional)")
     public void transactionalMethods(Transactional transactional) {

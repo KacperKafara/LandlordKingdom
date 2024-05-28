@@ -2,8 +2,8 @@ package pl.lodz.p.it.ssbd2024.mol.services;
 
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.mol.dto.GetRoleResponse;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.RoleRequestAlreadyExistsException;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.UserIsOwnerAlreadyException;
+import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
+import pl.lodz.p.it.ssbd2024.exceptions.UserIsOwnerAlreadyException;
 
 import java.util.UUID;
 

@@ -1,7 +1,7 @@
-package pl.lodz.p.it.ssbd2024.mok.controllers;
+package pl.lodz.p.it.ssbd2024.exceptions.controllers;
+
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,21 +11,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
+import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
 
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/tenants")
+@RequestMapping("/owners")
 @RequiredArgsConstructor
-public class TenantController {
-    private final TenantService tenantService;
+public class OwnerController {
 
-    @PutMapping(path = "/{id}/add-role")
+    private final OwnerService ownerService;
+
+    @PutMapping(path = "/{id}/remove-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) {
+    public ResponseEntity<Void> removeAccessLevel(@PathVariable UUID id) {
         try {
-            tenantService.addTenantAccessLevel(id);
+            ownerService.removeOwnerAccessLevel(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -33,11 +34,11 @@ public class TenantController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping(path = "/{id}/remove-role")
+    @PutMapping(path = "/{id}/add-role")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> removeAccessLevel(@PathVariable UUID id) {
+    public ResponseEntity<Void> addAccessLevel(@PathVariable UUID id) {
         try {
-            tenantService.removeTenantAccessLevel(id);
+            ownerService.addOwnerAccessLevel(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }

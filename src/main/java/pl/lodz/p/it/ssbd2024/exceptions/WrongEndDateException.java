@@ -1,6 +1,4 @@
-package pl.lodz.p.it.ssbd2024.mol.exceptions;
-
-import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
+package pl.lodz.p.it.ssbd2024.exceptions;
 
 public class WrongEndDateException extends ApplicationBaseException {
     public WrongEndDateException(String message, String code) {

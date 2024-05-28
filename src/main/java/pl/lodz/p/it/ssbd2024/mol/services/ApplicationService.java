@@ -3,7 +3,7 @@ package pl.lodz.p.it.ssbd2024.mol.services;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalAlreadyRentedException;
+import pl.lodz.p.it.ssbd2024.exceptions.LocalAlreadyRentedException;
 
 import java.util.List;
 import java.util.UUID;

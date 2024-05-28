@@ -5,9 +5,9 @@ import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.GivenAddressAssignedToOtherLocalException;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidRelationException;
+import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidRelationException;
 
 import java.math.BigDecimal;
 import java.util.List;

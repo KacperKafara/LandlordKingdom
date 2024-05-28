@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2024.mok.controllers;
+package pl.lodz.p.it.ssbd2024.exceptions.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
