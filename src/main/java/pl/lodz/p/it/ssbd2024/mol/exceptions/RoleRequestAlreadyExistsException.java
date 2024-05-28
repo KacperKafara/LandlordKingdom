@@ -1,11 +1,13 @@
 package pl.lodz.p.it.ssbd2024.mol.exceptions;
 
-public class RoleRequestAlreadyExistsException extends Exception{
-    public RoleRequestAlreadyExistsException(String message) {
-        super(message);
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
+
+public class RoleRequestAlreadyExistsException extends ApplicationBaseException {
+    public RoleRequestAlreadyExistsException(String message, String code) {
+        super(message, code);
     }
 
-    public RoleRequestAlreadyExistsException(String message, Throwable cause) {
-        super(message, cause);
+    public RoleRequestAlreadyExistsException(String message, Throwable cause, String code) {
+        super(message, cause, code);
     }
 }

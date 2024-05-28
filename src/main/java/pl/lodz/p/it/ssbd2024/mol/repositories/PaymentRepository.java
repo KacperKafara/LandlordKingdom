@@ -17,6 +17,6 @@ import java.util.UUID;
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
-    @Query("SELECT p FROM Payment p WHERE p.rent.local.id = :localId")
-    List<Payment> findByLocalId(@Param("localId") UUID localId);
+    @Query("SELECT p FROM Payment p WHERE p.rent.local.id = :localId AND p.rent.local.owner.id = :ownerId")
+    List<Payment> findByLocalId(@Param("localId") UUID localId, @Param("ownerId") UUID ownerId);
 }

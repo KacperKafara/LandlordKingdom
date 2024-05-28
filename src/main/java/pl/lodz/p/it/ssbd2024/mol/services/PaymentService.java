@@ -7,5 +7,5 @@ import java.util.UUID;
 
 public interface PaymentService {
 
-    List<Payment> getLocalPayments(UUID id);
+    List<Payment> getLocalPayments(UUID localId, UUID ownerId);
 }

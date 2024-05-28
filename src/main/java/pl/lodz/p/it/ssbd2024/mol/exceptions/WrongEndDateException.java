@@ -1,11 +1,13 @@
 package pl.lodz.p.it.ssbd2024.mol.exceptions;
 
-public class WrongEndDateException extends Exception {
-    public WrongEndDateException(String message) {
-        super(message);
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
+
+public class WrongEndDateException extends ApplicationBaseException {
+    public WrongEndDateException(String message, String code) {
+        super(message, code);
     }
 
-    public WrongEndDateException(String message, Throwable cause) {
-        super(message, cause);
+    public WrongEndDateException(String message, Throwable cause, String code) {
+        super(message, cause, code);
     }
 }

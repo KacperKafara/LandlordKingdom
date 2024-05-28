@@ -8,7 +8,6 @@ import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidRelationException;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalIsNotInactiveException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.UUID;
 
 public interface LocalService {
 
-    Local addLocal(Local local) throws GivenAddressAssignedToOtherLocalException;
+    Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException;
 
     List<Local> getActiveLocals();
 
@@ -28,7 +27,7 @@ public interface LocalService {
 
     Local editLocal(UUID id, Local local);
 
-    Local leaveLocal(UUID ownerId, UUID localId) throws LocalIsNotInactiveException;
+    Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState;
 
     Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee);
 

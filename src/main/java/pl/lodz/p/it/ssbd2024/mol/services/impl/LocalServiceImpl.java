@@ -12,7 +12,6 @@ import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidRelationException;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.LocalIsNotInactiveException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
@@ -28,7 +27,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local addLocal(Local local) throws GivenAddressAssignedToOtherLocalException {
+    public Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -64,7 +63,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local leaveLocal(UUID ownerId, UUID localId) throws LocalIsNotInactiveException {
+    public Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
