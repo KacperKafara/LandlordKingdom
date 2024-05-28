@@ -36,8 +36,6 @@ const CodeFormSchema = (t: TFunction) =>
 interface CodeInputProps {
   login: string;
   roles: string[] | undefined;
-  setToken: (token: string) => void;
-  setRefreshToken: (token: string) => void;
   setCodeInputOpen: (value: boolean) => void;
   resetForm: () => void;
 }
@@ -47,8 +45,6 @@ type CodeSchema = z.infer<ReturnType<typeof CodeFormSchema>>;
 const CodeInput: FC<CodeInputProps> = ({
   login,
   roles,
-  setToken,
-  setRefreshToken,
   setCodeInputOpen,
   resetForm,
 }) => {
@@ -62,7 +58,7 @@ const CodeInput: FC<CodeInputProps> = ({
   const navigate = useNavigate();
   const { verifyCode, isPending } = useVerifyCode();
   const { setTheme } = useTheme();
-  const { activeRole } = useUserStore();
+  const { activeRole, setToken, setRefreshToken } = useUserStore();
 
   const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
     const result = await verifyCode({ login, token: data.pin });
