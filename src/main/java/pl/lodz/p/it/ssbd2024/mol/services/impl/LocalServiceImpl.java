@@ -29,7 +29,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException {
+    public Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -53,13 +53,13 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public LocalReportResponse getLocalReport(UUID id) {
+    public LocalReportResponse getLocalReport(UUID id) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local editLocal(UUID id, Local local) {
+    public Local editLocal(UUID id, Local local) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -71,7 +71,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) {
+    public Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

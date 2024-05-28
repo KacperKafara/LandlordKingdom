@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface LocalService {
 
-    Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException;
+    Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException;
 
     List<Local> getActiveLocals();
 
@@ -23,13 +23,13 @@ public interface LocalService {
 
     List<Local> getOwnLocals(UUID id);
 
-    LocalReportResponse getLocalReport(UUID id);
+    LocalReportResponse getLocalReport(UUID id) throws NotFoundException;
 
-    Local editLocal(UUID id, Local local);
+    Local editLocal(UUID id, Local local) throws NotFoundException;
 
     Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState;
 
-    Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee);
+    Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
 
     List<Local> getAllLocals();
 
