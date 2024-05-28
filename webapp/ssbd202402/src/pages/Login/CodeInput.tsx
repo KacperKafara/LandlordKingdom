@@ -85,7 +85,7 @@ const CodeInput: FC<CodeInputProps> = ({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="bg-card border-1 flex w-fit flex-col rounded-md p-7 pb-3 shadow-2xl shadow-shadowColor"
+          className="border-1 flex w-fit flex-col rounded-md bg-card p-7 pb-3 shadow-2xl shadow-shadowColor"
         >
           <FormField
             control={form.control}

@@ -370,7 +370,13 @@ const errors = {
   [key in ExceptionCode]: string;
 };
 
+const notFoundPage = {
+  title: "Nie znaleziono strony",
+  description: "Strona, której szukasz, nie istnieje",
+};
+
 export default {
+  notFoundPage,
   sessionExpiredDialog,
   error,
   errors,

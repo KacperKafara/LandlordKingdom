@@ -8,6 +8,8 @@ import "@/i18n";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import NotFound from "./pages/NotFound";
+import { ErrorBoundary } from "react-error-boundary";
 
 const router = createBrowserRouter([
   ...UnprotectedRoutes,
@@ -16,17 +18,23 @@ const router = createBrowserRouter([
     Component: AuthGuard,
     children: ProtectedRoutes,
   },
+  {
+    path: "*",
+    Component: NotFound,
+  },
 ]);
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
+  <React.StrictMode>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
         <QueryClientProvider client={queryClient}>
           <RouterProvider router={router}></RouterProvider>
           <Toaster />
         </QueryClientProvider>
       </ThemeProvider>
-    </React.StrictMode>
+    </ErrorBoundary>
+  </React.StrictMode>
 );

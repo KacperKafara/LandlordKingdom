@@ -359,12 +359,19 @@ const errors = {
   jwtTokenInvalid: "Session expired",
   validationError: "Validation error",
   identicalEmail: "User with given email address already exists",
-  internalServerError: "Something went wrong on our end. Please try again later.",
+  internalServerError:
+    "Something went wrong on our end. Please try again later.",
 } satisfies {
   [key in ExceptionCode]: string;
 };
 
+const notFoundPage = {
+  title: "Not Found",
+  description: "The page you are looking for does not exist.",
+};
+
 export default {
+  notFoundPage,
   sessionExpiredDialog,
   error,
   errors,
