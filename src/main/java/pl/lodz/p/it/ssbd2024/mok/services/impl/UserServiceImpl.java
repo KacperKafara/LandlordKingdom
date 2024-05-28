@@ -172,7 +172,7 @@ public class UserServiceImpl implements UserService {
     @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void unblockUser(UUID id) throws NotFoundException, UserAlreadyUnblockedException {
-        User user = getUserById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         if (!user.isBlocked()) {
             throw new UserAlreadyUnblockedException(UserExceptionMessages.ALREADY_UNBLOCKED, ErrorCodes.USER_ALREADY_UNBLOCKED);
         }
@@ -302,7 +302,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @PreAuthorize("permitAll()")
     public void reactivateUser(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException {
-        VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
+        VerificationToken verificationToken = verificationTokenService.validateAccountActivateToken(token);
         User user = userRepository.getReferenceById(verificationToken.getUser().getId());
         user.setActive(true);
         userRepository.saveAndFlush(user);
