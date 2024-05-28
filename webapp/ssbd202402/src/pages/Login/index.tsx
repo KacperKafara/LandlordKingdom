@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useAuthenticate } from "@/data/useAuthenticate";
-import { useUserStore } from "@/store/userStore";
+import { roleMapping, useUserStore } from "@/store/userStore";
 import { NavLink, Navigate } from "react-router-dom";
 import i18next, { TFunction } from "i18next";
 import { isTokenValid } from "@/utils/jwt";
@@ -72,7 +72,8 @@ type LoginSchema = z.infer<ReturnType<typeof getLoginSchema>>;
 
 const Login2FaPage: FC = () => {
   const { t } = useTranslation();
-  const { setToken, setRefreshToken, token, roles } = useUserStore();
+  const { setToken, setRefreshToken, token, roles, activeRole } =
+    useUserStore();
   const { authenticate, isPending } = useAuthenticate();
   const [login, setLogin] = useState<string>();
   const [codeInputOpen, setCodeInputOpen] = useState(false);
@@ -84,12 +85,6 @@ const Login2FaPage: FC = () => {
     },
   });
 
-  const role_mapping: { [key: string]: string } = {
-    ADMINISTRATOR: "admin",
-    TENANT: "tenant",
-    OWNER: "owner",
-  };
-
   const onSubmit = form.handleSubmit(async ({ login, password }) => {
     await authenticate({ login, password, language: i18next.language });
     setCodeInputOpen(true);
@@ -97,7 +92,7 @@ const Login2FaPage: FC = () => {
   });
 
   if (token && isTokenValid(token)) {
-    return <Navigate to={`/${role_mapping[roles![0]]}`} replace />;
+    return <Navigate to={`/${roleMapping[activeRole!]}`} replace />;
   }
 
   return (

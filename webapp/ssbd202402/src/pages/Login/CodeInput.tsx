@@ -24,12 +24,7 @@ import { useNavigate } from "react-router-dom";
 import { useVerifyCode } from "@/data/useAuthenticate.ts";
 import LoadingButton from "@/components/LoadingButton";
 import { useTheme } from "@/components/ThemeProvider";
-
-const role_mapping: { [key: string]: string } = {
-  ADMINISTRATOR: "admin",
-  TENANT: "tenant",
-  OWNER: "owner",
-};
+import { roleMapping, useUserStore } from "@/store/userStore";
 
 const CodeFormSchema = (t: TFunction) =>
   z.object({
@@ -67,16 +62,17 @@ const CodeInput: FC<CodeInputProps> = ({
   const navigate = useNavigate();
   const { verifyCode, isPending } = useVerifyCode();
   const { setTheme } = useTheme();
+  const { activeRole } = useUserStore();
 
   const onSubmit: SubmitHandler<CodeSchema> = async (data: CodeSchema) => {
     const result = await verifyCode({ login, token: data.pin });
     setToken(result.token);
     setRefreshToken(result.refreshToken);
     setTheme(result.theme);
-    if (roles == undefined) {
+    if (roles === undefined) {
       return navigate("/login");
     } else {
-      navigate(`/${role_mapping[roles![0]]}`);
+      navigate(`/${roleMapping[activeRole!]}`);
     }
   };
 
