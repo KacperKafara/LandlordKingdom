@@ -29,7 +29,9 @@ public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificat
     List<User> findAll();
 
     List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
-    List<User> getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(LocalDateTime createdAt, LocalDateTime createdAt2);
+
+    @Query("SELECT u FROM User u WHERE :createdAt < u.createdAt AND u.createdAt < :createdAt2 AND u.verified = false")
+    List<User> getUsersToResendEmail(LocalDateTime createdAt, LocalDateTime createdAt2);
     @Query("SELECT u FROM User u WHERE u.active = true AND u.lastSuccessfulLogin < :date")
     List<User> getUserByActiveIsTrueAndLastSuccessfulLogin(@Param("date") LocalDateTime date);
 }

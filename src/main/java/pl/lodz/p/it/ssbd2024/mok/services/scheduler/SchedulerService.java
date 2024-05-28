@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mok.services.scheduler;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -22,6 +24,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 public class SchedulerService {
+    private static final Logger log = LoggerFactory.getLogger(SchedulerService.class);
     @Value("${account.removeUnverifiedAccountAfterHours}")
     private int removeUnverifiedAccountsAfterHours;
     @Value("${app.url}")
@@ -49,13 +52,13 @@ public class SchedulerService {
     public void sendEmailVerifyAccount() {
         LocalDateTime beforeTime = LocalDateTime.now().minusHours(removeUnverifiedAccountsAfterHours / 2);
         LocalDateTime afterTime = beforeTime.plusMinutes(10);
-        List<User> users = userRepository.getUsersByCreatedAtBeforeAndCreatedAtAfterAndVerifiedIsFalse(beforeTime, afterTime);
+        List<User> users = userRepository.getUsersToResendEmail(beforeTime, afterTime);
         users.forEach(user -> {
             Optional<AccountVerificationToken> token = accountVerificationTokenRepository.findByUserId(user.getId());
             if (token.isEmpty()) {
                 return;
             }
-            URI uri = URI.create(appUrl + "/verify/" + token);
+            URI uri = URI.create(appUrl + "/verify/" + token.get().getToken());
             emailService.sendVerifyAccountEmail(user.getEmail(), user.getFirstName(), uri.toString(), user.getLanguage());
         });
     }

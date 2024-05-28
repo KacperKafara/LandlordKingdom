@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,6 +77,9 @@ public class User extends AbstractEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AccessLevel> accessLevels = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     @Setter
     @ManyToOne
