@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -22,6 +23,7 @@ public class HtmlEmailServiceImpl implements HtmlEmailService {
     private final SpringTemplateEngine templateEngine;
 
     @Override
+    @PreAuthorize("permitAll()")
     public void sendHtmlEmail(String to, String subject, String body) {
         MimeMessage message = mailSender.createMimeMessage();
 
@@ -39,6 +41,7 @@ public class HtmlEmailServiceImpl implements HtmlEmailService {
     }
 
     @Override
+    @PreAuthorize("permitAll()")
     public void createHtmlEmail(String to, String subject, String templateName, Map<String, Object> templateModel, String lang) {
         Context thymeleafContext = new Context(Locale.of(lang));
         thymeleafContext.setVariables(templateModel);

@@ -3,6 +3,7 @@ import { api } from "./api";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import { ErrorCode } from "@/@types/errorCode";
+import {AxiosError} from "axios";
 
 export const useBlockUser = () => {
   const queryClient = useQueryClient();

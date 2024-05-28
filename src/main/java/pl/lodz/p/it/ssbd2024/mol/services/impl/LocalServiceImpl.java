@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.exceptions.InvalidRelationException;
+import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
@@ -24,6 +25,7 @@ import java.util.UUID;
 @Transactional
 public class LocalServiceImpl implements LocalService {
     private final LocalRepository localRepository;
+    private final AddressRepository addressRepository;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")

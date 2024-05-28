@@ -3,6 +3,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { ErrorCode } from "@/@types/errorCode";
+import {AxiosError} from "axios";
 
 type ResetPasswordRequest = {
   email: string;
@@ -23,7 +24,7 @@ export const useResetPassword = () => {
         description: t("userListPage.resetUserPasswordToastDescriptionSuccess"),
       });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("userListPage.resetUserPasswordToastTitleFail"),

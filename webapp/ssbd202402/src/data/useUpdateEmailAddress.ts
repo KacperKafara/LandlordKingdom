@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { api } from "./api";
 import { ErrorCode } from "@/@types/errorCode";
+import {AxiosError} from "axios";
 
 type ChangePasswordRequest = {
   token: string;
@@ -25,11 +26,12 @@ export const useResetOtherUserEmailAddress = () => {
     },
     onSettled: async (_, error) => {
       if (error) {
+        const e = error as AxiosError;
         toast({
           variant: "destructive",
           title: t("userListPage.resetUserEmailError"),
           description: t(
-            `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+            `errors.${(e.response?.data as ErrorCode).exceptionCode}`
           ),
         });
       } else {
@@ -58,11 +60,12 @@ export const useResetMyEmailAddress = () => {
     },
     onSettled: async (_, error) => {
       if (error) {
+        const e = error as AxiosError;
         toast({
           variant: "destructive",
           title: t("userListPage.resetUserEmailError"),
           description: t(
-            `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+            `errors.${(e.response?.data as ErrorCode).exceptionCode}`
           ),
         });
       } else {
@@ -91,11 +94,12 @@ export const useChangeEmailAddress = () => {
       });
     },
     onError: (error) => {
+      const e = error as AxiosError;
       toast({
         variant: "destructive",
         title: t("updateEmailPage.updateEmailError"),
         description: t(
-          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+          `errors.${(e.response?.data as ErrorCode).exceptionCode}`
         ),
       });
     },

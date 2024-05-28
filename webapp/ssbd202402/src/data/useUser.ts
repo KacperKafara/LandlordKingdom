@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { DetailedUserResponse } from "@/types/user/DetailedUserResponseType";
-import { AxiosInstance } from "axios";
+import {AxiosError, AxiosInstance} from "axios";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { UserUpdateRequestType } from "@/types/user/UserUpdateRequestType";
 import { toast } from "@/components/ui/use-toast";
@@ -48,7 +48,7 @@ export const useUpdateUserMutation = () => {
         title: t("updateDataForm.success"),
       });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("updateDataForm.error"),

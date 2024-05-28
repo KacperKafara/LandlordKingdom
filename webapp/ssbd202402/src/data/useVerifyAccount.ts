@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { t } from "i18next";
 import { ErrorCode } from "@/@types/errorCode";
+import {AxiosError} from "axios";
 
 export const useVerifyAccount = () => {
   const { token } = useParams<{ token: string }>();
@@ -15,7 +16,7 @@ export const useVerifyAccount = () => {
     mutationFn: async () => {
       await api.post("/me/verify", { token });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("error.baseTitle"),

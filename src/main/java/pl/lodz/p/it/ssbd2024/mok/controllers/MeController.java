@@ -70,8 +70,6 @@ public class MeController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (ApplicationOptimisticLockException e) {
             throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
-        } catch (TimezoneNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 

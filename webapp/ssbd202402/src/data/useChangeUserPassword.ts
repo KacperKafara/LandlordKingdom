@@ -3,6 +3,7 @@ import useAxiosPrivate from "./useAxiosPrivate";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
 import { ErrorCode } from "@/@types/errorCode";
+import {AxiosError} from "axios";
 type ChangePasswordType = {
   oldPassword: string;
   newPassword: string;
@@ -29,7 +30,7 @@ export const useChangeUserPassword = () => {
         description: t("changePasswordForm.successDescription"),
       });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("error.baseTitle"),
@@ -58,7 +59,7 @@ export const useChangeUserPasswordWithToken = () => {
         description: t("changePasswordForm.successDescription"),
       });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
         title: t("error.baseTitle"),
