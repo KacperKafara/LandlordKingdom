@@ -39,7 +39,7 @@ public class HtmlEmailServiceImpl implements HtmlEmailService {
     }
 
     @Override
-    public void sendHtmlEmail(String to, String subject, String templateName, Map<String, Object> templateModel, String lang) {
+    public void createHtmlEmail(String to, String subject, String templateName, Map<String, Object> templateModel, String lang) {
         Context thymeleafContext = new Context(Locale.of(lang));
         thymeleafContext.setVariables(templateModel);
         String htmlBody = templateEngine.process(templateName, thymeleafContext);

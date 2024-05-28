@@ -28,7 +28,7 @@ public class EmailServiceImpl implements EmailService {
                 "url", uri);
         String subject = mailMessageSource.getMessage("verifyAccount.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "verifyAccount", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "verifyAccount", templateModel, lang);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class EmailServiceImpl implements EmailService {
                 "name", name, "url", webUrl);
         String subject = mailMessageSource.getMessage("accountVerified.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "accountVerified", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "accountVerified", templateModel, lang);
     }
 
 
@@ -50,7 +50,7 @@ public class EmailServiceImpl implements EmailService {
                 "ip", ip);
         String subject = mailMessageSource.getMessage("loginBlock.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "loginBlock", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "loginBlock", templateModel, lang);
     }
 
     @Override
@@ -61,7 +61,7 @@ public class EmailServiceImpl implements EmailService {
                 "status", status);
         String subject = mailMessageSource.getMessage("accountBlockChange.subjectBlock", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class EmailServiceImpl implements EmailService {
                 "status", status);
         String subject = mailMessageSource.getMessage("accountBlockChange.subjectUnblock", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "accountBlockChange", templateModel, lang);
     }
 
     @Override
@@ -82,7 +82,7 @@ public class EmailServiceImpl implements EmailService {
                 "url", uri);
         String subject = mailMessageSource.getMessage("emailChange.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "emailChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "emailChange", templateModel, lang);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class EmailServiceImpl implements EmailService {
                 "url", uri);
         String subject = mailMessageSource.getMessage("passwordChange.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "passwordChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "passwordChange", templateModel, lang);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectGain", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectLost", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectGain", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -144,7 +144,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectLost", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -157,7 +157,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectGain", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -170,7 +170,7 @@ public class EmailServiceImpl implements EmailService {
                 "permissions", permissions);
         String subject = mailMessageSource.getMessage("permissionChange.subjectLost", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "permissionChange", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "permissionChange", templateModel, lang);
     }
 
     @Override
@@ -179,7 +179,7 @@ public class EmailServiceImpl implements EmailService {
                 "name", name);
         String subject = mailMessageSource.getMessage("accountDelete.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "accountDelete", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "accountDelete", templateModel, lang);
     }
 
     @Override
@@ -189,7 +189,7 @@ public class EmailServiceImpl implements EmailService {
                 "ip", ip);
         String subject = mailMessageSource.getMessage("adminLogin.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "adminLogin", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "adminLogin", templateModel, lang);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class EmailServiceImpl implements EmailService {
                 "otp", otp);
         String subject = mailMessageSource.getMessage("OTP.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "OTP", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "OTP", templateModel, lang);
     }
 
     @Override
@@ -209,6 +209,6 @@ public class EmailServiceImpl implements EmailService {
                 "name", name, "url", uri);
         String subject = mailMessageSource.getMessage("accountBlockedInactivity.subject", null, Locale.of(lang));
 
-        htmlEmailService.sendHtmlEmail(to, subject, "accountBlockedAfterInactivity", templateModel, lang);
+        htmlEmailService.createHtmlEmail(to, subject, "accountBlockedAfterInactivity", templateModel, lang);
     }
 }
