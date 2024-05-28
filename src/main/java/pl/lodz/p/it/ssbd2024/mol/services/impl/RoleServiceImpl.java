@@ -35,6 +35,13 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public void accept(UUID id) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void delete(UUID id) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }

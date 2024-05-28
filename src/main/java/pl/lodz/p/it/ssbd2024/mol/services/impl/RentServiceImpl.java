@@ -24,6 +24,12 @@ public class RentServiceImpl implements RentService {
     private final VariableFeeRepository variableFeeRepository;
 
     @Override
+    @PreAuthorize("hasRole('TENANT')")
+    public Rent getRent(UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     @PreAuthorize("hasRole('OWNER')")
     public List<Rent> getCurrentRents(UUID ownerId) {
         throw new UnsupportedOperationException("Not supported yet.");
