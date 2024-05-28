@@ -1,4 +1,4 @@
-package pl.lodz.p.it.ssbd2024.exceptions.controllers;
+package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
