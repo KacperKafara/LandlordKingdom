@@ -1,6 +1,9 @@
 import { useMutation } from "@tanstack/react-query";
 import { api } from "./api";
 import { useToast } from "@/components/ui/use-toast";
+import {ErrorCode} from "@/@types/errorCode.ts";
+import {t} from "i18next";
+import {AxiosError} from "axios";
 
 export const useReactivateUser = () => {
   const { toast } = useToast();
@@ -11,15 +14,17 @@ export const useReactivateUser = () => {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Account reactivated",
-        description: "Your account has been reactivated. You can now login.",
+        title: "success",
+        description: "reactivationSuccess",
       });
     },
-    onError: (error) => {
+    onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
-        title: "Error reactivating account",
-        description: error.message,
+        title: t("error.baseTitle"),
+        description: t(
+            `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
       });
     },
   });

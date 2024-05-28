@@ -19,9 +19,10 @@ import java.util.Objects;
         "pl.lodz.p.it.ssbd2024.util",
         "pl.lodz.p.it.ssbd2024.services",
         "pl.lodz.p.it.ssbd2024.mok.services",
-        "pl.lodz.p.it.ssbd2024.mol.repositories",
         "pl.lodz.p.it.ssbd2024.mok.repositories",
-        "pl.lodz.p.it.ssbd2024.mok.authRepositories"
+        "pl.lodz.p.it.ssbd2024.mok.authRepositories",
+        "pl.lodz.p.it.ssbd2024.mol.repositories",
+        "pl.lodz.p.it.ssbd2024.mol.services",
 })
 @EnableScheduling
 @EnableRetry

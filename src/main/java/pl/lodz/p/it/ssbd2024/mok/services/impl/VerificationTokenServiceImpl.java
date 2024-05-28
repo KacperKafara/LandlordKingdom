@@ -79,7 +79,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
-    @PreAuthorize("permitAll()")
+    @PreAuthorize("isAuthenticated()")
     public String generateEmailVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         emailTokenRepository.deleteEmailVerificationTokenByUserId(user.getId());

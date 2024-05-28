@@ -1,7 +1,5 @@
 package pl.lodz.p.it.ssbd2024.mok.services;
 
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
@@ -34,6 +32,5 @@ public interface VerificationTokenService {
 
     String generateOTPToken(User user) throws InvalidKeyException;
 
-    @Transactional(propagation = Propagation.MANDATORY, rollbackFor = {VerificationTokenExpiredException.class, VerificationTokenUsedException.class})
     VerificationToken validateOTPToken(String token) throws VerificationTokenExpiredException, VerificationTokenUsedException;
 }

@@ -19,9 +19,6 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.payments TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.rents TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.role_requests TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.variable_fees TO ssbd02mol;
-GRANT SELECT ON TABLE public.tenants TO ssbd02mol;
-GRANT SELECT ON TABLE public.owners TO ssbd02mol;
-GRANT SELECT ON TABLE public.access_levels TO ssbd02mol;
 
 GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO ssbd02auth;
 GRANT SELECT ON TABLE public.personal_data TO ssbd02auth;
@@ -34,6 +31,10 @@ GRANT SELECT ON TABLE public.owners TO ssbd02auth;
 GRANT SELECT ON TABLE public.access_levels TO ssbd02auth;
 GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02auth;
 
+GRANT SELECT ON TABLE public.tenants TO ssbd02mol;
+GRANT SELECT ON TABLE public.personal_data TO ssbd02mol;
+GRANT SELECT, INSERT ON TABLE public.owners TO ssbd02mol;
+GRANT SELECT, INSERT, UPDATE ON TABLE public.access_levels TO ssbd02mol;
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
                           modified_at, created_by, modified_by, active)
