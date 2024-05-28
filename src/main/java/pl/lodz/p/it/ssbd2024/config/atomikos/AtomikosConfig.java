@@ -5,6 +5,8 @@ import com.atomikos.icatch.jta.UserTransactionManager;
 import jakarta.transaction.SystemException;
 import jakarta.transaction.TransactionManager;
 import jakarta.transaction.UserTransaction;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -17,7 +19,11 @@ import org.springframework.transaction.jta.JtaTransactionManager;
 
 @Configuration
 @EnableTransactionManagement(order = 0)
+@Slf4j
 public class AtomikosConfig {
+
+    @Value("${transaction.timeout}")
+    private int transactionTimeout;
 
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
@@ -53,7 +59,7 @@ public class AtomikosConfig {
 
         TransactionManager atomikosTransactionManager = atomikosTransactionManager();
         JtaTransactionManager jtaTransactionManager = new JtaTransactionManager(userTransaction, atomikosTransactionManager);
-        jtaTransactionManager.setDefaultTimeout(5);
+        jtaTransactionManager.setDefaultTimeout(transactionTimeout);
         return jtaTransactionManager;
     }
 }

@@ -6,12 +6,12 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.jta.JtaTransactionManager;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 import pl.lodz.p.it.ssbd2024.model.AbstractEntity;
 
@@ -27,6 +27,9 @@ public class TransactionAspect {
     public void transactionalMethods(Transactional transactional) {
     }
 
+    @Value("${transaction.timeout}")
+    private int transactionTimeout;
+
     @Around(value = "transactionalMethods(transactional)", argNames = "jp, transactional")
     public Object logTransaction(ProceedingJoinPoint jp, Transactional transactional) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -35,7 +38,8 @@ public class TransactionAspect {
         String callerMethod = jp.getSignature().getName();
         String txId = UUID.randomUUID().toString();
         log.info("Transaction {} started by {} in {}.{}", txId, username, callerClass, callerMethod);
-        log.info("Transaction {} info: propagation={}, isolation={}, readOnly={}, timeout={}", txId, transactional.propagation(), transactional.isolation(), transactional.readOnly(), transactional.timeout());
+        int timeout = transactional.timeout() > 0 ? transactional.timeout() : transactionTimeout;
+        log.info("Transaction {} info: propagation={}, isolation={}, readOnly={}, timeout={}", txId, transactional.propagation(), transactional.isolation(), transactional.readOnly(), timeout);
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationImpl(txId));
         String args = parsArgs(jp.getArgs());
         if (args != null) {
