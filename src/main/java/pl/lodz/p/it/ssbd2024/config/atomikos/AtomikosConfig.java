@@ -36,7 +36,7 @@ public class AtomikosConfig {
     @Bean
     public UserTransaction userTransaction() throws SystemException {
         J2eeUserTransaction userTransactionImp = new J2eeUserTransaction();
-        userTransactionImp.setTransactionTimeout(5);
+        userTransactionImp.setTransactionTimeout(transactionTimeout);
         return userTransactionImp;
     }
 
