@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.AdministratorOwnRoleRemovalException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
@@ -24,7 +25,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import java.util.Optional;
 import java.util.UUID;
 
-@Transactional(rollbackFor = NotFoundException.class)
+@Transactional(rollbackFor = NotFoundException.class, propagation = Propagation.REQUIRES_NEW)
 @Service
 @RequiredArgsConstructor
 public class AdministratorServiceImpl implements AdministratorService {
@@ -34,7 +35,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
+    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class}, propagation = Propagation.REQUIRES_NEW)
     public Page<Administrator> getAllFiltered(Specification<Administrator> specification, Pageable pageable) {
         return administratorRepository.findAll(specification, pageable);
     }

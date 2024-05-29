@@ -7,6 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.util.KeyReader;
 
 import java.io.IOException;
@@ -20,6 +22,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.MANDATORY)
 public class JwtService {
     private final JwtEncoder jwtEncoder;
     private final JwtEncoder refreshTokenEncoder;

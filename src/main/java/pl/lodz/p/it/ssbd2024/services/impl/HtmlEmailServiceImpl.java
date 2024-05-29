@@ -8,6 +8,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 import pl.lodz.p.it.ssbd2024.services.HtmlEmailService;
@@ -17,6 +19,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@Transactional(propagation = Propagation.MANDATORY)
 @RequiredArgsConstructor
 public class HtmlEmailServiceImpl implements HtmlEmailService {
     private final JavaMailSender mailSender;
