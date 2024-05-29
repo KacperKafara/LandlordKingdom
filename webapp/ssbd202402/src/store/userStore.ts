@@ -16,14 +16,32 @@ type UserStore = {
 
 export type Role = "administrator" | "tenant" | "owner";
 
+export const roleMapping: Record<string, string> = {
+  ADMINISTRATOR: "admin",
+  TENANT: "tenant",
+  OWNER: "owner",
+};
+
+export const rolePriority: Record<string, number> = {
+  ADMINISTRATOR: 0,
+  OWNER: 1,
+  TENANT: 2,
+};
+
+const getActiveRole = (roles: string[]): string =>
+  roles.sort((a, b) => rolePriority[a] - rolePriority[b]).at(0)!;
+
 const LSToken = localStorage.getItem("token");
 const LSRefreshToken = localStorage.getItem("refreshToken");
 
+const decodedLSToken = LSToken === null ? undefined : decodeJwt(LSToken!);
+
 export const useUserStore = create<UserStore>((set) => ({
   token: LSToken === null ? undefined : LSToken,
-  id: LSToken === null ? undefined : decodeJwt(LSToken).sub,
-  roles: LSToken === null ? undefined : decodeJwt(LSToken).authorities,
-  activeRole: LSToken === null ? undefined : decodeJwt(LSToken).authorities[0],
+  id: LSToken === null ? undefined : decodedLSToken!.sub,
+  roles: LSToken === null ? undefined : decodedLSToken!.authorities,
+  activeRole:
+    LSToken === null ? undefined : getActiveRole(decodedLSToken!.authorities),
   refreshToken: LSRefreshToken === null ? undefined : LSRefreshToken,
   setToken: (token: string) =>
     set(() => {
@@ -33,7 +51,7 @@ export const useUserStore = create<UserStore>((set) => ({
         token,
         id: payload.sub,
         roles: payload.authorities,
-        activeRole: payload.authorities[0],
+        activeRole: getActiveRole(payload.authorities),
       };
     }),
   clearToken: () =>

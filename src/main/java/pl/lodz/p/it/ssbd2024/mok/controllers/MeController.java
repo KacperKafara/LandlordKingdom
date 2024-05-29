@@ -1,8 +1,9 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Scope;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +26,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@Scope("prototype")
 @RequestMapping("/me")
 @RequiredArgsConstructor
+@Slf4j
 public class MeController {
-
+    private final HttpServletRequest servletRequest;
     private final UserService userService;
     private final Signer signer;
     private final TimezoneService timezoneService;
@@ -165,5 +166,17 @@ public class MeController {
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
+    }
+
+
+    @PostMapping("/role-view-changed")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Void> logRoleViewChange(@RequestBody RoleViewChangeInformation roleViewChangeInformation) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID id = UUID.fromString(jwt.getSubject());
+        log.info("User with id: {}, changed view to role: {}, from address IP: {}",
+                id, roleViewChangeInformation.role(), servletRequest.getRemoteAddr());
+        return ResponseEntity.ok().build();
     }
 }

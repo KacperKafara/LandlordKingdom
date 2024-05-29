@@ -30,11 +30,7 @@ public class ErrorCodes {
     public static final String ACCESS_DENIED = "accessDenied";
     public static final String JWT_TOKEN_INVALID = "jwtTokenInvalid";
     public static final String VALIDATION_ERROR = "validationError";
-    public static final String ADDRESS_ASSIGNED_TO_OTHER_LOCAL = "addressAssignedToOtherLocal";
-    public static final String INVALID_LOCAL_STATE = "invalidLocalState";
-    public static final String LOCAL_ALREADY_RENTED = "localAlreadyRented";
-    public static final String ROLE_REQUEST_ALREADY_EXISTS = "roleRequestAlreadyExists";
-    public static final String USER_ALREADY_HAS_ROLE = "useAlreadyHasRole";
-    public static final String WRONG_END_DATE = "wrongEndDate";
-
+    public static final String ROLLBACK = "rollback";
+    public static final String UNEXPECTED_ROLLBACK = "unexpectedRollback";
+    public static final String TRANSACTION = "transaction";
 }

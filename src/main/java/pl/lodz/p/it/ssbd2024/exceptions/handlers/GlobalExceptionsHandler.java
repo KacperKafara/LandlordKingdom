@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 
+import com.atomikos.icatch.RollbackException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceException;
 import org.hibernate.exception.GenericJDBCException;
@@ -7,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.jwt.JwtValidationException;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -87,5 +90,20 @@ public class GlobalExceptionsHandler {
     @ExceptionHandler(SQLException.class)
     ResponseEntity<ExceptionResponse> handleSQLException(SQLException e) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
+    }
+
+    @ExceptionHandler(RollbackException.class)
+    ResponseEntity<ExceptionResponse> handleRollbackException(RollbackException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.ROLLBACK, ErrorCodes.ROLLBACK));
+    }
+
+    @ExceptionHandler(UnexpectedRollbackException.class)
+    ResponseEntity<ExceptionResponse> handleUnexpectedRollbackException(UnexpectedRollbackException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNEXPECTED_ROLLBACK, ErrorCodes.UNEXPECTED_ROLLBACK));
+    }
+
+    @ExceptionHandler(TransactionException.class)
+    ResponseEntity<ExceptionResponse> handleTransactionException(TransactionException e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TRANSACTION, ErrorCodes.TRANSACTION));
     }
 }
