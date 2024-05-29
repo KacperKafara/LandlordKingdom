@@ -188,7 +188,7 @@ const UserDetailsPage: FC = () => {
                 </Button>
               ) : (
                 <Button onClick={() => addAdminRole(data?.data.id || "")}>
-                  {t("userDetailsPage.role.add.tenant")}
+                  {t("userDetailsPage.role.add.administrator")}
                 </Button>
               )}
             </div>
