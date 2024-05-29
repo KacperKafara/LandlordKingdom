@@ -16,6 +16,7 @@ import {
 import MyAccountButton from "./MyAccountButton";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { ModeToggle } from "@/components/ui/toggle-theme";
+import { useChangeRoleView } from "@/data/useChangeRoleView";
 
 export type NavigationLink = {
   path: string;
@@ -69,6 +70,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const navigate = useNavigate();
   const { activeRole, setActiveRole } = useUserStore();
   const { roles } = useUserStore();
+  const { roleChanged } = useChangeRoleView();
 
   const role_mapping: { [key: string]: string } = {
     ADMINISTRATOR: "admin",
@@ -127,7 +129,10 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
               <DropdownMenuSeparator />
               {roles?.map((role, idx) => (
                 <DropdownMenuItem
-                  onClick={() => setActiveRole(role)}
+                  onClick={() => {
+                    setActiveRole(role);
+                    roleChanged({ role });
+                  }}
                   asChild
                   key={idx}
                 >

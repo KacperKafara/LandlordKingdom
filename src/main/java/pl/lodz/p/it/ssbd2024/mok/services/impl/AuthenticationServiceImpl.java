@@ -139,6 +139,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         String theme = user.getTheme() != null ?
                 user.getTheme().getType().toLowerCase() : "light";
 
+        log.info("Session started for user: {} - {}, from address IP: {}", login, user.getId(), ip);
         return Map.of(
                 "token", jwt,
                 "refreshToken", refreshToken,
