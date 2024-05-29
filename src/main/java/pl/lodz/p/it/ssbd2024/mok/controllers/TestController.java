@@ -38,7 +38,7 @@ public class TestController {
         User user = userService.getUserById(id);
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), List.of("ADMINISTRATOR", "USER")));
+        return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken( user.getId(), user.getLogin(), List.of("ADMINISTRATOR", "USER")));
     }
 
     @PreAuthorize("permitAll()")
