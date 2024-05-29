@@ -10,4 +10,5 @@ public class ExceptionMessages {
     public static final String ACCESS_DENIED = "Access denied";
     public static final String OPTIMISTIC_LOCK = "There was a conflict with the data you are trying to access. Please try again.";
     public static final String PERSISTENCE_ERROR = "Problem occurred while trying to persist data";
+    public static final String NOT_FOUND = "Endpoint not found";
 }
