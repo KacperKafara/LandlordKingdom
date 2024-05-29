@@ -6,12 +6,16 @@ import { useTranslation } from "react-i18next";
 import LanguageSelector from "@/components/LanguageSelector";
 import { useUserStore } from "@/store/userStore";
 import { ModeToggle } from "@/components/ui/toggle-theme";
+import { isTokenValid } from "@/utils/jwt";
 
 const HomePage: FC = () => {
   const { t } = useTranslation();
   const { token, refreshToken } = useUserStore();
 
-  if (token !== undefined || refreshToken !== undefined) {
+  if (
+    token !== undefined ||
+    (refreshToken !== undefined && isTokenValid(refreshToken))
+  ) {
     return <Navigate to="/login" />;
   }
 
