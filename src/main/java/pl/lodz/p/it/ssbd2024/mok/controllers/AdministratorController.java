@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,6 +17,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
 import java.util.UUID;
 
 @RestController
+@Scope("prototype")
 @RequestMapping("/admins")
 @RequiredArgsConstructor
 public class AdministratorController {

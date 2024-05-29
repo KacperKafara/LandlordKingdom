@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.query.SemanticException;
 import org.hibernate.query.sqm.PathElementException;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Scope("prototype")
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {

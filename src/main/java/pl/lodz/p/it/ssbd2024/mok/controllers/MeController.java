@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Scope("prototype")
 @RequestMapping("/me")
 @RequiredArgsConstructor
 public class MeController {
