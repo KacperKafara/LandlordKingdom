@@ -154,7 +154,7 @@ public class AuthController {
 
         try {
             Map<String, String> response = authenticationService.singInOAuth(token, servletRequest.getRemoteAddr(), payload);
-            if(response.containsKey("token")) {
+            if(response.containsKey("created")) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {
                 return ResponseEntity.ok(new AuthenticationResponse(response.get("token"), response.get("refreshToken"), response.get("theme")));
