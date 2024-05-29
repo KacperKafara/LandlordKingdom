@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
+import org.aspectj.weaver.ast.Not;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Application;
@@ -7,7 +8,6 @@ import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidRelationException;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -27,7 +27,7 @@ public interface LocalService {
 
     Local editLocal(UUID id, Local local) throws NotFoundException;
 
-    Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState;
+    Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState, NotFoundException;
 
     Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
 
@@ -39,9 +39,9 @@ public interface LocalService {
 
     Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState;
 
-    void deleteApplication(UUID applicationId, UUID userId) throws NotFoundException, InvalidRelationException;
+    void deleteApplication(UUID applicationId, UUID userId) throws NotFoundException;
 
-    Local approveLocal(UUID id);
+    Local approveLocal(UUID id) throws NotFoundException;
 
-    List<LocalReportResponse> getAllReports(UUID ownerId);
+    List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException;
 }

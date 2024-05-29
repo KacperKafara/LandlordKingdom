@@ -11,7 +11,6 @@ import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidRelationException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
@@ -65,7 +64,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState {
+    public Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState, NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -102,7 +101,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public void deleteApplication(UUID applicationId, UUID userId) throws NotFoundException, InvalidRelationException {
+    public void deleteApplication(UUID applicationId, UUID userId) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -114,7 +113,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<LocalReportResponse> getAllReports(UUID ownerId) {
+    public List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

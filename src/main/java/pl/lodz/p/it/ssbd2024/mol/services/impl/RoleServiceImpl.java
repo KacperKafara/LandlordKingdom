@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.mol.dto.GetRoleResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
-import pl.lodz.p.it.ssbd2024.exceptions.UserIsOwnerAlreadyException;
+import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RoleRequestRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.UserMolRepository;
@@ -30,7 +30,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public GetRoleResponse getRole(UUID tenantId) throws RoleRequestAlreadyExistsException, UserIsOwnerAlreadyException {
+    public GetRoleResponse requestRole(UUID tenantId) throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -42,7 +42,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public void delete(UUID id) throws NotFoundException {
+    public void reject(UUID id) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
