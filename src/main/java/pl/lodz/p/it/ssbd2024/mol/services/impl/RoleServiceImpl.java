@@ -24,6 +24,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRequestRepository roleRequestRepository;
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public GetRoleResponse getAll() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

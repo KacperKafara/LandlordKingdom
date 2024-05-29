@@ -37,11 +37,11 @@ public interface LocalService {
 
     Local editLocalByAdmin(UUID id, Local newLocal) throws NotFoundException;
 
-    Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState;
-
-    void deleteApplication(UUID applicationId, UUID userId) throws NotFoundException;
-
     Local approveLocal(UUID id) throws NotFoundException;
 
+    Local rejectLocal(UUID id) throws NotFoundException;
+
     List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException;
+
+    Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState;
 }

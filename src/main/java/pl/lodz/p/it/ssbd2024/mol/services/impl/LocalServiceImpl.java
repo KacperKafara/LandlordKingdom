@@ -94,26 +94,26 @@ public class LocalServiceImpl implements LocalService {
     }
 
     @Override
-    @PreAuthorize("hasRole('TENANT')")
-    public Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    @PreAuthorize("hasRole('TENANT')")
-    public void deleteApplication(UUID applicationId, UUID userId) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Local approveLocal(UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public Local rejectLocal(UUID id) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     @PreAuthorize("hasRole('OWNER')")
     public List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

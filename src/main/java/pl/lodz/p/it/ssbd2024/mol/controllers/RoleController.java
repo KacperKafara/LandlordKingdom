@@ -35,7 +35,7 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> deleteRoleRequest(@PathVariable UUID id) {
+    public ResponseEntity<Void> rejectRoleRequest(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

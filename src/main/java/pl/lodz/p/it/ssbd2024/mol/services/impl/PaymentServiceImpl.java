@@ -20,7 +20,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<Payment> getLocalPayments(UUID localId, UUID ownerId) {
+    public List<Payment> getRentPayments(UUID rentId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

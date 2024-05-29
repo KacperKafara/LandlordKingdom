@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public interface PaymentService {
 
-    List<Payment> getLocalPayments(UUID localId, UUID ownerId);
+    List<Payment> getRentPayments(UUID rentId);
 
     Payment create(Payment payment) throws NotFoundException;
 }

@@ -23,15 +23,15 @@ public class MeTenantController {
     private final RoleService roleService;
     private final RentService rentService;
 
-    @PostMapping("/getRole")
+    @PostMapping("/request-role")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<GetRoleResponse> getRole() {
+    public ResponseEntity<GetRoleResponse> requestRole() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @GetMapping("/rents")
+    @GetMapping("/current-rents")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getRents() {
+    public ResponseEntity<List<RentResponse>> getCurrentRents() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -53,7 +53,7 @@ public class MeTenantController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PostMapping("/rents/{id}/variableFee")
+    @PostMapping("/rents/{id}/variable-fee")
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<VariableFeeResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest) {
         throw new UnsupportedOperationException("Not supported yet.");

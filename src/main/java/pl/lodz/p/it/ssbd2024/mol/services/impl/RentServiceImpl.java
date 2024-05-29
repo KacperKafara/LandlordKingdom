@@ -25,20 +25,20 @@ public class RentServiceImpl implements RentService {
     private final VariableFeeRepository variableFeeRepository;
 
     @Override
-    @PreAuthorize("hasRole('TENANT')")
+    @PreAuthorize("hasAnyRole('TENANT', 'OWNER')")
     public Rent getRent(UUID id) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<Rent> getCurrentRents(UUID ownerId) {
+    public List<Rent> getCurrentOwnerRents(UUID userId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Rent payForRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException {
+    public Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -50,7 +50,7 @@ public class RentServiceImpl implements RentService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public List<Rent> getCurrentRentsForTenant(UUID tenantId) {
+    public List<Rent> getCurrentTenantRents(UUID tenantId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

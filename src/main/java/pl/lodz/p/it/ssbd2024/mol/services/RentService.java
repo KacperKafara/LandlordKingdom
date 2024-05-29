@@ -12,13 +12,13 @@ public interface RentService {
 
     Rent getRent(UUID id) throws NotFoundException;
 
-    List<Rent> getCurrentRents(UUID ownerId);
+    List<Rent> getCurrentOwnerRents(UUID ownerId);
 
-    Rent payForRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException;
+    Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException;
 
     Rent editEndDate(UUID rentId, UUID ownerId, Rent rent) throws WrongEndDateException, NotFoundException;
 
-    List<Rent> getCurrentRentsForTenant(UUID tenantId);
+    List<Rent> getCurrentTenantRents(UUID tenantId);
 
     List<Rent> getArchivalRentsForTenant(UUID tenantId);
 }
