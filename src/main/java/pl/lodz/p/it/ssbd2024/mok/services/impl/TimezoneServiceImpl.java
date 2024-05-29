@@ -19,8 +19,7 @@ public class TimezoneServiceImpl implements TimezoneService {
 
     @Override
     @PreAuthorize("isAuthenticated()")
-    public Timezone findByTimezoneName(String timezoneName) throws NotFoundException {
-        return timezoneRepository.findByName(timezoneName).orElseThrow(() ->
-                new NotFoundException("Timezone not found", ErrorCodes.TIMEZONE_NOT_FOUND));
+    public Timezone findByTimezoneName(String timezoneName) {
+        return timezoneRepository.findByName(timezoneName).orElse(null);
     }
 }

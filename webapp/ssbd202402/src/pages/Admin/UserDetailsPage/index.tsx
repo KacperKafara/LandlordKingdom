@@ -133,8 +133,11 @@ const UserDetailsPage: FC = () => {
                       }
                     />
                     <DataField
+                      className="col-span-2"
                       label={t("userDetailsPage.active")}
-                      value={data?.data.active ? "true" : "false"}
+                      value={
+                        data?.data.active ? t("common.yes") : t("common.no")
+                      }
                     />
                     <DataField
                       label={t("userDetailsPage.lastSuccessfulLogin")}
