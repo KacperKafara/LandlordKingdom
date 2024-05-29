@@ -157,7 +157,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             }
 
             List<String> roles = userService.getUserRoles(user.getId());
-            String userToken = jwtService.generateToken(user.getId(), roles);
+            String userToken = jwtService.generateToken(user.getId(), user.getLogin(), roles);
             String refreshToken = jwtService.generateRefreshToken(user.getId());
             String theme = user.getTheme() != null ?
                     user.getTheme().getType().toLowerCase() : "light";

@@ -25,8 +25,9 @@ public interface RentRepository extends JpaRepository<Rent, UUID>{
     @PreAuthorize("hasRole('TENANT')")
     Optional<Rent> findByIdAndTenantId(UUID id, UUID tenantId);
 
+    @NonNull
     @PreAuthorize("permitAll()")
-    List<Rent> getAll();
+    List<Rent> findAll();
 
     @PreAuthorize("hasRole('TENANT')")
     List<Rent> findAllByTenantIdAndEndDateBefore(UUID tenantId, LocalDate endDate);
