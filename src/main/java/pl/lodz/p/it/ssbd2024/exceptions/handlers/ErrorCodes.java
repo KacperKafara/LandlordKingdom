@@ -30,5 +30,7 @@ public class ErrorCodes {
     public static final String ACCESS_DENIED = "accessDenied";
     public static final String JWT_TOKEN_INVALID = "jwtTokenInvalid";
     public static final String VALIDATION_ERROR = "validationError";
-
+    public static final String ROLLBACK = "rollback";
+    public static final String UNEXPECTED_ROLLBACK = "unexpectedRollback";
+    public static final String TRANSACTION = "transaction";
 }
