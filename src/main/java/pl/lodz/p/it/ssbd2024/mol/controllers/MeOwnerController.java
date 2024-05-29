@@ -29,6 +29,12 @@ public class MeOwnerController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @PostMapping("/locals/add")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<LocalResponse> addNewLocal(@RequestBody LocalForm localForm) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     @GetMapping("/locals/{id}/applications")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<List<GetOwnLocalApplicationsResponse>> getOwnLocalApplications(@PathVariable UUID id) {
@@ -38,6 +44,12 @@ public class MeOwnerController {
     @PostMapping("/locals/{id}/rent")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<AcceptApplicationResponse> acceptApplication(@PathVariable UUID id, @RequestBody AcceptApplicationRequest acceptApplicationRequest) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PostMapping("/locals/{id}/generateReport")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<LocalReportResponse> generateReportData(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
