@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.mol.repositories.PaymentRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.PaymentService;
@@ -19,7 +20,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<Payment> getLocalPayments(UUID localId, UUID ownerId) {
+    public List<Payment> getRentPayments(UUID rentId) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Payment create(Payment payment) throws NotFoundException {
+        return null;
     }
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.VariableFeeRepository;
@@ -18,7 +19,7 @@ public class VariableFeeServiceImpl implements VariableFeeService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public VariableFee create(VariableFee fee) {
+    public VariableFee create(VariableFee fee) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.model.Address;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,4 +22,8 @@ public interface AddressRepository extends JpaRepository<Address, UUID> {
     @NonNull
     @PreAuthorize("isAuthenticated()")
     Optional<Address> findById(@NonNull UUID id);
+
+    @NonNull
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'OWNER')")
+    List<Address> findAll();
 }

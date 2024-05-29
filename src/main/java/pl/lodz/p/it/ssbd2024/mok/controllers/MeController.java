@@ -179,8 +179,9 @@ public class MeController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());
-        log.info("User with id: {}, changed view to role: {}, from address IP: {}",
-                id, roleViewChangeInformation.role(), servletRequest.getRemoteAddr());
+        String login = jwt.getClaim("login").toString();
+        log.info("User: {} - {} changed view to role: {}, from address IP: {}",
+                login, id, roleViewChangeInformation.role(), servletRequest.getRemoteAddr());
         return ResponseEntity.ok().build();
     }
 }

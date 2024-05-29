@@ -134,7 +134,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage());
         }
 
-        String jwt = jwtService.generateToken(verificationToken.getUser().getId(), getUserRoles(verificationToken.getUser()));
+        String jwt = jwtService.generateToken(verificationToken.getUser().getId(), verificationToken.getUser().getLogin(), getUserRoles(verificationToken.getUser()));
         String refreshToken = jwtService.generateRefreshToken(verificationToken.getUser().getId());
         String theme = user.getTheme() != null ?
                 user.getTheme().getType().toLowerCase() : "light";
@@ -213,7 +213,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         if (jwtService.validateRefreshExpiration(token)) {
             return Map.of(
-                    "token", jwtService.generateToken(userId, getUserRoles(user)),
+                    "token", jwtService.generateToken(userId, user.getLogin(), getUserRoles(user)),
                     "refreshToken", refreshToken);
         }
 

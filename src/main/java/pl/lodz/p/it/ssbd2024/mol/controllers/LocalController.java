@@ -51,9 +51,15 @@ public class LocalController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PatchMapping("/state")
+    @PatchMapping("/{id}/approve")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<LocalResponse> approveLocal(@RequestBody ApproveRequest request) {
+    public ResponseEntity<LocalResponse> approveLocal(@PathVariable UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PatchMapping("/{id}/reject")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<LocalResponse> rejectLocal(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -76,6 +82,7 @@ public class LocalController {
     }
 
     @PatchMapping("/{id}/archive")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<LocalResponse> archiveLocal(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

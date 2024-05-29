@@ -17,8 +17,17 @@ import java.util.UUID;
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public interface LocalRepository extends JpaRepository<Local, UUID> {
+
+    @NonNull
+    @PreAuthorize("permitAll()")
+    Optional<Local> findById(@NonNull UUID id);
+
     @PreAuthorize("hasRole('OWNER')")
     List<Local> findByAddress(Address address);
+
+    @NonNull
+    @PreAuthorize("permitAll()")
+    Local saveAndFlush(@NonNull Local local);
 
     @PreAuthorize("hasRole('OWNER')")
     List<Local> findAllByOwnerId(UUID id);

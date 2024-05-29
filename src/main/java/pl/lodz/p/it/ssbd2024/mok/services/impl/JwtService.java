@@ -43,7 +43,7 @@ public class JwtService {
     }
 
     @PreAuthorize("permitAll()")
-    public String generateToken(UUID id, List<String> roles) {
+    public String generateToken(UUID id, String login, List<String> roles) {
         Instant now = Instant.now();
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("team-2.proj-sum.it.p.lodz.pl")
@@ -51,6 +51,7 @@ public class JwtService {
                 .expiresAt(now.plus(jwtExpiration, ChronoUnit.HOURS))
                 .subject(id.toString())
                 .claim("authorities", roles)
+                .claim("login", login)
                 .build();
 
         var encoderParameters = JwtEncoderParameters.from(JwsHeader.with(SignatureAlgorithm.RS256).build(), claims);

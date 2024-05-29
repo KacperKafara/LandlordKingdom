@@ -3,7 +3,7 @@ import { api } from "./api";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useTranslation } from "react-i18next";
 import { ErrorCode } from "@/@types/errorCode";
-import {AxiosError} from "axios";
+import { AxiosError } from "axios";
 
 export const useBlockUser = () => {
   const queryClient = useQueryClient();
@@ -15,8 +15,9 @@ export const useBlockUser = () => {
       await api.post(`/users/${userId}/block`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["filteredUsers"] });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({
+        queryKey: ["users", "user", "filteredUsers"],
+      });
       toast({
         title: t("block.toast.title.success"),
         description: t("block.toast.description.blockSuccess"),
@@ -46,8 +47,9 @@ export const useUnblockUser = () => {
       await api.post(`/users/${userId}/unblock`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["filteredUsers"] });
-      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({
+        queryKey: ["users", "filteredUsers", "user"],
+      });
       toast({
         title: t("block.toast.title.success"),
         description: t("block.toast.description.unblockSuccess"),

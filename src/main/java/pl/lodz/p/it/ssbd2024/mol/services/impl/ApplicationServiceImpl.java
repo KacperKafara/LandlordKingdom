@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
@@ -28,7 +29,7 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<Application> getLocalApplications(UUID id) {
+    public List<Application> getLocalApplications(UUID localId, UUID ownerId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -52,13 +53,15 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public void createApplication(Application application) throws NotFoundException {
+    public Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public void removeApplication(Application application) throws NotFoundException {
+    public void removeApplication(UUID localId, UUID userId) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
 }
