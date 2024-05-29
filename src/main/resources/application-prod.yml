@@ -68,3 +68,6 @@ scheduler:
 account:
   removeUnverifiedAccountAfterHours: 24
   deactivateAccountAfterDays: 31
+
+transaction:
+  timeout: 5

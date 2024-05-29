@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.mol.exceptions.WrongEndDateException;
+import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.PaymentRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.VariableFeeRepository;
@@ -24,32 +25,32 @@ public class RentServiceImpl implements RentService {
     private final VariableFeeRepository variableFeeRepository;
 
     @Override
+    @PreAuthorize("hasAnyRole('TENANT', 'OWNER')")
+    public Rent getRent(UUID id) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public List<Rent> getCurrentOwnerRents(UUID userId) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Rent editEndDate(UUID rentId, UUID ownerId, Rent rent) throws WrongEndDateException, NotFoundException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     @PreAuthorize("hasRole('TENANT')")
-    public Rent getRent(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    @PreAuthorize("hasRole('OWNER')")
-    public List<Rent> getCurrentRents(UUID ownerId) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    @PreAuthorize("hasRole('OWNER')")
-    public Rent payForRent(UUID rentId, UUID ownerId, Payment payment) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    @PreAuthorize("hasRole('OWNER')")
-    public Rent editEndDate(UUID rentId, UUID ownerId, Rent rent) throws WrongEndDateException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    @PreAuthorize("hasRole('TENANT')")
-    public List<Rent> getCurrentRentsForTenant(UUID tenantId) {
+    public List<Rent> getCurrentTenantRents(UUID tenantId) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

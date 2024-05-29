@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/locals")
 @RequiredArgsConstructor
+@Scope("prototype")
 @Transactional(propagation = Propagation.NEVER)
 public class LocalController {
     private final LocalService localService;
@@ -49,9 +51,15 @@ public class LocalController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PatchMapping("/state")
+    @PatchMapping("/{id}/approve")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<LocalResponse> approveLocal(@RequestBody ApproveRequest request) {
+    public ResponseEntity<LocalResponse> approveLocal(@PathVariable UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @PatchMapping("/{id}/reject")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<LocalResponse> rejectLocal(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -74,6 +82,7 @@ public class LocalController {
     }
 
     @PatchMapping("/{id}/archive")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<LocalResponse> archiveLocal(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/me")
 @RequiredArgsConstructor
+@Scope("prototype")
 @Transactional(propagation = Propagation.NEVER)
 public class MeOwnerController {
     private final LocalService localService;
@@ -65,21 +67,27 @@ public class MeOwnerController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @GetMapping("/rents/{id}/payments")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<List<RentPaymentsResponse>> getRentPayments(@PathVariable UUID id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     @PatchMapping("/locals/{id}/leave")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<LeaveLocalResponse> leaveLocal(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PatchMapping("/locals/{id}/fixedFee")
+    @PatchMapping("/locals/{id}/fixed-fee")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<SetFixedFeeResponse> setFixedFee(@PathVariable UUID id, @RequestBody SetFixedFeeRequest setFixedFeeRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PatchMapping("/rents/{id}/endDate")
+    @PatchMapping("/rents/{id}/end-date")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentResponse> setEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
+    public ResponseEntity<RentResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

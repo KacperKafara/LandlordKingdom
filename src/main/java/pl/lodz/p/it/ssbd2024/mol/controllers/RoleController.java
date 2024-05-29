@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
@@ -15,6 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/roles")
 @RequiredArgsConstructor
+@Scope("prototype")
 @Transactional(propagation = Propagation.NEVER)
 public class RoleController {
     private final RoleService roleService;
@@ -33,7 +35,7 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<Void> deleteRoleRequest(@PathVariable UUID id) {
+    public ResponseEntity<Void> rejectRoleRequest(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }
