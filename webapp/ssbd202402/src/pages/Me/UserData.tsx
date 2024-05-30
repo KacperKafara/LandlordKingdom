@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { useTimezoneSelect, allTimezones } from "react-timezone-select";
+import {toast} from "@/components/ui/use-toast.ts";
 
 const updateUserSchema = (t: TFunction) =>
   z.object({
@@ -55,6 +56,13 @@ const UserData: FC = () => {
 
   const handleUserSubmit = form.handleSubmit((request) => {
     let etag: string = data?.headers.etag;
+    if (!etag) {
+        toast({
+            variant: "destructive",
+            title: t("userDataPage.error"),
+        })
+        return;
+    }
     etag = etag.substring(1, etag.length - 1);
     putMutation.mutate({ request, etag });
   });
