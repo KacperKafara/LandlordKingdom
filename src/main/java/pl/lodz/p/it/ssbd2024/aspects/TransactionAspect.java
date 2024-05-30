@@ -25,18 +25,14 @@ import java.util.UUID;
 @Component
 public class TransactionAspect {
     @Pointcut("@within(transactional)")
-    public void transactionalMethods(Transactional transactional) {
-    }
-
-    @Pointcut("execution(* org.springframework.data.jpa.repository.JpaRepository+.*(..))")
-    public void repositoryMethods() {
+    private void transactionalMethods(Transactional transactional) {
     }
 
     @Value("${transaction.timeout}")
     private int transactionTimeout;
 
     @Around(value = "transactionalMethods(transactional)", argNames = "jp, transactional")
-    public Object logTransaction(ProceedingJoinPoint jp, Transactional transactional) throws Throwable {
+    private Object logTransaction(ProceedingJoinPoint jp, Transactional transactional) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = "<anonymous>";
 
@@ -111,7 +107,7 @@ public class TransactionAspect {
         }
     }
 
-    String parsArgs(Object[] args) {
+    private String parsArgs(Object[] args) {
         if (args == null || args.length == 0) {
             return null;
         }
@@ -151,7 +147,7 @@ public class TransactionAspect {
         return sb.toString();
     }
 
-    String parseReturnValue(Object args) {
+    private String parseReturnValue(Object args) {
         if (args == null) {
             return null;
         }
