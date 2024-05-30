@@ -1,11 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { useToast } from "@/components/ui/use-toast";
+import {AxiosError} from "axios";
+import {useTranslation} from "react-i18next";
+import {ErrorCode} from "@/@types/errorCode.ts";
 
 export const useAdminRole = () => {
   const { api } = useAxiosPrivate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const {t} = useTranslation();
   const { mutate: addAdminRole } = useMutation({
     mutationFn: async (id: string) => {
       await api.put(`/admins/${id}/add-role`);
@@ -16,6 +20,15 @@ export const useAdminRole = () => {
         title: "Success",
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+    onError: (error: AxiosError) => {
+      toast(
+          {
+            variant: "destructive",
+            title: t("error.baseTitle"),
+            description: t(`errors.${(error.response?.data as ErrorCode).exceptionCode}`),
+          }
+      )
     },
   });
 
@@ -29,6 +42,15 @@ export const useAdminRole = () => {
         title: "Success",
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+    onError: (error: AxiosError) => {
+      toast(
+          {
+            variant: "destructive",
+            title: t("error.baseTitle"),
+            description: t(`errors.${(error.response?.data as ErrorCode).exceptionCode}`),
+          }
+      )
     },
   });
 

@@ -1,11 +1,15 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { useToast } from "@/components/ui/use-toast";
+import {AxiosError} from "axios";
+import {ErrorCode} from "@/@types/errorCode.ts";
+import {useTranslation} from "react-i18next";
 
 export const useOwnerRole = () => {
   const { api } = useAxiosPrivate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const {t} = useTranslation();
   const { mutate: addOwnerRole } = useMutation({
     mutationFn: async (id: string) => {
       await api.put(`/owners/${id}/add-role`);
@@ -16,6 +20,15 @@ export const useOwnerRole = () => {
         title: "Success",
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+    onError: (error: AxiosError<ErrorCode>) => {
+      toast(
+          {
+            variant: "destructive",
+            title: t("error.baseTitle"),
+            description: t(`errors.${(error.response!.data).exceptionCode}`),
+          }
+      )
     },
   });
 
@@ -29,6 +42,15 @@ export const useOwnerRole = () => {
         title: "Success",
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
+    onError: (error: AxiosError<ErrorCode>) => {
+      toast(
+          {
+            variant: "destructive",
+            title: t("error.baseTitle"),
+            description: t(`errors.${(error.response!.data).exceptionCode}`),
+          }
+      )
     },
   });
 

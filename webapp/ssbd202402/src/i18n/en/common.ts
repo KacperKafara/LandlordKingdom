@@ -361,6 +361,9 @@ const errors = {
   identicalEmail: "User with given email address already exists",
   internalServerError:
     "Something went wrong on our end. Please try again later.",
+  accessLevelAssigned: "Access level aleady assigned",
+  accessLevelTaken: "Access level already taken",
+  undefined: "Unexpected error occurred",
 } satisfies {
   [key in ExceptionCode]: string;
 };

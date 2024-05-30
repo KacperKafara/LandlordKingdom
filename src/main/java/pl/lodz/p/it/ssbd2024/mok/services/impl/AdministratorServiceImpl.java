@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyAssignedException;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyTakenException;
 import pl.lodz.p.it.ssbd2024.exceptions.AdministratorOwnRoleRemovalException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
@@ -43,10 +45,13 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Administrator removeAdministratorAccessLevel(UUID id, UUID administratorId) throws NotFoundException, AdministratorOwnRoleRemovalException {
+    public Administrator removeAdministratorAccessLevel(UUID id, UUID administratorId) throws NotFoundException, AdministratorOwnRoleRemovalException, AccessLevelAlreadyTakenException {
         Administrator administrator = administratorRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         if(administrator.getUser().getId().equals(administratorId)){
             throw new AdministratorOwnRoleRemovalException(AdministratorMessages.OWN_ADMINISTRATOR_ROLE_REMOVAL, ErrorCodes.ADMINISTRATOR_OWN_ROLE_REMOVAL);
+        }
+        if (!administrator.isActive()){
+            throw new AccessLevelAlreadyTakenException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);
         }
 
         administrator.setActive(false);
@@ -59,7 +64,7 @@ public class AdministratorServiceImpl implements AdministratorService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Administrator addAdministratorAccessLevel(UUID id) throws NotFoundException {
+    public Administrator addAdministratorAccessLevel(UUID id) throws NotFoundException, AccessLevelAlreadyAssignedException {
         Optional<Administrator> administratorOptional = administratorRepository.findByUserId(id);
 
         Administrator administrator;
@@ -72,7 +77,7 @@ public class AdministratorServiceImpl implements AdministratorService {
         }
 
         if (administrator.isActive()) {
-            return administrator;
+            throw new AccessLevelAlreadyAssignedException(UserExceptionMessages.ACCESS_LEVEL_ASSIGNED, ErrorCodes.ACCESS_LEVEL_ASSIGNED);
         }
 
         administrator.setActive(true);

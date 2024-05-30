@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyAssignedException;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyTakenException;
 import pl.lodz.p.it.ssbd2024.exceptions.AdministratorOwnRoleRemovalException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
@@ -38,7 +40,7 @@ public class AdministratorController {
             administratorService.removeAdministratorAccessLevel(id, administratorId);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (AdministratorOwnRoleRemovalException e) {
+        } catch (AdministratorOwnRoleRemovalException | AccessLevelAlreadyTakenException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
@@ -52,6 +54,8 @@ public class AdministratorController {
             administratorService.addAdministratorAccessLevel(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (AccessLevelAlreadyAssignedException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();

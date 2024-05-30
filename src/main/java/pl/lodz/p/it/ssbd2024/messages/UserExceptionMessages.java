@@ -17,4 +17,6 @@ public class UserExceptionMessages {
     public static final String INACTIVE = "User cannot perform action because is blocked due to inactivity";
     public static final String THEME_NOT_FOUND = "Theme not found";
     public static final String EMAIL_EXISTS = "User with this email already exists";
+    public static final String ACCESS_LEVEL_ASSIGNED = "Access level you are trying to assign is already assigned";
+    public static final String ACCESS_LEVEL_TAKEN = "Access level you are trying to take is already taken";
 }

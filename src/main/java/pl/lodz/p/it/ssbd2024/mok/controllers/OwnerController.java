@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyAssignedException;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyTakenException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
 
@@ -34,6 +36,8 @@ public class OwnerController {
             ownerService.removeOwnerAccessLevel(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (AccessLevelAlreadyTakenException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();
@@ -46,6 +50,8 @@ public class OwnerController {
             ownerService.addOwnerAccessLevel(id);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (AccessLevelAlreadyAssignedException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
 
         return ResponseEntity.ok().build();

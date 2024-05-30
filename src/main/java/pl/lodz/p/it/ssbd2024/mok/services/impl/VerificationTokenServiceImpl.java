@@ -178,7 +178,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
                     .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append)
                     .toString();
         } catch (NoSuchAlgorithmException e) {
-            throw new TokenGenerationException(e.getMessage(), ErrorCodes.INTERNAL_SERVER_ERROR);
+            throw new TokenGenerationException(e.getMessage(), e, ErrorCodes.INTERNAL_SERVER_ERROR);
         }
 
     }

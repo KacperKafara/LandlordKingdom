@@ -10,6 +10,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyAssignedException;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyTakenException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
@@ -40,8 +42,12 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Owner removeOwnerAccessLevel(UUID id) throws NotFoundException {
+    public Owner removeOwnerAccessLevel(UUID id) throws NotFoundException, AccessLevelAlreadyTakenException {
         Owner owner = ownerRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+
+        if (!owner.isActive()){
+            throw new AccessLevelAlreadyTakenException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);
+        }
 
         owner.setActive(false);
         User user = owner.getUser();
@@ -53,7 +59,7 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Owner addOwnerAccessLevel(UUID id) throws NotFoundException {
+    public Owner addOwnerAccessLevel(UUID id) throws NotFoundException, AccessLevelAlreadyAssignedException {
         Optional<Owner> ownerOptional = ownerRepository.findByUserId(id);
 
         Owner owner;
@@ -66,7 +72,7 @@ public class OwnerServiceImpl implements OwnerService {
         }
 
         if (owner.isActive()) {
-            return owner;
+            throw new AccessLevelAlreadyAssignedException(UserExceptionMessages.ACCESS_LEVEL_ASSIGNED, ErrorCodes.ACCESS_LEVEL_ASSIGNED);
         }
 
         owner.setActive(true);

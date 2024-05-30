@@ -32,4 +32,7 @@ export type ExceptionCode =
   | "jwtTokenInvalid"
   | "validationError"
   | "identicalEmail"
-  | "internalServerError";
+  | "internalServerError"
+  | "accessLevelAssigned"
+  | "accessLevelTaken"
+  | "undefined"  ;
