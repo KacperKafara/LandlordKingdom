@@ -14,8 +14,20 @@ interface UpdateUserRequest {
 }
 
 export const fetchUser = async (id: string, api: AxiosInstance) => {
-  const response = await api.get<DetailedUserResponse>(`/users/${id}`);
-  return response;
+  try {
+    const response = await api.get<DetailedUserResponse>(`/users/${id}`);
+    return response;
+  } catch (error) {
+    const axiosError = error as AxiosError;
+    toast({
+      variant: "destructive",
+      title: t("userDataPage.error"),
+      description: t(
+        `errors.${(axiosError.response?.data as ErrorCode).exceptionCode}`
+      ),
+    });
+    return Promise.reject(error);
+  }
 };
 
 export const updateUser = async (
