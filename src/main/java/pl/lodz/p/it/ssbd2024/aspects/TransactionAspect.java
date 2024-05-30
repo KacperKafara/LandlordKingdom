@@ -17,6 +17,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import pl.lodz.p.it.ssbd2024.model.AbstractEntity;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -54,9 +55,8 @@ public class TransactionAspect {
         if(TransactionSynchronizationManager.isActualTransactionActive()) {
             String id;
             try {
-                UUID uuidId = UUID.fromString(TransactionSynchronizationManager.getCurrentTransactionName());
+                UUID uuidId = UUID.fromString(Objects.requireNonNull(TransactionSynchronizationManager.getCurrentTransactionName()));
                 id = uuidId.toString();
-                int timeout = transactional.timeout() > 0 ? transactional.timeout() : transactionTimeout;
                 log.info("Continuing existing transaction {} with propagation {} in method {}.{}", id, transactional.propagation(), callerClass, callerMethod);
             } catch (IllegalArgumentException ignored) {
                 id = txId;
@@ -76,7 +76,7 @@ public class TransactionAspect {
             try {
                 obj = jp.proceed();
             } catch (Throwable e) {
-                log.error("Method {}.{} called by {} failed in transaction {} due {} with message {}", callerClass, callerMethod, username, id, e.getClass().getName(), e.getMessage());
+                log.error("Method {}.{} called by {} failed in transaction {} due {} with message {}", callerClass, callerMethod, username, id, e.getClass().getName(), e.getMessage(), e);
                 throw e;
             }
             String returnValue = parseReturnValue(obj);
@@ -98,7 +98,7 @@ public class TransactionAspect {
             try {
                 obj = jp.proceed();
             } catch (Throwable e) {
-                log.error("Method {}.{} called by {} failed due {} with message {}", callerClass, callerMethod, username, e.getClass().getName(), e.getMessage());
+                log.error("Method {}.{} called by {} failed due {} with message {}", callerClass, callerMethod, username, e.getClass().getName(), e.getMessage(), e);
                 throw e;
             }
             String returnValue = parseReturnValue(obj);
@@ -117,25 +117,30 @@ public class TransactionAspect {
         }
         StringBuilder sb = new StringBuilder();
         for (Object arg : args) {
+            if(arg == null) {
+                continue;
+            }
             if (arg instanceof AbstractEntity abstractEntity) {
                 sb
                         .append(abstractEntity.getClass().getName())
                         .append(abstractEntity)
                         .append(", ");
+            } else {
+                sb.append(arg).append(", ");
             }
-//            else {
-//                sb.append(arg.toString()).append(", ");
-//            }
 
             if (arg instanceof List<?> entities) {
                 for (Object entity : entities) {
+                    if(entity == null) {
+                        continue;
+                    }
                     if (entity instanceof AbstractEntity abstractEntity) {
                         sb
                                 .append(abstractEntity.getClass().getName())
                                 .append(abstractEntity)
                                 .append(", ");
                     } else {
-                        sb.append(entity.toString()).append(", ");
+                        sb.append(entity).append(", ");
                     }
                 }
             }
