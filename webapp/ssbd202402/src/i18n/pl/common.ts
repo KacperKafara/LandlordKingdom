@@ -63,6 +63,16 @@ const userDetailsPage = {
       owner: "Odbierz role właścicela",
       administrator: "Odbierz role administratora",
     },
+    added: {
+      tenant: "Przyznano role najemcy",
+      owner: "Przyznano role własciciela",
+      administrator: "Przyznano role administratora",
+    },
+    removed: {
+      tenant: "Odebrano role najemcy",
+      owner: "Odebrano role własciciela",
+      administrator: "Odebrano role administratora",
+    },
   },
   changeEmail: "Zmień adres email",
   updateEmailAddress: "Zaktualizuj adres email",

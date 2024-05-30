@@ -17,7 +17,7 @@ export const useAdminRole = () => {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Success",
+        title: t("userDetailsPage.role.added.administrator"),
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
@@ -39,7 +39,7 @@ export const useAdminRole = () => {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Success",
+        title: t("userDetailsPage.role.removed.administrator"),
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
