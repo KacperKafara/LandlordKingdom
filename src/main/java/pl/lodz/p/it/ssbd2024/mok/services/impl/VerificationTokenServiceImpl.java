@@ -83,7 +83,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     public String generateEmailVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         emailTokenRepository.deleteEmailVerificationTokenByUserId(user.getId());
-        accountTokenRepository.flush();
+        emailTokenRepository.flush();
         EmailVerificationToken token = new EmailVerificationToken(tokenVal, Instant.now().plus(EmailVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
         return emailTokenRepository.saveAndFlush(token).getToken();
     }
@@ -105,7 +105,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     public String generatePasswordVerificationToken(User user) throws TokenGenerationException {
         String tokenVal = generateSafeToken();
         passwordTokenRepository.deleteByUserId(user.getId());
-        accountTokenRepository.flush();
+        passwordTokenRepository.flush();
         PasswordVerificationToken token = new PasswordVerificationToken(tokenVal, Instant.now().plus(PasswordVerificationToken.EXPIRATION_TIME, ChronoUnit.MINUTES), user);
         return passwordTokenRepository.saveAndFlush(token).getToken();
     }
