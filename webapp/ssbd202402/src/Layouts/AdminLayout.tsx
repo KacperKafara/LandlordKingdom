@@ -11,8 +11,12 @@ const links = (t: TFunction): NavigationLink[] => [
 
 const AdminLayout: FC = () => {
   const { t } = useTranslation();
-  const { roles } = useUserStore();
+  const { roles, activeRole } = useUserStore();
   if (!roles?.includes("ADMINISTRATOR")) {
+    return <Navigate to={"/error"} />;
+  }
+
+  if (activeRole !== "ADMINISTRATOR") {
     return <Navigate to={"/error"} />;
   }
 

@@ -6,8 +6,12 @@ import { useUserStore } from "@/store/userStore";
 const links: NavigationLink[] = [];
 
 const OwnerLayout: FC = () => {
-  const { roles } = useUserStore();
+  const { roles, activeRole } = useUserStore();
   if (!roles?.includes("OWNER")) {
+    return <Navigate to={"/error"} />;
+  }
+
+  if (activeRole !== "OWNER") {
     return <Navigate to={"/error"} />;
   }
 

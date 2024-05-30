@@ -68,8 +68,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { t, i18n } = useTranslation();
   const colors = config[type];
   const navigate = useNavigate();
-  const { activeRole, setActiveRole } = useUserStore();
-  const { roles } = useUserStore();
+  const { roles, activeRole, setActiveRole } = useUserStore();
   const { roleChanged } = useChangeRoleView();
 
   const role_mapping: { [key: string]: string } = {
