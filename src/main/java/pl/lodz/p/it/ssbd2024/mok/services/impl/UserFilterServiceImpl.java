@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mok.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,6 +23,7 @@ public class UserFilterServiceImpl implements UserFilterService {
     private final UserRepository userRepository;
 
     @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void createOrUpdate(UserFilter userFilter) {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
         UserFilter optionalUserFilter =

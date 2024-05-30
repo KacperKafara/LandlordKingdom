@@ -1,11 +1,13 @@
 package pl.lodz.p.it.ssbd2024.mok.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
-import org.springframework.lang.NonNullApi;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,10 +25,16 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, UUID>, JpaSpecificationExecutor<User> {
 
     Optional<User> findByEmail(String email);
+
     Optional<User> findByGoogleId(String googleId);
+
     @NonNull
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     List<User> findAll();
+
+    @NonNull
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    Page<User> findAll(@NonNull Specification specification, @NonNull Pageable pageable);
 
     List<User> getUsersByCreatedAtBeforeAndVerifiedIsFalse(LocalDateTime createdAt);
 
