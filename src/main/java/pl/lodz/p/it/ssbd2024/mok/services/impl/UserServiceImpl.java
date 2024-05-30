@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class}, propagation = Propagation.REQUIRES_NEW)
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class}, propagation = Propagation.MANDATORY)
     public User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException {
         Tenant newTenant = new Tenant();
         newTenant.setActive(true);
