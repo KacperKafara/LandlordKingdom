@@ -72,7 +72,7 @@ public class TransactionAspect {
             try {
                 obj = jp.proceed();
             } catch (Throwable e) {
-                log.error("Method {}.{} called by {} failed in transaction {} due {} with message {}", callerClass, callerMethod, username, id, e.getClass().getName(), e.getMessage(), e);
+                log.error("Method {}.{} called by {} failed in transaction {} due {} with message {}", callerClass, callerMethod, username, id, e.getClass().getName(), e.getMessage());
                 throw e;
             }
             String returnValue = parseReturnValue(obj);
@@ -94,7 +94,7 @@ public class TransactionAspect {
             try {
                 obj = jp.proceed();
             } catch (Throwable e) {
-                log.error("Method {}.{} called by {} failed due {} with message {}", callerClass, callerMethod, username, e.getClass().getName(), e.getMessage(), e);
+                log.error("Method {}.{} called by {} failed due {} with message {}", callerClass, callerMethod, username, e.getClass().getName(), e.getMessage());
                 throw e;
             }
             String returnValue = parseReturnValue(obj);
