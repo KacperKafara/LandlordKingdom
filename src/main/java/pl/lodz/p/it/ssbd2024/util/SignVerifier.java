@@ -18,15 +18,12 @@ import java.util.Base64;
 import java.util.Map;
 import java.util.UUID;
 
-@Component
 public class SignVerifier {
 
-    @Value("${jws.secret}")
-    String secretValue;
+    private final String secretValue;
 
-    @PostConstruct
-    public void init() {
-        secretValue = Base64.getEncoder().encodeToString(secretValue.getBytes());
+    public SignVerifier(String secretValue) {
+        this.secretValue = Base64.getEncoder().encodeToString(secretValue.getBytes());
     }
 
     private boolean verifySignature(String token) throws ParseException, JOSEException {

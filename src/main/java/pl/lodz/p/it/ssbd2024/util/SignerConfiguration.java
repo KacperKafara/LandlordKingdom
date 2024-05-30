@@ -14,4 +14,9 @@ public class SignerConfiguration {
     public Signer getSigner() {
         return new Signer(secretValue);
     }
+
+    @Bean
+    public SignVerifier getSignVerifier() {
+        return new SignVerifier(secretValue);
+    }
 }
