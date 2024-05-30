@@ -86,7 +86,7 @@ public class AuthController {
     @PostMapping("/signin-2fa")
     public ResponseEntity<Void> authenticate2fa(@RequestBody @Valid AuthenticationRequest request) {
         try {
-            authenticationService.generateOTP(request.login(), request.password(), request.language(), servletRequest.getRemoteAddr());
+            authenticationService.generateOTP(request.login(), request.password(), request.language(), servletRequest.getHeader("X-Forwarded-For"));
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
@@ -103,7 +103,7 @@ public class AuthController {
     @PostMapping("/verify-2fa")
     public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid Verify2FATokenRequest request) {
         try {
-            Map<String, String> authResponse = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getRemoteAddr());
+            Map<String, String> authResponse = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getHeader("X-Forwarded-For"));
             return ResponseEntity.ok(new AuthenticationResponse(authResponse.get("token"), authResponse.get("refreshToken"), authResponse.get("theme")));
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
@@ -153,7 +153,7 @@ public class AuthController {
         GoogleOAuth2TokenPayload payload = mapper.readValue(tokenPayload, GoogleOAuth2TokenPayload.class);
 
         try {
-            Map<String, String> response = authenticationService.singInOAuth(token, servletRequest.getRemoteAddr(), payload);
+            Map<String, String> response = authenticationService.singInOAuth(token, servletRequest.getHeader("X-Forwarded-For"), payload);
             if(response.containsKey("created")) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
             } else {

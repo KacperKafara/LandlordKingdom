@@ -40,25 +40,25 @@ public class MeController {
     private final Signer signer;
     private final TimezoneService timezoneService;
 
-@GetMapping
-@PreAuthorize("isAuthenticated()")
-public ResponseEntity<DetailedUserResponse> getUserData() {
-    try {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Jwt jwt = (Jwt) authentication.getPrincipal();
-        UUID id = UUID.fromString(jwt.getSubject());
-        User user = userService.getUserById(id);
-        List<String> roles = userService.getUserRoles(id);
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<DetailedUserResponse> getUserData() {
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Jwt jwt = (Jwt) authentication.getPrincipal();
+            UUID id = UUID.fromString(jwt.getSubject());
+            User user = userService.getUserById(id);
+            List<String> roles = userService.getUserRoles(id);
 
-        return ResponseEntity
-                .ok()
-                .eTag(signer.generateSignature(user.getId(), user.getVersion()))
-                .body(UserMapper.toDetailedUserResponse(user, roles));
+            return ResponseEntity
+                    .ok()
+                    .eTag(signer.generateSignature(user.getId(), user.getVersion()))
+                    .body(UserMapper.toDetailedUserResponse(user, roles));
 
-    } catch (NotFoundException e) {
-        throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
-}
 
     @PutMapping
     @PreAuthorize("isAuthenticated()")
@@ -181,7 +181,7 @@ public ResponseEntity<DetailedUserResponse> getUserData() {
         UUID id = UUID.fromString(jwt.getSubject());
         String login = jwt.getClaim("login").toString();
         log.info("User: {} - {} changed view to role: {}, from address IP: {}",
-                login, id, roleViewChangeInformation.role(), servletRequest.getRemoteAddr());
+                login, id, roleViewChangeInformation.role(), servletRequest.getHeader("X-Forwarded-For"));
         return ResponseEntity.ok().build();
     }
 }
