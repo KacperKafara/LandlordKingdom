@@ -6,8 +6,12 @@ import { useUserStore } from "@/store/userStore";
 const links: NavigationLink[] = [];
 
 const TenantLayout: FC = () => {
-  const { roles } = useUserStore();
+  const { roles, activeRole } = useUserStore();
   if (!roles?.includes("TENANT")) {
+    return <Navigate to={"/error"} />;
+  }
+
+  if (activeRole !== "TENANT") {
     return <Navigate to={"/error"} />;
   }
 
