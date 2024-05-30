@@ -33,4 +33,6 @@ public class ErrorCodes {
     public static final String ROLLBACK = "rollback";
     public static final String UNEXPECTED_ROLLBACK = "unexpectedRollback";
     public static final String TRANSACTION = "transaction";
+    public static final String ACCESS_LEVEL_ASSIGNED = "accessLevelAssigned";
+    public static final String ACCESS_LEVEL_TAKEN = "accessLevelTaken";
 }

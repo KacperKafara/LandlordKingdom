@@ -366,6 +366,9 @@ const errors = {
   validationError: "Błąd walidacji",
   identicalEmail: "Użytkownik o podanym adresie email już istnieje",
   internalServerError: "Coś poszło nie tak po naszej stronie",
+  accessLevelAssigned: "Poziom dostępu został już nadany",
+  accessLevelTaken: "Poziom dostępu został już zabrany",
+  undefined: "Wystpi nieoczekiwany błąd",
 } satisfies {
   [key in ExceptionCode]: string;
 };

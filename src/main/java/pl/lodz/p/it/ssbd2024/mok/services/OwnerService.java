@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2024.mok.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyAssignedException;
+import pl.lodz.p.it.ssbd2024.exceptions.AccessLevelAlreadyTakenException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Owner;
 
@@ -12,7 +14,7 @@ public interface OwnerService {
 
     Page<Owner> getAllFiltered(Specification<Owner> specification, Pageable pageable);
 
-    Owner addOwnerAccessLevel(UUID id) throws NotFoundException;
+    Owner addOwnerAccessLevel(UUID id) throws NotFoundException, AccessLevelAlreadyAssignedException;
 
-    Owner removeOwnerAccessLevel(UUID id) throws NotFoundException;
+    Owner removeOwnerAccessLevel(UUID id) throws NotFoundException, AccessLevelAlreadyTakenException;
 }
