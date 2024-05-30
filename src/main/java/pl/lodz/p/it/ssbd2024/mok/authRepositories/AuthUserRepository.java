@@ -15,4 +15,5 @@ import java.util.UUID;
 @PreAuthorize("permitAll()")
 public interface AuthUserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByLogin(String login);
+    Optional<User> findByGoogleId(String googleId);
 }

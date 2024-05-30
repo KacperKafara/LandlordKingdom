@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.services.HtmlEmailService;
 
@@ -14,6 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@Transactional(propagation = Propagation.MANDATORY)
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
     private final ResourceBundleMessageSource mailMessageSource;

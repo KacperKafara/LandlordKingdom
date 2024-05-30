@@ -14,6 +14,7 @@ import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
@@ -35,7 +36,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-@Transactional(rollbackFor = NotFoundException.class)
+@Transactional(rollbackFor = NotFoundException.class, propagation = Propagation.REQUIRES_NEW)
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
@@ -60,7 +61,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class})
+    @Transactional(rollbackFor = {SemanticException.class, PathElementException.class}, propagation = Propagation.REQUIRES_NEW)
     public Page<User> getAllFiltered(Specification<User> specification, Pageable pageable) {
         return userRepository.findAll(specification, pageable);
     }
@@ -85,7 +86,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class}, propagation = Propagation.REQUIRES_NEW)
     public User createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException, CreationException {
         String encodedPassword = passwordEncoder.encode(password);
         newUser.setPassword(encodedPassword);
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class}, propagation = Propagation.REQUIRES_NEW)
     public User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException {
         Tenant newTenant = new Tenant();
         newTenant.setActive(true);
@@ -125,7 +126,7 @@ public class UserServiceImpl implements UserService {
             VerificationTokenUsedException.class,
             VerificationTokenExpiredException.class,
             NotFoundException.class
-    })
+    }, propagation = Propagation.REQUIRES_NEW)
     public void verify(String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, NotFoundException {
         VerificationToken verificationToken = verificationTokenService.validateAccountVerificationToken(token);
         User user = userRepository.findById(verificationToken.getUser().getId()).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
@@ -183,7 +184,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("isAuthenticated()")
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class})
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class}, propagation = Propagation.REQUIRES_NEW)
     public void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException, IdenticalFieldValueException {
         User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         if (userRepository.findByEmail(tempEmail).isPresent()){
@@ -198,7 +199,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class, IdenticalFieldValueException.class})
+    @Transactional(rollbackFor = {NotFoundException.class, VerificationTokenUsedException.class, VerificationTokenExpiredException.class, IdenticalFieldValueException.class}, propagation = Propagation.REQUIRES_NEW)
     public void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException, IdenticalFieldValueException {
         User checkPasswordUser = verificationTokenService.getUserByEmailToken(token);
         if (!passwordEncoder.matches(password, checkPasswordUser.getPassword())) {
@@ -218,7 +219,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class, UserBlockedException.class, UserNotVerifiedException.class})
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, TokenGenerationException.class, UserBlockedException.class, UserNotVerifiedException.class}, propagation = Propagation.REQUIRES_NEW)
     public void sendChangePasswordEmail(String email) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
@@ -238,7 +239,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("isAuthenticated()")
-    @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class})
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class}, propagation = Propagation.REQUIRES_NEW)
     public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException, PasswordRepetitionException {
         User user = getUserById(id);
 
@@ -258,7 +259,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Transactional(rollbackFor = {VerificationTokenUsedException.class, VerificationTokenExpiredException.class, UserBlockedException.class})
+    @Transactional(rollbackFor = {VerificationTokenUsedException.class, VerificationTokenExpiredException.class, UserBlockedException.class}, propagation = Propagation.REQUIRES_NEW)
     public void changePasswordWithToken(String newPassword, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException, PasswordRepetitionException {
         User user = verificationTokenService.getUserByPasswordToken(token);
 

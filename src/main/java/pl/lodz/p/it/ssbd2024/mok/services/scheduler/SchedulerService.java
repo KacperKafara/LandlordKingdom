@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
 import pl.lodz.p.it.ssbd2024.model.tokens.AccountVerificationToken;
@@ -22,7 +23,7 @@ import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class SchedulerService {
     private static final Logger log = LoggerFactory.getLogger(SchedulerService.class);
     @Value("${account.removeUnverifiedAccountAfterHours}")

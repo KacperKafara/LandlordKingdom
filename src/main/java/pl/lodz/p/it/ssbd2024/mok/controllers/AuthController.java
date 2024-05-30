@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.server.ResponseStatusException;
@@ -40,6 +42,7 @@ import java.util.Map;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 @PreAuthorize("permitAll()")
+@Transactional(propagation = Propagation.NEVER)
 public class AuthController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
@@ -149,50 +152,20 @@ public class AuthController {
         ObjectMapper mapper = new ObjectMapper();
         GoogleOAuth2TokenPayload payload = mapper.readValue(tokenPayload, GoogleOAuth2TokenPayload.class);
 
-        Map<String, String> response;
         try {
-            User user;
-            try {
-                user = userService.getUserByGoogleId(payload.getSub());
-
-                if (!user.isVerified()) {
-                    throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED, ErrorCodes.USER_NOT_VERIFIED);
-                }
-
-                List<String> roles = userService.getUserRoles(user.getId());
-                String userToken = jwtService.generateToken(user.getId(), user.getLogin(),  roles);
-                String refreshToken = jwtService.generateRefreshToken(user.getId());
-                String theme = user.getTheme() != null ?
-                        user.getTheme().getType().toLowerCase() : "light";
-
-
-                response = Map.of(
-                        "token", userToken,
-                        "refreshToken", refreshToken,
-                        "theme", theme);
-
-            } catch (NotFoundException e) {
-                User newUser = new User(
-                        payload.getGivenName(),
-                        payload.getFamilyName(),
-                        payload.getEmail(),
-                        payload.getEmail(),
-                        "en"
-                );
-                newUser.setGoogleId(payload.getSub());
-                userService.createUser(newUser);
+            Map<String, String> response = authenticationService.singInOAuth(token, servletRequest.getRemoteAddr(), payload);
+            if(response.containsKey("created")) {
                 return ResponseEntity.status(HttpStatus.CREATED).build();
+            } else {
+                return ResponseEntity.ok(new AuthenticationResponse(response.get("token"), response.get("refreshToken"), response.get("theme")));
             }
-
-        } catch (TokenGenerationException e1) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED, e1);
-        } catch (IdenticalFieldValueException | CreationException e1) {
-            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e1.getMessage(), e1);
-        } catch (UserNotVerifiedException e1) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e1.getMessage(), e1);
+        } catch (UserNotVerifiedException e) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, e.getMessage(), e);
+        } catch (TokenGenerationException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED, e);
+        } catch (CreationException | IdenticalFieldValueException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
-
-        return ResponseEntity.ok(new AuthenticationResponse(response.get("token"), response.get("refreshToken"), response.get("theme")));
     }
 
     @PostMapping("/refresh")

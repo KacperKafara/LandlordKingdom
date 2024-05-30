@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.UserFilterService;
 @Scope("prototype")
 @RestController
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.NEVER)
 public class FilterController {
     private final UserFilterService userFilterService;
 

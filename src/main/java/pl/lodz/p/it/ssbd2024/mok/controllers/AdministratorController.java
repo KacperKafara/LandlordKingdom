@@ -8,6 +8,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.AdministratorOwnRoleRemovalException;
@@ -20,6 +22,7 @@ import java.util.UUID;
 @Scope("prototype")
 @RequestMapping("/admins")
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.NEVER)
 public class AdministratorController {
 
     private final AdministratorService administratorService;

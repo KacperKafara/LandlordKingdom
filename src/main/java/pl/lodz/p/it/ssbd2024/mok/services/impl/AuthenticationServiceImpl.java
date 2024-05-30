@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -19,7 +21,9 @@ import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthAdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthOwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
+import pl.lodz.p.it.ssbd2024.mok.dto.oauth.GoogleOAuth2TokenPayload;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
+import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
@@ -27,15 +31,12 @@ import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
 import java.security.InvalidKeyException;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class AuthenticationServiceImpl implements AuthenticationService {
 
     private final JwtService jwtService;
@@ -46,6 +47,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
     private final VerificationTokenService verificationTokenService;
+    private final UserService userService;
 
     @Value("${login.maxAttempts}")
     private int maxLoginAttempts;
@@ -142,6 +144,44 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 "token", jwt,
                 "refreshToken", refreshToken,
                 "theme", theme);
+    }
+
+    @Override
+    @PreAuthorize("permitAll()")
+    public Map<String, String> singInOAuth(String token, String ip, GoogleOAuth2TokenPayload payload) throws UserNotVerifiedException, TokenGenerationException, CreationException, IdenticalFieldValueException {
+        try {
+            User user = userService.getUserByGoogleId(payload.getSub());
+
+            if (!user.isVerified()) {
+                throw new UserNotVerifiedException(UserExceptionMessages.NOT_VERIFIED, ErrorCodes.USER_NOT_VERIFIED);
+            }
+
+            List<String> roles = userService.getUserRoles(user.getId());
+            String userToken = jwtService.generateToken(user.getId(), user.getLogin(), roles);
+            String refreshToken = jwtService.generateRefreshToken(user.getId());
+            String theme = user.getTheme() != null ?
+                    user.getTheme().getType().toLowerCase() : "light";
+
+
+            return Map.of(
+                    "token", userToken,
+                    "refreshToken", refreshToken,
+                    "theme", theme);
+
+        } catch (NotFoundException e) {
+            User newUser = new User(
+                    payload.getGivenName(),
+                    payload.getFamilyName(),
+                    payload.getEmail(),
+                    payload.getEmail(),
+                    "en"
+            );
+            newUser.setGoogleId(payload.getSub());
+            userService.createUser(newUser);
+            return Map.of(
+                    "created", "true"
+            );
+        }
     }
 
     @Transactional(propagation = Propagation.MANDATORY)

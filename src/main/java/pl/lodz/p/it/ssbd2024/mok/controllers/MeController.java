@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
@@ -26,9 +29,11 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@Scope("prototype")
 @RequestMapping("/me")
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(propagation = Propagation.NEVER)
 public class MeController {
     private final HttpServletRequest servletRequest;
     private final UserService userService;
@@ -167,7 +172,6 @@ public class MeController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
-
 
     @PostMapping("/role-view-changed")
     @PreAuthorize("isAuthenticated()")
