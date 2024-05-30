@@ -241,7 +241,7 @@ public class UserServiceImpl implements UserService {
     @PreAuthorize("isAuthenticated()")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class, InvalidPasswordException.class}, propagation = Propagation.REQUIRES_NEW)
     public void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException, PasswordRepetitionException {
-        User user = getUserById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
             throw new InvalidPasswordException(UserExceptionMessages.INVALID_PASSWORD, ErrorCodes.INVALID_PASSWORD);

@@ -10,7 +10,7 @@ import pl.lodz.p.it.ssbd2024.services.HtmlEmailService;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
+@Transactional(propagation = Propagation.MANDATORY)
 public class MolEmailServiceImpl implements MolEmailService {
 
     HtmlEmailService htmlEmailService;
