@@ -33,6 +33,7 @@ const getActiveRole = (roles: string[]): string =>
 
 const LSToken = localStorage.getItem("token");
 const LSRefreshToken = localStorage.getItem("refreshToken");
+const LSActiveRole = localStorage.getItem("activeRole");
 
 const decodedLSToken = LSToken === null ? undefined : decodeJwt(LSToken!);
 
@@ -40,13 +41,13 @@ export const useUserStore = create<UserStore>((set) => ({
   token: LSToken === null ? undefined : LSToken,
   id: LSToken === null ? undefined : decodedLSToken!.sub,
   roles: LSToken === null ? undefined : decodedLSToken!.authorities,
-  activeRole:
-    LSToken === null ? undefined : getActiveRole(decodedLSToken!.authorities),
+  activeRole: LSActiveRole === null ? undefined : LSActiveRole,
   refreshToken: LSRefreshToken === null ? undefined : LSRefreshToken,
   setToken: (token: string) =>
     set(() => {
       const payload = decodeJwt(token);
       localStorage.setItem("token", token);
+      localStorage.setItem("activeRole", getActiveRole(payload.authorities));
       return {
         token,
         id: payload.sub,
@@ -74,5 +75,11 @@ export const useUserStore = create<UserStore>((set) => ({
       localStorage.removeItem("refreshToken");
       return { refreshToken: undefined };
     }),
-  setActiveRole: (role: string) => set(() => ({ activeRole: role })),
+  setActiveRole: (role: string) =>
+    set(() => {
+      localStorage.setItem("activeRole", role);
+      return {
+        activeRole: role,
+      };
+    }),
 }));
