@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.mol.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
@@ -12,7 +13,7 @@ import pl.lodz.p.it.ssbd2024.mol.services.VariableFeeService;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class VariableFeeServiceImpl implements VariableFeeService {
     private final VariableFeeRepository variableFeeRepository;
     private final LocalRepository localRepository;

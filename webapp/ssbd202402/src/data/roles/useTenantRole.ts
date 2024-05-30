@@ -17,7 +17,7 @@ export const useTenantRole = () => {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Success",
+        title: t("userDetailsPage.role.added.tenant"),
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
@@ -39,7 +39,7 @@ export const useTenantRole = () => {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Success",
+          title: t("userDetailsPage.role.removed.tenant"),
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },

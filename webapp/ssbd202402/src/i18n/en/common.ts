@@ -61,6 +61,16 @@ const userDetailsPage = {
       owner: "Remove owner role",
       administrator: "Remove administrator role",
     },
+    added: {
+      tenant: "Added tenant role",
+      owner: "Added owner role",
+      administrator: "Added administrator role",
+    },
+    removed: {
+      tenant: "Removed tenant role",
+      owner: "Removed owner role",
+      administrator: "Removed administrator role",
+    },
   },
   changeEmail: "Change email address",
   updateEmailAddress: "Update email address",

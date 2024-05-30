@@ -17,7 +17,7 @@ export const useOwnerRole = () => {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Success",
+        title: t("userDetailsPage.role.added.owner"),
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
@@ -39,7 +39,7 @@ export const useOwnerRole = () => {
     onSuccess: () => {
       toast({
         variant: "default",
-        title: "Success",
+        title: t("userDetailsPage.role.removed.owner"),
       });
       queryClient.invalidateQueries({ queryKey: ["user"] });
     },
