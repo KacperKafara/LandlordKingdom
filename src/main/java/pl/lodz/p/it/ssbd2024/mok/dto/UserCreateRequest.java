@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2024.mok.dto;
 
 import jakarta.validation.constraints.*;
 
+import java.util.StringJoiner;
+
 public record UserCreateRequest(
         @NotBlank(message = "Login cannot be blank.")
         @Size(min = 3, max = 50, message = "Login must be between 3 and 50 characters.")
@@ -26,4 +28,15 @@ public record UserCreateRequest(
         @NotBlank(message = "Language name cannot be blank.")
         @Pattern(regexp = "^(en|pl)$", message = "Language name must be 'en' or 'pl'.")
         String language) {
+        @Override
+        public String toString() {
+                return new StringJoiner(", ", UserCreateRequest.class.getSimpleName() + "[", "]")
+                        .add("login='" + login + "'")
+                        .add("email='" + email + "'")
+                        .add("firstName='" + firstName + "'")
+                        .add("lastName='" + lastName + "'")
+                        .add("password='********'")
+                        .add("language='" + language + "'")
+                        .toString();
+        }
 }

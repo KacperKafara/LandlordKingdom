@@ -89,7 +89,7 @@ public class MeController {
             Jwt jwt = (Jwt) authentication.getPrincipal();
             UUID id = UUID.fromString(jwt.getSubject());
 
-            userService.changePassword(id, request.oldPassword(), request.newPassword());
+            userService.changePassword(id, new PasswordHolder(request.oldPassword()), new PasswordHolder(request.newPassword()));
 
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
@@ -105,7 +105,7 @@ public class MeController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> changePasswordWithToken(@RequestBody @Valid ChangePasswordRequest request) {
         try {
-            userService.changePasswordWithToken(request.password(), request.token());
+            userService.changePasswordWithToken(new PasswordHolder(request.password()), request.token());
             return ResponseEntity.ok().build();
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
@@ -138,7 +138,7 @@ public class MeController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> updateUserEmail(@RequestBody @Valid UserEmailUpdateRequest request) {
         try {
-            userService.changeUserEmail(request.token(), request.password());
+            userService.changeUserEmail(request.token(), new PasswordHolder(request.password()));
         } catch (NotFoundException | VerificationTokenUsedException | VerificationTokenExpiredException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (InvalidPasswordException e) {

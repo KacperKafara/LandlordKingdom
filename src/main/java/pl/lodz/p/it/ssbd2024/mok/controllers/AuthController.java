@@ -74,7 +74,7 @@ public class AuthController {
                     newUserData.login(),
                     newUserData.language()
             );
-            userService.createUser(newUser, newUserData.password());
+            userService.createUser(newUser, new PasswordHolder(newUserData.password()));
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (TokenGenerationException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, VerificationTokenMessages.TOKEN_GENERATION_FAILED, e);
@@ -86,7 +86,7 @@ public class AuthController {
     @PostMapping("/signin-2fa")
     public ResponseEntity<Void> authenticate2fa(@RequestBody @Valid AuthenticationRequest request) {
         try {
-            authenticationService.generateOTP(request.login(), request.password(), request.language(), servletRequest.getHeader("X-Forwarded-For"));
+            authenticationService.generateOTP(request.login(), new PasswordHolder(request.password()), request.language(), servletRequest.getHeader("X-Forwarded-For"));
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);

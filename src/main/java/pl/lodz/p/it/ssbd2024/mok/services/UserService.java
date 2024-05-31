@@ -11,6 +11,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenExpiredException;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.mok.dto.PasswordHolder;
 
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +28,7 @@ public interface UserService {
 
     User getUserByGoogleId(String googleId) throws NotFoundException;
 
-    User createUser(User newUser, String password) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
+    User createUser(User newUser, PasswordHolder password) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
 
     User createUser(User newUser) throws IdenticalFieldValueException, TokenGenerationException, CreationException;
 
@@ -41,13 +42,13 @@ public interface UserService {
 
     void sendEmailUpdateVerificationEmail(UUID id, String tempEmail) throws NotFoundException, TokenGenerationException, IdenticalFieldValueException;
 
-    void changeUserEmail(String token, String password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException, IdenticalFieldValueException;
+    void changeUserEmail(String token, PasswordHolder password) throws NotFoundException, VerificationTokenUsedException, VerificationTokenExpiredException, InvalidPasswordException, IdenticalFieldValueException;
 
     void sendChangePasswordEmail(String login) throws NotFoundException, TokenGenerationException, UserBlockedException, UserNotVerifiedException;
 
-    void changePassword(UUID id, String oldPassword, String newPassword) throws NotFoundException, InvalidPasswordException, PasswordRepetitionException;
+    void changePassword(UUID id, PasswordHolder oldPassword, PasswordHolder newPassword) throws NotFoundException, InvalidPasswordException, PasswordRepetitionException;
 
-    void changePasswordWithToken(String password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException, PasswordRepetitionException;
+    void changePasswordWithToken(PasswordHolder password, String token) throws VerificationTokenUsedException, VerificationTokenExpiredException, UserBlockedException, PasswordRepetitionException;
 
     List<String> getUserRoles(UUID id);
 

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import pl.lodz.p.it.ssbd2024.model.tokens.VerificationToken;
 
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.List;
 @SecondaryTable(name = "personal_data", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 @SecondaryTable(name = "google_auth", pkJoinColumns = @PrimaryKeyJoinColumn(name = "user_id"))
 @NoArgsConstructor
+@ToString
 public class User extends AbstractEntity {
     @Setter
     @Column(name = "first_name", table = "personal_data", nullable = false, length = 50)
@@ -37,6 +39,7 @@ public class User extends AbstractEntity {
 
     @Setter
     @Column(name = "password", length = 64)
+    @ToString.Exclude
     private String password;
 
     @Setter

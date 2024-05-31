@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -14,6 +15,7 @@ import static pl.lodz.p.it.ssbd2024.util.UserFromContext.getCurrentUserId;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -25,15 +27,19 @@ public abstract class AbstractEntity {
     private Long version;
 
     @Column(name = "created_at", nullable = false, updatable = false)
+    @ToString.Exclude
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at", nullable = false)
+    @ToString.Exclude
     private LocalDateTime modifiedAt;
 
     @Column(name = "created_by", updatable = false)
+    @ToString.Exclude
     private UUID createdBy;
 
     @Column(name = "modified_by")
+    @ToString.Exclude
     private UUID modifiedBy;
 
     @PrePersist
@@ -48,13 +54,5 @@ public abstract class AbstractEntity {
     public void onPreUpdate() {
         this.modifiedAt = LocalDateTime.now();
         this.modifiedBy = getCurrentUserId();
-    }
-
-    @Override
-    public final String toString() {
-        return "{" +
-                "id=" + id +
-                ", version=" + version +
-                '}';
     }
 }

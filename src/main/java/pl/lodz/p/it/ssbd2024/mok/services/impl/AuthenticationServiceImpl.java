@@ -21,6 +21,7 @@ import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthAdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthOwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthTenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.authRepositories.AuthUserRepository;
+import pl.lodz.p.it.ssbd2024.mok.dto.PasswordHolder;
 import pl.lodz.p.it.ssbd2024.mok.dto.oauth.GoogleOAuth2TokenPayload;
 import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
@@ -69,7 +70,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @PreAuthorize("permitAll()")
-    public void generateOTP(String login, String password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException, TokenGenerationException, UserInactiveException {
+    public void generateOTP(String login, PasswordHolder password, String language, String ip) throws InvalidKeyException, NotFoundException, UserNotVerifiedException, UserBlockedException, SignInBlockedException, InvalidLoginDataException, TokenGenerationException, UserInactiveException {
         User user = userRepository.findByLogin(login).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
 
         if (!user.isVerified()) {
@@ -86,7 +87,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             user.setLoginAttempts(0);
         }
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
+        if (passwordEncoder.matches(password.password(), user.getPassword())) {
             if (!user.isActive()) {
                 String token = verificationTokenService.generateAccountActivateToken(user);
                 emailService.sendAccountActivateAfterBlock(user.getEmail(), user.getFirstName(), token, language);

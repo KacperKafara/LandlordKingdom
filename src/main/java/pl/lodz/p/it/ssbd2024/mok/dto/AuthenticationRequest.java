@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+import java.util.StringJoiner;
+
 @Builder
 public record AuthenticationRequest(
         @NotBlank(message = "Login cannot be blank.")
@@ -19,5 +21,15 @@ public record AuthenticationRequest(
         @NotBlank(message = "Language name cannot be blank.")
         @Pattern(regexp = "^(en|pl)$", message = "Language name must be 'en' or 'pl'.")
         String language
+
+
 ) {
+        @Override
+        public String toString() {
+                return new StringJoiner(", ", AuthenticationRequest.class.getSimpleName() + "[", "]")
+                        .add("login='" + login + "'")
+                        .add("password='********'")
+                        .add("language='" + language + "'")
+                        .toString();
+        }
 }
