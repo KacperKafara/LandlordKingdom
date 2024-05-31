@@ -3,11 +3,12 @@ package pl.lodz.p.it.ssbd2024.mol.services.scheduler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class MolSchedulerService {
     @PreAuthorize("permitAll()")
     public void changeLocalState() {
