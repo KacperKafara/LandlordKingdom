@@ -33,20 +33,20 @@ services:
       - /etc/ssbd02/privateJwt-key.pem:/etc/ssbd02/privateJwt-key.pem
       - /etc/ssbd02/privateRefresh-key.pem:/etc/ssbd02/privateRefresh-key.pem
 
-  nginx:
-    build:
-      context: ..
-      dockerfile: DockerfileNginx
-    container_name: ssbd02-nginx
-    restart: always
-    ports:
-      - "3000:80"
-    networks:
-      - my_network
-    depends_on:
-      - tomcat
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+#  nginx:
+#    build:
+#      context: ..
+#      dockerfile: DockerfileNginx
+#    container_name: ssbd02-nginx
+#    restart: always
+#    ports:
+#      - "3000:80"
+#    networks:
+#      - my_network
+#    depends_on:
+#      - tomcat
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf
 
 
 networks:
