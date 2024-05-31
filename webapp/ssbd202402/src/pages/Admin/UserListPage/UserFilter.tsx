@@ -47,10 +47,6 @@ const UserFilter: FC = () => {
   );
   const { userFilter } = useUserFilter();
 
-  useEffect(() => {
-    store.setPageSize(userFilter?.pageSize ?? 10);
-  }, [userFilter?.pageSize]);
-
   const filterForm = useForm<FilterUsers>({
     values: {
       verified: userFilter?.verified ?? null,
@@ -62,6 +58,11 @@ const UserFilter: FC = () => {
       role: userFilter?.role ?? "ALL",
     },
   });
+
+  useEffect(() => {
+    store.setPageSize(userFilter?.pageSize ?? 10);
+    handleFilterSubmit();
+  }, [userFilter?.pageSize]);
 
   const handleFilterSubmit = filterForm.handleSubmit(async (values) => {
     const criterias: SearchCriteria[] = [];
