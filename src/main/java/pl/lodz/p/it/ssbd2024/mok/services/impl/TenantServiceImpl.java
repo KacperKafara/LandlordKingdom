@@ -21,6 +21,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.TenantRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.TenantService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -33,6 +34,7 @@ public class TenantServiceImpl implements TenantService {
     private final EmailService emailService;
     private final TenantRepository tenantRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -45,6 +47,10 @@ public class TenantServiceImpl implements TenantService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Tenant removeTenantAccessLevel(UUID id) throws NotFoundException, AccessLevelAlreadyTakenException {
         Tenant tenant = tenantRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+
+        if(userService.getUserRoles(tenant.getUser().getId()).size() <= 1){
+            throw new AccessLevelAlreadyTakenException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);
+        }
 
         if(!tenant.isActive()){
             throw new AccessLevelAlreadyTakenException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);

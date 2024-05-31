@@ -285,6 +285,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @PreAuthorize("permitAll()")
+    @Transactional(rollbackFor = NotFoundException.class, propagation = Propagation.REQUIRED)
     public List<String> getUserRoles(UUID id) {
         List<String> roles = new ArrayList<>();
         administratorRepository.findByUserIdAndActive(id, true).ifPresent(administrator -> roles.add("ADMINISTRATOR"));

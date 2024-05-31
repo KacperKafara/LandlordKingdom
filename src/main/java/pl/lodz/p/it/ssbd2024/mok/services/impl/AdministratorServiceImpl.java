@@ -23,6 +23,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.AdministratorRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.AdministratorService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -34,6 +35,7 @@ public class AdministratorServiceImpl implements AdministratorService {
     private final EmailService emailService;
     private final AdministratorRepository administratorRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -47,6 +49,11 @@ public class AdministratorServiceImpl implements AdministratorService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Administrator removeAdministratorAccessLevel(UUID id, UUID administratorId) throws NotFoundException, AdministratorOwnRoleRemovalException, AccessLevelAlreadyTakenException {
         Administrator administrator = administratorRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+
+        if(userService.getUserRoles(administrator.getUser().getId()).size() <= 1){
+            throw new AccessLevelAlreadyTakenException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);
+        }
+
         if(administrator.getUser().getId().equals(administratorId)){
             throw new AdministratorOwnRoleRemovalException(AdministratorMessages.OWN_ADMINISTRATOR_ROLE_REMOVAL, ErrorCodes.ADMINISTRATOR_OWN_ROLE_REMOVAL);
         }

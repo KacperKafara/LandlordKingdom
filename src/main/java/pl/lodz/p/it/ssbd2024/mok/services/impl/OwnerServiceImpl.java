@@ -21,6 +21,7 @@ import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -32,6 +33,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final EmailService emailService;
     private final OwnerRepository ownerRepository;
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -44,6 +46,10 @@ public class OwnerServiceImpl implements OwnerService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Owner removeOwnerAccessLevel(UUID id) throws NotFoundException, AccessLevelAlreadyTakenException {
         Owner owner = ownerRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+
+        if(userService.getUserRoles(owner.getUser().getId()).size() <= 1){
+            throw new AccessLevelAlreadyTakenException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);
+        }
 
         if (!owner.isActive()){
             throw new AccessLevelAlreadyTakenException(UserExceptionMessages.ACCESS_LEVEL_TAKEN, ErrorCodes.ACCESS_LEVEL_TAKEN);
