@@ -168,7 +168,10 @@ const UserDetailsPage: FC = () => {
           <CardContent>
             <div className="flex justify-center gap-2">
               {data?.data.roles.includes("TENANT") ? (
-                <Button onClick={() => removeTenantRole(data?.data.id || "")}>
+                <Button
+                  onClick={() => removeTenantRole(data?.data.id || "")}
+                  disabled={data.data.roles.length === 1}
+                >
                   {t("userDetailsPage.role.remove.tenant")}
                 </Button>
               ) : (
@@ -177,7 +180,10 @@ const UserDetailsPage: FC = () => {
                 </Button>
               )}
               {data?.data.roles.includes("OWNER") ? (
-                <Button onClick={() => removeOwnerRole(data?.data.id || "")}>
+                <Button
+                  onClick={() => removeOwnerRole(data?.data.id || "")}
+                  disabled={data.data.roles.length === 1}
+                >
                   {t("userDetailsPage.role.remove.owner")}
                 </Button>
               ) : (
@@ -186,7 +192,10 @@ const UserDetailsPage: FC = () => {
                 </Button>
               )}
               {data?.data.roles.includes("ADMINISTRATOR") ? (
-                <Button onClick={() => removeAdminRole(data?.data.id || "")}>
+                <Button
+                  onClick={() => removeAdminRole(data?.data.id || "")}
+                  disabled={data.data.roles.length === 1}
+                >
                   {t("userDetailsPage.role.remove.administrator")}
                 </Button>
               ) : (
