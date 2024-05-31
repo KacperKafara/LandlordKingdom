@@ -82,6 +82,7 @@ public class User extends AbstractEntity {
     private List<AccessLevel> accessLevels = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @ToString.Exclude
     private List<VerificationToken> verificationTokens = new ArrayList<>();
 
     @Setter
@@ -104,6 +105,7 @@ public class User extends AbstractEntity {
     @CollectionTable(name = "old_passwords", joinColumns = @JoinColumn(name = "user_id"),
             indexes = @Index(name = "idx_user_oldPassword", columnList = "user_id"))
     @Column(name = "password")
+    @ToString.Exclude
     private List<String> oldPasswords = new ArrayList<>();
 
     @Setter

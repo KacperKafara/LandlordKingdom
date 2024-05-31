@@ -254,6 +254,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.getOldPasswords().add(user.getPassword());
+        user.getOldPasswords().add(newPassword.password());
         user.setPassword(passwordEncoder.encode(newPassword.password()));
         userRepository.saveAndFlush(user);
     }
@@ -277,6 +278,7 @@ public class UserServiceImpl implements UserService {
         verificationTokenService.validatePasswordVerificationToken(token);
 
         user.getOldPasswords().add(user.getPassword());
+        user.getOldPasswords().add(newPassword.password());
         user.setPassword(passwordEncoder.encode(newPassword.password()));
         userRepository.saveAndFlush(user);
     }
