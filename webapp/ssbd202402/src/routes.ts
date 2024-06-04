@@ -24,6 +24,7 @@ const UpdateEmailPage = loadable(() => import("./pages/UpdateEmail"));
 const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
+const RoleRequestPage = loadable(() => import("./pages/Tenant/RoleRequest"));
 
 const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
@@ -33,6 +34,7 @@ const AdminRoutes: RouteObject[] = [
 const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
+  { path: "role-request", Component: RoleRequestPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 
