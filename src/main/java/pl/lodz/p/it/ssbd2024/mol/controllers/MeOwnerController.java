@@ -4,10 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
+import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
@@ -28,7 +33,11 @@ public class MeOwnerController {
     @GetMapping("/locals")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<List<GetOwnLocalsResponse>> getOwnLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID id = UUID.fromString(jwt.getSubject());
+
+        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id)));
     }
 
     @GetMapping("/locals/{id}/applications")

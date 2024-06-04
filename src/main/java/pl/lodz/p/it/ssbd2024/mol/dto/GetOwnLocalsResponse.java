@@ -1,4 +1,14 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record GetOwnLocalsResponse() {
+import java.math.BigDecimal;
+
+public record GetOwnLocalsResponse(
+        String name,
+        String description,
+        String state,
+        int size,
+        BigDecimal marginFee,
+        BigDecimal rentFee,
+        AddressResponse address
+) {
 }

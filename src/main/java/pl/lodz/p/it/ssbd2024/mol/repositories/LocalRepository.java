@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
@@ -30,6 +31,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     Local saveAndFlush(@NonNull Local local);
 
     @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT l FROM Local l WHERE l.owner.user.id = :id")
     List<Local> findAllByOwnerId(UUID id);
 
     @PreAuthorize("isAuthenticated()")
