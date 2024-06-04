@@ -16,11 +16,13 @@ import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RoleRequestRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.UserMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -30,6 +32,7 @@ public class RoleServiceImpl implements RoleService {
     private final UserMolRepository userRepository;
     private final TenantMolRepository tenantRepository;
     private final RoleRequestRepository roleRequestRepository;
+    private final OwnerMolRepository ownerRepository;
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -51,8 +54,20 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public RoleRequest requestRole(UUID tenantId) throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public RoleRequest requestRole() throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException, NotFoundException {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+        Tenant tenant = tenantRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+
+        if (roleRequestRepository.findByTenantId(tenant.getId()).isPresent()) {
+            throw new RoleRequestAlreadyExistsException(RoleRequestMessages.ROLE_REQUEST_ALREADY_EXISTS, ErrorCodes.ROLE_REQUEST_ALREADY_EXISTS);
+        }
+
+        if (ownerRepository.findByUserId(userId).isPresent()) {
+            throw new UserAlreadyHasRoleException(RoleRequestMessages.USER_ALREADY_HAS_ROLE, ErrorCodes.USER_ALREADY_HAS_ROLE);
+        }
+
+        RoleRequest roleRequest = new RoleRequest(tenant);
+        return roleRequestRepository.saveAndFlush(roleRequest);
     }
 
     @Override

@@ -13,7 +13,7 @@ public interface RoleService {
 
     RoleRequest get() throws NotFoundException;
 
-    RoleRequest requestRole(UUID tenantId) throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException;
+    RoleRequest requestRole() throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException, NotFoundException;
 
     void accept(UUID id) throws NotFoundException;
 

@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
+import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
@@ -29,7 +31,16 @@ public class MeTenantController {
     @PostMapping("/role-request")
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<GetRoleRequestResponse> requestRole() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            RoleRequest roleRequest = roleService.requestRole();
+            return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest));
+        } catch (RoleRequestAlreadyExistsException e) {
+            throw new RuntimeException(e);
+        } catch (UserAlreadyHasRoleException e) {
+            throw new RuntimeException(e);
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/role-request")
