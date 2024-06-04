@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 public class LocalMapper {
     public static GetOwnLocalsResponse toGetOwnLocalsResponse(Local local) {
         return new GetOwnLocalsResponse(
+                local.getId(),
                 local.getName(),
                 local.getDescription(),
                 local.getState().toString(),
