@@ -255,6 +255,7 @@ const navLinks = {
   account: "Moje konto",
   signOut: "Wyloguj",
   users: "Użytkownicy",
+  notApprovedActions: "Niezatwierdzone operację",
   roles: "Zmień poziom dostępu",
 };
 
@@ -317,6 +318,12 @@ const registerSuccessPage = {
   description:
     "Wysłaliśmy ci email z linkiem slużącym do aktywacji konta. Użyj tego linku aby zweryfikować swój adres email. Dopóki nie zweryfikujesz adresu, nie możesz się zalogować.",
   loginButton: "Wróc do strony logowania",
+};
+
+const notApprovedActionsPage = {
+  roleRequests: "Zgłoszenia o rolę",
+  locals: "Lokale",
+  emptyRoleRequests: "Brak zgłoszeń o rolę",
 };
 
 const validation = {
@@ -431,6 +438,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  notApprovedActionsPage,
   light: "Jasny",
   dark: "Ciemny",
   reactivationSuccess: "Konto zostało aktywowane, możesz się zalogować",

@@ -23,6 +23,7 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.UserMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -36,8 +37,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public RoleRequest getAll() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<RoleRequest> getAll() {
+        return roleRequestRepository.findAll();
     }
 
     @Override

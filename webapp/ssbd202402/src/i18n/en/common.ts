@@ -248,6 +248,7 @@ const navLinks = {
   account: "My account",
   signOut: "Sign out",
   users: "Users",
+  notApprovedActions: "Not approved actions",
   roles: "Change access level",
 };
 
@@ -310,6 +311,12 @@ const registerSuccessPage = {
   description:
     "We send you an email with verification link. Use this link to verify your account. Until you perform this action you won't be able to login.",
   loginButton: "Go back to login",
+};
+
+const notApprovedActionsPage = {
+  roleRequests: "Requests for role",
+  locals: "Locals",
+  emptyRoleRequests: "No avaliable role requsts",
 };
 
 const validation = {
@@ -426,6 +433,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  notApprovedActionsPage,
   light: "Light",
   dark: "Dark",
   reactivationSuccess: "Your account has been reactivated. You can now login.",

@@ -2,12 +2,16 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestResponse;
+import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
 import java.util.List;
@@ -24,7 +28,8 @@ public class RoleController {
     @GetMapping
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<List<RoleRequestResponse>> getRoleRequests() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<RoleRequest> requests = roleService.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(requests.stream().map(RoleRequestMapper::toRoleRequestResponse).toList());
     }
 
     @PostMapping("/{id}")
