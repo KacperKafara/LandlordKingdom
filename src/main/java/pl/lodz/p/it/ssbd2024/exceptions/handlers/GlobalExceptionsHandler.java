@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 import com.atomikos.icatch.RollbackException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceException;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ import pl.lodz.p.it.ssbd2024.messages.ExceptionMessages;
 
 import java.sql.SQLException;
 
+@Slf4j
 @ControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionsHandler {
 
@@ -74,6 +76,7 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<ExceptionResponse> handleException(Exception e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
