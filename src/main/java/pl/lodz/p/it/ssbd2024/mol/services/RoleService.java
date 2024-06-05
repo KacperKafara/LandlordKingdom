@@ -5,11 +5,12 @@ import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface RoleService {
 
-    RoleRequest getAll();
+    List<RoleRequest> getAll();
 
     RoleRequest get() throws NotFoundException;
 

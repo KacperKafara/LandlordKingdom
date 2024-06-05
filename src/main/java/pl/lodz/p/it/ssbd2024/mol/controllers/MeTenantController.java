@@ -33,7 +33,7 @@ public class MeTenantController {
     public ResponseEntity<GetRoleRequestResponse> requestRole() {
         try {
             RoleRequest roleRequest = roleService.requestRole();
-            return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest));
+            return ResponseEntity.ok(RoleRequestMapper.toGetRoleResponse(roleRequest));
         } catch (RoleRequestAlreadyExistsException e) {
             throw new RuntimeException(e);
         } catch (UserAlreadyHasRoleException e) {
@@ -47,7 +47,7 @@ public class MeTenantController {
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<GetRoleRequestResponse> getRoleRequest() throws NotFoundException {
         RoleRequest roleRequest = roleService.get();
-        return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest));
+        return ResponseEntity.ok(RoleRequestMapper.toGetRoleResponse(roleRequest));
     }
 
     @GetMapping("/current-rents")
