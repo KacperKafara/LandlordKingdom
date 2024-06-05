@@ -47,7 +47,7 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public List<Local> getOwnLocals(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return localRepository.findAllByOwnerId(id);
     }
 
     @Override

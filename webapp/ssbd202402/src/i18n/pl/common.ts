@@ -1,4 +1,5 @@
 import { ExceptionCode } from "@/@types/errorCode";
+import { LocalState } from "@/@types/localState";
 import { Role } from "@/store/userStore";
 
 const error = {
@@ -388,7 +389,24 @@ const notFoundPage = {
   description: "Strona, której szukasz, nie istnieje",
 };
 
+const ownerLocals = {
+  show: "Wyświetl",
+};
+
+const localState = {
+  UNAPPROVED: "Niezaakceptowany",
+  ARCHIVED: "Zarchiwizowany",
+  ACTIVE: "Aktywny",
+  INACTIVE: "Nieaktywny",
+  WITHOUT_OWNER: "Bez właściciela",
+  RENTED: "Wynajęty",
+} satisfies {
+  [key in LocalState]: string;
+};
+
 export default {
+  ownerLocals,
+  localState,
   notFoundPage,
   sessionExpiredDialog,
   error,

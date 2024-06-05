@@ -38,6 +38,10 @@ GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02auth;
 
 GRANT SELECT ON TABLE public.tenants TO ssbd02mol;
 GRANT SELECT ON TABLE public.personal_data TO ssbd02mol;
+GRANT SELECT ON TABLE public.users TO ssbd02mol;
+GRANT SELECT ON TABLE public.themes TO ssbd02mol;
+GRANT SELECT ON TABLE public.timezones TO ssbd02mol;
+GRANT SELECT ON TABLE public.google_auth TO ssbd02mol;
 GRANT SELECT, INSERT ON TABLE public.owners TO ssbd02mol;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.access_levels TO ssbd02mol;
 
