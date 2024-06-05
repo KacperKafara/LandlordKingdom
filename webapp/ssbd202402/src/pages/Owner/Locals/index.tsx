@@ -7,15 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { useGetOwnLocals } from "@/data/mol/useGetOwnLocals";
-import { OwnLocals } from "@/types/mol/OwnLocals";
 import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
