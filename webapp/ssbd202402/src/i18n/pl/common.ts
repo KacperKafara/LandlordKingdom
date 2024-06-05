@@ -410,7 +410,19 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const roleRequestDialog = {
+  description:
+    "Możesz złożyć wniosek o przyznanie roli właściciela. Po otrzymaniu wniosku przeanalizujemy Twoje konto, aby ocenić Twoją kwalifikację. Jeśli rola zostanie Ci przyznana, otrzymasz powiadomienie e-mail.",
+  requestOwnerRole: "Złóż prośbę o role właściciela",
+  requestOwnerRoleDescription:
+    "Kliknij ten przycisk, aby złożyć wniosek o przyznanie roli właściciela.",
+  alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: {{when}}",
+  howDoesItWork: "Jak to działa?",
+  requestRoleButton: "Złóż wniosek",
+};
+
 export default {
+  roleRequestDialog,
   allLocals,
   ownerLocals,
   localState,
