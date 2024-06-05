@@ -7,7 +7,7 @@ import AdminTestPage from "./pages/Admin/Test";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
-import LocalsPage from "./pages/Owner/Locals";
+import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
 import NotApprovedActionsPage from "./pages/Admin/NotApprovedActions";
 
