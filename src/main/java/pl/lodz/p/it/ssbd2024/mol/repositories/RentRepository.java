@@ -9,6 +9,8 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 
 import java.time.LocalDate;
@@ -54,4 +56,7 @@ public interface RentRepository extends JpaRepository<Rent, UUID>{
 
     @PreAuthorize("permitAll()")
     List<Rent> getAllByEndDateBefore(LocalDate date);
+
+    @PreAuthorize("permitAll()")
+    List<Rent> findAllByEndDateBeforeAndLocal_State(LocalDate date, LocalState state);
 }

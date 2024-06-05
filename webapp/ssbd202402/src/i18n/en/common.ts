@@ -250,6 +250,7 @@ const navLinks = {
   users: "Users",
   notApprovedActions: "Not approved actions",
   roles: "Change access level",
+  locals: "Locals",
 };
 
 const userDataPage = {
@@ -395,6 +396,11 @@ const ownerLocals = {
   show: "Show",
 };
 
+const allLocals = {
+  show: "Show",
+  localOwner: "Owner: ",
+};
+
 const localState = {
   UNAPPROVED: "Unapproved",
   ARCHIVED: "Archived",
@@ -407,6 +413,7 @@ const localState = {
 };
 
 export default {
+  allLocals,
   localState,
   ownerLocals,
   notFoundPage,
