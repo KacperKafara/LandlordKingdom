@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
+import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.util.List;
@@ -66,7 +67,7 @@ public class LocalController {
     @GetMapping
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<List<GetAllLocalsResponse>> getAllLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ResponseEntity.ok(LocalMapper.toGetAllLocalsResponseList(localService.getAllLocals()));
     }
 
     @PatchMapping("/{id}/address")

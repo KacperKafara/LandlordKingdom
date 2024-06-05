@@ -256,6 +256,7 @@ const navLinks = {
   signOut: "Wyloguj",
   users: "Użytkownicy",
   roles: "Zmień poziom dostępu",
+  locals: "Nieruchomości",
 };
 
 const userDataPage = {
@@ -393,6 +394,11 @@ const ownerLocals = {
   show: "Wyświetl",
 };
 
+const allLocals = {
+  show: "Wyświetl",
+  localOwner: "Właściciel: ",
+};
+
 const localState = {
   UNAPPROVED: "Niezaakceptowany",
   ARCHIVED: "Zarchiwizowany",
@@ -405,6 +411,7 @@ const localState = {
 };
 
 export default {
+  allLocals,
   ownerLocals,
   localState,
   notFoundPage,
