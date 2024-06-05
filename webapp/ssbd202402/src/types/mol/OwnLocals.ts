@@ -1,8 +1,10 @@
+import { LocalState } from "@/@types/localState";
+
 export interface OwnLocals {
   id: string;
   name: string;
   description: string;
-  state: string;
+  state: LocalState;
   size: number;
   marginFee: number;
   rentalFee: number;

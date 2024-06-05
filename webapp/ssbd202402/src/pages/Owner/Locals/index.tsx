@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -6,9 +7,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useGetOwnLocals } from "@/data/mol/useGetOwnLocals";
+import { OwnLocals } from "@/types/mol/OwnLocals";
+import { t } from "i18next";
+import { RefreshCw } from "lucide-react";
 import { FC } from "react";
-import Loader from "react-js-loader";
 
 const Locals: FC = () => {
   const { data: locals, isLoading } = useGetOwnLocals();
@@ -16,32 +26,36 @@ const Locals: FC = () => {
   // const isLoading = true;
 
   return (
-    <>
-      {isLoading && <Loader type="box-up" />}
+    <div className="flex h-full justify-center">
+      {isLoading && <RefreshCw className="animate-spin" />}
       {!isLoading && locals && locals.length === 0 && (
         <div>No locals found</div>
       )}
       {!isLoading && locals && locals.length > 0 && (
-        <div className="my-3 grid grid-cols-1 gap-2 md:grid-cols-3">
+        <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
           {locals.map((local) => (
-            <Card key={local.id}>
+            <Card className="relative" key={local.id}>
+              <Button className="absolute right-1 top-1" variant="ghost">
+                {t("ownerLocals.show")}
+              </Button>
               <CardHeader>
                 <CardTitle>{local.name}</CardTitle>
                 <CardDescription>{local.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p>{local.address.street}</p>
-                <p>{local.address.city}</p>
-                <p>{local.address.zipCode}</p>
+                <p>
+                  {local.address.street} {local.address.number},{" "}
+                  {local.address.zipCode} {local.address.city}
+                </p>
               </CardContent>
               <CardFooter>
-                <p>{local.state}</p>
+                <p>{t(`localState.${local.state}`)}</p>
               </CardFooter>
             </Card>
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
