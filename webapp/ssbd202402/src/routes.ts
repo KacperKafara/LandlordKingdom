@@ -7,6 +7,7 @@ import AdminTestPage from "./pages/Admin/Test";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
+import addLocalForm from "@/pages/Owner/addLocalForm.tsx";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
 const MePage = loadable(() => import("./pages/Me"));
@@ -30,7 +31,10 @@ const AdminRoutes: RouteObject[] = [
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
 ];
-const OwnerRoutes: RouteObject[] = [{ path: "test", Component: OwnerTestPage }];
+const OwnerRoutes: RouteObject[] = [
+    { path: "test", Component: OwnerTestPage },
+    { path: "addLocalForm", Component: addLocalForm },
+];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
 ];

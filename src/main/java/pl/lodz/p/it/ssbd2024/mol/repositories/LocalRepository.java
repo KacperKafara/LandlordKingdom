@@ -23,7 +23,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     Optional<Local> findById(@NonNull UUID id);
 
     @PreAuthorize("hasRole('OWNER')")
-    List<Local> findByAddress(Address address);
+    Optional<Local> findByAddress(Address address);
 
     @NonNull
     @PreAuthorize("permitAll()")

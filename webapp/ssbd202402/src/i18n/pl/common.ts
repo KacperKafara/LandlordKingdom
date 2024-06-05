@@ -311,6 +311,33 @@ const mePage = {
   timezone: "Strefa czasowa",
 };
 
+const addLocalPage = {
+  title: "Dodaj nowy lokal",
+  name: "Nazwa",
+  description: "Opis",
+  size: "Rozmiar",
+  number: "Numer mieszkania",
+  street: "Nazwa ulicy",
+  city: "Miasto",
+  zip: "Kod pocztowy",
+  country: "Kraj",
+  marginFee: "Opłata stała",
+  rentalFee: "Cena wynajmu",
+  formSubmit: "Zgłoś formularz",
+  wrong: {
+    name: "Niepoprawna nazwa lokalu",
+    description: "Niepoprawny opis lokalu",
+    size: "Niepoprawny rozmiar",
+    number: "Niepoprawny numer mieszkania",
+    street: "Niepoprawna nazwa ulicy",
+    city: "Niepoprawne miasto",
+    zip: "Niepoprawny kod pocztowy",
+    country: "Niepoprawny kraj",
+    marginFee: "Niepoprawna opłata stała",
+    rentalFee: "Niepoprawna cena wynajmu",
+  }
+};
+
 const registerSuccessPage = {
   title: "Dziękujemy za stworzenie konta",
   description:
@@ -409,6 +436,7 @@ export default {
   userDetailsPage,
   updateDataForm,
   mePage,
+  addLocalPage,
   userDataPage,
   updateEmailPage,
   validation,

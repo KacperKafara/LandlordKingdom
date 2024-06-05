@@ -26,4 +26,8 @@ public interface AddressRepository extends JpaRepository<Address, UUID> {
     @NonNull
     @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'OWNER')")
     List<Address> findAll();
+
+    @NonNull
+    @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'OWNER')")
+    Optional<Address> findByNumberAndStreetAndCityAndZipAndCountry(String number, String street, String city, String zip, String country);
 }

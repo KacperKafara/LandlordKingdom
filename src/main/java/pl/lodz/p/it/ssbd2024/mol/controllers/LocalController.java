@@ -2,15 +2,25 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
+import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.Owner;
+import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
-
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -20,6 +30,7 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.NEVER)
 public class LocalController {
     private final LocalService localService;
+    private final OwnerRepository ownerRepository;
 
     @GetMapping("/active")
     @PreAuthorize("isAuthenticated()")
@@ -36,7 +47,25 @@ public class LocalController {
     @PostMapping
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<AddLocalResponse> addLocal(@RequestBody AddLocalRequest addLocalRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            Owner owner = ownerRepository.findById(addLocalRequest.ownerId()).orElseThrow(() -> new
+                    NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+            Local newLocal = new Local(
+                    addLocalRequest.name(),
+                    addLocalRequest.description(),
+                    addLocalRequest.size(),
+                    addLocalRequest.address(),
+                    owner,
+                    addLocalRequest.marginFee(),
+                    addLocalRequest.rentalFee()
+            );
+            localService.addLocal(newLocal);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
+        } catch (GivenAddressAssignedToOtherLocalException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 
     @PostMapping("/applications")

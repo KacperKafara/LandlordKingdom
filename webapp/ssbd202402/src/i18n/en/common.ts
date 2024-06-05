@@ -304,6 +304,33 @@ const mePage = {
   timezone: "Timezone",
 };
 
+const addLocalPage = {
+  title: "Add new local",
+  name: "Name",
+  description: "Description",
+  size: "Size",
+  number: "Number",
+  street: "Street name",
+  city: "City",
+  zip: "Postal code",
+  country: "Country",
+  marginFee: "Margin fee",
+  rentalFee: "Rental fee",
+  formSubmit: "Send form",
+  wrong: {
+    name: "Wrong local name",
+    description: "Wrong local description",
+    size: "Wrong local size",
+    number: "Wrong local number",
+    street: "Wrong street name",
+    city: "Wrong city",
+    zip: "Wrong postal code",
+    country: "Wrong country",
+    marginFee: "Wrong margin fee",
+    rentalFee: "Wrong rental fee",
+  }
+}
+
 const registerSuccessPage = {
   title: "Thanks for creating an account",
   description:
@@ -404,6 +431,7 @@ export default {
   userDetailsPage,
   updateDataForm,
   mePage,
+  addLocalPage,
   userDataPage,
   updateEmailPage,
   validation,

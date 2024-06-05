@@ -5,18 +5,20 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
-import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -28,8 +30,29 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local addLocal(Local local) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
+        Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
+                local.getAddress().getNumber(),
+                local.getAddress().getStreet(),
+                local.getAddress().getCity(),
+                local.getAddress().getZip(),
+                local.getAddress().getCountry()
+        );
+        if (existingAddress.isPresent()) {
+            Local existingLocal = localRepository.findByAddress(local.getAddress()).orElseThrow(() -> new
+                    NotFoundException(LocalMessages.NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+            if (existingLocal.getState() == LocalState.WITHOUT_OWNER) {
+                existingLocal.setOwner(local.getOwner());
+                existingLocal.setName(local.getName());
+                existingLocal.setDescription(local.getDescription());
+                existingLocal.setState(LocalState.UNAPPROVED);
+                return localRepository.saveAndFlush(existingLocal);
+            } else throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
+                                                                       ErrorCodes.ADDRESS_ASSIGNED);
+        } else {
+            addressRepository.saveAndFlush(local.getAddress());
+        }
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
