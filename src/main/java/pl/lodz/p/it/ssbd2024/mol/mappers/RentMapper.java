@@ -7,6 +7,7 @@ public class RentMapper {
 
     public static RentForTenantResponse rentForTenantResponse(Rent rent){
         return new RentForTenantResponse(
+                rent.getId(),
                 LocalMapper.localForTenantResponse(rent.getLocal()),
                 OwnerMapper.ownerForTenantResponse(rent.getOwner()),
                 rent.getStartDate().toString(),
