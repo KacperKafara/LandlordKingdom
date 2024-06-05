@@ -2,20 +2,26 @@ package pl.lodz.p.it.ssbd2024.mol.services.scheduler;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 @Transactional(propagation = Propagation.NEVER)
 public class LocalScheduler {
+    private final MolSchedulerService molSchedulerService;
 
+    @Scheduled(fixedRate = 24, timeUnit = TimeUnit.HOURS)
     @PreAuthorize("permitAll()")
     public void changeLocalStateAfterEndedRent() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        log.info("Changing state of locals with ended rent");
+        molSchedulerService.changeLocalState();
     }
 
     @PreAuthorize("permitAll()")
