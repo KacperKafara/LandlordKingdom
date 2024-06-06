@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 
 public record LocalForTenantResponse(
         String name,
-        String description,
         int size,
         AddressResponse address,
         BigDecimal marginFee,

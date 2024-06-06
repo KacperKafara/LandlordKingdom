@@ -11,10 +11,11 @@ import {
 import DataField from '@/components/DataField';
 import RefreshQueryButton from '@/components/RefreshQueryButton';
 import { Button } from '@/components/ui/button';
+import { useTranslation } from 'react-i18next';
 
 const CurrentRentsPage: FC = () => {
     const { data, isLoading } = useGetTenantOwnRents();
-
+    const { t } = useTranslation();
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -39,18 +40,17 @@ const CurrentRentsPage: FC = () => {
                                 </p>
                             </CardHeader>
                             <CardContent className='grid grid-cols-2'>
-                                <p className='col-span-2 my-3 font-bold text-xl'>Local</p>
+                                <DataField label={t("currentTenantRents.startDate")} value={rent.startDate} />
+                                <DataField label={t("currentTenantRents.endDate")} value={rent.endDate} />
+                                <DataField label={t("currentTenantRents.fixedFee")} value={(rent.local.rentalFee + rent.local.marginFee).toString()} />
+                                <DataField label={t("currentTenantRents.balance")} value={rent.balance.toString()} />
+                                <DataField label={t("currentTenantRents.localSize")} value={rent.local.size.toString()} />
 
-                                <DataField label='Start Date' value={rent.startDate} />
-                                <DataField label='End Date' value={rent.endDate} />
-                                <DataField label='Fixed Fee' value={(rent.local.rentalFee + rent.local.marginFee).toString()} />
-                                <DataField label='Balance' value={rent.balance.toString()} />
+                                <p className='col-span-2 my-3 font-bold text-xl'>{t("currentTenantRents.owner")}</p>
 
-                                <p className='col-span-2 my-3 font-bold text-xl'>Owner</p>
-
-                                <DataField label='Name' value={`${rent.owner.firstName} ${rent.owner.lastName}`} />
-                                <DataField label='Email' value={rent.owner.email} />
-                                <DataField label='Login' value={rent.owner.login} />                                
+                                <DataField label={t("currentTenantRents.name")} value={`${rent.owner.firstName} ${rent.owner.lastName}`} />
+                                <DataField label={t("currentTenantRents.email")} value={rent.owner.email} />
+                                <DataField label={t("currentTenantRents.login")} value={rent.owner.login} />                                
                             </CardContent>
                             <CardFooter className='w-full justify-center gap-3'>
                                 <Button className='flex-auto'>Action 1</Button>

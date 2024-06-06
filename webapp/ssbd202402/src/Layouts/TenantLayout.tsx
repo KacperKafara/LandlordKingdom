@@ -8,6 +8,10 @@ const links: NavigationLink[] = [
     label: "Role Request",
     path: "./role-request",
   },
+  {
+    label: "currentRents",
+    path: "./current-rents",
+  }
 ];
 
 const TenantLayout: FC = () => {

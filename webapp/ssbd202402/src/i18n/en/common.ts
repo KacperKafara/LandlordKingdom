@@ -250,6 +250,9 @@ const navLinks = {
   users: "Users",
   roles: "Change access level",
   locals: "Locals",
+  currentRents: "Current rents",
+} satisfies {
+  [key in string] : string;
 };
 
 const userDataPage = {
@@ -405,7 +408,20 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const currentTenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
 export default {
+  currentTenantRents,
   allLocals,
   localState,
   ownerLocals,
