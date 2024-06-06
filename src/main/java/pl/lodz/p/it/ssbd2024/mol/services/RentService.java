@@ -18,7 +18,7 @@ public interface RentService {
 
     Rent editEndDate(UUID rentId, UUID ownerId, Rent rent) throws WrongEndDateException, NotFoundException;
 
-    List<Rent> getCurrentTenantRents(UUID tenantId);
+    List<Rent> getCurrentTenantRents(UUID userId);
 
     List<Rent> getArchivalRentsForTenant(UUID tenantId);
 }
