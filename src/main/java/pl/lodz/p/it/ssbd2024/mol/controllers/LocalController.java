@@ -89,11 +89,10 @@ public class LocalController {
 
     @PatchMapping("/{id}/archive")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<LocalResponse> archiveLocal(@PathVariable UUID id) {
+    public ResponseEntity<LocalForAdministratorResponse> archiveLocal(@PathVariable UUID id) {
         try {
             Local archivedLocal = localService.archiveLocal(id);
-            throw new UnsupportedOperationException("Not supported yet.");
-            //TODO: return ResponseEntity.ok(LocalMapper.toLocalResponse(archivedLocal));
+            return ResponseEntity.ok(LocalMapper.toLocalForAdministratorResponse(archivedLocal));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (InvalidLocalState e) {
