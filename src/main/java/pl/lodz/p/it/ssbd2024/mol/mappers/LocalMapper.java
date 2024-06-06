@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.GetAllLocalsResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.GetOwnLocalsResponse;
 
@@ -41,5 +42,18 @@ public class LocalMapper {
 
     public static List<GetAllLocalsResponse> toGetAllLocalsResponseList(List<Local> locals) {
         return locals.stream().map(LocalMapper::toGetAllLocalsResponse).collect(Collectors.toList());
+    }
+
+    public static AddLocalResponse toGetAddLocalResponse(Local local) {
+        return new AddLocalResponse(
+                local.getId(),
+                local.getName(),
+                local.getDescription(),
+                local.getState().toString(),
+                local.getSize(),
+                local.getMarginFee(),
+                local.getRentalFee(),
+                AddressMapper.toAddressResponse(local.getAddress())
+        );
     }
 }

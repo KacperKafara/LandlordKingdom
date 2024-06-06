@@ -36,33 +36,9 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
-        Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
-                addLocalRequest.address().getNumber(),
-                addLocalRequest.address().getStreet(),
-                addLocalRequest.address().getCity(),
-                addLocalRequest.address().getZip(),
-                addLocalRequest.address().getCountry()
-        );
         Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new
                 NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
-        if (existingAddress.isPresent()) {
-            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(addLocalRequest.address(), LocalState.ARCHIVED);
-            if (!existingLocal.isEmpty()) {
-                boolean hasOtherState = existingLocal.stream()
-                        .anyMatch(local -> local.getState() != LocalState.WITHOUT_OWNER);
-                if (hasOtherState && existingLocal.size() > 1) {
-                    throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
-                            ErrorCodes.ADDRESS_ASSIGNED);
-                } else {
-                    existingLocal.getFirst().setOwner(owner);
-                    existingLocal.getFirst().setState(LocalState.UNAPPROVED);
-                    return localRepository.saveAndFlush(existingLocal.getFirst());
-                }
-            }
-        } else {
-            addressRepository.saveAndFlush(addLocalRequest.address());
-        }
-        Local local = new Local(
+        Local newLocal = new Local(
                 addLocalRequest.name(),
                 addLocalRequest.description(),
                 addLocalRequest.size(),
@@ -71,7 +47,33 @@ public class LocalServiceImpl implements LocalService {
                 addLocalRequest.marginFee(),
                 addLocalRequest.rentalFee()
         );
-        return localRepository.saveAndFlush(local);
+        throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
+                ErrorCodes.ADDRESS_ASSIGNED);
+//        Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
+//                addLocalRequest.address().getNumber(),
+//                addLocalRequest.address().getStreet(),
+//                addLocalRequest.address().getCity(),
+//                addLocalRequest.address().getZip(),
+//                addLocalRequest.address().getCountry()
+//        );
+//        if (existingAddress.isPresent()) {
+//            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(addLocalRequest.address(), LocalState.ARCHIVED);
+//            if (!existingLocal.isEmpty()) {
+//                boolean hasOtherState = existingLocal.stream()
+//                        .anyMatch(local -> local.getState() != LocalState.WITHOUT_OWNER);
+//                if (hasOtherState && existingLocal.size() > 1) {
+//                    throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
+//                            ErrorCodes.ADDRESS_ASSIGNED);
+//                } else {
+//                    newLocal = existingLocal.getFirst();
+//                    newLocal.setOwner(owner);
+//                    newLocal.setState(LocalState.UNAPPROVED);
+//                }
+//            }
+//        } else {
+//            addressRepository.saveAndFlush(addLocalRequest.address());
+//        }
+//        return localRepository.saveAndFlush(newLocal);
     }
 
     @Override

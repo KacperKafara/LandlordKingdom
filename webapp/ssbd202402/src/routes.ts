@@ -10,7 +10,7 @@ import loadable from "@loadable/component";
 import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
 import NotApprovedActionsPage from "./pages/Admin/NotApprovedActions";
-import addLocalForm from "@/pages/Owner/addLocalForm.tsx";
+import addLocalForm from "./pages/Owner/addLocalForm";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
 const MePage = loadable(() => import("./pages/Me"));
@@ -40,7 +40,7 @@ const AdminRoutes: RouteObject[] = [
 const OwnerRoutes: RouteObject[] = [
   { path: "test", Component: OwnerTestPage },
   { path: "locals", Component: OwnLocalsPage },
-    { path: "addLocalForm", Component: addLocalForm },
+  { path: "addLocalForm", Component: addLocalForm },
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },

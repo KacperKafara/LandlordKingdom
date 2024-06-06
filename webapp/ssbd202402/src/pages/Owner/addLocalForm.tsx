@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
-import { useAddLocal } from "@/data/useAddLocal";
+import { useAddLocal } from "@/data/mol/useAddLocal.ts";
 import {TFunction} from "i18next";
 
 const addLocalSchema = (t: TFunction) => z.object({
@@ -40,15 +40,15 @@ const AddLocalForm: FC = () => {
                 name: data.name,
                 description: data.description,
                 size: data.size,
+                marginFee: data.marginFee,
+                rentalFee: data.rentalFee,
                 address: {
                     number: data.address.number,
                     street: data.address.street,
                     city: data.address.city,
-                    zip: data.address.zip,
-                    country: data.address.country
+                    country: data.address.country,
+                    zipCode: data.address.zip
                 },
-                marginFee: data.marginFee,
-                rentalFee: data.rentalFee,
             });
         } catch (error) {
             console.error('An error occurred while adding local:', error);

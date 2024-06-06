@@ -56,8 +56,7 @@ public class LocalController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID ownerId = UUID.fromString(jwt.getSubject());
         try {
-            localService.addLocal(addLocalRequest, ownerId);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(addLocalRequest, ownerId)));
         } catch (GivenAddressAssignedToOtherLocalException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (NotFoundException e) {
