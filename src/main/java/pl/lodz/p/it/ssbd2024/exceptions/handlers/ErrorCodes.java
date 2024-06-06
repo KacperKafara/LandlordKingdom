@@ -35,6 +35,8 @@ public class ErrorCodes {
     public static final String TRANSACTION = "transaction";
     public static final String ACCESS_LEVEL_ASSIGNED = "accessLevelAssigned";
     public static final String ACCESS_LEVEL_TAKEN = "accessLevelTaken";
+    public static final String ROLE_REQUEST_ALREADY_EXISTS = "roleRequestAlreadyExists";
+    public static final String USER_ALREADY_HAS_ROLE = "userAlreadyHasRole";
     public static final String ADDRESS_ASSIGNED = "addressAssigned";
     public static final String LOCAL_NOT_FOUND = "localNotFound";
 }

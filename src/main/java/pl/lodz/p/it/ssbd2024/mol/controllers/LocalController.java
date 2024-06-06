@@ -22,6 +22,7 @@ import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
+import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import java.util.List;
 import java.util.Optional;
@@ -91,7 +92,7 @@ public class LocalController {
     @GetMapping
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<List<GetAllLocalsResponse>> getAllLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return ResponseEntity.ok(LocalMapper.toGetAllLocalsResponseList(localService.getAllLocals()));
     }
 
     @PatchMapping("/{id}/address")

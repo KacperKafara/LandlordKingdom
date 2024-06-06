@@ -1,4 +1,5 @@
 import { ExceptionCode } from "@/@types/errorCode";
+import { LocalState } from "@/@types/localState";
 import { Role } from "@/store/userStore";
 
 const error = {
@@ -247,7 +248,9 @@ const navLinks = {
   account: "My account",
   signOut: "Sign out",
   users: "Users",
+  notApprovedActions: "Not approved actions",
   roles: "Change access level",
+  locals: "Locals",
 };
 
 const userDataPage = {
@@ -338,6 +341,12 @@ const registerSuccessPage = {
   loginButton: "Go back to login",
 };
 
+const notApprovedActionsPage = {
+  roleRequests: "Requests for role",
+  locals: "Locals",
+  emptyRoleRequests: "No avaliable role requsts",
+};
+
 const validation = {
   characters: "character(s)",
   minLength: "Field must contain at least",
@@ -410,7 +419,30 @@ const notFoundPage = {
   description: "The page you are looking for does not exist.",
 };
 
+const ownerLocals = {
+  show: "Show",
+};
+
+const allLocals = {
+  show: "Show",
+  localOwner: "Owner: ",
+};
+
+const localState = {
+  UNAPPROVED: "Unapproved",
+  ARCHIVED: "Archived",
+  ACTIVE: "Active",
+  INACTIVE: "Inactive",
+  WITHOUT_OWNER: "Without owner",
+  RENTED: "Rented",
+} satisfies {
+  [key in LocalState]: string;
+};
+
 export default {
+  allLocals,
+  localState,
+  ownerLocals,
   notFoundPage,
   sessionExpiredDialog,
   error,
@@ -436,6 +468,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  notApprovedActionsPage,
   light: "Light",
   dark: "Dark",
   reactivationSuccess: "Your account has been reactivated. You can now login.",

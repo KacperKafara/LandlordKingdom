@@ -1,17 +1,20 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.mol.dto.GetRoleResponse;
+import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface RoleService {
 
-    GetRoleResponse getAll();
+    List<RoleRequest> getAll();
 
-    GetRoleResponse requestRole(UUID tenantId) throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException;
+    RoleRequest get() throws NotFoundException;
+
+    RoleRequest requestRole() throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException, NotFoundException;
 
     void accept(UUID id) throws NotFoundException;
 

@@ -7,6 +7,9 @@ import AdminTestPage from "./pages/Admin/Test";
 import OwnerTestPage from "./pages/Owner/Test";
 import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
+import LocalsPage from "./pages/Admin/Locals";
+import OwnLocalsPage from "./pages/Owner/Locals";
+import NotApprovedActionsPage from "./pages/Admin/NotApprovedActions";
 import addLocalForm from "@/pages/Owner/addLocalForm.tsx";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
@@ -25,18 +28,23 @@ const UpdateEmailPage = loadable(() => import("./pages/UpdateEmail"));
 const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
+const RoleRequestPage = loadable(() => import("./pages/Tenant/RoleRequest"));
 
 const AdminRoutes: RouteObject[] = [
+  { path: "locals", Component: LocalsPage },
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
+  { path: "not-approved", Component: NotApprovedActionsPage },
 ];
 const OwnerRoutes: RouteObject[] = [
-    { path: "test", Component: OwnerTestPage },
+  { path: "test", Component: OwnerTestPage },
+  { path: "locals", Component: OwnLocalsPage },
     { path: "addLocalForm", Component: addLocalForm },
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
+  { path: "role-request", Component: RoleRequestPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 

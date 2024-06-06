@@ -19,6 +19,11 @@ GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.payments TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.rents TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.role_requests TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.variable_fees TO ssbd02mol;
+GRANT SELECT ON TABLE public.users TO ssbd02mol;
+GRANT SELECT ON TABLE public.personal_data TO ssbd02mol;
+GRANT SELECT ON TABLE public.google_auth TO ssbd02mol;
+GRANT SELECT ON TABLE public.timezones TO ssbd02mol;
+GRANT SELECT ON TABLE public.themes TO ssbd02mol;
 
 GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO ssbd02auth;
 GRANT SELECT ON TABLE public.personal_data TO ssbd02auth;
@@ -33,6 +38,10 @@ GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02auth;
 
 GRANT SELECT ON TABLE public.tenants TO ssbd02mol;
 GRANT SELECT ON TABLE public.personal_data TO ssbd02mol;
+GRANT SELECT ON TABLE public.users TO ssbd02mol;
+GRANT SELECT ON TABLE public.themes TO ssbd02mol;
+GRANT SELECT ON TABLE public.timezones TO ssbd02mol;
+GRANT SELECT ON TABLE public.google_auth TO ssbd02mol;
 GRANT SELECT, INSERT ON TABLE public.owners TO ssbd02mol;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.access_levels TO ssbd02mol;
 
@@ -165,19 +174,34 @@ VALUES (gen_random_uuid(), 'Pacific/Midway'),
        (gen_random_uuid(), 'Pacific/Auckland'),
        (gen_random_uuid(), 'Pacific/Tongatapu');
 
-INSERT INTO public.addresses (created_at, modified_at, version, number, zip, created_by, id, modified_by, city, country, street)
-VALUES
-    ('2023-01-01 10:00:00', '2023-01-01 10:00:00', 1, '123', '12345', NULL, '550e8400-e29b-41d4-a716-446655440000', NULL, 'City A', 'Country A', 'Street A'),
-    ('2023-01-02 11:00:00', '2023-01-02 11:00:00', 1, '456', '67890', NULL, '550e8400-e29b-41d4-a716-446655440005', NULL, 'City B', 'Country B', 'Street B'),
-    ('2023-01-03 12:00:00', '2023-01-03 12:00:00', 1, '789', '10111', NULL, '550e8400-e29b-41d4-a716-446655440010', NULL, 'City C', 'Country C', 'Street C'),
-    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '101', '12131', NULL, '550e8400-e29b-41d4-a716-446655440015', NULL, 'City D', 'Country D', 'Street D'),
-    ('2023-01-05 14:00:00', '2023-01-05 14:00:00', 1, '112', '14151', NULL, '550e8400-e29b-41d4-a716-446655440020', NULL, 'City E', 'Country E', 'Street E');
+INSERT INTO public.addresses (created_at, modified_at, version, number, zip, created_by, id, modified_by, city, country,
+                              street)
+VALUES ('2023-01-01 10:00:00', '2023-01-01 10:00:00', 1, '123', '12345', NULL, '550e8400-e29b-41d4-a716-446655440000',
+        NULL, 'City A', 'Country A', 'Street A'),
+       ('2023-01-02 11:00:00', '2023-01-02 11:00:00', 1, '456', '67890', NULL, '550e8400-e29b-41d4-a716-446655440005',
+        NULL, 'City B', 'Country B', 'Street B'),
+       ('2023-01-03 12:00:00', '2023-01-03 12:00:00', 1, '789', '10111', NULL, '550e8400-e29b-41d4-a716-446655440010',
+        NULL, 'City C', 'Country C', 'Street C'),
+       ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '101', '12131', NULL, '550e8400-e29b-41d4-a716-446655440015',
+        NULL, 'City D', 'Country D', 'Street D'),
+       ('2023-01-05 14:00:00', '2023-01-05 14:00:00', 1, '112', '14151', NULL, '550e8400-e29b-41d4-a716-446655440020',
+        NULL, 'City E', 'Country E', 'Street E');
 
 
-INSERT INTO locals (margin_fee, rental_fee, size, state, created_at, modified_at, version, address_id, created_by, id, modified_by, owner_id, name, description)
-VALUES
-    (10.50, 1000.00, 50, 3, '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, '550e8400-e29b-41d4-a716-446655440000', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440002', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local A', 'Description of Local A'),
-    (12.00, 1200.00, 60, 2, '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, '550e8400-e29b-41d4-a716-446655440005', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440007', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local B', 'Description of Local B'),
-    (15.00, 1500.00, 70, 4, '2023-01-03 14:00:00', '2023-01-03 14:00:00', 1, '550e8400-e29b-41d4-a716-446655440010', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440012', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local C', 'Description of Local C'),
-    (20.00, 2000.00, 80, 1, '2023-01-04 15:00:00', '2023-01-04 15:00:00', 1, '550e8400-e29b-41d4-a716-446655440015', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440017', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local D', 'Description of Local D'),
-    (25.00, 2500.00, 90, 5, '2023-01-05 16:00:00', '2023-01-05 16:00:00', 1, '550e8400-e29b-41d4-a716-446655440020', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440022', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local E', 'Description of Local E');
+INSERT INTO locals (margin_fee, rental_fee, size, state, created_at, modified_at, version, address_id, created_by, id,
+                    modified_by, owner_id, name, description)
+VALUES (10.50, 1000.00, 50, 3, '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, '550e8400-e29b-41d4-a716-446655440000',
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440002', null,
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local A', 'Description of Local A'),
+       (12.00, 1200.00, 60, 2, '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, '550e8400-e29b-41d4-a716-446655440005',
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440007', null,
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local B', 'Description of Local B'),
+       (15.00, 1500.00, 70, 4, '2023-01-03 14:00:00', '2023-01-03 14:00:00', 1, '550e8400-e29b-41d4-a716-446655440010',
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440012', null,
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local C', 'Description of Local C'),
+       (20.00, 2000.00, 80, 1, '2023-01-04 15:00:00', '2023-01-04 15:00:00', 1, '550e8400-e29b-41d4-a716-446655440015',
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440017', null,
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local D', 'Description of Local D'),
+       (25.00, 2500.00, 90, 5, '2023-01-05 16:00:00', '2023-01-05 16:00:00', 1, '550e8400-e29b-41d4-a716-446655440020',
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440022', null,
+        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local E', 'Description of Local E');

@@ -36,6 +36,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     Local saveAndFlush(@NonNull Local local);
 
     @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT l FROM Local l WHERE l.owner.user.id = :id")
     List<Local> findAllByOwnerId(UUID id);
 
     @PreAuthorize("isAuthenticated()")

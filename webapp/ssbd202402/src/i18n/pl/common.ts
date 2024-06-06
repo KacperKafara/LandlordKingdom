@@ -1,4 +1,5 @@
 import { ExceptionCode } from "@/@types/errorCode";
+import { LocalState } from "@/@types/localState";
 import { Role } from "@/store/userStore";
 
 const error = {
@@ -254,7 +255,9 @@ const navLinks = {
   account: "Moje konto",
   signOut: "Wyloguj",
   users: "Użytkownicy",
+  notApprovedActions: "Niezatwierdzone operację",
   roles: "Zmień poziom dostępu",
+  locals: "Nieruchomości",
 };
 
 const userDataPage = {
@@ -345,6 +348,12 @@ const registerSuccessPage = {
   loginButton: "Wróc do strony logowania",
 };
 
+const notApprovedActionsPage = {
+  roleRequests: "Zgłoszenia o rolę",
+  locals: "Lokale",
+  emptyRoleRequests: "Brak zgłoszeń o rolę",
+};
+
 const validation = {
   characters: "znak(i/ów)",
   minLength: "Pole musi zawierać minimalnie",
@@ -415,7 +424,30 @@ const notFoundPage = {
   description: "Strona, której szukasz, nie istnieje",
 };
 
+const ownerLocals = {
+  show: "Wyświetl",
+};
+
+const allLocals = {
+  show: "Wyświetl",
+  localOwner: "Właściciel: ",
+};
+
+const localState = {
+  UNAPPROVED: "Niezaakceptowany",
+  ARCHIVED: "Zarchiwizowany",
+  ACTIVE: "Aktywny",
+  INACTIVE: "Nieaktywny",
+  WITHOUT_OWNER: "Bez właściciela",
+  RENTED: "Wynajęty",
+} satisfies {
+  [key in LocalState]: string;
+};
+
 export default {
+  allLocals,
+  ownerLocals,
+  localState,
   notFoundPage,
   sessionExpiredDialog,
   error,
@@ -441,6 +473,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  notApprovedActionsPage,
   light: "Jasny",
   dark: "Ciemny",
   reactivationSuccess: "Konto zostało aktywowane, możesz się zalogować",
