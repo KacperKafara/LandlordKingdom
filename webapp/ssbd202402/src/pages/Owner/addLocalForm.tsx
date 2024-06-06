@@ -49,7 +49,6 @@ const AddLocalForm: FC = () => {
                 },
                 marginFee: data.marginFee,
                 rentalFee: data.rentalFee,
-                ownerId: "2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9"
             });
         } catch (error) {
             console.error('An error occurred while adding local:', error);

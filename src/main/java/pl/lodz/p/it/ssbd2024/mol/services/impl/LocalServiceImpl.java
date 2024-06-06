@@ -8,9 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
+import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
+import pl.lodz.p.it.ssbd2024.model.Owner;
+import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
+import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
@@ -27,31 +31,46 @@ import java.util.UUID;
 public class LocalServiceImpl implements LocalService {
     private final LocalRepository localRepository;
     private final AddressRepository addressRepository;
+    private final OwnerRepository ownerRepository;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local addLocal(Local local) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
+    public Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
         Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
-                local.getAddress().getNumber(),
-                local.getAddress().getStreet(),
-                local.getAddress().getCity(),
-                local.getAddress().getZip(),
-                local.getAddress().getCountry()
+                addLocalRequest.address().getNumber(),
+                addLocalRequest.address().getStreet(),
+                addLocalRequest.address().getCity(),
+                addLocalRequest.address().getZip(),
+                addLocalRequest.address().getCountry()
         );
+        Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new
+                NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         if (existingAddress.isPresent()) {
-            Local existingLocal = localRepository.findByAddress(local.getAddress()).orElseThrow(() -> new
-                    NotFoundException(LocalMessages.NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
-            if (existingLocal.getState() == LocalState.WITHOUT_OWNER) {
-                existingLocal.setOwner(local.getOwner());
-                existingLocal.setName(local.getName());
-                existingLocal.setDescription(local.getDescription());
-                existingLocal.setState(LocalState.UNAPPROVED);
-                return localRepository.saveAndFlush(existingLocal);
-            } else throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
-                                                                       ErrorCodes.ADDRESS_ASSIGNED);
+            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(addLocalRequest.address(), LocalState.ARCHIVED);
+            if (!existingLocal.isEmpty()) {
+                boolean hasOtherState = existingLocal.stream()
+                        .anyMatch(local -> local.getState() != LocalState.WITHOUT_OWNER);
+                if (hasOtherState && existingLocal.size() > 1) {
+                    throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
+                            ErrorCodes.ADDRESS_ASSIGNED);
+                } else {
+                    existingLocal.getFirst().setOwner(owner);
+                    existingLocal.getFirst().setState(LocalState.UNAPPROVED);
+                    return localRepository.saveAndFlush(existingLocal.getFirst());
+                }
+            }
         } else {
-            addressRepository.saveAndFlush(local.getAddress());
+            addressRepository.saveAndFlush(addLocalRequest.address());
         }
+        Local local = new Local(
+                addLocalRequest.name(),
+                addLocalRequest.description(),
+                addLocalRequest.size(),
+                addLocalRequest.address(),
+                owner,
+                addLocalRequest.marginFee(),
+                addLocalRequest.rentalFee()
+        );
         return localRepository.saveAndFlush(local);
     }
 

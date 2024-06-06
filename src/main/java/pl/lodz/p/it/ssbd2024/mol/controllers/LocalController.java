@@ -1,10 +1,14 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -47,19 +51,11 @@ public class LocalController {
     @PostMapping
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<AddLocalResponse> addLocal(@RequestBody AddLocalRequest addLocalRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID ownerId = UUID.fromString(jwt.getSubject());
         try {
-            Owner owner = ownerRepository.findById(addLocalRequest.ownerId()).orElseThrow(() -> new
-                    NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
-            Local newLocal = new Local(
-                    addLocalRequest.name(),
-                    addLocalRequest.description(),
-                    addLocalRequest.size(),
-                    addLocalRequest.address(),
-                    owner,
-                    addLocalRequest.marginFee(),
-                    addLocalRequest.rentalFee()
-            );
-            localService.addLocal(newLocal);
+            localService.addLocal(addLocalRequest, ownerId);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (GivenAddressAssignedToOtherLocalException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);

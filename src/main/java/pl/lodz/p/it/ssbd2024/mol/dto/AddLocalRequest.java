@@ -9,7 +9,6 @@ public record AddLocalRequest(
         String description,
         int size,
         Address address,
-        UUID ownerId,
         BigDecimal marginFee,
         BigDecimal rentalFee
 ) {

@@ -12,7 +12,6 @@ type AddLocalRequest = {
     address: Address;
     marginFee: number;
     rentalFee: number;
-    ownerId: string;
 };
 
 type Address = {
