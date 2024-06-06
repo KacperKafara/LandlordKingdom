@@ -258,6 +258,7 @@ const navLinks = {
   notApprovedActions: "Niezatwierdzone operację",
   roles: "Zmień poziom dostępu",
   locals: "Nieruchomości",
+  currentRents: "Aktualne wynajmy",
 };
 
 const userDataPage = {
@@ -417,7 +418,20 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const currentTenantRents = {
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  fixedFee: "Opłata stała",
+  balance: "Bilans",
+  localSize: "Powierzchnia",
+  owner: "Właściciel",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+};
+
 export default {
+  currentTenantRents,
   allLocals,
   ownerLocals,
   localState,

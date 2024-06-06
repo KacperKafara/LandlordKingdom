@@ -174,34 +174,133 @@ VALUES (gen_random_uuid(), 'Pacific/Midway'),
        (gen_random_uuid(), 'Pacific/Auckland'),
        (gen_random_uuid(), 'Pacific/Tongatapu');
 
-INSERT INTO public.addresses (created_at, modified_at, version, number, zip, created_by, id, modified_by, city, country,
-                              street)
-VALUES ('2023-01-01 10:00:00', '2023-01-01 10:00:00', 1, '123', '12345', NULL, '550e8400-e29b-41d4-a716-446655440000',
-        NULL, 'City A', 'Country A', 'Street A'),
-       ('2023-01-02 11:00:00', '2023-01-02 11:00:00', 1, '456', '67890', NULL, '550e8400-e29b-41d4-a716-446655440005',
-        NULL, 'City B', 'Country B', 'Street B'),
-       ('2023-01-03 12:00:00', '2023-01-03 12:00:00', 1, '789', '10111', NULL, '550e8400-e29b-41d4-a716-446655440010',
-        NULL, 'City C', 'Country C', 'Street C'),
-       ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '101', '12131', NULL, '550e8400-e29b-41d4-a716-446655440015',
-        NULL, 'City D', 'Country D', 'Street D'),
-       ('2023-01-05 14:00:00', '2023-01-05 14:00:00', 1, '112', '14151', NULL, '550e8400-e29b-41d4-a716-446655440020',
-        NULL, 'City E', 'Country E', 'Street E');
+INSERT INTO public.addresses (created_at, modified_at, version, number, zip, created_by, id, modified_by, city, country, street)
+VALUES
+    ('2023-01-01 10:00:00', '2023-01-01 10:00:00', 1, '123', '12345', NULL, '550e8400-e29b-41d4-a716-446655440000', NULL, 'City A', 'Country A', 'Street A'),
+    ('2023-01-02 11:00:00', '2023-01-02 11:00:00', 1, '456', '67890', NULL, '550e8400-e29b-41d4-a716-446655440005', NULL, 'City B', 'Country B', 'Street B'),
+    ('2023-01-03 12:00:00', '2023-01-03 12:00:00', 1, '789', '10111', NULL, '550e8400-e29b-41d4-a716-446655440010', NULL, 'City C', 'Country C', 'Street C'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '101', '12131', NULL, '550e8400-e29b-41d4-a716-446655440015', NULL, 'City D', 'Country D', 'Street D'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '103', '12139', NULL, '550e8400-e29b-41d4-a716-446655440025', NULL, 'City F', 'Country F', 'Street F'),
+    ('2023-01-05 14:00:00', '2023-01-05 14:00:00', 1, '112', '14151', NULL, '550e8400-e29b-41d4-a716-446655440020', NULL, 'City E', 'Country E', 'Street E'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '193', '19139', NULL, '550e8400-e29b-41d4-a716-446655440030', NULL, 'City G', 'Country G', 'Street G'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '323', '19142', NULL, '550e8400-e29b-41d4-a716-446655440035', NULL, 'City I', 'Country I', 'Street I');
 
 
-INSERT INTO locals (margin_fee, rental_fee, size, state, created_at, modified_at, version, address_id, created_by, id,
-                    modified_by, owner_id, name, description)
-VALUES (10.50, 1000.00, 50, 3, '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, '550e8400-e29b-41d4-a716-446655440000',
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440002', null,
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local A', 'Description of Local A'),
-       (12.00, 1200.00, 60, 2, '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, '550e8400-e29b-41d4-a716-446655440005',
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440007', null,
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local B', 'Description of Local B'),
-       (15.00, 1500.00, 70, 4, '2023-01-03 14:00:00', '2023-01-03 14:00:00', 1, '550e8400-e29b-41d4-a716-446655440010',
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440012', null,
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local C', 'Description of Local C'),
-       (20.00, 2000.00, 80, 1, '2023-01-04 15:00:00', '2023-01-04 15:00:00', 1, '550e8400-e29b-41d4-a716-446655440015',
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440017', null,
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local D', 'Description of Local D'),
-       (25.00, 2500.00, 90, 5, '2023-01-05 16:00:00', '2023-01-05 16:00:00', 1, '550e8400-e29b-41d4-a716-446655440020',
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440022', null,
-        '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local E', 'Description of Local E');
+INSERT INTO locals (margin_fee, rental_fee, size, state, created_at, modified_at, version, address_id, created_by, id, modified_by, owner_id, name, description)
+VALUES
+    (10.50, 1000.00, 50, 3, '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, '550e8400-e29b-41d4-a716-446655440000', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440002', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local A', 'Description of Local A'),
+    (12.00, 1200.00, 60, 2, '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, '550e8400-e29b-41d4-a716-446655440005', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440007', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local B', 'Description of Local B'),
+    (15.00, 1500.00, 70, 4, '2023-01-03 14:00:00', '2023-01-03 14:00:00', 1, '550e8400-e29b-41d4-a716-446655440010', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440012', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local C', 'Description of Local C'),
+    (20.00, 2000.00, 80, 1, '2023-01-04 15:00:00', '2023-01-04 15:00:00', 1, '550e8400-e29b-41d4-a716-446655440015', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440017', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local D', 'Description of Local D'),
+    (25.00, 2500.00, 90, 5, '2023-01-05 16:00:00', '2023-01-05 16:00:00', 1, '550e8400-e29b-41d4-a716-446655440020', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440022', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local F', 'Description of Local F'),
+    (25.00, 2500.00, 90, 5, '2023-01-05 16:00:00', '2023-01-05 16:00:00', 1, '550e8400-e29b-41d4-a716-446655440025', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440025', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local G', 'Description of Local G'),
+    (25.00, 2500.00, 90, 5, '2023-01-05 16:00:00', '2023-01-05 16:00:00', 1, '550e8400-e29b-41d4-a716-446655440030', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440028', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local H', 'Description of Local H'),
+    (25.00, 2500.00, 90, 5, '2023-01-05 16:00:00', '2023-01-05 16:00:00', 1, '550e8400-e29b-41d4-a716-446655440035', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440031', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local I', 'Description of Local I');
+
+-- INSERT INTO ssbd02.public.rents (local_id, tenant_id, owner_id, start_date, end_date, balance, created_at, modified_at, version,  created_by, modified_by, id)
+-- VALUES
+--     ()
+
+-- Rent 1
+INSERT INTO public.rents (balance, end_date, start_date, created_at, modified_at, version, created_by, id, local_id, modified_by, owner_id, tenant_id)
+VALUES (1000.00, '2024-06-23', '2024-01-01', '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'a1111111-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440025', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', '4b329d71-2a92-4e90-8f0b-f673e4f79529');
+VALUES (1000.00, '2024-06-30', '2024-01-01', '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'a1111111-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440022', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', '4b329d71-2a92-4e90-8f0b-f673e4f79529');
+
+-- Rent 2
+INSERT INTO public.rents (balance, end_date, start_date, created_at, modified_at, version, created_by, id, local_id, modified_by, owner_id, tenant_id)
+VALUES (1200.00, '2024-06-16', '2024-01-02', '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'a2222222-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440028', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', '4b329d71-2a92-4e90-8f0b-f673e4f79529');
+
+-- Rent 3
+INSERT INTO public.rents (balance, end_date, start_date, created_at, modified_at, version, created_by, id, local_id, modified_by, owner_id, tenant_id)
+VALUES (1500.00, '2024-04-03', '2024-01-03', '2023-01-03 14:00:00', '2023-01-03 14:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'a3333333-e29b-41d4-a716-446655440000', '550e8400-e29b-41d4-a716-446655440031', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', '4b329d71-2a92-4e90-8f0b-f673e4f79529');
+-- Additional Fixed Fees for Rent 1
+INSERT INTO public.fixed_fees (date, margin_fee, rental_fee, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+VALUES
+    ('2023-01-01', 15.00, 95.00, '2023-01-01 12:40:00', '2023-01-01 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff1a1114-e29b-41d4-a716-446655440001', null, 'a1111111-e29b-41d4-a716-446655440000'),
+    ('2023-01-01', 7.50, 47.50, '2023-01-01 12:50:00', '2023-01-01 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff1a1115-e29b-41d4-a716-446655440001', null, 'a1111111-e29b-41d4-a716-446655440000'),
+    ('2023-01-01', 10.00, 67.00, '2023-01-01 13:00:00', '2023-01-01 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff1a1116-e29b-41d4-a716-446655440001', null, 'a1111111-e29b-41d4-a716-446655440000');
+
+-- Additional Fixed Fees for Rent 2
+INSERT INTO public.fixed_fees (date, margin_fee, rental_fee, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+VALUES
+    ('2023-01-02', 18.00, 112.00, '2023-01-02 12:40:00', '2023-01-02 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff2a1114-e29b-41d4-a716-446655440002', null, 'a2222222-e29b-41d4-a716-446655440000'),
+    ('2023-01-02', 9.00, 56.00, '2023-01-02 12:50:00', '2023-01-02 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff2a1115-e29b-41d4-a716-446655440002', null, 'a2222222-e29b-41d4-a716-446655440000'),
+    ('2023-01-02', 12.00, 70.00, '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff2a1116-e29b-41d4-a716-446655440002', null, 'a2222222-e29b-41d4-a716-446655440000');
+
+-- Additional Fixed Fees for Rent 3
+INSERT INTO public.fixed_fees (date, margin_fee, rental_fee, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+VALUES
+    ('2023-01-03', 21.00, 119.00, '2023-01-03 12:40:00', '2023-01-03 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff3a1114-e29b-41d4-a716-446655440003', null, 'a3333333-e29b-41d4-a716-446655440000'),
+    ('2023-01-03', 10.50, 64.50, '2023-01-03 12:50:00', '2023-01-03 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff3a1115-e29b-41d4-a716-446655440003', null, 'a3333333-e29b-41d4-a716-446655440000'),
+    ('2023-01-03', 13.50, 78.50, '2023-01-03 13:00:00', '2023-01-03 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ff3a1116-e29b-41d4-a716-446655440003', null, 'a3333333-e29b-41d4-a716-446655440000');
+
+-- Additional fixed fees follow the same pattern for remaining rents...
+
+
+-- Payments for Rent 1
+INSERT INTO public.payments (amount, created_at, modified_at, version, created_by, id, modified_by, rent_id, date)
+VALUES
+    (300.00, '2023-01-10 12:10:00', '2023-01-10 12:10:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '659451d2-283b-4f45-b0d3-6b3d01ce1610', null, 'a1111111-e29b-41d4-a716-446655440000', '2023-01-1'),
+    (400.00, '2023-01-15 12:20:00', '2023-01-15 12:20:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '1fb46985-bff4-492f-a403-6a7fada1c192', null, 'a1111111-e29b-41d4-a716-446655440000', '2023-01-8'),
+    (300.00, '2023-01-20 12:30:00', '2023-01-20 12:30:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'a64e6501-68ed-4be0-a49b-37f05d5538ef', null, 'a1111111-e29b-41d4-a716-446655440000', '2023-01-15');
+
+-- Payments for Rent 2
+INSERT INTO public.payments (amount, created_at, modified_at, version, created_by, id, modified_by, rent_id, date)
+VALUES
+    (400.00, '2023-01-11 12:10:00', '2023-01-11 12:10:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '56aad039-f835-43b1-b99b-5d6cb54b0e7b', null, 'a2222222-e29b-41d4-a716-446655440000', '2023-01-11'),
+    (400.00, '2023-01-16 12:20:00', '2023-01-16 12:20:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '43dd70c4-c85d-4b1c-b877-c1df995bef84', null, 'a2222222-e29b-41d4-a716-446655440000', '2023-01-16'),
+    (400.00, '2023-01-21 12:30:00', '2023-01-21 12:30:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'f41fce24-0662-4d2f-8a15-3c3aa21b34f5', null, 'a2222222-e29b-41d4-a716-446655440000', '2023-01-21');
+
+-- Payments for Rent 3
+INSERT INTO public.payments (amount, created_at, modified_at, version, created_by, id, modified_by, rent_id, date)
+VALUES
+    (500.00, '2023-01-12 12:10:00', '2023-01-12 12:10:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '9dc038a5-bf01-4869-8e15-c9b1f0c0e884', null, 'a3333333-e29b-41d4-a716-446655440000', '2023-01-12'),
+    (500.00, '2023-01-17 12:20:00', '2023-01-17 12:20:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '7d78be21-120b-47fa-bab3-e257039a8149', null, 'a3333333-e29b-41d4-a716-446655440000', '2023-01-17'),
+    (500.00, '2023-01-22 12:30:00', '2023-01-22 12:30:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '8a38fdd6-a596-461e-a85e-ad022a73e76e', null, 'a3333333-e29b-41d4-a716-446655440000', '2023-01-22');
+
+-- Additional payments follow the same pattern for remaining rents...
+-- Additional Payments for Rent 1
+INSERT INTO public.payments (amount, created_at, modified_at, version, created_by, id, modified_by, rent_id, date)
+VALUES
+    (310.00, '2023-01-25 12:40:00', '2023-01-25 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '25569df6-6cc8-4350-ac3e-5a04616d5d12', null, 'a1111111-e29b-41d4-a716-446655440000', '2023-01-25'),
+    (410.00, '2023-01-30 12:50:00', '2023-01-30 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'c099836b-d620-4144-9ad4-1040023ba4f8', null, 'a1111111-e29b-41d4-a716-446655440000', '2023-01-30'),
+    (310.00, '2023-02-05 13:00:00', '2023-02-05 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '994ab228-102c-4def-a696-9ab0aebf757b', null, 'a1111111-e29b-41d4-a716-446655440000', '2023-02-05');
+
+-- Additional Payments for Rent 2
+INSERT INTO public.payments (amount, created_at, modified_at, version, created_by, id, modified_by, rent_id, date)
+VALUES
+    (420.00, '2023-01-26 12:40:00', '2023-01-26 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '071b5f5b-3eb5-47b0-82c6-85b5ec49c63b', null, 'a2222222-e29b-41d4-a716-446655440000', '2023-01-26'),
+    (420.00, '2023-01-31 12:50:00', '2023-01-31 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'f3781f64-1970-467d-828d-6f724be6cce5', null, 'a2222222-e29b-41d4-a716-446655440000', '2023-01-31'),
+    (420.00, '2023-02-06 13:00:00', '2023-02-06 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '59f20709-cf92-476f-a4b3-0d9362aec916', null, 'a2222222-e29b-41d4-a716-446655440000', '2023-02-06');
+
+-- Additional Payments for Rent 3
+INSERT INTO public.payments (amount, created_at, modified_at, version, created_by, id, modified_by, rent_id, date)
+VALUES
+    (530.00, '2023-01-27 12:40:00', '2023-01-27 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'b78f92ad-3ec9-4270-86b2-ede94d2e7aa5', null, 'a3333333-e29b-41d4-a716-446655440000', '2023-01-27'),
+    (530.00, '2023-02-01 12:50:00', '2023-02-01 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '679f1b4f-64f2-4f2f-b08e-0879516615fb', null, 'a3333333-e29b-41d4-a716-446655440000', '2023-02-01'),
+    (530.00, '2023-02-07 13:00:00', '2023-02-07 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '84081b9e-41cb-4b33-ab38-2a3af6b5a780', null, 'a3333333-e29b-41d4-a716-446655440000', '2023-02-07');
+
+-- Additional payments follow the same pattern for remaining rents...
+
+-- Additional Variable Fees for Rent 1
+INSERT INTO public.variable_fees (amount, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+VALUES
+    (15.00, '2023-01-01', '2023-01-01 12:40:00', '2023-01-01 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'eca37199-fe8b-409e-9346-c3d798b9f3ad', null, 'a1111111-e29b-41d4-a716-446655440000'),
+    (7.50, '2023-01-01', '2023-01-01 12:50:00', '2023-01-01 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '4796fb20-dcf8-4ad8-bd36-9db10b7fbc66', null, 'a1111111-e29b-41d4-a716-446655440000'),
+    (10.00, '2023-01-01', '2023-01-01 13:00:00', '2023-01-01 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '1faf1d81-4716-40df-95fb-e2327493559b', null, 'a1111111-e29b-41d4-a716-446655440000');
+
+-- Additional Variable Fees for Rent 2
+INSERT INTO public.variable_fees (amount, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+VALUES
+    (18.00, '2023-01-02', '2023-01-02 12:40:00', '2023-01-02 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '48ef2f1f-f1a1-462d-9537-d14ad551de4b', null, 'a2222222-e29b-41d4-a716-446655440000'),
+    (9.00, '2023-01-02', '2023-01-02 12:50:00', '2023-01-02 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '10ea5949-b7be-4018-b41d-f21e7fdd55c1', null, 'a2222222-e29b-41d4-a716-446655440000'),
+    (12.00, '2023-01-02', '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '1e391d79-afb8-48d2-82cf-b55f12b3296b', null, 'a2222222-e29b-41d4-a716-446655440000');
+
+-- Additional Variable Fees for Rent 3
+INSERT INTO public.variable_fees (amount, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+VALUES
+    (21.00, '2023-01-03', '2023-01-03 12:40:00', '2023-01-03 12:40:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', '10076d55-7cff-4648-9458-035347737ca1', null, 'a3333333-e29b-41d4-a716-446655440000'),
+    (10.50, '2023-01-03', '2023-01-03 12:50:00', '2023-01-03 12:50:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'd6f388ff-1381-4aae-b73f-b624ecd73791', null, 'a3333333-e29b-41d4-a716-446655440000'),
+    (13.50, '2023-01-03', '2023-01-03 13:00:00', '2023-01-03 13:00:00', 1, 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'c6e1ecaf-5545-4510-8387-65af92a0e716', null, 'a3333333-e29b-41d4-a716-446655440000');
+
+-- Additional variable fees follow the same pattern for remaining rents...
