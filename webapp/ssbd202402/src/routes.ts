@@ -10,6 +10,7 @@ import loadable from "@loadable/component";
 import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
 import NotApprovedActionsPage from "./pages/Admin/NotApprovedActions";
+import ActiveLocals from "@/pages/Tenant/Locals";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
 const MePage = loadable(() => import("./pages/Me"));
@@ -42,6 +43,7 @@ const OwnerRoutes: RouteObject[] = [
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
+  { path: "locals", Component: ActiveLocals },
   { path: "role-request", Component: RoleRequestPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];

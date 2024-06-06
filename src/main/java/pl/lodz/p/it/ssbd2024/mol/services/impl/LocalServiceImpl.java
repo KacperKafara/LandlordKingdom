@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
@@ -35,7 +36,7 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("isAuthenticated()")
     public List<Local> getActiveLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return localRepository.findAllByState(LocalState.ACTIVE);
     }
 
     @Override
