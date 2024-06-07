@@ -473,11 +473,25 @@ const currentTenantRents = {
   login: "Login",
 };
 
+
+
+const roleRequestDialog = {
+  description:
+    "You can submit a request for an owner role. Once we receive your request, we will review your account to determine your eligibility. If the role is assigned to you, you will receive an email notification.",
+  requestOwnerRole: "Request Owner role",
+  requestOwnerRoleDescription:
+    "Click this button to submit a request for an owner role.",
+  alreadyPlacedRequest: "You already placed a request for role at: {{when}}",
+  howDoesItWork: "How does this work?",
+  requestRoleButton: "Request role",
+};
+
 export default {
   currentOwnerRents,
   currentTenantRents,
   tenantRents,
   leaveLocal,
+  roleRequestDialog,
   allLocals,
   localState,
   ownerLocals,
