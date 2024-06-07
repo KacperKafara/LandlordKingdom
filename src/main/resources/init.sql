@@ -176,14 +176,14 @@ VALUES (gen_random_uuid(), 'Pacific/Midway'),
 
 INSERT INTO public.addresses (created_at, modified_at, version, number, zip, created_by, id, modified_by, city, country, street)
 VALUES
-    ('2023-01-01 10:00:00', '2023-01-01 10:00:00', 1, '123', '12345', NULL, '550e8400-e29b-41d4-a716-446655440000', NULL, 'City A', 'Country A', 'Street A'),
-    ('2023-01-02 11:00:00', '2023-01-02 11:00:00', 1, '456', '67890', NULL, '550e8400-e29b-41d4-a716-446655440005', NULL, 'City B', 'Country B', 'Street B'),
-    ('2023-01-03 12:00:00', '2023-01-03 12:00:00', 1, '789', '10111', NULL, '550e8400-e29b-41d4-a716-446655440010', NULL, 'City C', 'Country C', 'Street C'),
-    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '101', '12131', NULL, '550e8400-e29b-41d4-a716-446655440015', NULL, 'City D', 'Country D', 'Street D'),
-    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '103', '12139', NULL, '550e8400-e29b-41d4-a716-446655440025', NULL, 'City F', 'Country F', 'Street F'),
-    ('2023-01-05 14:00:00', '2023-01-05 14:00:00', 1, '112', '14151', NULL, '550e8400-e29b-41d4-a716-446655440020', NULL, 'City E', 'Country E', 'Street E'),
-    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '193', '19139', NULL, '550e8400-e29b-41d4-a716-446655440030', NULL, 'City G', 'Country G', 'Street G'),
-    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '323', '19142', NULL, '550e8400-e29b-41d4-a716-446655440035', NULL, 'City I', 'Country I', 'Street I');
+    ('2023-01-01 10:00:00', '2023-01-01 10:00:00', 1, '123', '12-345', NULL, '550e8400-e29b-41d4-a716-446655440000', NULL, 'City A', 'Country A', 'Street A'),
+    ('2023-01-02 11:00:00', '2023-01-02 11:00:00', 1, '456', '67-890', NULL, '550e8400-e29b-41d4-a716-446655440005', NULL, 'City B', 'Country B', 'Street B'),
+    ('2023-01-03 12:00:00', '2023-01-03 12:00:00', 1, '789', '10-111', NULL, '550e8400-e29b-41d4-a716-446655440010', NULL, 'City C', 'Country C', 'Street C'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '101', '12-131', NULL, '550e8400-e29b-41d4-a716-446655440015', NULL, 'City D', 'Country D', 'Street D'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '103', '12-139', NULL, '550e8400-e29b-41d4-a716-446655440025', NULL, 'City F', 'Country F', 'Street F'),
+    ('2023-01-05 14:00:00', '2023-01-05 14:00:00', 1, '112', '14-151', NULL, '550e8400-e29b-41d4-a716-446655440020', NULL, 'City E', 'Country E', 'Street E'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '193', '19-139', NULL, '550e8400-e29b-41d4-a716-446655440030', NULL, 'City G', 'Country G', 'Street G'),
+    ('2023-01-04 13:00:00', '2023-01-04 13:00:00', 1, '323', '19-142', NULL, '550e8400-e29b-41d4-a716-446655440035', NULL, 'City I', 'Country I', 'Street I');
 
 
 INSERT INTO locals (margin_fee, rental_fee, size, state, created_at, modified_at, version, address_id, created_by, id, modified_by, owner_id, name, description)
