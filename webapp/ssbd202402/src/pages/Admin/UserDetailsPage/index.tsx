@@ -18,7 +18,7 @@ import { useOwnerRole } from "@/data/roles/useOwnerRole";
 import { useAdminRole } from "@/data/roles/useAdminRole";
 import UpdateUserDataDialog from "./updateUserDataDialog";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
-import DataField from "@/pages/Me/DataField";
+import DataField from "@/components/DataField";
 import UpdateUserEmailAddress from "./UpdateUserEmailAddress";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
