@@ -11,6 +11,7 @@ import { useGetOwnLocals } from "@/data/mol/useGetOwnLocals";
 import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
+import { LeaveLocalButton } from "./LeaveLocalButton";
 
 const Locals: FC = () => {
   const { data: locals, isLoading } = useGetOwnLocals();
@@ -27,9 +28,12 @@ const Locals: FC = () => {
         <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
           {locals.map((local) => (
             <Card className="relative" key={local.id}>
-              <Button className="absolute right-1 top-1" variant="ghost">
-                {t("ownerLocals.show")}
-              </Button>
+              <div className="flex flex-col gap-1 absolute right-1 top-1">
+                <Button variant="ghost">
+                  {t("ownerLocals.show")}
+                </Button>
+                {local.state === "INACTIVE" && <LeaveLocalButton id={local.id} /> }
+              </div>
               <CardHeader>
                 <CardTitle>{local.name}</CardTitle>
                 <CardDescription>{local.description}</CardDescription>

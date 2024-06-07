@@ -6,8 +6,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
@@ -64,8 +67,15 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState, NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException {
+        Local local = localRepository.findByOwner_User_IdAndId(userId, localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (local.getState() != LocalState.INACTIVE) {
+            throw new InvalidLocalState(LocalExceptionMessages.LOCAL_NOT_INACTIVE, ErrorCodes.LOCAL_NOT_INACTIVE);
+        }
+        local.setOwner(null);
+        local.setState(LocalState.WITHOUT_OWNER);
+        return localRepository.saveAndFlush(local);
+
     }
 
     @Override
