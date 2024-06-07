@@ -258,6 +258,8 @@ const navLinks = {
   notApprovedActions: "Niezatwierdzone operację",
   roles: "Zmień poziom dostępu",
   locals: "Nieruchomości",
+  currentRents: "Aktualne wynajmy",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const userDataPage = {
@@ -401,6 +403,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Wyświetl",
+  noLocalsFound: "Aktualnie nie posiadasz żadnych nieruchomości",
+  addFirstLocal: "Dodaj pierwszą nieruchomość",
+  title: "Strona główna",
+  locals: "Nieruchomości",
 };
 
 const allLocals = {
@@ -428,8 +434,21 @@ const leaveLocal = {
 }
 
 
+const tenantRents = {
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  fixedFee: "Opłata stała",
+  balance: "Bilans",
+  localSize: "Powierzchnia",
+  owner: "Właściciel",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+};
+
 export default {
   leaveLocal,
+  tenantRents,
   allLocals,
   ownerLocals,
   localState,

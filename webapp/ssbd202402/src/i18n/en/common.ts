@@ -251,6 +251,10 @@ const navLinks = {
   notApprovedActions: "Not approved actions",
   roles: "Change access level",
   locals: "Locals",
+  currentRents: "Current rents",
+  archivalRents: "Archival rents",
+} satisfies {
+  [key in string] : string;
 };
 
 const userDataPage = {
@@ -396,6 +400,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Show",
+  noLocalsFound: "Currently you have no locals",
+  addFirstLocal: "Add first local",
+  title: "Main page",
+  locals: "Locals",
 };
 
 const allLocals = {
@@ -414,6 +422,18 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const tenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
 const leaveLocal = {
   successTitle: "Success",
   successDescription: "You have left the local",
@@ -422,6 +442,7 @@ const leaveLocal = {
 }
 
 export default {
+  tenantRents,
   leaveLocal,
   allLocals,
   localState,

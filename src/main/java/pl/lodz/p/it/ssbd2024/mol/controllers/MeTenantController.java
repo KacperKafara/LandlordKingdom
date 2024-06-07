@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +14,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
+import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
@@ -52,8 +55,9 @@ public class MeTenantController {
 
     @GetMapping("/current-rents")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getCurrentRents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<RentForTenantResponse>> getCurrentRents() {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(rentService.getCurrentTenantRents(userId).stream().map(RentMapper::rentForTenantResponse).toList());
     }
 
     @GetMapping("/rents/{id}")
@@ -64,8 +68,9 @@ public class MeTenantController {
 
     @GetMapping("/rents/archival")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getArchivalRents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<RentForTenantResponse>> getArchivalRents() {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(rentService.getArchivalRentsForTenant(userId).stream().map(RentMapper::rentForTenantResponse).toList());
     }
 
     @GetMapping("/applications")
