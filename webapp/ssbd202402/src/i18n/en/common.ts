@@ -253,7 +253,7 @@ const navLinks = {
   locals: "Locals",
   currentRents: "Current rents",
 } satisfies {
-  [key in string] : string;
+  [key in string]: string;
 };
 
 const userDataPage = {
@@ -427,7 +427,12 @@ const currentTenantRents = {
   login: "Login",
 };
 
+const currnetOwnerRents = {
+  rents: "Rents",
+};
+
 export default {
+  currnetOwnerRents,
   currentTenantRents,
   allLocals,
   localState,

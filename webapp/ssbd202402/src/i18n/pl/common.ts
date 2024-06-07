@@ -430,7 +430,12 @@ const currentTenantRents = {
   login: "Login",
 };
 
+const currentOwnerRents = {
+  rents: "Wynajmy",
+};
+
 export default {
+  currentOwnerRents,
   currentTenantRents,
   allLocals,
   ownerLocals,
