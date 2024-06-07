@@ -10,6 +10,7 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
@@ -91,7 +92,12 @@ public class MeOwnerController {
     @PatchMapping("/locals/{id}/fixed-fee")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<SetFixedFeeResponse> setFixedFee(@PathVariable UUID id, @RequestBody SetFixedFeeRequest setFixedFeeRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID ownerId = UUID.fromString(jwt.getSubject());
+
+        Local local = localService.setFixedFee(id, ownerId, setFixedFeeRequest.rentalFee(), setFixedFeeRequest.marginFee());
+        return ResponseEntity.ok(LocalMapper.toSetFixedFeeResponse(local));
     }
 
     @PatchMapping("/rents/{id}/end-date")
