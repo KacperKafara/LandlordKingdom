@@ -254,7 +254,7 @@ const navLinks = {
   currentRents: "Current rents",
   archivalRents: "Archival rents",
 } satisfies {
-  [key in string] : string;
+  [key in string]: string;
 };
 
 const userDataPage = {
@@ -434,6 +434,18 @@ const tenantRents = {
   login: "Login",
 };
 
+const currentOwnerRents = {
+  title: "Owner",
+  rents: "Current rents",
+  startDate: "Start date",
+  endDate: "End date",
+  balance: "Balance",
+  tenant: "Tenant",
+  name: "Name",
+  email: "Email",
+  noRentsFound: "Currently your local has no tenants",
+};
+
 const leaveLocal = {
   successTitle: "Success",
   successDescription: "You have left the local",
@@ -442,6 +454,8 @@ const leaveLocal = {
 }
 
 export default {
+  currentOwnerRents,
+  currentTenantRents,
   tenantRents,
   leaveLocal,
   allLocals,

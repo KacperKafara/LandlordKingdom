@@ -446,9 +446,23 @@ const tenantRents = {
   login: "Login",
 };
 
+const currentOwnerRents = {
+  title: "Właściciel",
+  rents: "Obence wynajmy",
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  balance: "Balans",
+  tenant: "Najemca",
+  name: "Imię i nazwisko",
+  email: "Email",
+  noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
+};
+
 export default {
   leaveLocal,
   tenantRents,
+  currentOwnerRents,
+  currentTenantRents,
   allLocals,
   ownerLocals,
   localState,

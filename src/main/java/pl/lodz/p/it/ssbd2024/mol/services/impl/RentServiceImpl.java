@@ -34,7 +34,7 @@ public class RentServiceImpl implements RentService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public List<Rent> getCurrentOwnerRents(UUID userId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return rentRepository.findCurrentRentsByOwnerId(userId);
     }
 
     @Override
