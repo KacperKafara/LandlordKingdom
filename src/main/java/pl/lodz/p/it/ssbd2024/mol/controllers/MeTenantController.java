@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
+import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
@@ -33,7 +36,8 @@ public class MeTenantController {
     public ResponseEntity<GetRoleRequestResponse> requestRole() {
         try {
             RoleRequest roleRequest = roleService.requestRole();
-            return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest));
+            User user = roleRequest.getTenant().getUser();
+            return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest, user.getTimezone(), user.getLanguage()));
         } catch (RoleRequestAlreadyExistsException e) {
             throw new RuntimeException(e);
         } catch (UserAlreadyHasRoleException e) {
@@ -47,7 +51,8 @@ public class MeTenantController {
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<GetRoleRequestResponse> getRoleRequest() throws NotFoundException {
         RoleRequest roleRequest = roleService.get();
-        return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest));
+        User user = roleRequest.getTenant().getUser();
+        return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest, user.getTimezone(), user.getLanguage()));
     }
 
     @GetMapping("/current-rents")
