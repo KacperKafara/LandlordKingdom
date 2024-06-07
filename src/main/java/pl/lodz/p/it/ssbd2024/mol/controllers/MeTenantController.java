@@ -62,13 +62,13 @@ public class MeTenantController {
 
     @GetMapping("/rents/{id}")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getRent(@PathVariable UUID id) {
+    public ResponseEntity<List<RentForTenantResponse>> getRent(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @GetMapping("/rents/archival")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getArchivalRents() {
+    public ResponseEntity<List<RentForTenantResponse>> getArchivalRents() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

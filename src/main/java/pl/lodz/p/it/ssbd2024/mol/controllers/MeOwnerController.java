@@ -10,9 +10,10 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
+import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
@@ -66,13 +67,15 @@ public class MeOwnerController {
 
     @GetMapping("/rents/current")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<RentResponse>> getCurrentRents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<RentForOwnerResponse>> getCurrentRents() {
+        UUID ownerId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        List<Rent> rents = rentService.getCurrentOwnerRents(ownerId);
+        return ResponseEntity.ok(RentMapper.rentForOwnerResponseList(rents));
     }
 
     @PostMapping("/rents/{id}/payment")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentResponse> payRent(@PathVariable UUID id, @RequestBody NewPaymentRequest newPaymentRequest) {
+    public ResponseEntity<RentForOwnerResponse> payRent(@PathVariable UUID id, @RequestBody NewPaymentRequest newPaymentRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -96,7 +99,7 @@ public class MeOwnerController {
 
     @PatchMapping("/rents/{id}/end-date")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
+    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
