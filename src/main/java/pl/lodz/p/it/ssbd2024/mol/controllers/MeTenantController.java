@@ -68,8 +68,9 @@ public class MeTenantController {
 
     @GetMapping("/rents/archival")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getArchivalRents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<RentForTenantResponse>> getArchivalRents() {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(rentService.getArchivalRentsForTenant(userId).stream().map(RentMapper::rentForTenantResponse).toList());
     }
 
     @GetMapping("/applications")

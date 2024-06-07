@@ -252,6 +252,7 @@ const navLinks = {
   roles: "Change access level",
   locals: "Locals",
   currentRents: "Current rents",
+  archivalRents: "Archival rents",
 } satisfies {
   [key in string] : string;
 };
@@ -419,7 +420,7 @@ const localState = {
   [key in LocalState]: string;
 };
 
-const currentTenantRents = {
+const tenantRents = {
   startDate: "Start date",
   endDate: "End date",
   fixedFee: "Fixed fee",
@@ -432,7 +433,7 @@ const currentTenantRents = {
 };
 
 export default {
-  currentTenantRents,
+  tenantRents,
   allLocals,
   localState,
   ownerLocals,

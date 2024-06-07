@@ -20,5 +20,5 @@ public interface RentService {
 
     List<Rent> getCurrentTenantRents(UUID userId);
 
-    List<Rent> getArchivalRentsForTenant(UUID tenantId);
+    List<Rent> getArchivalRentsForTenant(UUID userId);
 }

@@ -29,6 +29,7 @@ const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
 const RoleRequestPage = loadable(() => import("./pages/Tenant/RoleRequest"));
 const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
+const ArchivalRentsPage = loadable(() => import("./pages/Tenant/ArchivalRents"));
 
 const AdminRoutes: RouteObject[] = [
   { path: "locals", Component: LocalsPage },
@@ -45,6 +46,7 @@ const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
   { path: "role-request", Component: RoleRequestPage },
   { path: "current-rents", Component: CurrentRentsPage },
+  { path: "archival-rents", Component: ArchivalRentsPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 

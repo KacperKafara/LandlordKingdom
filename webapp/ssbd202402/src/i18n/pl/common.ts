@@ -259,6 +259,7 @@ const navLinks = {
   roles: "Zmień poziom dostępu",
   locals: "Nieruchomości",
   currentRents: "Aktualne wynajmy",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const userDataPage = {
@@ -422,7 +423,7 @@ const localState = {
   [key in LocalState]: string;
 };
 
-const currentTenantRents = {
+const tenantRents = {
   startDate: "Data rozpoczęcia",
   endDate: "Data zakończenia",
   fixedFee: "Opłata stała",
@@ -435,7 +436,7 @@ const currentTenantRents = {
 };
 
 export default {
-  currentTenantRents,
+  tenantRents,
   allLocals,
   ownerLocals,
   localState,
