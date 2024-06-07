@@ -248,8 +248,13 @@ const navLinks = {
   account: "My account",
   signOut: "Sign out",
   users: "Users",
+  notApprovedActions: "Not approved actions",
   roles: "Change access level",
   locals: "Locals",
+  currentRents: "Current rents",
+  archivalRents: "Archival rents",
+} satisfies {
+  [key in string]: string;
 };
 
 const userDataPage = {
@@ -311,6 +316,12 @@ const registerSuccessPage = {
   description:
     "We send you an email with verification link. Use this link to verify your account. Until you perform this action you won't be able to login.",
   loginButton: "Go back to login",
+};
+
+const notApprovedActionsPage = {
+  roleRequests: "Requests for role",
+  locals: "Locals",
+  emptyRoleRequests: "No avaliable role requsts",
 };
 
 const validation = {
@@ -376,6 +387,8 @@ const errors = {
   accessLevelAssigned: "Access level aleady assigned",
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
+  localNotFound: "Local not found",
+  localNotInactive: "Local must be inactive for this operation",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -387,6 +400,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Show",
+  noLocalsFound: "Currently you have no locals",
+  addFirstLocal: "Add first local",
+  title: "Main page",
+  locals: "Locals",
 };
 
 const allLocals = {
@@ -405,6 +422,37 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const tenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
+const currentOwnerRents = {
+  title: "Owner",
+  rents: "Current rents",
+  startDate: "Start date",
+  endDate: "End date",
+  balance: "Balance",
+  tenant: "Tenant",
+  name: "Name",
+  email: "Email",
+  noRentsFound: "Currently your local has no tenants",
+};
+
+const leaveLocal = {
+  successTitle: "Success",
+  successDescription: "You have left the local",
+  errorTitle: "Error",
+  buttonText: "Leave local",
+}
+
 const roleRequestDialog = {
   description:
     "You can submit a request for an owner role. Once we receive your request, we will review your account to determine your eligibility. If the role is assigned to you, you will receive an email notification.",
@@ -417,6 +465,10 @@ const roleRequestDialog = {
 };
 
 export default {
+  currentOwnerRents,
+  currentTenantRents,
+  tenantRents,
+  leaveLocal,
   roleRequestDialog,
   allLocals,
   localState,
@@ -445,6 +497,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  notApprovedActionsPage,
   light: "Light",
   dark: "Dark",
   reactivationSuccess: "Your account has been reactivated. You can now login.",

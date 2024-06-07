@@ -255,8 +255,11 @@ const navLinks = {
   account: "Moje konto",
   signOut: "Wyloguj",
   users: "Użytkownicy",
+  notApprovedActions: "Niezatwierdzone operację",
   roles: "Zmień poziom dostępu",
   locals: "Nieruchomości",
+  currentRents: "Aktualne wynajmy",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const userDataPage = {
@@ -320,6 +323,12 @@ const registerSuccessPage = {
   loginButton: "Wróc do strony logowania",
 };
 
+const notApprovedActionsPage = {
+  roleRequests: "Zgłoszenia o rolę",
+  locals: "Lokale",
+  emptyRoleRequests: "Brak zgłoszeń o rolę",
+};
+
 const validation = {
   characters: "znak(i/ów)",
   minLength: "Pole musi zawierać minimalnie",
@@ -381,6 +390,8 @@ const errors = {
   accessLevelAssigned: "Poziom dostępu został już nadany",
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
+  localNotFound: "Nie znaleziono nieruchomości",
+  localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -392,6 +403,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Wyświetl",
+  noLocalsFound: "Aktualnie nie posiadasz żadnych nieruchomości",
+  addFirstLocal: "Dodaj pierwszą nieruchomość",
+  title: "Strona główna",
+  locals: "Nieruchomości",
 };
 
 const allLocals = {
@@ -421,8 +436,45 @@ const roleRequestDialog = {
   requestRoleButton: "Złóż wniosek",
 };
 
+const leaveLocal = {
+  successTitle: "Sukces",
+  successDescription: "Opuściłeś lokal",
+  errorTitle: "Błąd",
+  buttonText: "Opuść lokal",
+
+}
+
+
+const tenantRents = {
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  fixedFee: "Opłata stała",
+  balance: "Bilans",
+  localSize: "Powierzchnia",
+  owner: "Właściciel",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+};
+
+const currentOwnerRents = {
+  title: "Właściciel",
+  rents: "Obence wynajmy",
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  balance: "Balans",
+  tenant: "Najemca",
+  name: "Imię i nazwisko",
+  email: "Email",
+  noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
+};
+
 export default {
   roleRequestDialog,
+  leaveLocal,
+  tenantRents,
+  currentOwnerRents,
+  currentTenantRents,
   allLocals,
   ownerLocals,
   localState,
@@ -450,6 +502,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  notApprovedActionsPage,
   light: "Jasny",
   dark: "Ciemny",
   reactivationSuccess: "Konto zostało aktywowane, możesz się zalogować",

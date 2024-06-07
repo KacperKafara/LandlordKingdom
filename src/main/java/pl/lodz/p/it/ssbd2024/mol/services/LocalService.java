@@ -27,7 +27,7 @@ public interface LocalService {
 
     Local editLocal(UUID id, Local local) throws NotFoundException;
 
-    Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState, NotFoundException;
+    Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException;
 
     Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
 

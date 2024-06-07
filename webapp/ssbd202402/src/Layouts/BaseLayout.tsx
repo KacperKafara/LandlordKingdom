@@ -110,8 +110,12 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                   isActive && colors.accentColor
                 )
               }
-            >
-              {link.label}
+            >   
+              
+                 {i18n.exists(`navLinks.${link.label}`)
+                //  @ts-expect-error error handled
+                  ? t(`navLinks.${link.label}`) 
+                  : link.label}
             </NavLink>
           ))}
           <ModeToggle />

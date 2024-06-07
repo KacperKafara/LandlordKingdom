@@ -3,7 +3,16 @@ import BaseLayout, { NavigationLink } from "./BaseLayout";
 import { Navigate, Outlet } from "react-router-dom";
 import { useUserStore } from "@/store/userStore";
 
-const links: NavigationLink[] = [];
+const links: NavigationLink[] = [
+  {
+    label: "currentRents",
+    path: "./current-rents",
+  },
+  {
+    label: "archivalRents",
+    path: "./archival-rents",
+  }
+];
 
 const TenantLayout: FC = () => {
   const { roles, activeRole } = useUserStore();
