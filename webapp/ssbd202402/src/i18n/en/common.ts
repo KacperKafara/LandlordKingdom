@@ -453,6 +453,20 @@ const leaveLocal = {
   buttonText: "Leave local",
 }
 
+const currentTenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
+
+
 const roleRequestDialog = {
   description:
     "You can submit a request for an owner role. Once we receive your request, we will review your account to determine your eligibility. If the role is assigned to you, you will receive an email notification.",
