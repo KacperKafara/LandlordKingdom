@@ -458,6 +458,18 @@ const currentOwnerRents = {
   noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
 };
 
+const currentTenantRents = {
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  fixedFee: "Opłata stała",
+  balance: "Bilans",
+  localSize: "Powierzchnia",
+  owner: "Właściciel",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+};
+
 export default {
   leaveLocal,
   tenantRents,

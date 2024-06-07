@@ -453,6 +453,20 @@ const leaveLocal = {
   buttonText: "Leave local",
 }
 
+const currentTenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
+
+
 export default {
   currentOwnerRents,
   currentTenantRents,
