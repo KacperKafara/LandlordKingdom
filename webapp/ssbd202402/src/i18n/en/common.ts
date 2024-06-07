@@ -427,12 +427,20 @@ const currentTenantRents = {
   login: "Login",
 };
 
-const currnetOwnerRents = {
-  rents: "Rents",
+const currentOwnerRents = {
+  title: "Owner",
+  rents: "Current rents",
+  startDate: "Start date",
+  endDate: "End date",
+  balance: "Balance",
+  tenant: "Tenant",
+  name: "Name",
+  email: "Email",
+  noRentsFound: "Currently your local has no tenants",
 };
 
 export default {
-  currnetOwnerRents,
+  currentOwnerRents,
   currentTenantRents,
   allLocals,
   localState,
