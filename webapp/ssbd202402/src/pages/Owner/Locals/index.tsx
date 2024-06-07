@@ -13,6 +13,7 @@ import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
+import { LeaveLocalButton } from "./LeaveLocalButton";
 
 const Locals: FC = () => {
   const { data: locals, isLoading } = useGetOwnLocals();
@@ -53,6 +54,7 @@ const Locals: FC = () => {
                   <Button className="absolute right-1 top-1" variant="ghost">
                     {t("ownerLocals.show")}
                   </Button>
+                  {local.state === "INACTIVE" && <LeaveLocalButton id={local.id} /> }
                   <CardHeader>
                     <CardTitle>{local.name}</CardTitle>
                     <CardDescription>{local.description}</CardDescription>
@@ -74,6 +76,7 @@ const Locals: FC = () => {
               queryKeys={["ownLocals"]}
             />
           </div>
+                
         </div>
       )}
     </div>

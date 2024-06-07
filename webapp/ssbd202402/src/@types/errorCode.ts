@@ -35,4 +35,6 @@ export type ExceptionCode =
   | "internalServerError"
   | "accessLevelAssigned"
   | "accessLevelTaken"
-  | "undefined"  ;
+  | "undefined"
+  | "localNotFound"  
+  | "localNotInactive";

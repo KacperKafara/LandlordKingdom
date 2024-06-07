@@ -390,6 +390,8 @@ const errors = {
   accessLevelAssigned: "Poziom dostępu został już nadany",
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
+  localNotFound: "Nie znaleziono nieruchomości",
+  localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -423,6 +425,15 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const leaveLocal = {
+  successTitle: "Sukces",
+  successDescription: "Opuściłeś lokal",
+  errorTitle: "Błąd",
+  buttonText: "Opuść lokal",
+
+}
+
+
 const tenantRents = {
   startDate: "Data rozpoczęcia",
   endDate: "Data zakończenia",
@@ -436,6 +447,7 @@ const tenantRents = {
 };
 
 export default {
+  leaveLocal,
   tenantRents,
   allLocals,
   ownerLocals,

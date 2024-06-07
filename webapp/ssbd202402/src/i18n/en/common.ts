@@ -387,6 +387,8 @@ const errors = {
   accessLevelAssigned: "Access level aleady assigned",
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
+  localNotFound: "Local not found",
+  localNotInactive: "Local must be inactive for this operation",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -432,8 +434,16 @@ const tenantRents = {
   login: "Login",
 };
 
+const leaveLocal = {
+  successTitle: "Success",
+  successDescription: "You have left the local",
+  errorTitle: "Error",
+  buttonText: "Leave local",
+}
+
 export default {
   tenantRents,
+  leaveLocal,
   allLocals,
   localState,
   ownerLocals,
