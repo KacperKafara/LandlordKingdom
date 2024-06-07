@@ -31,9 +31,7 @@ const LocalAcceptList: FC = () => {
           <TableHead>
             {t("notApprovedActionsPage.unapprovedLocals.owner")}
           </TableHead>
-          <TableHead className="w-1">
-            {t("notApprovedActionsPage.actions")}
-          </TableHead>
+          <TableHead className="w-1"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -41,7 +39,10 @@ const LocalAcceptList: FC = () => {
           unapprovedLocals.map((local) => (
             <TableRow key={local.id}>
               <TableCell>{local.name}</TableCell>
-              <TableCell>{local.address.city}</TableCell>
+              <TableCell>
+                {local.address.street} {local.address.number},{" "}
+                {local.address.zipCode} {local.address.city}
+              </TableCell>
               <TableCell>{local.ownerLogin}</TableCell>
               <TableCell>
                 <Button asChild>

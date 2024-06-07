@@ -324,6 +324,7 @@ const registerSuccessPage = {
 };
 
 const notApprovedActionsPage = {
+  title: "Niezatwierdzone operacje",
   roleRequests: "Zgłoszenia o rolę",
   locals: "Lokale",
   emptyRoleRequests: "Brak zgłoszeń o rolę",

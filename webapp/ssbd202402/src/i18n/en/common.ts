@@ -319,6 +319,7 @@ const registerSuccessPage = {
 };
 
 const notApprovedActionsPage = {
+  title: "Not approved actions",
   roleRequests: "Requests for role",
   locals: "Locals",
   emptyRoleRequests: "No avaliable role requsts",
@@ -472,8 +473,6 @@ const currentTenantRents = {
   email: "Email",
   login: "Login",
 };
-
-
 
 const roleRequestDialog = {
   description:
