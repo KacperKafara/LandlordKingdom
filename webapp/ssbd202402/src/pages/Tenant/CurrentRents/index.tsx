@@ -24,6 +24,9 @@ const CurrentRentsPage: FC = () => {
     if (isLoading) {
         return <div>Loading...</div>;
     }
+    if (!data) {
+        return <div>No data</div>;
+    }
 
     return (
         <div className='relative pt-2'>
@@ -47,15 +50,15 @@ const CurrentRentsPage: FC = () => {
                                     </p>
                                 </CardHeader>
                                 <CardContent className='grid grid-cols-2'>
-                                    <DataField label={t("currentTenantRents.startDate")} value={rent.startDate} />
-                                    <DataField label={t("currentTenantRents.endDate")} value={rent.endDate} />
-                                    <DataField label={t("currentTenantRents.fixedFee")} value={(rent.local.rentalFee + rent.local.marginFee).toString()} />
-                                    <DataField label={t("currentTenantRents.balance")} value={rent.balance.toString()} />
-                                    <DataField label={t("currentTenantRents.localSize")} value={rent.local.size.toString()} />
-                                    <p className='col-span-2 my-3 font-bold text-xl'>{t("currentTenantRents.owner")}</p>
-                                    <DataField label={t("currentTenantRents.name")} value={`${rent.owner.firstName} ${rent.owner.lastName}`} />
-                                    <DataField label={t("currentTenantRents.email")} value={rent.owner.email} />
-                                    <DataField label={t("currentTenantRents.login")} value={rent.owner.login} />
+                                    <DataField label={t("tenantRents.startDate")} value={rent.startDate} />
+                                    <DataField label={t("tenantRents.endDate")} value={rent.endDate} />
+                                    <DataField label={t("tenantRents.fixedFee")} value={(rent.local.rentalFee + rent.local.marginFee).toString()} />
+                                    <DataField label={t("tenantRents.balance")} value={rent.balance.toString()} />
+                                    <DataField label={t("tenantRents.localSize")} value={rent.local.size.toString()} />
+                                    <p className='col-span-2 my-3 font-bold text-xl'>{t("tenantRents.owner")}</p>
+                                    <DataField label={t("tenantRents.name")} value={`${rent.owner.firstName} ${rent.owner.lastName}`} />
+                                    <DataField label={t("tenantRents.email")} value={rent.owner.email} />
+                                    <DataField label={t("tenantRents.login")} value={rent.owner.login} />
                                 </CardContent>
                                 <CardFooter className='w-full justify-center gap-3'>
                                     <Button className='flex-auto'>Action 1</Button>
