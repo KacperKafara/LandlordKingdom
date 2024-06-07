@@ -17,6 +17,8 @@ import MyAccountButton from "./MyAccountButton";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { ModeToggle } from "@/components/ui/toggle-theme";
 import { useChangeRoleView } from "@/data/useChangeRoleView";
+import RoleRequestDialog from "./RoleRequestDialog";
+import { useDialogStore } from "@/store/dialogStore";
 
 export type NavigationLink = {
   path: string;
@@ -70,6 +72,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const navigate = useNavigate();
   const { roles, activeRole, setActiveRole } = useUserStore();
   const { roleChanged } = useChangeRoleView();
+  const { openDialog } = useDialogStore();
 
   const role_mapping: { [key: string]: string } = {
     ADMINISTRATOR: "admin",
@@ -83,6 +86,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <RoleRequestDialog />
       <nav
         className={cn(
           "flex h-20 flex-row items-center justify-between px-10",
@@ -146,6 +150,14 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                   </NavLink>
                 </DropdownMenuItem>
               ))}
+              {!roles?.includes("OWNER") && (
+                <>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => openDialog("roleRequest")}>
+                    {t("roleRequestDialog.requestOwnerRole")}
+                  </DropdownMenuItem>
+                </>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
           <MyAccountButton hover={colors.hover} />
