@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -11,6 +12,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.model.Rent;
+import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
@@ -88,7 +93,15 @@ public class MeOwnerController {
     @PatchMapping("/locals/{id}/leave")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<LeaveLocalResponse> leaveLocal(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try{
+             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+             localService.leaveLocal(userId, id);
+             return ResponseEntity.ok(new LeaveLocalResponse(true));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidLocalState e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/locals/{id}/fixed-fee")

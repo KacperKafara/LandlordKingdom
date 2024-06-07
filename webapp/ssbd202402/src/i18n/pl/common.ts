@@ -259,6 +259,7 @@ const navLinks = {
   roles: "Zmień poziom dostępu",
   locals: "Nieruchomości",
   currentRents: "Aktualne wynajmy",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const userDataPage = {
@@ -389,6 +390,8 @@ const errors = {
   accessLevelAssigned: "Poziom dostępu został już nadany",
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
+  localNotFound: "Nie znaleziono nieruchomości",
+  localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -400,6 +403,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Wyświetl",
+  noLocalsFound: "Aktualnie nie posiadasz żadnych nieruchomości",
+  addFirstLocal: "Dodaj pierwszą nieruchomość",
+  title: "Strona główna",
+  locals: "Nieruchomości",
 };
 
 const allLocals = {
@@ -418,7 +425,16 @@ const localState = {
   [key in LocalState]: string;
 };
 
-const currentTenantRents = {
+const leaveLocal = {
+  successTitle: "Sukces",
+  successDescription: "Opuściłeś lokal",
+  errorTitle: "Błąd",
+  buttonText: "Opuść lokal",
+
+}
+
+
+const tenantRents = {
   startDate: "Data rozpoczęcia",
   endDate: "Data zakończenia",
   fixedFee: "Opłata stała",
@@ -443,6 +459,8 @@ const currentOwnerRents = {
 };
 
 export default {
+  leaveLocal,
+  tenantRents,
   currentOwnerRents,
   currentTenantRents,
   allLocals,

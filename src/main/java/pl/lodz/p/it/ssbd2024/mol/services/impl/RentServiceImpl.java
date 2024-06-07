@@ -57,8 +57,8 @@ public class RentServiceImpl implements RentService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public List<Rent> getArchivalRentsForTenant(UUID tenantId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Rent> getArchivalRentsForTenant(UUID userId) {
+        return rentRepository.findAllPastRentsByTenantUserId(userId);
     }
 
 }

@@ -1,22 +1,22 @@
-import useAxiosPrivate from "../useAxiosPrivate";
+import { TenantOwnRents } from "@/types/tenant/rentForTenant";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "@/components/ui/use-toast";
+import useAxiosPrivate from "../useAxiosPrivate";
 import { useTranslation } from "react-i18next";
+import { toast } from "@/components/ui/use-toast";
 import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
-import { TenantOwnRents } from "@/types/tenant/rentForTenant";
 
 
 
-export const useGetTenantOwnRents = () => {
+export const useGetTenantArchivalRents = () => {
     const { api } = useAxiosPrivate();
     const { t } = useTranslation();
 
     return useQuery({
-        queryKey: ["tenantOwnRents"],
+        queryKey: ["tenantArchivalRents"],
         queryFn: async () => {
             try {
-                const response = await api.get<TenantOwnRents[]>("/me/current-rents");    
+                const response = await api.get<TenantOwnRents[]>("/me/rents/archival");    
                 return response.data;
             } catch (error) {
                 const axiosError = error as AxiosError;

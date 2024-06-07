@@ -252,6 +252,7 @@ const navLinks = {
   roles: "Change access level",
   locals: "Locals",
   currentRents: "Current rents",
+  archivalRents: "Archival rents",
 } satisfies {
   [key in string]: string;
 };
@@ -386,6 +387,8 @@ const errors = {
   accessLevelAssigned: "Access level aleady assigned",
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
+  localNotFound: "Local not found",
+  localNotInactive: "Local must be inactive for this operation",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -397,6 +400,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Show",
+  noLocalsFound: "Currently you have no locals",
+  addFirstLocal: "Add first local",
+  title: "Main page",
+  locals: "Locals",
 };
 
 const allLocals = {
@@ -415,7 +422,7 @@ const localState = {
   [key in LocalState]: string;
 };
 
-const currentTenantRents = {
+const tenantRents = {
   startDate: "Start date",
   endDate: "End date",
   fixedFee: "Fixed fee",
@@ -439,9 +446,18 @@ const currentOwnerRents = {
   noRentsFound: "Currently your local has no tenants",
 };
 
+const leaveLocal = {
+  successTitle: "Success",
+  successDescription: "You have left the local",
+  errorTitle: "Error",
+  buttonText: "Leave local",
+}
+
 export default {
   currentOwnerRents,
   currentTenantRents,
+  tenantRents,
+  leaveLocal,
   allLocals,
   localState,
   ownerLocals,
