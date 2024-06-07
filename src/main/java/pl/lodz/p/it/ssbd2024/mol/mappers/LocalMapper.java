@@ -47,7 +47,6 @@ public class LocalMapper {
     public static LocalForTenantResponse localForTenantResponse(Local local) {
         return new LocalForTenantResponse(
                 local.getName(),
-                local.getDescription(),
                 local.getSize(),
                 AddressMapper.toAddressResponse(local.getAddress()),
                 local.getMarginFee(),
