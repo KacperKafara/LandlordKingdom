@@ -327,6 +327,14 @@ const notApprovedActionsPage = {
   roleRequests: "Zgłoszenia o rolę",
   locals: "Lokale",
   emptyRoleRequests: "Brak zgłoszeń o rolę",
+  emptyUnapprovedLocals: "No unapproved locals",
+  actions: "Akcje",
+  unapprovedLocals: {
+    name: "Nazwa",
+    address: "Adres",
+    owner: "Właściciel",
+    details: "Szczegóły",
+  },
 };
 
 const validation = {
@@ -430,9 +438,7 @@ const leaveLocal = {
   successDescription: "Opuściłeś lokal",
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
-
-}
-
+};
 
 const tenantRents = {
   startDate: "Data rozpoczęcia",

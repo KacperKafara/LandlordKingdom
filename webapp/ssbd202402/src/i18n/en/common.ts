@@ -322,6 +322,14 @@ const notApprovedActionsPage = {
   roleRequests: "Requests for role",
   locals: "Locals",
   emptyRoleRequests: "No avaliable role requsts",
+  emptyUnapprovedLocals: "No unapproved locals",
+  actions: "Actions",
+  unapprovedLocals: {
+    name: "Name",
+    address: "Address",
+    owner: "Owner",
+    details: "Details",
+  },
 };
 
 const validation = {
@@ -451,7 +459,7 @@ const leaveLocal = {
   successDescription: "You have left the local",
   errorTitle: "Error",
   buttonText: "Leave local",
-}
+};
 
 const currentTenantRents = {
   startDate: "Start date",
@@ -464,8 +472,6 @@ const currentTenantRents = {
   email: "Email",
   login: "Login",
 };
-
-
 
 export default {
   currentOwnerRents,
