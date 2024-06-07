@@ -394,6 +394,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Show",
+  noLocalsFound: "Currently you have no locals",
+  addFirstLocal: "Add first local",
+  title: "Main page",
+  locals: "Locals",
 };
 
 const allLocals = {

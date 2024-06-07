@@ -399,6 +399,10 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Wyświetl",
+  noLocalsFound: "Aktualnie nie posiadasz żadnych nieruchomości",
+  addFirstLocal: "Dodaj pierwszą nieruchomość",
+  title: "Strona główna",
+  locals: "Nieruchomości",
 };
 
 const allLocals = {
