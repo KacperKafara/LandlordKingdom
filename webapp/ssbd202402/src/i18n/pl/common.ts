@@ -419,8 +419,10 @@ const ownerLocals = {
 };
 
 const allLocals = {
+  title: "Wszystkie nieruchomości",
   show: "Wyświetl",
   localOwner: "Właściciel: ",
+  noLocalsFound: "Aktualnie nie ma żadnych nieruchomości",
 };
 
 const localState = {

@@ -416,8 +416,10 @@ const ownerLocals = {
 };
 
 const allLocals = {
+  title: "All locals",
   show: "Show",
   localOwner: "Owner: ",
+  noLocalsFound: "Currently there are no locals",
 };
 
 const localState = {
