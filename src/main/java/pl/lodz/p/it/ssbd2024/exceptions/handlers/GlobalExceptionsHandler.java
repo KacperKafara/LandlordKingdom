@@ -39,11 +39,13 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(TemplateInputException.class)
     ResponseEntity<ExceptionResponse> handleEmailTemplateException(TemplateInputException e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TEMPLATE_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(GenericJDBCException.class)
     ResponseEntity<ExceptionResponse> handleJDBCException(GenericJDBCException e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
@@ -87,26 +89,31 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(PersistenceException.class)
     ResponseEntity<ExceptionResponse> handlePersistenceException(PersistenceException e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.PERSISTENCE_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(SQLException.class)
     ResponseEntity<ExceptionResponse> handleSQLException(SQLException e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(RollbackException.class)
     ResponseEntity<ExceptionResponse> handleRollbackException(RollbackException e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.ROLLBACK, ErrorCodes.ROLLBACK));
     }
 
     @ExceptionHandler(UnexpectedRollbackException.class)
     ResponseEntity<ExceptionResponse> handleUnexpectedRollbackException(UnexpectedRollbackException e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNEXPECTED_ROLLBACK, ErrorCodes.UNEXPECTED_ROLLBACK));
     }
 
     @ExceptionHandler(TransactionException.class)
     ResponseEntity<ExceptionResponse> handleTransactionException(TransactionException e) {
+        log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TRANSACTION, ErrorCodes.TRANSACTION));
     }
 }

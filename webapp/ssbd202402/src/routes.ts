@@ -27,22 +27,30 @@ const UpdateEmailPage = loadable(() => import("./pages/UpdateEmail"));
 const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
-const RoleRequestPage = loadable(() => import("./pages/Tenant/RoleRequest"));
+const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
+const CurrnetOwnerRentsPage = loadable(() => import("./pages/Owner/Rents"));
+const ArchivalRentsPage = loadable(() => import("./pages/Tenant/ArchivalRents"));
+const LocalDetailsPage = loadable(() => import("./pages/Admin/LocalDetails"));
 
 const AdminRoutes: RouteObject[] = [
-  { path: "locals", Component: LocalsPage },
+  { path: "locals", children: [
+      {index : true, Component: LocalsPage},
+      { path: "local/:id", Component: LocalDetailsPage },
+    ]},
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
-  { path: "not-approved", Component: NotApprovedActionsPage },
+  { path: "not-approved", Component: NotApprovedActionsPage }, 
 ];
 const OwnerRoutes: RouteObject[] = [
   { path: "test", Component: OwnerTestPage },
   { path: "locals", Component: OwnLocalsPage },
+  { path: "rents", Component: CurrnetOwnerRentsPage },
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
-  { path: "role-request", Component: RoleRequestPage },
+  { path: "current-rents", Component: CurrentRentsPage },
+  { path: "archival-rents", Component: ArchivalRentsPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 

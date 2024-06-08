@@ -4,6 +4,8 @@ import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.GetAllLocalsResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.GetOwnLocalsResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalForAdministratorResponse;
+import pl.lodz.p.it.ssbd2024.mol.dto.LocalDetailsForAdminResponse;
+import pl.lodz.p.it.ssbd2024.mol.dto.LocalForTenantResponse;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -55,6 +57,29 @@ public class LocalMapper {
                 local.getMarginFee(),
                 local.getRentalFee(),
                 AddressMapper.toAddressResponse(local.getAddress())
+        );
+    }
+
+    public static LocalForTenantResponse localForTenantResponse(Local local) {
+        return new LocalForTenantResponse(
+                local.getName(),
+                local.getSize(),
+                AddressMapper.toAddressResponse(local.getAddress()),
+                local.getMarginFee(),
+                local.getRentalFee()
+        );
+    }
+
+    public static LocalDetailsForAdminResponse toLocalDetailsForAdminResponse(Local local) {
+        return new LocalDetailsForAdminResponse(
+                local.getName(),
+                local.getSize(),
+                local.getDescription(),
+                local.getState().toString(),
+                OwnerMapper.toOwnerForAdminResponse(local.getOwner()),
+                AddressMapper.toAddressResponse(local.getAddress()),
+                local.getMarginFee(),
+                local.getRentalFee()
         );
     }
 }

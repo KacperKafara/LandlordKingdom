@@ -9,9 +9,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
@@ -35,8 +35,9 @@ public class LocalController {
 
     @GetMapping("/unapproved")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<List<LocalResponse>> getUnapprovedLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<GetAllLocalsResponse>> getUnapprovedLocals() {
+        List<Local> unapprovedLocals = localService.getUnapprovedLocals();
+        return ResponseEntity.ok(unapprovedLocals.stream().map(LocalMapper::toGetAllLocalsResponse).toList());
     }
 
     @PostMapping
@@ -97,6 +98,17 @@ public class LocalController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (InvalidLocalState e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
+    }
+
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public ResponseEntity<LocalDetailsForAdminResponse> getLocal(@PathVariable UUID id) {
+        try {
+            Local local = localService.getLocal(id);
+            return ResponseEntity.ok(LocalMapper.toLocalDetailsForAdminResponse(local));
+        } catch (NotFoundException e) {
+           throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 }
