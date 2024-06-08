@@ -517,6 +517,10 @@ const localDetails = {
   basicInformation: "Podstawowe informacje",
   updateData: "Zaktualizuj dane lokalu",
   changeAddress: "Zmień adres",
+  archiveLocal: "Zarchiwizuj lokal",
+  approveLocal: "Zaakceptuj lokal",
+  archiveLocalDescription: "Czy na pewno chcesz zarchiwizować lokal?",
+  close: "Zamknij",
 };
 
 const changeEndDate = {

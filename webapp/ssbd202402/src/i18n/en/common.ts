@@ -526,6 +526,10 @@ const localDetails = {
   basicInformation: "Basic information",
   updateData: "Update data",
   changeAddress: "Change address",
+  archiveLocal: "Archive local",
+  approveLocal: "Approve local",
+  archiveLocalDescription: "Are you sure you want to archive this local?",
+  close: "Close",
 };
 
 export default {

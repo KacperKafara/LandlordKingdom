@@ -9,6 +9,13 @@ import { LoadingData } from "@/components/LoadingData";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 const LocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -27,6 +34,10 @@ const LocalDetailsPage: FC = () => {
   if (isLoading) {
     return <LoadingData />;
   }
+
+  const handleArchiveLocal = () => {
+    console.log("Archive local");
+  };
 
   return (
     <div className="flex flex-col pt-2">
@@ -53,7 +64,7 @@ const LocalDetailsPage: FC = () => {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="basic">
-                  <Card className="relative">
+                  <Card className="relative mb-2">
                     <CardHeader>
                       <CardTitle className="text-center">
                         {t("localDetails.localInformation")}
@@ -127,15 +138,64 @@ const LocalDetailsPage: FC = () => {
                           <div>{data.description}</div>
                         </div>
 
-                        <Button
-                          variant="secondary"
-                          className="col-span-2 mt-3 text-lg font-normal"
-                          onClick={() => {
-                            navigate(`/admin/users/${data.owner.userId}`);
-                          }}
-                        >
-                          {t("localDetails.showOwnerDetails")}
-                        </Button>
+                        <div className="col-span-2 flex gap-3">
+                          <Button
+                            variant="secondary"
+                            className="mt-3 w-full text-lg font-normal"
+                            onClick={() => {
+                              navigate(`/admin/users/${data.owner.userId}`);
+                            }}
+                          >
+                            {t("localDetails.showOwnerDetails")}
+                          </Button>
+                          {data.state === "WITHOUT_OWNER" && (
+                            <Dialog>
+                              <DialogTrigger asChild>
+                                <Button
+                                  variant="destructive"
+                                  className="mt-3 w-full text-lg font-normal"
+                                >
+                                  {t("localDetails.archiveLocal")}
+                                </Button>
+                              </DialogTrigger>
+                              <DialogContent>
+                                <DialogHeader>
+                                  {t("localDetails.archiveLocal")}
+                                </DialogHeader>
+                                <p>
+                                  {t("localDetails.archiveLocalDescription")}
+                                </p>
+                                <div className="flex gap-2">
+                                  <DialogClose asChild>
+                                    <Button
+                                      variant="default"
+                                      className="mt-3 w-full text-lg font-normal"
+                                    >
+                                      {t("localDetails.close")}
+                                    </Button>
+                                  </DialogClose>
+                                  <DialogClose asChild>
+                                    <Button
+                                      variant="destructive"
+                                      className="mt-3 w-full text-lg font-normal"
+                                      onClick={handleArchiveLocal}
+                                    >
+                                      {t("localDetails.archiveLocal")}
+                                    </Button>
+                                  </DialogClose>
+                                </div>
+                              </DialogContent>
+                            </Dialog>
+                          )}
+                          {data.state === "UNAPPROVED" && (
+                            <Button
+                              variant="default"
+                              className="mt-3 w-full text-lg font-normal"
+                            >
+                              {t("localDetails.approveLocal")}
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </CardContent>
                     <RefreshQueryButton
