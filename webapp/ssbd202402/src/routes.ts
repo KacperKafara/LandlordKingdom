@@ -27,7 +27,6 @@ const UpdateEmailPage = loadable(() => import("./pages/UpdateEmail"));
 const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
-const RoleRequestPage = loadable(() => import("./pages/Tenant/RoleRequest"));
 const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
 const CurrnetOwnerRentsPage = loadable(() => import("./pages/Owner/Rents"));
 const ArchivalRentsPage = loadable(() => import("./pages/Tenant/ArchivalRents"));
@@ -46,7 +45,6 @@ const OwnerRoutes: RouteObject[] = [
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
-  { path: "role-request", Component: RoleRequestPage },
   { path: "current-rents", Component: CurrentRentsPage },
   { path: "archival-rents", Component: ArchivalRentsPage },
 ];

@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
@@ -30,8 +31,9 @@ public class LocalController {
 
     @GetMapping("/unapproved")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<List<LocalResponse>> getUnapprovedLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<GetAllLocalsResponse>> getUnapprovedLocals() {
+        List<Local> unapprovedLocals = localService.getUnapprovedLocals();
+        return ResponseEntity.ok(unapprovedLocals.stream().map(LocalMapper::toGetAllLocalsResponse).toList());
     }
 
     @PostMapping

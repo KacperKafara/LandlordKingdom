@@ -13,6 +13,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
+import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
@@ -36,7 +38,8 @@ public class MeTenantController {
     public ResponseEntity<GetRoleRequestResponse> requestRole() {
         try {
             RoleRequest roleRequest = roleService.requestRole();
-            return ResponseEntity.ok(RoleRequestMapper.toGetRoleResponse(roleRequest));
+            User user = roleRequest.getTenant().getUser();
+            return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest, user.getTimezone(), user.getLanguage()));
         } catch (RoleRequestAlreadyExistsException e) {
             throw new RuntimeException(e);
         } catch (UserAlreadyHasRoleException e) {
@@ -50,7 +53,8 @@ public class MeTenantController {
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<GetRoleRequestResponse> getRoleRequest() throws NotFoundException {
         RoleRequest roleRequest = roleService.get();
-        return ResponseEntity.ok(RoleRequestMapper.toGetRoleResponse(roleRequest));
+        User user = roleRequest.getTenant().getUser();
+        return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest, user.getTimezone(), user.getLanguage()));
     }
 
     @GetMapping("/current-rents")

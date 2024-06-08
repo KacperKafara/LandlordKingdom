@@ -5,10 +5,6 @@ import { useUserStore } from "@/store/userStore";
 
 const links: NavigationLink[] = [
   {
-    label: "Role Request",
-    path: "./role-request",
-  },
-  {
     label: "currentRents",
     path: "./current-rents",
   },
