@@ -127,5 +127,10 @@ public class LocalServiceImpl implements LocalService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public Local getLocal(UUID id) throws NotFoundException {
+        return localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+    }
 
 }

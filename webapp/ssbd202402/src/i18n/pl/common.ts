@@ -492,6 +492,29 @@ const currentTenantRents = {
   login: "Login",
 };
 
+const localDetails = {
+  error: "Błąd podczas pobierania danych o nieruchomości",
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  size: "Powierzchnia",
+  rentalFee: "Opłata za wynajem",
+  marginFee: "Marża właściciela",
+  owner: "Właściciel",
+  login: "Login",
+  email: "Email",
+  address: "Adres",
+  country: "Kraj",
+  city: "Miasto",
+  street: "Ulica",
+  number: "Numer",
+  zipCode: "Kod pocztowy",
+  description: "Opis",
+  showOwnerDetails: "Pokaż dane właściciela",
+  localInformation: "Informacje o nieruchomości",
+  ownerInformation: "Informacje o właścicielu",
+  addressInformation: "Informacje o adresie",
+}
+
 const changeEndDate = {
   successTitle: "Sukces",
   successDescription: "Data zakończenia została zmieniona",
@@ -506,6 +529,7 @@ const changeEndDate = {
 };
 
 export default {
+  localDetails,
   roleRequestDialog,
   changeEndDate,
   leaveLocal,

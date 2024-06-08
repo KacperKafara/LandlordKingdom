@@ -13,6 +13,7 @@ import { RefreshCw } from "lucide-react";
 import { FC } from "react";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
+import { useNavigate } from "react-router-dom";
 
 const AllLocals: FC = () => {
   const { data: locals, isLoading } = useGetAllLocals();
@@ -20,7 +21,7 @@ const AllLocals: FC = () => {
     { title: t("roles.administrator"), path: "/admin" },
     { title: t("allLocals.title"), path: "/admin/locals" },
   ]);
-
+  const navigate = useNavigate();
   if (isLoading) {
     return (
       <div className="flex h-full justify-center">
@@ -52,7 +53,7 @@ const AllLocals: FC = () => {
       <div className="my-3 grid w-11/12 grid-cols-1 gap-2 self-center md:grid-cols-2">
         {locals.map((local) => (
           <Card className="relative" key={local.id}>
-            <Button className="absolute right-1 top-1" variant="ghost">
+            <Button onClick={() => navigate(`local/${local.id}`)} className="absolute right-1 top-1" variant="ghost">
               {t("allLocals.show")}
             </Button>
             <CardHeader>
