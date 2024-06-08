@@ -21,7 +21,7 @@ import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface RentRepository extends JpaRepository<Rent, UUID>{
+public interface RentRepository extends JpaRepository<Rent, UUID> {
 
 
     @PreAuthorize("hasRole('TENANT')")

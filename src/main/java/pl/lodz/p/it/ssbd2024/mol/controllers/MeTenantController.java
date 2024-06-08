@@ -66,8 +66,9 @@ public class MeTenantController {
 
     @GetMapping("/rents/{id}")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentForTenantResponse>> getRent(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<RentForTenantResponse> getRent(@PathVariable UUID id) throws NotFoundException {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok(RentMapper.rentForTenantResponse(rentService.getTenantRent(id, userId)));
     }
 
     @GetMapping("/rents/archival")

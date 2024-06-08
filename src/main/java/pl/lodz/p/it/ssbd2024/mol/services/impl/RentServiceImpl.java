@@ -6,11 +6,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.RentMessages;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.mol.repositories.PaymentRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
+import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.VariableFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 
@@ -24,11 +28,20 @@ public class RentServiceImpl implements RentService {
     private final RentRepository rentRepository;
     private final PaymentRepository paymentRepository;
     private final VariableFeeRepository variableFeeRepository;
+    private final TenantMolRepository tenantRepository;
 
     @Override
     @PreAuthorize("hasAnyRole('TENANT', 'OWNER')")
     public Rent getRent(UUID id) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    @PreAuthorize("hasRole('TENANT')")
+    public Rent getTenantRent(UUID rentId, UUID userId) throws NotFoundException {
+        Tenant tenant = tenantRepository.findByUserId(userId).get();
+        return rentRepository.findByIdAndTenantId(rentId, tenant.getId())
+                .orElseThrow(() -> new NotFoundException(RentMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
     }
 
     @Override
