@@ -32,6 +32,7 @@ public class AuthControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
                 .when()
                 .body(request)
                 .post(AUTH_URL + "/signin-2fa")
@@ -153,7 +154,7 @@ public class AuthControllerIT extends BaseConfig {
     @Test
     @DisplayName("RefreshToken_TokenCorrect_ReturnNewToken_Test")
     public void RefreshToken_TokenCorrect_ReturnNewToken_Test() {
-        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("userVerified", "20099984");
+        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("userVerified2", "20099984");
 
         Response response = given()
                 .contentType(ContentType.JSON)
