@@ -2,21 +2,16 @@ package pl.lodz.p.it.ssbd2024.integration;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
 import org.springframework.test.annotation.DirtiesContext;
-
-import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class TenantControllerIT extends BaseConfig {
@@ -26,32 +21,18 @@ public class TenantControllerIT extends BaseConfig {
     private String adminToken;
 
     @BeforeEach
-    public void setUp() throws MessagingException, IOException, InterruptedException {
+    public void setUp() {
         String AUTH_URL = baseUrl + "/auth";
         TENANTS_URL = baseUrl + "/tenants";
         USERS_URL = baseUrl + "/users";
 
         loadDataSet("src/test/resources/datasets/usersForTenantsIT.xml");
 
-        AuthenticationRequest signinRequest = new AuthenticationRequest("adminUser", "password", "en");
-
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .body(signinRequest)
-                .post(AUTH_URL + "/signin-2fa")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value());
-
-        String otp = EmailReader.readOtpFromEmail("adminUser@test.com");
-
-        assertNotNull(otp);
-
-        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("adminUser", otp);
+        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("adminUser", "20099984");
 
         Response response = given()
                 .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
                 .when()
                 .body(verifyRequest)
                 .post(AUTH_URL + "/verify-2fa")

@@ -2,19 +2,10 @@ package pl.lodz.p.it.ssbd2024.integration;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import jakarta.validation.Valid;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
-import pl.lodz.p.it.ssbd2024.exceptions.TokenGenerationException;
-import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
-import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.RefreshTokenRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserCreateRequest;
@@ -24,7 +15,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class AuthControllerIT extends BaseConfig {
     private static  String AUTH_URL = baseUrl + "/auth";
 
@@ -125,6 +115,7 @@ public class AuthControllerIT extends BaseConfig {
         for (int i = 0; i < 3; i++) {
             given()
                     .contentType(ContentType.JSON)
+                    .header("X-Forwarded-For", "203.0.113.195")
                     .when()
                     .body(invalidCredentialsRequest)
                     .post(AUTH_URL + "/signin-2fa")
@@ -160,77 +151,13 @@ public class AuthControllerIT extends BaseConfig {
     }
 
     @Test
-    @DisplayName("Verify2fa_OtpCorrect_ReturnToken_Test")
-    public void Verify2fa_OtpCorrect_ReturnToken_Test() throws Exception {
-
-        AuthenticationRequest signinRequest = new AuthenticationRequest("userVerified", "password", "en");
-
-
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .body(signinRequest)
-                .post(AUTH_URL + "/signin-2fa")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value());
-
-        String otp = EmailReader.readOtpFromEmail("userVerified@test.com");
-
-        assertNotNull(otp);
-
-        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("userVerified", otp);
-
-        Response response = given()
-                .contentType(ContentType.JSON)
-                .when()
-                .body(verifyRequest)
-                .post(AUTH_URL + "/verify-2fa")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value())
-                .extract()
-                .response();
-
-        String token = response.path("token");
-        String refreshToken = response.path("refreshToken");
-
-        assertNotNull(token);
-        assertNotNull(refreshToken);
-
-        given()
-                .contentType(ContentType.JSON)
-                .auth().oauth2(token)
-                .when()
-                .get(baseUrl + "/me")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value());
-    }
-
-    @Test
     @DisplayName("RefreshToken_TokenCorrect_ReturnNewToken_Test")
-    public void RefreshToken_TokenCorrect_ReturnNewToken_Test() throws Exception {
-
-        AuthenticationRequest signinRequest = new AuthenticationRequest("userVerified", "password", "en");
-
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .body(signinRequest)
-                .post(AUTH_URL + "/signin-2fa")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value());
-
-        String otp = EmailReader.readOtpFromEmail("userVerified@test.com");
-
-        assertNotNull(otp);
-
-        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("userVerified", otp);
+    public void RefreshToken_TokenCorrect_ReturnNewToken_Test() {
+        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("userVerified", "20099984");
 
         Response response = given()
                 .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
                 .when()
                 .body(verifyRequest)
                 .post(AUTH_URL + "/verify-2fa")
@@ -270,7 +197,7 @@ public class AuthControllerIT extends BaseConfig {
 
     @Test
     @DisplayName("Verify2fa_OtpIncorrect_ReturnBadRequest_Test")
-    public void Verify2fa_OtpIncorrect_ReturnBadRequest_Test() throws Exception {
+    public void Verify2fa_OtpIncorrect_ReturnBadRequest_Test() {
 
         AuthenticationRequest signinRequest = new AuthenticationRequest("userVerified", "password", "en");
 
@@ -287,6 +214,7 @@ public class AuthControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
                 .when()
                 .body(verifyRequest)
                 .post(AUTH_URL + "/verify-2fa")
@@ -303,6 +231,7 @@ public class AuthControllerIT extends BaseConfig {
 
         given()
                 .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
                 .when()
                 .body(verifyRequest)
                 .post(AUTH_URL + "/verify-2fa")

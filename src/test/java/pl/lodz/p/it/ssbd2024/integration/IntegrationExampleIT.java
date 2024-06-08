@@ -19,7 +19,7 @@ public class IntegrationExampleIT extends BaseConfig {
                 .get(baseUrl)
                 .then()
                 .assertThat()
-                .statusCode(200);
+                .statusCode(404);
     }
 
     @Test

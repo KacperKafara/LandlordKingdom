@@ -18,8 +18,19 @@
            modified_at="[NOW]"
            created_by="[NULL]"
            modified_by="[NULL]"
-           active="true"
-           theme="LIGHT"/>
+           active="true"/>
+
+    <!-- Token -->
+    <tokens id="6bcef94d-16f5-401b-a0d0-9461257572f9"
+           token="20099984"
+           purpose="OTP"
+           user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
+           created_at="2024-05-04 14:33:01.413581"
+           modified_at="2024-05-04 14:33:01.413581"
+           expiration_date="2039-05-04 14:33:01.413581"
+           version="0"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 
     <!-- Personal Data -->
     <personal_data user_id="ba537227-d54f-42b3-aa58-10492cddf8a6"
@@ -56,8 +67,7 @@
            modified_at="[NOW]"
            created_by="[NULL]"
            modified_by="[NULL]"
-           active="true"
-           theme="LIGHT"/>
+           active="true"/>
 
     <!-- Personal Data -->
     <personal_data user_id="2d1c91e8-cc0c-4f33-ae6e-20a9948a6f2d"
@@ -95,8 +105,7 @@
            modified_at="[NOW]"
            created_by="[NULL]"
            modified_by="[NULL]"
-           active="true"
-           theme="LIGHT"/>
+           active="true"/>
 
     <!-- Personal Data -->
     <personal_data user_id="3a9a32e2-0f9e-4edf-b1ed-0e01386d6e49"
