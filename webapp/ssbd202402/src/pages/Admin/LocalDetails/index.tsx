@@ -1,28 +1,38 @@
 import { useGetLocalDetailsForAdmin } from "@/data/local/useGetLocalDetailsForAdmin";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DataField from "@/components/DataField";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { LoadingData } from "@/components/LoadingData";
+import RefreshQueryButton from "@/components/RefreshQueryButton";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 const LocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useGetLocalDetailsForAdmin(id!);
+  const [localName] = useState<string>(data?.name || "");
   const navigate = useNavigate();
   const { t } = useTranslation();
+
+  const breadcrumbs = useBreadcrumbs([
+    { title: t("roles.administrator"), path: "/admin" },
+    { title: t("allLocals.title"), path: "/admin/locals" },
+    { title: localName, path: `/admin/local/${id}` },
+  ]);
 
   if (isLoading) {
     return <LoadingData />;
   }
 
   return (
-    <div className="flex flex-col items-center py-10">
+    <div className="flex flex-col pt-2">
+      {breadcrumbs}
       {data && (
-        <>
+        <div className="flex w-full justify-center py-9">
           <div className="w-10/12 ">
-            <Card>
+            <Card className="relative">
               <CardHeader className="items-center">
                 <CardTitle>{data.name}</CardTitle>
               </CardHeader>
@@ -110,9 +120,13 @@ const LocalDetailsPage: FC = () => {
                   </div>
                 </div>
               </CardContent>
+              <RefreshQueryButton
+                className="absolute right-1 top-1"
+                queryKeys={["localDetailsForAdmin"]}
+              />
             </Card>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
