@@ -44,7 +44,7 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public List<Local> getUnapprovedLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return localRepository.findAllByState(LocalState.UNAPPROVED);
     }
 
     @Override

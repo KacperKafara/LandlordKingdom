@@ -319,9 +319,18 @@ const registerSuccessPage = {
 };
 
 const notApprovedActionsPage = {
+  title: "Not approved actions",
   roleRequests: "Requests for role",
   locals: "Locals",
   emptyRoleRequests: "No avaliable role requsts",
+  emptyUnapprovedLocals: "No unapproved locals",
+  actions: "Actions",
+  unapprovedLocals: {
+    name: "Name",
+    address: "Address",
+    owner: "Owner",
+    details: "Details",
+  },
 };
 
 const validation = {
@@ -453,7 +462,7 @@ const leaveLocal = {
   successDescription: "You have left the local",
   errorTitle: "Error",
   buttonText: "Leave local",
-}
+};
 
 const currentTenantRents = {
   startDate: "Start date",
@@ -477,7 +486,17 @@ const changeEndDate = {
   dialogDescription: "Choose a new end date for the rent.",
   formLabel: "New end date",
   formDescription: "End date must be in the future and it must be Sunday.",
-  spanText: "Pick a date",  
+  spanText: "Pick a date",
+};
+const roleRequestDialog = {
+  description:
+    "You can submit a request for an owner role. Once we receive your request, we will review your account to determine your eligibility. If the role is assigned to you, you will receive an email notification.",
+  requestOwnerRole: "Request Owner role",
+  requestOwnerRoleDescription:
+    "Click this button to submit a request for an owner role.",
+  alreadyPlacedRequest: "You already placed a request for role at: {{when}}",
+  howDoesItWork: "How does this work?",
+  requestRoleButton: "Request role",
 };
 
 export default {
@@ -486,6 +505,7 @@ export default {
   currentTenantRents,
   tenantRents,
   leaveLocal,
+  roleRequestDialog,
   allLocals,
   localState,
   ownerLocals,

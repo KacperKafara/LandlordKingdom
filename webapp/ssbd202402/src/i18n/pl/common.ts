@@ -324,9 +324,18 @@ const registerSuccessPage = {
 };
 
 const notApprovedActionsPage = {
+  title: "Niezatwierdzone operacje",
   roleRequests: "Zgłoszenia o rolę",
   locals: "Lokale",
   emptyRoleRequests: "Brak zgłoszeń o rolę",
+  emptyUnapprovedLocals: "No unapproved locals",
+  actions: "Akcje",
+  unapprovedLocals: {
+    name: "Nazwa",
+    address: "Adres",
+    owner: "Właściciel",
+    details: "Szczegóły",
+  },
 };
 
 const validation = {
@@ -427,14 +436,23 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const roleRequestDialog = {
+  description:
+    "Możesz złożyć wniosek o przyznanie roli właściciela. Po otrzymaniu wniosku przeanalizujemy Twoje konto, aby ocenić Twoją kwalifikację. Jeśli rola zostanie Ci przyznana, otrzymasz powiadomienie e-mail.",
+  requestOwnerRole: "Złóż prośbę o role właściciela",
+  requestOwnerRoleDescription:
+    "Kliknij ten przycisk, aby złożyć wniosek o przyznanie roli właściciela.",
+  alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: {{when}}",
+  howDoesItWork: "Jak to działa?",
+  requestRoleButton: "Złóż wniosek",
+};
+
 const leaveLocal = {
   successTitle: "Sukces",
   successDescription: "Opuściłeś lokal",
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
-
-}
-
+};
 
 const tenantRents = {
   startDate: "Data rozpoczęcia",
@@ -486,6 +504,7 @@ const changeEndDate = {
 };
 
 export default {
+  roleRequestDialog,
   changeEndDate,
   leaveLocal,
   tenantRents,
