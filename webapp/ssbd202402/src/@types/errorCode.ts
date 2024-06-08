@@ -37,4 +37,6 @@ export type ExceptionCode =
   | "accessLevelTaken"
   | "undefined"
   | "localNotFound"  
-  | "localNotInactive";
+  | "localNotInactive"
+  | "rentNotFound"
+  | "wrongEndDate";

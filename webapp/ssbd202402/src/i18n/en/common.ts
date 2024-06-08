@@ -398,6 +398,8 @@ const errors = {
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
   localNotInactive: "Local must be inactive for this operation",
+  wrongEndDate: "End date must be in the future Sunday, after start date and different from current end date",
+  rentNotFound: "Rent not found",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -476,6 +478,18 @@ const currentTenantRents = {
   login: "Login",
 };
 
+const changeEndDate = {
+  successTitle: "Success",
+  successDescription: "End date has been changed",
+  errorTitle: "Error",
+  buttonText: "Change end date",
+  newDateRequired: "New date is required",
+  dialogTitle: "Change rent's end date",
+  dialogDescription: "Choose a new end date for the rent.",
+  formLabel: "New end date",
+  formDescription: "End date must be in the future and it must be Sunday.",
+  spanText: "Pick a date",
+};
 const roleRequestDialog = {
   description:
     "You can submit a request for an owner role. Once we receive your request, we will review your account to determine your eligibility. If the role is assigned to you, you will receive an email notification.",
@@ -488,6 +502,7 @@ const roleRequestDialog = {
 };
 
 export default {
+  changeEndDate,
   currentOwnerRents,
   currentTenantRents,
   tenantRents,
