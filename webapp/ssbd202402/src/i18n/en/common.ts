@@ -295,7 +295,7 @@ const mePage = {
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the user's email address",
   title: "My account",
-  basicInformation: "Basic information's",
+  basicInformation: "Basic information",
   firstNameLabel: "First name",
   lastNamelabel: "Last name",
   emailLabel: "Email",
@@ -487,7 +487,32 @@ const roleRequestDialog = {
   requestRoleButton: "Request role",
 };
 
+const localDetails = {
+    error: "Error while fetching local details",
+    firstName: "First name",
+    lastName: "Last name",
+    owner: "Owner",
+    login: "Login",
+    email: "Email",
+    address: "Address",
+    size: "Size",
+    rentalFee: "Rental fee",
+    marginFee: "Margin fee",
+    description: "Description",
+    country: "Country",
+    city: "City",
+    street: "Street",
+    number: "Number",
+    zipCode: "Zip code",
+    showOwnerDetails: "Show owner details",
+    localInformation: "Local information",
+    ownerInformation: "Owner information",
+    addressInformation: "Address information",
+    
+}
+
 export default {
+  localDetails,
   currentOwnerRents,
   currentTenantRents,
   tenantRents,
