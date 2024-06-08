@@ -398,7 +398,8 @@ const errors = {
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
   localNotInactive: "Local must be inactive for this operation",
-  wrongEndDate: "End date must be in the future Sunday, after start date and different from current end date",
+  wrongEndDate:
+    "End date must be in the future Sunday, after start date and different from current end date",
   rentNotFound: "Rent not found",
 } satisfies {
   [key in ExceptionCode]: string;
@@ -502,28 +503,30 @@ const roleRequestDialog = {
 };
 
 const localDetails = {
-    error: "Error while fetching local details",
-    firstName: "First name",
-    lastName: "Last name",
-    owner: "Owner",
-    login: "Login",
-    email: "Email",
-    address: "Address",
-    size: "Size",
-    rentalFee: "Rental fee",
-    marginFee: "Margin fee",
-    description: "Description",
-    country: "Country",
-    city: "City",
-    street: "Street",
-    number: "Number",
-    zipCode: "Zip code",
-    showOwnerDetails: "Show owner details",
-    localInformation: "Local information",
-    ownerInformation: "Owner information",
-    addressInformation: "Address information",
-
-}
+  error: "Error while fetching local details",
+  firstName: "First name",
+  lastName: "Last name",
+  owner: "Owner",
+  login: "Login",
+  email: "Email",
+  address: "Address",
+  size: "Size",
+  rentalFee: "Rental fee",
+  marginFee: "Margin fee",
+  description: "Description",
+  country: "Country",
+  city: "City",
+  street: "Street",
+  number: "Number",
+  zipCode: "Zip code",
+  showOwnerDetails: "Show owner details",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  addressInformation: "Address information",
+  basicInformation: "Basic information",
+  updateData: "Update data",
+  changeAddress: "Change address",
+};
 
 export default {
   localDetails,
