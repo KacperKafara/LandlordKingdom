@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -10,14 +11,23 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.Rent;
+import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
+import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -67,13 +77,15 @@ public class MeOwnerController {
 
     @GetMapping("/rents/current")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<RentResponse>> getCurrentRents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<RentForOwnerResponse>> getCurrentRents() {
+        UUID ownerId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        List<Rent> rents = rentService.getCurrentOwnerRents(ownerId);
+        return ResponseEntity.ok(RentMapper.rentForOwnerResponseList(rents));
     }
 
     @PostMapping("/rents/{id}/payment")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentResponse> payRent(@PathVariable UUID id, @RequestBody NewPaymentRequest newPaymentRequest) {
+    public ResponseEntity<RentForOwnerResponse> payRent(@PathVariable UUID id, @RequestBody NewPaymentRequest newPaymentRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -86,7 +98,15 @@ public class MeOwnerController {
     @PatchMapping("/locals/{id}/leave")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<LeaveLocalResponse> leaveLocal(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try{
+             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+             localService.leaveLocal(userId, id);
+             return ResponseEntity.ok(new LeaveLocalResponse(true));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidLocalState e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/locals/{id}/fixed-fee")
@@ -102,8 +122,18 @@ public class MeOwnerController {
 
     @PatchMapping("/rents/{id}/end-date")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
+        try {
+            UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+            LocalDate newDate =  LocalDate.parse(setEndDateRequest.newEndDate());
+            return ResponseEntity.ok(RentMapper.rentForOwnerResponse(rentService.editEndDate(id, userId, newDate)));
+        } catch (DateTimeParseException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RentExceptionMessages.WRONG_DATE_FORMAT, new WrongEndDateException(RentExceptionMessages.WRONG_DATE_FORMAT, ErrorCodes.WRONG_END_DATE));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (WrongEndDateException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @GetMapping("/locals/reports")
@@ -111,4 +141,5 @@ public class MeOwnerController {
     public ResponseEntity<List<LocalReportResponse>> getAllReports() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 }

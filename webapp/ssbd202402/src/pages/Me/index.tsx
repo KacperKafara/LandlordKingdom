@@ -3,7 +3,7 @@ import UserData from "./UserData";
 import ChangeUserPassword from "./ChangeUserPassword";
 import UpdateEmailAddress from "./UpdateEmailAddress";
 import { useMeQuery } from "@/data/meQueries";
-import DataField from "./DataField";
+import DataField from "../../components/DataField";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
