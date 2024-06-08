@@ -39,4 +39,6 @@ public class ErrorCodes {
     public static final String USER_ALREADY_HAS_ROLE = "userAlreadyHasRole";
     public static final String LOCAL_NOT_FOUND = "localNotFound";
     public static final String LOCAL_NOT_INACTIVE = "localNotInactive";
+    public static final String WRONG_END_DATE = "wrongEndDate";
+    public static final String RENT_NOT_FOUND = "rentNotFound";
 }

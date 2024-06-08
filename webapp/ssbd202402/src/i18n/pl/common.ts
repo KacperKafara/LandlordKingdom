@@ -401,6 +401,8 @@ const errors = {
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
+  wrongEndDate: "Data zakończenia musi być późniejsza niż data rozpoczęcia, musi być w przyszłości i musi być Niedzielą",
+  rentNotFound: "Nie znaleziono wynajmu",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -513,9 +515,23 @@ const localDetails = {
   addressInformation: "Informacje o adresie",
 }
 
+const changeEndDate = {
+  successTitle: "Sukces",
+  successDescription: "Data zakończenia została zmieniona",
+  errorTitle: "Błąd",
+  buttonText: "Zmień datę zakończenia",
+  newDateRequired: "Nowa data jest wymagana",
+  dialogTitle: "Zmień datę zakończenia wynajmu",
+  dialogDescription: "Wybierz nową datę zakończenia wynajmu",
+  formLabel: "Nowa data zakończenia",
+  formDescription: "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
+  spanText: "Wybierz datę",
+};
+
 export default {
   localDetails,
   roleRequestDialog,
+  changeEndDate,
   leaveLocal,
   tenantRents,
   currentOwnerRents,

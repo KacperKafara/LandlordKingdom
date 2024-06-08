@@ -23,6 +23,7 @@ import org.testcontainers.utility.MountableFile;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.time.Duration;
 
 @Testcontainers
 public class BaseConfig {
@@ -45,7 +46,7 @@ public class BaseConfig {
     public static IDatabaseConnection connection;
 
     static {
-        postgres = new PostgreSQLContainer<>("postgres:16.2")
+        postgres = new PostgreSQLContainer<>("postgres:16.2-alpine")
                 .withNetwork(network)
                 .withNetworkAliases("testdb")
                 .withExposedPorts(5432)
@@ -76,7 +77,7 @@ public class BaseConfig {
                 .withCopyToContainer(war, "/usr/local/tomcat/webapps/ssbd02.war")
                 .withCopyFileToContainer(MountableFile.forClasspathResource("privateJwt-key.pem"), "/etc/ssbd02/privateJwt-key.pem")
                 .withCopyFileToContainer(MountableFile.forClasspathResource("privateRefresh-key.pem"), "/etc/ssbd02/privateRefresh-key.pem")
-                .waitingFor(Wait.forHttp("/ssbd02/").forPort(8080));
+                .waitingFor(Wait.forHttp("/ssbd02").forPort(8080).forStatusCode(404));
         tomcat.start();
 
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
@@ -121,7 +122,9 @@ public class BaseConfig {
             DatabaseOperation.REFRESH.execute(connection, replacementDataSet);
         } catch (Exception e) {
             System.err.println("Error executing DBUnit operation" + "in path "+ filePath + ": " + e.getMessage());
+            e.printStackTrace();
         }
+        System.out.println("Success executing DBUnit operation" + "in path "+ filePath );
     }
 
     protected ReplacementDataSet createDataSetFromDb() throws Exception {

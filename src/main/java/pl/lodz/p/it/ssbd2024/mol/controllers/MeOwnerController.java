@@ -11,7 +11,12 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Rent;
+import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
@@ -23,6 +28,8 @@ import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
@@ -113,7 +120,17 @@ public class MeOwnerController {
     @PatchMapping("/rents/{id}/end-date")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+            LocalDate newDate =  LocalDate.parse(setEndDateRequest.newEndDate());
+            return ResponseEntity.ok(RentMapper.rentForOwnerResponse(rentService.editEndDate(id, userId, newDate)));
+        } catch (DateTimeParseException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RentExceptionMessages.WRONG_DATE_FORMAT, new WrongEndDateException(RentExceptionMessages.WRONG_DATE_FORMAT, ErrorCodes.WRONG_END_DATE));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (WrongEndDateException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @GetMapping("/locals/reports")
@@ -121,4 +138,5 @@ public class MeOwnerController {
     public ResponseEntity<List<LocalReportResponse>> getAllReports() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
 }
