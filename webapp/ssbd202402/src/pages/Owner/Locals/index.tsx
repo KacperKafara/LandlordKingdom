@@ -11,9 +11,9 @@ import {
 import { useGetOwnLocals } from "@/data/mol/useGetOwnLocals";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
-import { RefreshCw } from "lucide-react";
 import { FC } from "react";
 import { LeaveLocalButton } from "./LeaveLocalButton";
+import { LoadingData } from "@/components/LoadingData";
 
 const Locals: FC = () => {
   const { data: locals, isLoading } = useGetOwnLocals();
@@ -22,13 +22,12 @@ const Locals: FC = () => {
     { title: t("ownerLocals.locals"), path: "/owner/locals" },
   ]);
 
+  if (isLoading) {
+    return <LoadingData />;
+  }
+
   return (
     <div className="flex h-full justify-center">
-      {isLoading && (
-        <div className="mt-10 h-full">
-          <RefreshCw className="size-14 animate-spin" />
-        </div>
-      )}
       {!isLoading && locals && locals.length === 0 && (
         <div className="w-full pt-2">
           {breadCrumbs}
@@ -54,7 +53,9 @@ const Locals: FC = () => {
                   <Button className="absolute right-1 top-1" variant="ghost">
                     {t("ownerLocals.show")}
                   </Button>
-                  {local.state === "INACTIVE" && <LeaveLocalButton id={local.id} /> }
+                  {local.state === "INACTIVE" && (
+                    <LeaveLocalButton id={local.id} />
+                  )}
                   <CardHeader>
                     <CardTitle>{local.name}</CardTitle>
                     <CardDescription>{local.description}</CardDescription>
@@ -76,7 +77,6 @@ const Locals: FC = () => {
               queryKeys={["ownLocals"]}
             />
           </div>
-                
         </div>
       )}
     </div>

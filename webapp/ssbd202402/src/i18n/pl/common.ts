@@ -401,8 +401,11 @@ const errors = {
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
-  wrongEndDate: "Data zakończenia musi być późniejsza niż data rozpoczęcia, musi być w przyszłości i musi być Niedzielą",
+  wrongEndDate:
+    "Data zakończenia musi być późniejsza niż data rozpoczęcia, musi być w przyszłości i musi być Niedzielą",
   rentNotFound: "Nie znaleziono wynajmu",
+  invalidLocalStateArchive:
+    "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -513,7 +516,16 @@ const localDetails = {
   localInformation: "Informacje o nieruchomości",
   ownerInformation: "Informacje o właścicielu",
   addressInformation: "Informacje o adresie",
-}
+  basicInformation: "Podstawowe informacje",
+  updateData: "Zaktualizuj dane lokalu",
+  changeAddress: "Zmień adres",
+  archiveLocal: "Zarchiwizuj lokal",
+  approveLocal: "Zaakceptuj lokal",
+  archiveLocalDescription: "Czy na pewno chcesz zarchiwizować lokal?",
+  close: "Zamknij",
+  archiveError: "Błąd podczas archiwizacji",
+  archiveSuccess: "Lokal został zarchiwizowany",
+};
 
 const changeEndDate = {
   successTitle: "Sukces",
@@ -524,7 +536,8 @@ const changeEndDate = {
   dialogTitle: "Zmień datę zakończenia wynajmu",
   dialogDescription: "Wybierz nową datę zakończenia wynajmu",
   formLabel: "Nowa data zakończenia",
-  formDescription: "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
+  formDescription:
+    "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
   spanText: "Wybierz datę",
 };
 
