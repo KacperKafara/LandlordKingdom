@@ -14,12 +14,14 @@ import {
   DialogContent,
   DialogHeader,
   DialogTrigger,
+  DialogClose,
 } from "@/components/ui/dialog";
-import { DialogClose } from "@radix-ui/react-dialog";
+import { useArchiveLocal } from "@/data/local/useArchiveLocal";
 
 const LocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useGetLocalDetailsForAdmin(id!);
+  const { archiveLocal } = useArchiveLocal();
   const [localName] = useState<string>(data?.name || "");
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -35,8 +37,8 @@ const LocalDetailsPage: FC = () => {
     return <LoadingData />;
   }
 
-  const handleArchiveLocal = () => {
-    console.log("Archive local");
+  const handleArchiveLocal = async () => {
+    await archiveLocal(id!);
   };
 
   return (

@@ -404,6 +404,8 @@ const errors = {
   wrongEndDate:
     "Data zakończenia musi być późniejsza niż data rozpoczęcia, musi być w przyszłości i musi być Niedzielą",
   rentNotFound: "Nie znaleziono wynajmu",
+  invalidLocalStateArchive:
+    "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -521,6 +523,8 @@ const localDetails = {
   approveLocal: "Zaakceptuj lokal",
   archiveLocalDescription: "Czy na pewno chcesz zarchiwizować lokal?",
   close: "Zamknij",
+  archiveError: "Błąd podczas archiwizacji",
+  archiveSuccess: "Lokal został zarchiwizowany",
 };
 
 const changeEndDate = {

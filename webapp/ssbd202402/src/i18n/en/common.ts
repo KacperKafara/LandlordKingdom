@@ -401,6 +401,7 @@ const errors = {
   wrongEndDate:
     "End date must be in the future Sunday, after start date and different from current end date",
   rentNotFound: "Rent not found",
+  invalidLocalStateArchive: "Local must be in Without owner state to archive",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -530,6 +531,8 @@ const localDetails = {
   approveLocal: "Approve local",
   archiveLocalDescription: "Are you sure you want to archive this local?",
   close: "Close",
+  archiveError: "Archive error",
+  archiveSuccess: "Local has been archived",
 };
 
 export default {
