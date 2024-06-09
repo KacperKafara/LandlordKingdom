@@ -138,7 +138,12 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (local.getState() != LocalState.WITHOUT_OWNER) {
+            throw new InvalidLocalState(LocalExceptionMessages.INVALID_LOCAL_STATE_ARCHIVE, ErrorCodes.INVALID_LOCAL_STATE_ARCHIVE, LocalState.WITHOUT_OWNER, local.getState());
+        }
+        local.setState(LocalState.ARCHIVED);
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
