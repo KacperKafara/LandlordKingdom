@@ -111,7 +111,7 @@ public class MeOwnerController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @GetMapping("/rents/{id}/payments")
+    @PostMapping("/rents/{id}/payments")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<RentPaymentsResponse> getRentPayments(@PathVariable UUID id,
                                                                       @RequestBody RentPaymentsRequest rentPaymentsRequest,
@@ -174,9 +174,9 @@ public class MeOwnerController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @GetMapping("/rents/{id}")
+    @GetMapping("/owner/rents/{id}")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentForOwnerResponse> getRent(@PathVariable UUID id) {
+    public ResponseEntity<RentForOwnerResponse> getOwnerRent(@PathVariable UUID id) {
         try {
             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
             return ResponseEntity.ok(RentMapper.rentForOwnerResponse(rentService.getOwnerRent(userId, id)));

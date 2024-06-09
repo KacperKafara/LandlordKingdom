@@ -90,7 +90,7 @@ public class RentServiceImpl implements RentService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public Rent getOwnerRent(UUID userId, UUID rentId) throws NotFoundException {
-        return rentRepository.findByOwnerIdAndId(userId, rentId).orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
+        return rentRepository.findByOwner_User_IdAndId(userId, rentId).orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
     }
 
 }

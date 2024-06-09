@@ -490,6 +490,7 @@ const currentOwnerRents = {
   name: "Imię i nazwisko",
   email: "Email",
   noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
+  rentDetails: "Szczegóły wynajmu",
 };
 
 const currentTenantRents = {
@@ -550,7 +551,38 @@ const changeEndDate = {
   spanText: "Wybierz datę",
 };
 
+const ownerRentDetails = {
+  error: "Błąd podczas pobierania danych o wynajmie",
+  ownerMainPage: "Właściciel",
+  rents: "Obecne wynajmy",
+  rent: "Wynajem lokalu ",
+  rentDetails: "Szczegóły wynajmu",
+  rentInfo: "Informacje o wynajmie",
+  tenantInfo: "Informacje o najemcy",
+  addressInfo: "Informacje o adresie",
+  payments: "Płatności",
+  fixedFees: "Opłaty stałe",
+  noPayments: "Brak płatności",
+  variableFees: "Opłaty zmienne",
+  localInfo: "Informacje o lokalu",
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+  address: "Adres",
+  date: "Data",
+  amount: "Kwota",
+  selectStart: "Wybierz datę początkową",
+  selectEnd: "Wybierz datę końcową",
+  number: "Nr",
+  localName: "Nazwa",
+  balance: "Balans",
+  pickDate: "Wybierz datę",
+}
+
 export default {
+  ownerRentDetails,
   localDetails,
   roleRequestDialog,
   changeEndDate,

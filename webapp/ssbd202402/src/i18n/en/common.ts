@@ -467,6 +467,7 @@ const currentOwnerRents = {
   name: "Name",
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
+  rentDetails: "Rent details",
 };
 
 const leaveLocal = {
@@ -543,7 +544,38 @@ const localDetails = {
   archiveSuccess: "Local has been archived",
 };
 
+const ownerRentDetails = {
+  error: "Error while fetching rent details",
+  ownerMainPage: "Owner",
+  rents: "Current rents",
+  rent: "Rent of local ",
+  rentDetails: "Rent details",
+  rentInfo: "Rent information",
+  tenantInfo: "Tenant information",
+  addressInfo: "Address information",
+  payments: "Payments",
+  fixedFees: "Fixed fees",
+  noPayments: "No payments",
+  variableFees: "Variable fees",
+  localInfo: "Local information",
+  startDate: "Start date",
+  endDate: "End date",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+  address: "Address",
+  date: "Date",
+  amount: "Amount",
+  selectStart: "Select start date",
+  selectEnd: "Select end date",
+  number: "No.",
+  localName: "Name",
+  balance: "Balance",
+  pickDate: "Pick a date",
+}
+
 export default {
+  ownerRentDetails,
   localDetails,
   changeEndDate,
   currentOwnerRents,
