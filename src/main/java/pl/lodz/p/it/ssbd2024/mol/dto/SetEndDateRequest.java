@@ -1,4 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record SetEndDateRequest() {
+import jakarta.validation.constraints.Future;
+
+public record SetEndDateRequest(
+        String newEndDate
+) {
 }

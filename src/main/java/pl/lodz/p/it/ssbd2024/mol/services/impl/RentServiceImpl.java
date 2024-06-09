@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.RentMessages;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
@@ -18,6 +19,8 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.VariableFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -58,8 +61,16 @@ public class RentServiceImpl implements RentService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Rent editEndDate(UUID rentId, UUID ownerId, Rent rent) throws WrongEndDateException, NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Rent editEndDate(UUID rentId, UUID userId, LocalDate newEndDate) throws WrongEndDateException, NotFoundException {
+        Rent rent = rentRepository.findByOwner_User_IdAndId(userId, rentId).orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
+
+        if (newEndDate.isBefore(LocalDate.now())
+                || !newEndDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)
+                || newEndDate.equals(rent.getEndDate())) {
+            throw new WrongEndDateException(RentExceptionMessages.WRONG_END_DATE, ErrorCodes.WRONG_END_DATE);
+        }
+        rent.setEndDate(newEndDate);
+        return rentRepository.saveAndFlush(rent);
     }
 
     @Override

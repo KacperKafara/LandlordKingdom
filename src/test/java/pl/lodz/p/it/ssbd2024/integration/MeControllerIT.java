@@ -2,25 +2,18 @@ package pl.lodz.p.it.ssbd2024.integration;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
-import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticatedChangePasswordRequest;
-import pl.lodz.p.it.ssbd2024.mok.dto.AuthenticationRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
-import org.springframework.test.annotation.DirtiesContext;
-
-import java.io.IOException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class MeControllerIT extends BaseConfig {
     private static String ME_URL = baseUrl;
     private static String AUTH_URL = baseUrl;
@@ -28,30 +21,16 @@ public class MeControllerIT extends BaseConfig {
     private String adminToken;
 
     @BeforeEach
-    public void setUp() throws MessagingException, IOException, InterruptedException {
+    public void setUp() {
         ME_URL = baseUrl + "/me";
         AUTH_URL = baseUrl + "/auth";
         loadDataSet("src/test/resources/datasets/userForMeIT.xml");
 
-        AuthenticationRequest signinRequest = new AuthenticationRequest("adminUser", "password", "en");
-
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .body(signinRequest)
-                .post(AUTH_URL + "/signin-2fa")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value());
-
-        String otp = EmailReader.readOtpFromEmail("adminUser@test.com");
-
-        assertNotNull(otp);
-
-        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("adminUser", otp);
+        Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("adminUser", "20099984");
 
         Response response = given()
                 .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
                 .when()
                 .body(verifyRequest)
                 .post(AUTH_URL + "/verify-2fa")
@@ -96,7 +75,7 @@ public class MeControllerIT extends BaseConfig {
 
         String etag = response.getHeader(HttpHeaders.ETAG);
         etag = etag.substring(1, etag.length() - 1);
-        UpdateUserDataRequest updateRequest = new UpdateUserDataRequest("admin", "user", "pl");
+        UpdateUserDataRequest updateRequest = new UpdateUserDataRequest("admin", "user", "pl", "Pacific/Midway");
 
         given()
                 .contentType(ContentType.JSON)
@@ -128,7 +107,7 @@ public class MeControllerIT extends BaseConfig {
 
         String etag = response.getHeader(HttpHeaders.ETAG);
         etag = etag.substring(1, etag.length() - 1);
-        UpdateUserDataRequest updateRequest = new UpdateUserDataRequest("admin", "user", "pl");
+        UpdateUserDataRequest updateRequest = new UpdateUserDataRequest("admin", "user", "pl","Pacific/Midway");
 
         given()
                 .contentType(ContentType.JSON)
@@ -142,7 +121,7 @@ public class MeControllerIT extends BaseConfig {
                 .statusCode(HttpStatus.OK.value())
                 .body("language", equalTo("pl"));
 
-        UpdateUserDataRequest updateRequest2 = new UpdateUserDataRequest("admin", "user", "en");
+        UpdateUserDataRequest updateRequest2 = new UpdateUserDataRequest("admin", "user", "en","Pacific/Midway");
 
         given()
                 .contentType(ContentType.JSON)

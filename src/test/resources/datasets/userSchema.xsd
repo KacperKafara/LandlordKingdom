@@ -10,6 +10,7 @@
                 <xs:element ref="administrators" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="owners" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="tenants" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="tokens" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -19,7 +20,7 @@
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="login" type="xs:string" use="required"/>
             <xs:attribute name="password" type="xs:string" use="required"/>
-            <xs:attribute name="login_attempts" type="xs:string" use="required"/>
+            <xs:attribute name="login_attempts" type="xs:integer" use="required"/>
             <xs:attribute name="last_successful_login" type="xs:string" use="optional"/>
             <xs:attribute name="last_failed_login" type="xs:string" use="optional"/>
             <xs:attribute name="last_successful_login_ip" type="xs:string" use="optional"/>
@@ -27,13 +28,14 @@
             <xs:attribute name="blocked" type="xs:boolean" use="required"/>
             <xs:attribute name="verified" type="xs:boolean" use="required"/>
             <xs:attribute name="language" type="xs:string" use="required"/>
-            <xs:attribute name="version" type="xs:string" use="required"/>
+            <xs:attribute name="version" type="xs:integer" use="required"/>
             <xs:attribute name="created_at" type="xs:string" use="required"/>
             <xs:attribute name="modified_at" type="xs:string" use="required"/>
             <xs:attribute name="created_by" type="xs:string" use="optional"/>
             <xs:attribute name="modified_by" type="xs:string" use="optional"/>
             <xs:attribute name="active" type="xs:boolean" use="required"/>
-            <xs:attribute name="theme" type="xs:string" use="required"/>
+            <xs:attribute name="theme_id" type="xs:string" use="optional"/>
+            <xs:attribute name="timezone_id" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
@@ -79,4 +81,18 @@
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="tokens">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="token" type="xs:string" use="required"/>
+            <xs:attribute name="user_id" type="xs:string" use="required"/>
+            <xs:attribute name="version" type="xs:string" use="required"/>
+            <xs:attribute name="created_at" type="xs:string" use="required"/>
+            <xs:attribute name="modified_at" type="xs:string" use="required"/>
+            <xs:attribute name="created_by" type="xs:string" use="optional"/>
+            <xs:attribute name="modified_by" type="xs:string" use="optional"/>
+            <xs:attribute name="expiration_date" type="xs:string" use="required"/>
+            <xs:attribute name="purpose" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
 </xs:schema>

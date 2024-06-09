@@ -14,6 +14,7 @@ import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
+import { ChangeEndDate } from "./ChangeEndDate";
 
 const RentsPage: FC = () => {
   const breadCrumbs = useBreadcrumbs([
@@ -91,7 +92,7 @@ const RentsPage: FC = () => {
                   />
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
-                  <Button className="flex-auto">Action 1</Button>
+                  <ChangeEndDate startDate={rent.startDate} id={rent.id} endDate={rent.endDate}/>
                   <Button className="flex-auto">Action 2</Button>
                   <Button className="flex-auto">Action 3</Button>
                 </CardFooter>

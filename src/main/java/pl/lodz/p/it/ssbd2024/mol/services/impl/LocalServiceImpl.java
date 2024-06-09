@@ -105,14 +105,29 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Local approveLocal(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local approveLocal(UUID id) throws NotFoundException, InvalidLocalState {
+        Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+
+        if (local.getState() != LocalState.UNAPPROVED) {
+            throw new InvalidLocalState(LocalExceptionMessages.LOCAL_NOT_UNAPPROVED, ErrorCodes.LOCAL_NOT_UNAPPROVED, LocalState.UNAPPROVED, local.getState());
+        }
+
+        local.setState(LocalState.INACTIVE);
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Local rejectLocal(UUID id) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local rejectLocal(UUID id) throws NotFoundException, InvalidLocalState {
+        Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+
+        if (local.getState() != LocalState.UNAPPROVED) {
+            throw new InvalidLocalState(LocalExceptionMessages.LOCAL_NOT_UNAPPROVED, ErrorCodes.LOCAL_NOT_UNAPPROVED, LocalState.UNAPPROVED, local.getState());
+        }
+
+        local.setState(LocalState.WITHOUT_OWNER);
+        local.setOwner(null);
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
@@ -124,8 +139,23 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (local.getState() != LocalState.WITHOUT_OWNER) {
+            throw new InvalidLocalState(LocalExceptionMessages.INVALID_LOCAL_STATE_ARCHIVE, ErrorCodes.INVALID_LOCAL_STATE_ARCHIVE, LocalState.WITHOUT_OWNER, local.getState());
+        }
+        local.setState(LocalState.ARCHIVED);
+        return localRepository.saveAndFlush(local);
     }
 
+    @Override
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    public Local getLocal(UUID id) throws NotFoundException {
+        return localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+    }
 
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Local getOwnLocal(UUID id, UUID ownerId) throws NotFoundException {
+        return localRepository.findByOwner_User_IdAndId(ownerId, id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+    }
 }

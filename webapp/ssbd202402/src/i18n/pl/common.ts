@@ -328,8 +328,15 @@ const notApprovedActionsPage = {
   roleRequests: "Zgłoszenia o rolę",
   locals: "Lokale",
   emptyRoleRequests: "Brak zgłoszeń o rolę",
-  emptyUnapprovedLocals: "No unapproved locals",
+  emptyUnapprovedLocals: "Brak niezatwierdzonych lokali",
   actions: "Akcje",
+  confirm: "Zatwierdź",
+  reject: "Odrzuć",
+  confirmDialog: {
+    title: "Czy jesteś pewny?",
+    confirmDescription: "Czy na pewno chcesz zatwierdzić ten lokal?",
+    rejectDescription: "Czy na pewno chcesz odrzucić ten lokal?",
+  },
   unapprovedLocals: {
     name: "Nazwa",
     address: "Adres",
@@ -401,6 +408,13 @@ const errors = {
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
+  localNotUnapproved:
+    "Nieruchomość musi być niezatwierdzona, aby wykonać tę operację",
+  wrongEndDate:
+    "Data zakończenia musi być późniejsza niż data rozpoczęcia, musi być w przyszłości i musi być Niedzielą",
+  rentNotFound: "Nie znaleziono wynajmu",
+  invalidLocalStateArchive:
+    "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -419,8 +433,10 @@ const ownerLocals = {
 };
 
 const allLocals = {
+  title: "Wszystkie nieruchomości",
   show: "Wyświetl",
   localOwner: "Właściciel: ",
+  noLocalsFound: "Aktualnie nie ma żadnych nieruchomości",
 };
 
 const localState = {
@@ -488,8 +504,56 @@ const currentTenantRents = {
   login: "Login",
 };
 
+const localDetails = {
+  error: "Błąd podczas pobierania danych o nieruchomości",
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  size: "Powierzchnia",
+  rentalFee: "Opłata za wynajem",
+  marginFee: "Marża właściciela",
+  owner: "Właściciel",
+  login: "Login",
+  email: "Email",
+  address: "Adres",
+  country: "Kraj",
+  city: "Miasto",
+  street: "Ulica",
+  number: "Numer",
+  zipCode: "Kod pocztowy",
+  description: "Opis",
+  showOwnerDetails: "Pokaż dane właściciela",
+  localInformation: "Informacje o nieruchomości",
+  ownerInformation: "Informacje o właścicielu",
+  addressInformation: "Informacje o adresie",
+  basicInformation: "Podstawowe informacje",
+  updateData: "Zaktualizuj dane lokalu",
+  changeAddress: "Zmień adres",
+  archiveLocal: "Zarchiwizuj lokal",
+  approveLocal: "Zaakceptuj lokal",
+  archiveLocalDescription: "Czy na pewno chcesz zarchiwizować lokal?",
+  close: "Zamknij",
+  archiveError: "Błąd podczas archiwizacji",
+  archiveSuccess: "Lokal został zarchiwizowany",
+};
+
+const changeEndDate = {
+  successTitle: "Sukces",
+  successDescription: "Data zakończenia została zmieniona",
+  errorTitle: "Błąd",
+  buttonText: "Zmień datę zakończenia",
+  newDateRequired: "Nowa data jest wymagana",
+  dialogTitle: "Zmień datę zakończenia wynajmu",
+  dialogDescription: "Wybierz nową datę zakończenia wynajmu",
+  formLabel: "Nowa data zakończenia",
+  formDescription:
+    "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
+  spanText: "Wybierz datę",
+};
+
 export default {
+  localDetails,
   roleRequestDialog,
+  changeEndDate,
   leaveLocal,
   tenantRents,
   currentOwnerRents,

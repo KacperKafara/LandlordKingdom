@@ -32,10 +32,20 @@ const CurrnetOwnerRentsPage = loadable(() => import("./pages/Owner/Rents"));
 const ArchivalRentsPage = loadable(
   () => import("./pages/Tenant/ArchivalRents")
 );
+const LocalDetailsPage = loadable(() => import("./pages/Admin/LocalDetails"));
+const OwnLocalDetailsPage = loadable(
+  () => import("./pages/Owner/OwnLocalDetails")
+);
 const RentDetailsPage = loadable(() => import("./pages/Tenant/RentDetails"));
 
 const AdminRoutes: RouteObject[] = [
-  { path: "locals", Component: LocalsPage },
+  {
+    path: "locals",
+    children: [
+      { index: true, Component: LocalsPage },
+      { path: "local/:id", Component: LocalDetailsPage },
+    ],
+  },
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
@@ -43,7 +53,13 @@ const AdminRoutes: RouteObject[] = [
 ];
 const OwnerRoutes: RouteObject[] = [
   { path: "test", Component: OwnerTestPage },
-  { path: "locals", Component: OwnLocalsPage },
+  {
+    path: "locals",
+    children: [
+      { index: true, Component: OwnLocalsPage },
+      { path: "local/:id", Component: OwnLocalDetailsPage },
+    ],
+  },
   { path: "rents", Component: CurrnetOwnerRentsPage },
 ];
 const TenantRoutes: RouteObject[] = [
