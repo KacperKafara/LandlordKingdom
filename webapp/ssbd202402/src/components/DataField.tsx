@@ -3,7 +3,7 @@ import { FC } from "react";
 
 type DataFieldProps = {
   label: string;
-  value: string;
+  value: string | number;
   className?: string;
 };
 

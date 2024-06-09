@@ -4,23 +4,24 @@ import { toast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
-import { TenantOwnRents } from "@/types/tenant/rentForTenant";
 
-export const useGetTenantOwnRents = () => {
+import { OwnLocalDetails } from "@/types/owner/OwnLocalDetails";
+
+export const useGetOwnLocalDetails = (id: string) => {
   const { api } = useAxiosPrivate();
   const { t } = useTranslation();
 
   return useQuery({
-    queryKey: ["tenantOwnRents"],
+    queryKey: ["ownLocalDetails", id],
     queryFn: async () => {
       try {
-        const response = await api.get<TenantOwnRents[]>("/me/current-rents");
+        const response = await api.get<OwnLocalDetails>(`/me/locals/${id}`);
         return response.data;
       } catch (error) {
         const axiosError = error as AxiosError;
         toast({
           variant: "destructive",
-          title: t("userDataPage.error"),
+          title: t("localDetails.error"),
           description: t(
             `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
           ),

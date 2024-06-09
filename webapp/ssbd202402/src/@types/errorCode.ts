@@ -38,6 +38,7 @@ export type ExceptionCode =
   | "undefined"
   | "localNotFound"
   | "localNotInactive"
+  | "localNotUnapproved"
   | "rentNotFound"
   | "wrongEndDate"
   | "invalidLocalStateArchive";
