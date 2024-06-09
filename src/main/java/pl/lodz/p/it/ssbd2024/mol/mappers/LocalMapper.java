@@ -90,4 +90,20 @@ public class LocalMapper {
                 local.getRentalFee()
         );
     }
+
+    public static GetActiveLocalsResponse toGetAllActiveLocalsResponse(Local local) {
+        return new GetActiveLocalsResponse(
+                local.getId(),
+                local.getName(),
+                local.getDescription(),
+                local.getSize(),
+                local.getMarginFee(),
+                local.getRentalFee(),
+                AddressMapper.toAddressResponse(local.getAddress())
+        );
+    }
+
+    public static List<GetActiveLocalsResponse> toGetAllActiveLocalsResponseList(List<Local> locals) {
+        return locals.stream().map(LocalMapper::toGetAllActiveLocalsResponse).collect(Collectors.toList());
+    }
 }
