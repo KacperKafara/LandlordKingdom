@@ -1,43 +1,28 @@
-import { useGetLocalDetailsForAdmin } from "@/data/local/useGetLocalDetailsForAdmin";
+import { useGetOwnLocalDetails } from "@/data/local/useGetOwnLocalDetails";
 import { FC } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DataField from "@/components/DataField";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { LoadingData } from "@/components/LoadingData";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTrigger,
-  DialogClose,
-} from "@/components/ui/dialog";
-import { useArchiveLocal } from "@/data/local/useArchiveLocal";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
-const LocalDetailsPage: FC = () => {
+const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = useGetLocalDetailsForAdmin(id!);
-  const { archiveLocal } = useArchiveLocal();
-  const navigate = useNavigate();
+  const { data, isLoading } = useGetOwnLocalDetails(id!);
   const { t } = useTranslation();
-
   const breadcrumbs = useBreadcrumbs([
-    { title: t("roles.administrator"), path: "/admin" },
-    { title: t("allLocals.title"), path: "/admin/locals" },
-    { title: data?.name ?? "", path: `/admin/locals/local/${id}` },
+    { title: t("ownerLocals.title"), path: "/owner" },
+    { title: t("ownerLocals.locals"), path: "/owner/locals" },
+    { title: data?.name ?? "", path: `/owner/locals/local/${id}` },
   ]);
 
   if (isLoading) {
     return <LoadingData />;
   }
-
-  const handleArchiveLocal = async () => {
-    await archiveLocal(id!);
-  };
 
   return (
     <div className="flex flex-col pt-2">
@@ -86,27 +71,6 @@ const LocalDetailsPage: FC = () => {
                         />
 
                         <p className="col-span-2 text-xl font-semibold">
-                          {t("localDetails.ownerInformation")}{" "}
-                        </p>
-
-                        <DataField
-                          label={t("localDetails.firstName")}
-                          value={data.owner.firstName}
-                        />
-                        <DataField
-                          label={t("localDetails.lastName")}
-                          value={data.owner.lastName}
-                        />
-                        <DataField
-                          label={t("localDetails.login")}
-                          value={data.owner.login}
-                        />
-                        <DataField
-                          label={t("localDetails.email")}
-                          value={data.owner.email}
-                        />
-
-                        <p className="col-span-2 text-xl font-semibold">
                           {t("localDetails.addressInformation")}{" "}
                         </p>
 
@@ -139,54 +103,6 @@ const LocalDetailsPage: FC = () => {
                         </div>
 
                         <div className="col-span-2 flex gap-3">
-                          <Button
-                            variant="secondary"
-                            className="mt-3 w-full text-lg font-normal"
-                            onClick={() => {
-                              navigate(`/admin/users/${data.owner.userId}`);
-                            }}
-                          >
-                            {t("localDetails.showOwnerDetails")}
-                          </Button>
-                          {data.state === "WITHOUT_OWNER" && (
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button
-                                  variant="destructive"
-                                  className="mt-3 w-full text-lg font-normal"
-                                >
-                                  {t("localDetails.archiveLocal")}
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <DialogHeader>
-                                  {t("localDetails.archiveLocal")}
-                                </DialogHeader>
-                                <p>
-                                  {t("localDetails.archiveLocalDescription")}
-                                </p>
-                                <div className="flex gap-2">
-                                  <DialogClose asChild>
-                                    <Button
-                                      variant="default"
-                                      className="mt-3 w-full text-lg font-normal"
-                                    >
-                                      {t("localDetails.close")}
-                                    </Button>
-                                  </DialogClose>
-                                  <DialogClose asChild>
-                                    <Button
-                                      variant="destructive"
-                                      className="mt-3 w-full text-lg font-normal"
-                                      onClick={handleArchiveLocal}
-                                    >
-                                      {t("localDetails.archiveLocal")}
-                                    </Button>
-                                  </DialogClose>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                          )}
                           {data.state === "UNAPPROVED" && (
                             <Button
                               variant="default"
@@ -200,7 +116,7 @@ const LocalDetailsPage: FC = () => {
                     </CardContent>
                     <RefreshQueryButton
                       className="absolute right-1 top-1"
-                      queryKeys={["localDetailsForAdmin"]}
+                      queryKeys={["ownLocalDetails"]}
                     />
                   </Card>
                 </TabsContent>
@@ -231,4 +147,4 @@ const LocalDetailsPage: FC = () => {
   );
 };
 
-export default LocalDetailsPage;
+export default OwnLocalDetailsPage;

@@ -13,6 +13,7 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { LoadingData } from "@/components/LoadingData";
 import { NavLink } from "react-router-dom";
 
 const CurrentRentsPage: FC = () => {

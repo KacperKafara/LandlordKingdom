@@ -1,10 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
 import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.mol.dto.GetAllLocalsResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.GetOwnLocalsResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.LocalDetailsForAdminResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.LocalForTenantResponse;
+import pl.lodz.p.it.ssbd2024.mol.dto.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,6 +42,20 @@ public class LocalMapper {
         return locals.stream().map(LocalMapper::toGetAllLocalsResponse).collect(Collectors.toList());
     }
 
+    public static LocalForAdministratorResponse toLocalForAdministratorResponse(Local local) {
+        return new LocalForAdministratorResponse(
+                local.getId(),
+                local.getOwner().getUser().getLogin(),
+                local.getName(),
+                local.getDescription(),
+                local.getState().toString(),
+                local.getSize(),
+                local.getMarginFee(),
+                local.getRentalFee(),
+                AddressMapper.toAddressResponse(local.getAddress())
+        );
+    }
+
     public static LocalForTenantResponse localForTenantResponse(Local local) {
         return new LocalForTenantResponse(
                 local.getName(),
@@ -62,6 +73,18 @@ public class LocalMapper {
                 local.getDescription(),
                 local.getState().toString(),
                 OwnerMapper.toOwnerForAdminResponse(local.getOwner()),
+                AddressMapper.toAddressResponse(local.getAddress()),
+                local.getMarginFee(),
+                local.getRentalFee()
+        );
+    }
+
+    public static OwnLocalDetailsResponse toOwnLocalDetailsResponse(Local local) {
+        return new OwnLocalDetailsResponse(
+                local.getName(),
+                local.getSize(),
+                local.getDescription(),
+                local.getState().toString(),
                 AddressMapper.toAddressResponse(local.getAddress()),
                 local.getMarginFee(),
                 local.getRentalFee()

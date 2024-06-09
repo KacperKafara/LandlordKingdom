@@ -17,8 +17,13 @@ import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
+import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
@@ -53,6 +58,19 @@ public class MeOwnerController {
         UUID id = UUID.fromString(jwt.getSubject());
 
         return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id)));
+    }
+
+    @GetMapping("locals/{id}")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<OwnLocalDetailsResponse> getLocal(@PathVariable UUID id) {
+        UUID ownerId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+
+        try {
+            Local local = localService.getOwnLocal(id, ownerId);
+            return ResponseEntity.ok(LocalMapper.toOwnLocalDetailsResponse(local));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 
     @GetMapping("/locals/{id}/applications")

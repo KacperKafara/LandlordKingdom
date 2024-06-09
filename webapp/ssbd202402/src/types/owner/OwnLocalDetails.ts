@@ -1,14 +1,7 @@
-export type LocalDetailsForAdmin = {
+export type OwnLocalDetails = {
   name: string;
   size: number;
   description: string;
-  owner: {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    login: string;
-    email: string;
-  };
   address: {
     country: string;
     city: string;
