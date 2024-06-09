@@ -30,8 +30,8 @@ public class LocalController {
 
     @GetMapping("/active")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<LocalResponse>> getActiveLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<GetActiveLocalsResponse>> getActiveLocals() {
+        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocals()));
     }
 
     @GetMapping("/unapproved")

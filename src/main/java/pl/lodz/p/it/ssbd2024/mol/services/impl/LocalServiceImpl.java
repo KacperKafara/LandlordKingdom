@@ -38,7 +38,7 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("isAuthenticated()")
     public List<Local> getActiveLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return localRepository.findAllByState(LocalState.ACTIVE);
     }
 
     @Override

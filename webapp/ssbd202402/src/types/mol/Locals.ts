@@ -23,3 +23,14 @@ export interface OwnLocals {
   rentalFee: number;
   address: Address;
 }
+
+export interface ActiveLocals {
+  id: string;
+  name: string;
+  ownerLogin: string;
+  description: string;
+  size: number;
+  marginFee: number;
+  rentalFee: number;
+  address: Address;
+}
