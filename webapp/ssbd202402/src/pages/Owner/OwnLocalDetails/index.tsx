@@ -8,11 +8,17 @@ import { useTranslation } from "react-i18next";
 import { LoadingData } from "@/components/LoadingData";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useGetOwnLocalDetails(id!);
   const { t } = useTranslation();
+  const breadcrumbs = useBreadcrumbs([
+    { title: t("ownerLocals.title"), path: "/owner" },
+    { title: t("ownerLocals.locals"), path: "/owner/locals" },
+    { title: data?.name ?? "", path: `/owner/locals/${id}` },
+  ]);
 
   if (isLoading) {
     return <LoadingData />;
@@ -20,7 +26,7 @@ const OwnLocalDetailsPage: FC = () => {
 
   return (
     <div className="flex flex-col pt-2">
-      {/* {breadcrumbs} */}
+      {breadcrumbs}
       {data && (
         <>
           <Card className="mt-2">
