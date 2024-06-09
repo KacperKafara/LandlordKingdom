@@ -28,7 +28,7 @@ const LocalDetailsPage: FC = () => {
   const breadcrumbs = useBreadcrumbs([
     { title: t("roles.administrator"), path: "/admin" },
     { title: t("allLocals.title"), path: "/admin/locals" },
-    { title: data?.name ?? "", path: `/admin/locals/${id}` },
+    { title: data?.name ?? "", path: `/admin/locals/local/${id}` },
   ]);
 
   if (isLoading) {

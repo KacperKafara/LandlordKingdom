@@ -17,7 +17,7 @@ const OwnLocalDetailsPage: FC = () => {
   const breadcrumbs = useBreadcrumbs([
     { title: t("ownerLocals.title"), path: "/owner" },
     { title: t("ownerLocals.locals"), path: "/owner/locals" },
-    { title: data?.name ?? "", path: `/owner/locals/${id}` },
+    { title: data?.name ?? "", path: `/owner/locals/local/${id}` },
   ]);
 
   if (isLoading) {
