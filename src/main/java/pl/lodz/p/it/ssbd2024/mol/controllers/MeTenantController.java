@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +13,10 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
+import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
+import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
@@ -33,7 +38,8 @@ public class MeTenantController {
     public ResponseEntity<GetRoleRequestResponse> requestRole() {
         try {
             RoleRequest roleRequest = roleService.requestRole();
-            return ResponseEntity.ok(RoleRequestMapper.toGetRoleResponse(roleRequest));
+            User user = roleRequest.getTenant().getUser();
+            return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest, user.getTimezone(), user.getLanguage()));
         } catch (RoleRequestAlreadyExistsException e) {
             throw new RuntimeException(e);
         } catch (UserAlreadyHasRoleException e) {
@@ -47,25 +53,29 @@ public class MeTenantController {
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<GetRoleRequestResponse> getRoleRequest() throws NotFoundException {
         RoleRequest roleRequest = roleService.get();
-        return ResponseEntity.ok(RoleRequestMapper.toGetRoleResponse(roleRequest));
+        User user = roleRequest.getTenant().getUser();
+        return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest, user.getTimezone(), user.getLanguage()));
     }
 
     @GetMapping("/current-rents")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getCurrentRents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<RentForTenantResponse>> getCurrentRents() {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(rentService.getCurrentTenantRents(userId).stream().map(RentMapper::rentForTenantResponse).toList());
     }
 
     @GetMapping("/rents/{id}")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getRent(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<RentDetailedTenantResponse> getRent(@PathVariable UUID id) throws NotFoundException {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok(RentMapper.rentDetailedTenantResponse(rentService.getTenantRent(id, userId)));
     }
 
     @GetMapping("/rents/archival")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<RentResponse>> getArchivalRents() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<RentForTenantResponse>> getArchivalRents() {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(rentService.getArchivalRentsForTenant(userId).stream().map(RentMapper::rentForTenantResponse).toList());
     }
 
     @GetMapping("/applications")

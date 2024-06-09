@@ -251,6 +251,10 @@ const navLinks = {
   notApprovedActions: "Not approved actions",
   roles: "Change access level",
   locals: "Locals",
+  currentRents: "Current rents",
+  archivalRents: "Archival rents",
+} satisfies {
+  [key in string]: string;
 };
 
 const userDataPage = {
@@ -291,7 +295,7 @@ const mePage = {
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the user's email address",
   title: "My account",
-  basicInformation: "Basic information's",
+  basicInformation: "Basic information",
   firstNameLabel: "First name",
   lastNamelabel: "Last name",
   emailLabel: "Email",
@@ -315,9 +319,25 @@ const registerSuccessPage = {
 };
 
 const notApprovedActionsPage = {
+  title: "Not approved actions",
   roleRequests: "Requests for role",
   locals: "Locals",
   emptyRoleRequests: "No avaliable role requsts",
+  emptyUnapprovedLocals: "No unapproved locals",
+  actions: "Actions",
+  confirm: "Confirm",
+  reject: "Reject",
+  confirmDialog: {
+    title: "Are you sure?",
+    confirmDescription: "Are you sure you want to confirm this local?",
+    rejectDescription: "Are you sure you want to reject this local?",
+  },
+  unapprovedLocals: {
+    name: "Name",
+    address: "Address",
+    owner: "Owner",
+    details: "Details",
+  },
 };
 
 const validation = {
@@ -383,6 +403,13 @@ const errors = {
   accessLevelAssigned: "Access level aleady assigned",
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
+  localNotFound: "Local not found",
+  localNotInactive: "Local must be inactive for this operation",
+  localNotUnapproved: "Local must be unapproved for this operation",
+  wrongEndDate:
+    "End date must be in the future Sunday, after start date and different from current end date",
+  rentNotFound: "Rent not found",
+  invalidLocalStateArchive: "Local must be in Without owner state to archive",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -394,11 +421,17 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Show",
+  noLocalsFound: "Currently you have no locals",
+  addFirstLocal: "Add first local",
+  title: "Main page",
+  locals: "Locals",
 };
 
 const allLocals = {
+  title: "All locals",
   show: "Show",
   localOwner: "Owner: ",
+  noLocalsFound: "Currently there are no locals",
 };
 
 const localState = {
@@ -412,7 +445,112 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const tenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
+const currentOwnerRents = {
+  title: "Owner",
+  rents: "Current rents",
+  startDate: "Start date",
+  endDate: "End date",
+  balance: "Balance",
+  tenant: "Tenant",
+  name: "Name",
+  email: "Email",
+  noRentsFound: "Currently your local has no tenants",
+};
+
+const leaveLocal = {
+  successTitle: "Success",
+  successDescription: "You have left the local",
+  errorTitle: "Error",
+  buttonText: "Leave local",
+};
+
+const currentTenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
+const changeEndDate = {
+  successTitle: "Success",
+  successDescription: "End date has been changed",
+  errorTitle: "Error",
+  buttonText: "Change end date",
+  newDateRequired: "New date is required",
+  dialogTitle: "Change rent's end date",
+  dialogDescription: "Choose a new end date for the rent.",
+  formLabel: "New end date",
+  formDescription: "End date must be in the future and it must be Sunday.",
+  spanText: "Pick a date",
+};
+const roleRequestDialog = {
+  description:
+    "You can submit a request for an owner role. Once we receive your request, we will review your account to determine your eligibility. If the role is assigned to you, you will receive an email notification.",
+  requestOwnerRole: "Request Owner role",
+  requestOwnerRoleDescription:
+    "Click this button to submit a request for an owner role.",
+  alreadyPlacedRequest: "You already placed a request for role at: {{when}}",
+  howDoesItWork: "How does this work?",
+  requestRoleButton: "Request role",
+};
+
+const localDetails = {
+  error: "Error while fetching local details",
+  firstName: "First name",
+  lastName: "Last name",
+  owner: "Owner",
+  login: "Login",
+  email: "Email",
+  address: "Address",
+  size: "Size",
+  rentalFee: "Rental fee",
+  marginFee: "Margin fee",
+  description: "Description",
+  country: "Country",
+  city: "City",
+  street: "Street",
+  number: "Number",
+  zipCode: "Zip code",
+  showOwnerDetails: "Show owner details",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  addressInformation: "Address information",
+  basicInformation: "Basic information",
+  updateData: "Update data",
+  changeAddress: "Change address",
+  archiveLocal: "Archive local",
+  approveLocal: "Approve local",
+  archiveLocalDescription: "Are you sure you want to archive this local?",
+  close: "Close",
+  archiveError: "Archive error",
+  archiveSuccess: "Local has been archived",
+};
+
 export default {
+  localDetails,
+  changeEndDate,
+  currentOwnerRents,
+  currentTenantRents,
+  tenantRents,
+  leaveLocal,
+  roleRequestDialog,
   allLocals,
   localState,
   ownerLocals,
