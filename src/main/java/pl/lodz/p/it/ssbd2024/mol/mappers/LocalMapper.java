@@ -95,7 +95,9 @@ public class LocalMapper {
                 local.getState().toString(),
                 AddressMapper.toAddressResponse(local.getAddress()),
                 local.getMarginFee(),
-                local.getRentalFee()
+                local.getRentalFee(),
+                local.getNextMarginFee(),
+                local.getNextRentalFee()
         );
     }
 
