@@ -325,12 +325,24 @@ const notApprovedActionsPage = {
   emptyRoleRequests: "No avaliable role requsts",
   emptyUnapprovedLocals: "No unapproved locals",
   actions: "Actions",
+  confirm: "Confirm",
+  reject: "Reject",
+  confirmDialog: {
+    title: "Are you sure?",
+    confirmDescription: "Are you sure you want to confirm this local?",
+    rejectDescription: "Are you sure you want to reject this local?",
+  },
   unapprovedLocals: {
     name: "Name",
     address: "Address",
     owner: "Owner",
     details: "Details",
   },
+  approve: "Approve",
+  reject: "Reject",
+  show: "Show",
+  roleRequestApproveSuccess: "Role request approved",
+  roleRequestRejectSuccess: "Role request rejected",
 };
 
 const validation = {
@@ -398,6 +410,7 @@ const errors = {
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
   localNotInactive: "Local must be inactive for this operation",
+  localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
     "End date must be in the future Sunday, after start date and different from current end date",
   rentNotFound: "Rent not found",

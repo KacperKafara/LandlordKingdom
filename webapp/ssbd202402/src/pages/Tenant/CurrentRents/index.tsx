@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { LoadingData } from "@/components/LoadingData";
+import { NavLink } from "react-router-dom";
 
 const CurrentRentsPage: FC = () => {
   const { data, isLoading } = useGetTenantOwnRents();
@@ -23,7 +24,7 @@ const CurrentRentsPage: FC = () => {
     { title: t("navLinks.currentRents"), path: "/tenant/current-rents" },
   ]);
   if (isLoading) {
-    return <LoadingData />;
+    return <div>Loading...</div>;
   }
   if (!data) {
     return <div>No data</div>;
@@ -94,7 +95,9 @@ const CurrentRentsPage: FC = () => {
                   />
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
-                  <Button className="flex-auto">Action 1</Button>
+                  <Button className="flex-auto" asChild>
+                    <NavLink to={`/tenant/rents/${rent.id}`}>Details</NavLink>
+                  </Button>
                   <Button className="flex-auto">Action 2</Button>
                   <Button className="flex-auto">Action 3</Button>
                 </CardFooter>

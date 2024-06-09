@@ -1,11 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
 import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.mol.dto.GetAllLocalsResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.GetOwnLocalsResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.LocalForAdministratorResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.LocalDetailsForAdminResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.LocalForTenantResponse;
+import pl.lodz.p.it.ssbd2024.mol.dto.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,5 +85,33 @@ public class LocalMapper {
                 local.getNextMarginFee(),
                 local.getNextRentalFee()
         );
+    }
+
+    public static OwnLocalDetailsResponse toOwnLocalDetailsResponse(Local local) {
+        return new OwnLocalDetailsResponse(
+                local.getName(),
+                local.getSize(),
+                local.getDescription(),
+                local.getState().toString(),
+                AddressMapper.toAddressResponse(local.getAddress()),
+                local.getMarginFee(),
+                local.getRentalFee()
+        );
+    }
+
+    public static GetActiveLocalsResponse toGetAllActiveLocalsResponse(Local local) {
+        return new GetActiveLocalsResponse(
+                local.getId(),
+                local.getName(),
+                local.getDescription(),
+                local.getSize(),
+                local.getMarginFee(),
+                local.getRentalFee(),
+                AddressMapper.toAddressResponse(local.getAddress())
+        );
+    }
+
+    public static List<GetActiveLocalsResponse> toGetAllActiveLocalsResponseList(List<Local> locals) {
+        return locals.stream().map(LocalMapper::toGetAllActiveLocalsResponse).collect(Collectors.toList());
     }
 }

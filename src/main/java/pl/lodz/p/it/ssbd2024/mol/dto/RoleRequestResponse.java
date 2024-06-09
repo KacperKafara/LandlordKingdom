@@ -7,6 +7,7 @@ public record RoleRequestResponse(
         String login,
         String email,
         String firstName,
-        String lastName
+        String lastName,
+        UUID userId
 ) {
 }

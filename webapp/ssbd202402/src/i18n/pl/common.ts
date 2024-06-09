@@ -328,14 +328,26 @@ const notApprovedActionsPage = {
   roleRequests: "Zgłoszenia o rolę",
   locals: "Lokale",
   emptyRoleRequests: "Brak zgłoszeń o rolę",
-  emptyUnapprovedLocals: "No unapproved locals",
+  emptyUnapprovedLocals: "Brak niezatwierdzonych lokali",
   actions: "Akcje",
+  confirm: "Zatwierdź",
+  reject: "Odrzuć",
+  confirmDialog: {
+    title: "Czy jesteś pewny?",
+    confirmDescription: "Czy na pewno chcesz zatwierdzić ten lokal?",
+    rejectDescription: "Czy na pewno chcesz odrzucić ten lokal?",
+  },
   unapprovedLocals: {
     name: "Nazwa",
     address: "Adres",
     owner: "Właściciel",
     details: "Szczegóły",
   },
+  approve: "Zaakceptuj",
+  reject: "Odrzuć",
+  show: "Pokaż",
+  roleRequestApproveSuccess: "Zgłoszenie o rolę zaakceptowane",
+  roleRequestRejectSuccess: "Zgłoszenie o rolę odrzucone",
 };
 
 const validation = {
@@ -401,6 +413,8 @@ const errors = {
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
+  localNotUnapproved:
+    "Nieruchomość musi być niezatwierdzona, aby wykonać tę operację",
   wrongEndDate:
     "Data zakończenia musi być późniejsza niż data rozpoczęcia, musi być w przyszłości i musi być Niedzielą",
   rentNotFound: "Nie znaleziono wynajmu",

@@ -1,5 +1,5 @@
 import { useGetLocalDetailsForAdmin } from "@/data/local/useGetLocalDetailsForAdmin";
-import { FC, useState } from "react";
+import { FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import DataField from "@/components/DataField";
@@ -22,15 +22,13 @@ const LocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { data, isLoading } = useGetLocalDetailsForAdmin(id!);
   const { archiveLocal } = useArchiveLocal();
-  const [localName] = useState<string>(data?.name || "");
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  //TODO: Poprawic ten syf bo przeciez ledwo dziala, jak sie pierwszy raz wejdzie na lokal to nie ma nazwy lokalu
   const breadcrumbs = useBreadcrumbs([
     { title: t("roles.administrator"), path: "/admin" },
     { title: t("allLocals.title"), path: "/admin/locals" },
-    { title: localName, path: `/admin/local/${id}` },
+    { title: data?.name ?? "", path: `/admin/locals/local/${id}` },
   ]);
 
   if (isLoading) {

@@ -1,4 +1,5 @@
 import { LocalState } from "@/@types/localState";
+import { Address } from "../Address";
 
 export interface AllLocals {
   id: string;
@@ -27,10 +28,13 @@ export interface OwnLocals {
   address: Address;
 }
 
-export interface Address {
-  country: string;
-  city: string;
-  street: string;
-  number: string;
-  zipCode: string;
+export interface ActiveLocals {
+  id: string;
+  name: string;
+  ownerLogin: string;
+  description: string;
+  size: number;
+  marginFee: number;
+  rentalFee: number;
+  address: Address;
 }

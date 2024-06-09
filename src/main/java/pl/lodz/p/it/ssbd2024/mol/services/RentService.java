@@ -14,6 +14,8 @@ public interface RentService {
 
     Rent getRent(UUID id) throws NotFoundException;
 
+    Rent getTenantRent(UUID rentId, UUID userId) throws NotFoundException;
+
     List<Rent> getCurrentOwnerRents(UUID ownerId);
 
     Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException;

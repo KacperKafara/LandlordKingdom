@@ -29,8 +29,8 @@ public class LocalController {
 
     @GetMapping("/active")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<LocalResponse>> getActiveLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<GetActiveLocalsResponse>> getActiveLocals() {
+        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocals()));
     }
 
     @GetMapping("/unapproved")
@@ -61,13 +61,27 @@ public class LocalController {
     @PatchMapping("/{id}/approve")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<LocalResponse> approveLocal(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            localService.approveLocal(id);
+            return ResponseEntity.ok().build();
+        } catch (NotFoundException  e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidLocalState e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/{id}/reject")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<LocalResponse> rejectLocal(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            localService.rejectLocal(id);
+            return ResponseEntity.ok().build();
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidLocalState e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
     }
 
     @GetMapping
