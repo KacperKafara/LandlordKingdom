@@ -4,7 +4,6 @@ export interface ActiveLocalDetails {
   description: string;
   ownerName: string;
   size: number;
-  marginFee: number;
-  rentalFee: number;
+  price: number;
   city: string;
 }

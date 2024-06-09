@@ -20,7 +20,7 @@ const ActiveLocalDetailsPage: FC = () => {
       path: "/tenant/locals",
     },
     {
-      title: t("breadcrumbs.local"),
+      title: local?.name ?? "",
       path: `/tenant/locals/${id}`,
     },
   ]);
@@ -39,8 +39,8 @@ const ActiveLocalDetailsPage: FC = () => {
             <div className="w-9/12">
               <Card className="relative pt-6">
                 <CardContent>
-                  <div className="grid w-2/3 grid-cols-2 gap-2">
-                    <p className="col-span-2 text-xl font-semibold">
+                  <div className="grid w-2/3 grid-cols-3 gap-2">
+                    <p className="col-span-3 text-xl font-semibold">
                       {t("localDetails.localInformation")}
                     </p>
                     <DataField
@@ -51,29 +51,17 @@ const ActiveLocalDetailsPage: FC = () => {
                       label={t("localDetails.size")}
                       value={local.size}
                     />
+                    <DataField
+                      label={t("localDetails.price")}
+                      value={local.price}
+                    />
 
-                    <p className="col-span-2 text-xl font-semibold">
+                    <p className="col-span-3 text-xl font-semibold">
                       {t("localDetails.ownerInformation")}
                     </p>
                     <DataField
                       label={t("localDetails.firstName")}
                       value={local.ownerName}
-                    />
-
-                    <p className="col-span-2 text-xl font-semibold">
-                      {t("localDetails.price")}
-                    </p>
-                    <DataField
-                      label={t("localDetails.marginFee")}
-                      value={local.marginFee}
-                    />
-                    <DataField
-                      label={t("localDetails.rentalFee")}
-                      value={local.rentalFee}
-                    />
-                    <DataField
-                      label={t("localDetails.totalPrice")}
-                      value={local.marginFee + local.rentalFee}
                     />
                   </div>
 

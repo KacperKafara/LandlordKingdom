@@ -7,6 +7,5 @@ public record ActiveLocalResponse(String name,
                                   int size,
                                   String ownerName,
                                   String city,
-                                  BigDecimal marginFee,
-                                  BigDecimal rentalFee) {
+                                  BigDecimal price) {
 }

@@ -98,8 +98,7 @@ public class LocalMapper {
                 local.getSize(),
                 local.getOwner().getUser().getFirstName(),
                 local.getAddress().getCity(),
-                local.getMarginFee(),
-                local.getRentalFee()
+                local.getMarginFee().add(local.getRentalFee())
         );
     }
 
