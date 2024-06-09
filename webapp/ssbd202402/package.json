@@ -51,6 +51,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.35.6",
     "@types/loadable__component": "^5.13.9",
     "@types/node": "^20.12.7",
     "@types/react": "^18.2.66",

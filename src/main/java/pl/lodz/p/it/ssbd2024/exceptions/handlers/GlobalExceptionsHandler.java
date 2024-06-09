@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.thymeleaf.exceptions.TemplateInputException;
 import pl.lodz.p.it.ssbd2024.exceptions.ApplicationBaseException;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.messages.ExceptionMessages;
 
 import java.sql.SQLException;
@@ -31,7 +32,7 @@ public class GlobalExceptionsHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ExceptionResponse> handleConstraintViolationException(MethodArgumentNotValidException e) {
         StringBuilder sb = new StringBuilder();
-        for (FieldError error: e.getFieldErrors()) {
+        for (FieldError error : e.getFieldErrors()) {
             sb.append(error.getDefaultMessage()).append(", ");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ExceptionMessages.VALIDATION_ERROR + sb, ErrorCodes.VALIDATION_ERROR));
@@ -56,11 +57,11 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<ExceptionResponse> handleResponseStatusException(ResponseStatusException e) {
-        if(e.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
+        if (e.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT, ErrorCodes.INTERNAL_SERVER_ERROR));
         }
 
-        if(e.getCause() instanceof ApplicationBaseException ex) {
+        if (e.getCause() instanceof ApplicationBaseException ex) {
             return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getReason(), ex.getCode()));
         }
         return ResponseEntity.status(e.getStatusCode()).body(new ExceptionResponse(e.getReason(), ErrorCodes.SOMETHING_WENT_WRONG));
@@ -115,5 +116,10 @@ public class GlobalExceptionsHandler {
     ResponseEntity<ExceptionResponse> handleTransactionException(TransactionException e) {
         log.error("Uncaught exception", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TRANSACTION, ErrorCodes.TRANSACTION));
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(e.getMessage(), e.getCode()));
     }
 }

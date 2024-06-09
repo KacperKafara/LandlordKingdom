@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
@@ -20,7 +21,6 @@ import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
@@ -106,7 +106,7 @@ public class MeOwnerController {
 
     @GetMapping("/rents/{id}/payments")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<RentPaymentsResponse>> getRentPayments(@PathVariable UUID id) {
+    public ResponseEntity<List<PaymentResponse>> getRentPayments(@PathVariable UUID id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
