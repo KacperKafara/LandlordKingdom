@@ -39,7 +39,7 @@ public interface RentRepository extends JpaRepository<Rent, UUID> {
     List<Rent> findCurrentRentsByOwnerId(UUID ownerId);
 
     @PreAuthorize("hasRole('OWNER')")
-    Rent findByOwnerIdAndId(UUID ownerId, UUID rentId);
+    Optional<Rent> findByOwnerIdAndId(UUID ownerId, UUID rentId);
 
     @PreAuthorize("hasRole('OWNER')")
     Rent findAllByOwnerIdAndLocalId(UUID ownerId, UUID localId);

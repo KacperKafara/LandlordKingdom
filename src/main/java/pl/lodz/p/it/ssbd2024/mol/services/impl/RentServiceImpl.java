@@ -86,4 +86,10 @@ public class RentServiceImpl implements RentService {
         return rentRepository.findAllPastRentsByTenantUserId(userId);
     }
 
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Rent getOwnerRent(UUID userId, UUID rentId) throws NotFoundException {
+        return rentRepository.findByOwnerIdAndId(userId, rentId).orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
+    }
+
 }

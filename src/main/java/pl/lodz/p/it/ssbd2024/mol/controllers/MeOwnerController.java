@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,21 +14,19 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
-import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
+import pl.lodz.p.it.ssbd2024.mol.mappers.PaymentMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
+import pl.lodz.p.it.ssbd2024.mol.services.PaymentService;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ public class MeOwnerController {
     private final LocalService localService;
     private final ApplicationService applicationService;
     private final RentService rentService;
+    private final PaymentService paymentService;
 
     @GetMapping("/locals")
     @PreAuthorize("hasRole('OWNER')")
@@ -93,8 +95,23 @@ public class MeOwnerController {
 
     @GetMapping("/rents/{id}/payments")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<RentPaymentsResponse>> getRentPayments(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<RentPaymentsResponse> getRentPayments(@PathVariable UUID id,
+                                                                      @RequestBody RentPaymentsRequest rentPaymentsRequest,
+                                                                      @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
+                                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        try {
+            LocalDate startDate =  LocalDate.parse(rentPaymentsRequest.startDate());
+            LocalDate endDate =  LocalDate.parse(rentPaymentsRequest.endDate());
+            paymentService.getRentPayments(id, userId, startDate, endDate, pageable);
+            return ResponseEntity.ok(PaymentMapper.toRentPaymentsResponse(paymentService.getRentPayments(id, userId, startDate, endDate, pageable)));
+        }catch (DateTimeParseException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    RentExceptionMessages.DATE_PARSING_ERROR,
+                    new DateParsingException(RentExceptionMessages.DATE_PARSING_ERROR, exception, ErrorCodes.DATE_PARSING_ERROR));
+        }
+
     }
 
     @PatchMapping("/locals/{id}/leave")
@@ -139,4 +156,14 @@ public class MeOwnerController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @GetMapping("/rents/{id}")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<RentForOwnerResponse> getRent(@PathVariable UUID id) {
+        try {
+            UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+            return ResponseEntity.ok(RentMapper.rentForOwnerResponse(rentService.getOwnerRent(userId, id)));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
 }
