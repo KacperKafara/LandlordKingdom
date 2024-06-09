@@ -90,4 +90,16 @@ public class LocalMapper {
                 local.getRentalFee()
         );
     }
+
+    public static LocalPublicResponse toLocalPublicResponse(Local local) {
+        return new LocalPublicResponse(
+                local.getName(),
+                local.getDescription(),
+                local.getSize(),
+                local.getOwner().getUser().getFirstName(),
+                local.getAddress().getCity(),
+                local.getMarginFee(),
+                local.getRentalFee()
+        );
+    }
 }
