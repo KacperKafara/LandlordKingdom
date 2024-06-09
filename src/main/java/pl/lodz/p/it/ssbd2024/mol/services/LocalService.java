@@ -38,9 +38,9 @@ public interface LocalService {
 
     Local editLocalByAdmin(UUID id, Local newLocal) throws NotFoundException;
 
-    Local approveLocal(UUID id) throws NotFoundException;
+    Local approveLocal(UUID id) throws NotFoundException, InvalidLocalState;
 
-    Local rejectLocal(UUID id) throws NotFoundException;
+    Local rejectLocal(UUID id) throws NotFoundException, InvalidLocalState;
 
     List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException;
 
