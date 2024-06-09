@@ -87,13 +87,7 @@ public class LocalServiceImpl implements LocalService {
     public Local setFixedFee(UUID localId, UUID ownerId,  BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException {
         Local local = localRepository.findByOwner_User_IdAndId(ownerId, localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
 
-        ZonedDateTime now = ZonedDateTime.now(ZoneId.of("UTC"));
-        ZonedDateTime nextSundayMidnight = now.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY))
-                .toLocalDate()
-                .atStartOfDay(ZoneId.of("UTC"))
-                .plusDays(1);
-
-        if (now.isAfter(nextSundayMidnight.minusHours(24))) {
+        if (local.getState() == LocalState.RENTED) {
             local.setNextMarginFee(marginFee);
             local.setNextRentalFee(rentalFee);
         } else {
