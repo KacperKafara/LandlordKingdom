@@ -10,6 +10,7 @@ GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02mok;
 GRANT SELECT ON TABLE public.timezones TO ssbd02mok;
 GRANT SELECT ON TABLE public.themes TO ssbd02mok;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.user_filters TO ssbd02mok;
+GRANT SELECT, DELETE ON TABLE public.role_requests TO ssbd02mok;
 
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.locals TO ssbd02mol;
 GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.addresses TO ssbd02mol;
