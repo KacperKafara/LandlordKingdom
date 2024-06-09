@@ -29,7 +29,10 @@ const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
 const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
 const CurrnetOwnerRentsPage = loadable(() => import("./pages/Owner/Rents"));
-const ArchivalRentsPage = loadable(() => import("./pages/Tenant/ArchivalRents"));
+const ArchivalRentsPage = loadable(
+  () => import("./pages/Tenant/ArchivalRents")
+);
+const RentDetailsPage = loadable(() => import("./pages/Tenant/RentDetails"));
 const LocalDetailsPage = loadable(() => import("./pages/Admin/LocalDetails"));
 
 const AdminRoutes: RouteObject[] = [
@@ -40,7 +43,7 @@ const AdminRoutes: RouteObject[] = [
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
-  { path: "not-approved", Component: NotApprovedActionsPage }, 
+  { path: "not-approved", Component: NotApprovedActionsPage },
 ];
 const OwnerRoutes: RouteObject[] = [
   { path: "test", Component: OwnerTestPage },
@@ -51,6 +54,7 @@ const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
   { path: "current-rents", Component: CurrentRentsPage },
   { path: "archival-rents", Component: ArchivalRentsPage },
+  { path: "rents/:id", Component: RentDetailsPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 
