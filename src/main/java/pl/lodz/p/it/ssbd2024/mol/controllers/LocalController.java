@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -129,7 +128,7 @@ public class LocalController {
 
     @GetMapping("/active/{id}")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<LocalPublicResponse> getActiveLocal(@PathVariable UUID id) {
+    public ResponseEntity<ActiveLocalResponse> getActiveLocal(@PathVariable UUID id) {
         try {
             Local local = localService.getActiveLocal(id);
             return ResponseEntity.ok(LocalMapper.toLocalPublicResponse(local));

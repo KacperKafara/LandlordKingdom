@@ -91,8 +91,8 @@ public class LocalMapper {
         );
     }
 
-    public static LocalPublicResponse toLocalPublicResponse(Local local) {
-        return new LocalPublicResponse(
+    public static ActiveLocalResponse toLocalPublicResponse(Local local) {
+        return new ActiveLocalResponse(
                 local.getName(),
                 local.getDescription(),
                 local.getSize(),
