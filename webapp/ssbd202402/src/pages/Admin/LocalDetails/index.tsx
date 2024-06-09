@@ -17,6 +17,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useArchiveLocal } from "@/data/local/useArchiveLocal";
+import ChangeAddressFormComponent from "./ChangeAddressFormComponent";
 
 const LocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -214,13 +215,7 @@ const LocalDetailsPage: FC = () => {
                   </Card>
                 </TabsContent>
                 <TabsContent value="changeAddress">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-center">
-                        {t("localDetails.changeAddress")}
-                      </CardTitle>
-                    </CardHeader>
-                  </Card>
+                  <ChangeAddressFormComponent localId={id!} />
                 </TabsContent>
               </Tabs>
             </div>

@@ -344,7 +344,6 @@ const notApprovedActionsPage = {
     details: "Szczegóły",
   },
   approve: "Zaakceptuj",
-  reject: "Odrzuć",
   show: "Pokaż",
   roleRequestApproveSuccess: "Zgłoszenie o rolę zaakceptowane",
   roleRequestRejectSuccess: "Zgłoszenie o rolę odrzucone",
@@ -555,7 +554,22 @@ const changeEndDate = {
   spanText: "Wybierz datę",
 };
 
+const changeAddressForm = {
+  cityValidation: "Miasto musi zawierać od 1 do 100 znaków",
+  countryValidation: "Kraj musi zawierać od 1 do 100 znaków",
+  streetValidation: "Ulica musi zawierać od 1 do 100 znaków",
+  numberValidation: "Numer musi zawierać od 1 do 10 znaków",
+  zipCodeValidation: "Kod pocztowy musi być w formacie 12-345",
+  country: "Kraj*",
+  city: "Miasto*",
+  street: "Ulica*",
+  number: "Numer*",
+  zipCode: "Kod pocztowy*",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić adres?",
+};
+
 export default {
+  changeAddressForm,
   localDetails,
   roleRequestDialog,
   changeEndDate,

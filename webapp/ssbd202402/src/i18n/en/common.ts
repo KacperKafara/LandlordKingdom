@@ -339,7 +339,6 @@ const notApprovedActionsPage = {
     details: "Details",
   },
   approve: "Approve",
-  reject: "Reject",
   show: "Show",
   roleRequestApproveSuccess: "Role request approved",
   roleRequestRejectSuccess: "Role request rejected",
@@ -548,7 +547,22 @@ const localDetails = {
   archiveSuccess: "Local has been archived",
 };
 
+const changeAddressForm = {
+  cityValidation: "City must be between 1 and 100 characters",
+  countryValidation: "Country must be between 1 and 100 characters",
+  streetValidation: "Street must be between 1 and 100 characters",
+  numberValidation: "Number must be between 1 and 10 characters",
+  zipCodeValidation: "Zip code must be in format 12-345",
+  country: "Country*",
+  city: "City*",
+  street: "Street*",
+  number: "Number*",
+  zipCode: "Zip code*",
+  confirmDialogDescription: "Are you sure you want to change address?",
+};
+
 export default {
+  changeAddressForm,
   localDetails,
   changeEndDate,
   currentOwnerRents,
