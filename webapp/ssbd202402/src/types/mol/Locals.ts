@@ -9,6 +9,8 @@ export interface AllLocals {
   size: number;
   marginFee: number;
   rentalFee: number;
+  nextMarginFee: number;
+  nextRentalFee: number;
   address: Address;
 }
 
@@ -20,6 +22,8 @@ export interface OwnLocals {
   size: number;
   marginFee: number;
   rentalFee: number;
+  nextMarginFee: number;
+  nextRentalFee: number;
   address: Address;
 }
 
