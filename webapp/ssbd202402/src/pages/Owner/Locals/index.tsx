@@ -14,6 +14,7 @@ import { t } from "i18next";
 import { FC } from "react";
 import { LeaveLocalButton } from "./LeaveLocalButton";
 import { LoadingData } from "@/components/LoadingData";
+import { useNavigate } from "react-router-dom";
 
 const Locals: FC = () => {
   const { data: locals, isLoading } = useGetOwnLocals();
@@ -21,6 +22,8 @@ const Locals: FC = () => {
     { title: t("ownerLocals.title"), path: "/owner" },
     { title: t("ownerLocals.locals"), path: "/owner/locals" },
   ]);
+
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <LoadingData />;
@@ -50,7 +53,11 @@ const Locals: FC = () => {
             <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
               {locals.map((local) => (
                 <Card className="relative" key={local.id}>
-                  <Button className="absolute right-1 top-1" variant="ghost">
+                  <Button
+                    onClick={() => navigate(`local/${local.id}`)}
+                    className="absolute right-1 top-1"
+                    variant="ghost"
+                  >
                     {t("ownerLocals.show")}
                   </Button>
                   {local.state === "INACTIVE" && (

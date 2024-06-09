@@ -29,22 +29,36 @@ const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
 const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
 const CurrnetOwnerRentsPage = loadable(() => import("./pages/Owner/Rents"));
-const ArchivalRentsPage = loadable(() => import("./pages/Tenant/ArchivalRents"));
+const ArchivalRentsPage = loadable(
+  () => import("./pages/Tenant/ArchivalRents")
+);
 const LocalDetailsPage = loadable(() => import("./pages/Admin/LocalDetails"));
+const OwnLocalDetailsPage = loadable(
+  () => import("./pages/Owner/OwnLocalDetails")
+);
 
 const AdminRoutes: RouteObject[] = [
-  { path: "locals", children: [
-      {index : true, Component: LocalsPage},
+  {
+    path: "locals",
+    children: [
+      { index: true, Component: LocalsPage },
       { path: "local/:id", Component: LocalDetailsPage },
-    ]},
+    ],
+  },
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
-  { path: "not-approved", Component: NotApprovedActionsPage }, 
+  { path: "not-approved", Component: NotApprovedActionsPage },
 ];
 const OwnerRoutes: RouteObject[] = [
   { path: "test", Component: OwnerTestPage },
-  { path: "locals", Component: OwnLocalsPage },
+  {
+    path: "locals",
+    children: [
+      { index: true, Component: OwnLocalsPage },
+      { path: "local/:id", Component: OwnLocalDetailsPage },
+    ],
+  },
   { path: "rents", Component: CurrnetOwnerRentsPage },
 ];
 const TenantRoutes: RouteObject[] = [
