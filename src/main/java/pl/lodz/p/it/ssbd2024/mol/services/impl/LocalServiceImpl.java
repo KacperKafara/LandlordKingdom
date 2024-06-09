@@ -138,4 +138,9 @@ public class LocalServiceImpl implements LocalService {
         return localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
     }
 
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Local getOwnLocal(UUID id, UUID ownerId) throws NotFoundException {
+        return localRepository.findByOwner_User_IdAndId(ownerId, id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+    }
 }

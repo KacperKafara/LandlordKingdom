@@ -47,4 +47,6 @@ public interface LocalService {
     Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState;
 
     Local getLocal(UUID id) throws NotFoundException;
+
+    Local getOwnLocal(UUID id, UUID ownerId) throws NotFoundException;
 }

@@ -53,6 +53,19 @@ public class MeOwnerController {
         return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id)));
     }
 
+    @GetMapping("locals/{id}")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<OwnLocalDetailsResponse> getLocal(@PathVariable UUID id) {
+        UUID ownerId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+
+        try {
+            Local local = localService.getOwnLocal(id, ownerId);
+            return ResponseEntity.ok(LocalMapper.toOwnLocalDetailsResponse(local));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
     @GetMapping("/locals/{id}/applications")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<List<GetOwnLocalApplicationsResponse>> getOwnLocalApplications(@PathVariable UUID id) {
@@ -138,5 +151,4 @@ public class MeOwnerController {
     public ResponseEntity<List<LocalReportResponse>> getAllReports() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
 }
