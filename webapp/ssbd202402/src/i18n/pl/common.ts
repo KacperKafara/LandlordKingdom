@@ -344,7 +344,6 @@ const notApprovedActionsPage = {
     details: "Szczegóły",
   },
   approve: "Zaakceptuj",
-  reject: "Odrzuć",
   show: "Pokaż",
   roleRequestApproveSuccess: "Zgłoszenie o rolę zaakceptowane",
   roleRequestRejectSuccess: "Zgłoszenie o rolę odrzucone",
@@ -516,6 +515,8 @@ const localDetails = {
   size: "Powierzchnia",
   rentalFee: "Opłata za wynajem",
   marginFee: "Marża właściciela",
+  nextRentalFee: "Przyszła opłata za wynajem",
+  nextMarginFee: "Przyszła marża właściciela",
   owner: "Właściciel",
   login: "Login",
   email: "Email",
@@ -541,6 +542,30 @@ const localDetails = {
   archiveSuccess: "Lokal został zarchiwizowany",
 };
 
+const ownLocalDetails = {
+  error: "Błąd podczas pobierania danych o nieruchomości",
+  size: "Powierzchnia",
+  rentalFee: "Opłata za wynajem",
+  marginFee: "Marża właściciela",
+  nextRentalFee: "Przyszła opłata za wynajem",
+  nextMarginFee: "Przyszła marża właściciela",
+  address: "Adres",
+  country: "Kraj",
+  city: "Miasto",
+  street: "Ulica",
+  number: "Numer",
+  zipCode: "Kod pocztowy",
+  description: "Opis",
+  localInformation: "Informacje o nieruchomości",
+  addressInformation: "Informacje o adresie",
+  basicInformation: "Podstawowe informacje",
+  updateData: "Zaktualizuj dane lokalu",
+  changeAddress: "Zmień adres",
+  changeFixedFee: "Zmień wartość opłaty stałej",
+  changeFixedFeeDescription:
+    "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
+};
+
 const changeEndDate = {
   successTitle: "Sukces",
   successDescription: "Data zakończenia została zmieniona",
@@ -555,8 +580,33 @@ const changeEndDate = {
   spanText: "Wybierz datę",
 };
 
+const updateOwnLocalFixedFeeForm = {
+  rentalFeeNotEmpty: "Opłata za wynajem nie może być pusta.",
+  rentalFeeNotValid:
+    "Opłata za wynajem musi być prawidłową kwotą pieniężną z maksymalnie 2 miejscami po przecinku.",
+  marginFeeNotEmpty: "Marża nie może być pusta.",
+  marginFeeNotValid:
+    "Marża musi być prawidłową kwotą pieniężną z maksymalnie 2 miejscami po przecinku.",
+  rentalFeeInput: "Wprowadź opłatę za wynajem",
+  marginFeeInput: "Wprowadź marżę",
+  updateFixedFee: "Zaktualizuj stałą opłatę",
+  updateFixedFeeTitle: "Potwierdź aktualizację",
+  updateFixedFeeDescription: "Czy na pewno chcesz zaktualizować stałą opłatę?",
+  rentalFeeTooLarge: "Opłata za wynajem nie może przekroczyć 10 000.",
+  marginFeeTooLarge: "Marża nie może przekroczyć 10 000.",
+};
+
+const changeFixedFee = {
+  successTitle: "Sukces",
+  successDescription: "Opłata stała została zmieniona",
+  errorTitle: "Błąd",
+};
+
 export default {
   localDetails,
+  updateOwnLocalFixedFeeForm,
+  ownLocalDetails,
+  changeFixedFee,
   roleRequestDialog,
   changeEndDate,
   leaveLocal,

@@ -5,25 +5,27 @@ import { useToast } from "@/components/ui/use-toast";
 import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
 
-type MutateEndDateRequest = {
+type MutateOwnLocalFixedFeeRequest = {
   id: string;
-  newDate: string;
+  rentalFee: number;
+  marginFee: number;
 };
 
-export const useMutateEndDate = () => {
+export const useMutateOwnLocalFixedFee = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { t } = useTranslation();
   const { api } = useAxiosPrivate();
 
   return useMutation({
-    mutationFn: async (data: MutateEndDateRequest) => {
-      await api.patch(`/me/rents/${data.id}/end-date`, {
-        newEndDate: data.newDate,
+    mutationFn: async (data: MutateOwnLocalFixedFeeRequest) => {
+      await api.patch(`/me/locals/${data.id}/fixed-fee`, {
+        rentalFee: data.rentalFee,
+        marginFee: data.marginFee,
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ownerCurrentRents"] });
+      queryClient.invalidateQueries({ queryKey: ["ownLocalDetails"] });
       toast({
         title: t("changeFixedFee.successTitle"),
         description: t("changeFixedFee.successDescription"),
