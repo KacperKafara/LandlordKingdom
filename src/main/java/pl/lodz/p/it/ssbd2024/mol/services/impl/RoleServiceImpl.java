@@ -11,6 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RoleRequestMessages;
+import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
@@ -74,12 +75,18 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void accept(UUID id) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        Owner owner = new Owner();
+        owner.setUser(roleRequest.getTenant().getUser());
+        owner.setActive(true);
+        ownerRepository.saveAndFlush(owner);
+        roleRequestRepository.delete(roleRequest);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void reject(UUID id) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        roleRequestRepository.delete(roleRequest);
     }
 }

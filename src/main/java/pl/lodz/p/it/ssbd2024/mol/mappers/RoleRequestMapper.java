@@ -7,8 +7,6 @@ import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestResponse;
 import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
 
 public class RoleRequestMapper {
-    private RoleRequestMapper() {
-    }
 
     public static GetRoleRequestResponse toRoleResponse(RoleRequest roleRequest, Timezone timezone, String lang) {
         String timezoneStr = timezone == null ? "UTC" : timezone.getName();
@@ -22,6 +20,7 @@ public class RoleRequestMapper {
                 roleRequest.getTenant().getUser().getLogin(),
                 roleRequest.getTenant().getUser().getEmail(),
                 roleRequest.getTenant().getUser().getFirstName(),
-                roleRequest.getTenant().getUser().getLastName());
+                roleRequest.getTenant().getUser().getLastName(),
+                roleRequest.getTenant().getUser().getId());
     }
 }

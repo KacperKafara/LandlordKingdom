@@ -331,6 +331,11 @@ const notApprovedActionsPage = {
     owner: "Owner",
     details: "Details",
   },
+  approve: "Approve",
+  reject: "Reject",
+  show: "Show",
+  roleRequestApproveSuccess: "Role request approved",
+  roleRequestRejectSuccess: "Role request rejected",
 };
 
 const validation = {

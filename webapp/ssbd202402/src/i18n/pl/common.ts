@@ -336,6 +336,11 @@ const notApprovedActionsPage = {
     owner: "Właściciel",
     details: "Szczegóły",
   },
+  approve: "Zaakceptuj",
+  reject: "Odrzuć",
+  show: "Pokaż",
+  roleRequestApproveSuccess: "Zgłoszenie o rolę zaakceptowane",
+  roleRequestRejectSuccess: "Zgłoszenie o rolę odrzucone",
 };
 
 const validation = {
