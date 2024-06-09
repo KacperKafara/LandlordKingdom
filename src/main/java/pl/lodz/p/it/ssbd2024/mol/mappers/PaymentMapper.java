@@ -13,12 +13,9 @@ public class PaymentMapper {
 
     public static PaymentResponse toPaymentResponse(Payment payment) {
         return new PaymentResponse(
-                payment.getAmount(),
-                payment.getDate().toString()
+                payment.getDate().toString(),
+                payment.getAmount()
         );
-    }
-    public static PaymentResponse paymentResponse(Payment payment) {
-        return new PaymentResponse(payment.getDate().toString(), payment.getAmount());
     }
 
     public static RentPaymentsResponse toRentPaymentsResponse(Page<Payment> rentPayments) {
@@ -26,7 +23,8 @@ public class PaymentMapper {
                 rentPayments.map(PaymentMapper::toPaymentResponse).getContent(),
                 rentPayments.getTotalPages()
         );
+    }
     public static List<PaymentResponse> paymentResponseList(List<Payment> paymentList) {
-        return paymentList.stream().map(PaymentMapper::paymentResponse).toList();
+        return paymentList.stream().map(PaymentMapper::toPaymentResponse).toList();
     }
 }
