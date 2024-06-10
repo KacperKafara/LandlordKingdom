@@ -18,6 +18,7 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.VariableFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.VariableFeeService;
+import pl.lodz.p.it.ssbd2024.util.DateUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -41,7 +42,7 @@ public class VariableFeeServiceImpl implements VariableFeeService {
                 .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
 
         Optional<VariableFee> existingVariableFee = variableFeeRepository
-                .findByRentIdBetween(rentId, userId, LocalDate.now(), LocalDate.now());
+                .findByRentIdBetween(rentId, userId, DateUtils.getFirstDayOfCurrentWeek(), DateUtils.getLastDayOfCurrentWeek());
 
         if (existingVariableFee.isPresent()) {
             throw new VariableFeeAlreadyExistsException(

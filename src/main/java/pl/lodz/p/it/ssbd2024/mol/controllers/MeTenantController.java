@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,9 +10,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
+import pl.lodz.p.it.ssbd2024.exceptions.VariableFeeAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
@@ -94,9 +97,15 @@ public class MeTenantController {
 
     @PostMapping("/rents/{id}/variable-fee")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<VariableFeeResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest) throws NotFoundException {
+    public ResponseEntity<VariableFeeResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest)
+            throws NotFoundException {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
-        VariableFee variableFee = variableFeeService.create(userId, id, variableFeeRequest.amount());
-        return ResponseEntity.ok(VariableFeeMapper.variableFeeResponse(variableFee));
+        try {
+            VariableFee variableFee = variableFeeService.create(userId, id, variableFeeRequest.amount());
+            return ResponseEntity.ok(VariableFeeMapper.variableFeeResponse(variableFee));
+        } catch (VariableFeeAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
+
     }
 }
