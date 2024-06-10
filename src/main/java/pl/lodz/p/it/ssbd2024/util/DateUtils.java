@@ -8,8 +8,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.Locale;
 
-public class TimezoneMapper {
-    private TimezoneMapper() {
+public class DateUtils {
+    private DateUtils() {
     }
 
     public static ZonedDateTime convertUTCToAnotherTimezoneFull(LocalDateTime dateTime, String timezone) throws DateTimeException {
