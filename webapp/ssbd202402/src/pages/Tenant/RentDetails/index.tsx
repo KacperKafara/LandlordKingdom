@@ -7,6 +7,7 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import RentInformationCard from "./RentInformationCard";
+import CreateVariableFeeDialog from "./CreateVariableFeeDialog";
 
 const RentDetailsPage: FC = () => {
   const { t } = useTranslation();
@@ -31,6 +32,7 @@ const RentDetailsPage: FC = () => {
           {breadcrumbs}
           <RefreshQueryButton queryKeys={["tenantRent"]} />
         </div>
+        {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
         <RentInformationCard rent={rent} />
         <Tabs defaultValue="payments">
           <TabsList>

@@ -8,10 +8,10 @@ import {
 import { useCreateRoleRequest } from "@/data/role-request/useCreateRoleRequest";
 import { useGetRoleRequest } from "@/data/role-request/useGetRoleRequest";
 import { useDialogStore } from "@/store/dialogStore";
-import { FC } from "react";
+import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 
-const RoleRequestDialog: FC = () => {
+const RoleRequestDialogComponent: FC = () => {
   const { t } = useTranslation();
   const { isOpened, closeDialog } = useDialogStore();
   const { roleRequest, isError } = useGetRoleRequest();
@@ -49,5 +49,7 @@ const RoleRequestDialog: FC = () => {
     </Dialog>
   );
 };
+
+const RoleRequestDialog = React.memo(RoleRequestDialogComponent);
 
 export default RoleRequestDialog;

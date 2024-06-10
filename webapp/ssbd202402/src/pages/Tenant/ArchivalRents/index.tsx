@@ -66,13 +66,15 @@ const ArchivalRentsPage: FC = () => {
                   />
                   <DataField
                     label={t("tenantRents.fixedFee")}
-                    value={(
-                      rent.local.rentalFee + rent.local.marginFee
-                    ).toString()}
+                    value={
+                      (rent.local.rentalFee + rent.local.marginFee).toString() +
+                      " " +
+                      t("currency")
+                    }
                   />
                   <DataField
                     label={t("tenantRents.balance")}
-                    value={rent.balance.toString()}
+                    value={rent.balance.toString() + " " + t("currency")}
                   />
                   <DataField
                     label={t("tenantRents.localSize")}

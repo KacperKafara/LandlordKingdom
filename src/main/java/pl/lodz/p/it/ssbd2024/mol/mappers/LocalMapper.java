@@ -118,9 +118,7 @@ public class LocalMapper {
                 local.getName(),
                 local.getDescription(),
                 local.getSize(),
-                local.getMarginFee(),
-                local.getRentalFee(),
-                AddressMapper.toAddressResponse(local.getAddress())
+                local.getAddress().getCity()
         );
     }
 

@@ -471,6 +471,9 @@ const leaveLocal = {
   successDescription: "Opuściłeś lokal",
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
+  dialogTitle: "Czy na pewno chcesz opuścić lokal?",
+  dialogDescription: "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
+
 };
 
 const tenantRents = {
@@ -483,6 +486,7 @@ const tenantRents = {
   name: "Imię",
   email: "Email",
   login: "Login",
+  noData: "Aktualnie nie wynajmujesz żadnych lokali",
 };
 
 const currentOwnerRents = {
@@ -545,6 +549,7 @@ const localDetails = {
   close: "Zamknij",
   archiveError: "Błąd podczas archiwizacji",
   archiveSuccess: "Lokal został zarchiwizowany",
+  state: "Stan",
 };
 
 const ownLocalDetails = {
@@ -569,6 +574,16 @@ const ownLocalDetails = {
   changeFixedFee: "Zmień wartość opłaty stałej",
   changeFixedFeeDescription:
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
+    leaveLocal: "Opuść lokal",
+  leaveLocalDescription: 
+  "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+};
+
+const activeLocals = {
+  error: "Błąd podczas pobierania danych aktywnych nieruchomości",
+  size: "Powierzchnia",
+  city: "Miasto",
+  show: "Wyświetl szczegóły",
 };
 
 const changeEndDate = {
@@ -653,7 +668,8 @@ const ownerRentDetails = {
   margin: "Marża",
   rental: "Opłata za wynajem",
   summary: "Razem",
-};
+  showLocalDetails: "Pokaż szczegóły lokalu",
+}
 
 const breadcrumbs = {
   tenant: "Najemca",
@@ -677,6 +693,7 @@ export default {
   currentTenantRents,
   allLocals,
   ownerLocals,
+  activeLocals,
   localState,
   notFoundPage,
   sessionExpiredDialog,

@@ -14,6 +14,7 @@ import DateSelector from "./DateSelector";
 import PaymentsPageChanger from "./PaymentsPageChanger";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTranslation } from "react-i18next";
+import { LoadingData } from "@/components/LoadingData";
 
 type RentPaymentProps = {
   id: string;
@@ -34,7 +35,7 @@ export const RentPayments: FC<RentPaymentProps> = ({
   const [selectEndDate, setSelectEndDate] = useState<Date | undefined>(
     new Date(endDate)
   );
-  const { data } = useRentPayments({
+  const { data, isLoading } = useRentPayments({
     id: id!,
     pageNumber: pageNumber,
     pageSize: pageSize,
@@ -42,6 +43,10 @@ export const RentPayments: FC<RentPaymentProps> = ({
     endDate: format(selectEndDate!.toString(), "yyyy-MM-dd"),
   });
   const { t } = useTranslation();
+
+  if (isLoading) {
+    return <LoadingData />;
+  }
 
   return (
     <Card className="relative">

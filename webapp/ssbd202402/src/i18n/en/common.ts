@@ -455,11 +455,12 @@ const tenantRents = {
   endDate: "End date",
   fixedFee: "Fixed fee",
   balance: "Balance",
-  size: "Local size",
+  localSize: "Local size",
   owner: "Owner",
   name: "Name",
   email: "Email",
   login: "Login",
+  noData: "Currently you have no rents",
 };
 
 const currentOwnerRents = {
@@ -473,6 +474,7 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
+
 };
 
 const leaveLocal = {
@@ -480,6 +482,10 @@ const leaveLocal = {
   successDescription: "You have left the local",
   errorTitle: "Error",
   buttonText: "Leave local",
+  dialogTitle: "Are you sure you want to continue?",
+  dialogDescription:
+    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
+    
 };
 
 const currentTenantRents = {
@@ -552,6 +558,7 @@ const localDetails = {
   close: "Close",
   archiveError: "Archive error",
   archiveSuccess: "Local has been archived",
+  state: "State",
 };
 
 const changeAddressForm = {
@@ -591,6 +598,18 @@ const ownLocalDetails = {
   changeFixedFee: "Change fixed fee",
   changeFixedFeeDescription:
     "Changes to the fixed fees will be effective from the next billing period.",
+    leaveLocal: "Leave local",
+    leaveLocalDescription: 
+    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
+    
+};
+
+const activeLocals = {
+  error: "Error while fetching active locals",
+  size: "Size",
+  city: "City",
+  show: "Show details",
+
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -646,7 +665,8 @@ const ownerRentDetails = {
   margin: "Margin Fee",
   rental: "Rental Fee",
   summary: "Total",
-};
+  showLocalDetails: "Show local details",
+}
 
 const breadcrumbs = {
   tenant: "Tenant",
@@ -671,6 +691,7 @@ export default {
   allLocals,
   localState,
   ownerLocals,
+  activeLocals,
   notFoundPage,
   sessionExpiredDialog,
   error,
