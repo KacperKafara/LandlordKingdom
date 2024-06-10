@@ -15,15 +15,25 @@ import { useNavigate } from "react-router-dom";
 import { RefreshCw } from "lucide-react";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import DataField from "@/components/DataField";
+import ConfirmDialog from "@/components/ConfirmDialog";
+import { useDeleteApplication } from "@/data/application/useDeleteApplication";
+import { useQueryClient } from "@tanstack/react-query";
 
 const OwnApplicationsPage: FC = () => {
   const { data: applications, isLoading } = useGetOwnApplications();
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const { deleteApplication } = useDeleteApplication();
   const breadcrumbs = useBreadcrumbs([
     { title: "Tenant", path: "/tenant" },
     { title: t("navLinks.applications"), path: "/tenant/applications" },
   ]);
   const navigate = useNavigate();
+
+  const handleRemoveApplication = async (id: string) => {
+    await deleteApplication(id);
+    queryClient.invalidateQueries({ queryKey: ["tenantOwnApplications"] });
+  };
 
   return (
     <div className="relative pt-2">
@@ -61,8 +71,18 @@ const OwnApplicationsPage: FC = () => {
                     value={application.createdAt}
                   />
                 </CardContent>
-                <CardFooter className="w-full justify-center gap-3">
-                  <Button className="flex-auto">Action 2</Button>
+                <CardFooter className="flex w-full justify-end gap-3">
+                  <ConfirmDialog
+                    dialogTitle={t("tenantApplications.deleteApplication")}
+                    dialogDescription={t(
+                      "tenantApplications.deleteApplicationDescription"
+                    )}
+                    buttonText={t("tenantApplications.deleteApplication")}
+                    confirmAction={async () =>
+                      await handleRemoveApplication(application.localId)
+                    }
+                    variant="destructive"
+                  />
                 </CardFooter>
               </Card>
             ))}
