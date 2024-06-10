@@ -338,6 +338,10 @@ const notApprovedActionsPage = {
     owner: "Owner",
     details: "Details",
   },
+  approve: "Approve",
+  show: "Show",
+  roleRequestApproveSuccess: "Role request approved",
+  roleRequestRejectSuccess: "Role request rejected",
 };
 
 const validation = {
@@ -513,6 +517,7 @@ const roleRequestDialog = {
 };
 
 const localDetails = {
+  name: "Name",
   error: "Error while fetching local details",
   firstName: "First name",
   lastName: "Last name",
@@ -523,6 +528,8 @@ const localDetails = {
   size: "Size",
   rentalFee: "Rental fee",
   marginFee: "Margin fee",
+  price: "Price",
+  totalPrice: "Total",
   description: "Description",
   country: "Country",
   city: "City",
@@ -574,8 +581,15 @@ const ownerRentDetails = {
   pickDate: "Pick a date",
 }
 
+const breadcrumbs = {
+  tenant: "Tenant",
+  locals: "Locals",
+  local: "Local",
+};
+
 export default {
   ownerRentDetails,
+  breadcrumbs,
   localDetails,
   changeEndDate,
   currentOwnerRents,

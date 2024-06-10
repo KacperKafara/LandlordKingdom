@@ -16,8 +16,10 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Owner;
+import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
+import pl.lodz.p.it.ssbd2024.mok.repositories.RoleRequestMOKRepository;
 import pl.lodz.p.it.ssbd2024.mok.repositories.UserRepository;
 import pl.lodz.p.it.ssbd2024.mok.services.OwnerService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
@@ -33,6 +35,7 @@ public class OwnerServiceImpl implements OwnerService {
     private final EmailService emailService;
     private final OwnerRepository ownerRepository;
     private final UserRepository userRepository;
+    private final RoleRequestMOKRepository roleRequestRepository;
     private final UserService userService;
 
     @Override
@@ -85,7 +88,12 @@ public class OwnerServiceImpl implements OwnerService {
         User user = owner.getUser();
 
         emailService.sendOwnerPermissionGainedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
+        Owner savedOwner = ownerRepository.saveAndFlush(owner);
 
-        return ownerRepository.saveAndFlush(owner);
+        Optional<RoleRequest> roleRequest = roleRequestRepository.findByUserId(savedOwner.getUser().getId());
+
+        roleRequest.ifPresent(roleRequestRepository::delete);
+
+        return savedOwner;
     }
 }

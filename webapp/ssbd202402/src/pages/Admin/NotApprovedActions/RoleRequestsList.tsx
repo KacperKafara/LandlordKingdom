@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -6,12 +7,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { fetchRoleRequests } from "@/data/useRolesRequset";
+import {
+  useAcceptRoleRequest,
+  useGetRoleRequests,
+  useRejectRoleRequest,
+} from "@/data/useRolesRequset";
 import { t } from "i18next";
 import { FC } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RoleRequestsList: FC = () => {
-  const { roleRequests } = fetchRoleRequests();
+  const { roleRequests } = useGetRoleRequests();
+  const { acceptRoleRequest } = useAcceptRoleRequest();
+  const { rejectRoleRequest } = useRejectRoleRequest();
+  const navigate = useNavigate();
+
+  const approveRole = async (id: string) => {
+    await acceptRoleRequest(id);
+  };
+
+  const rejectRole = async (id: string) => {
+    await rejectRoleRequest(id);
+  };
 
   return (
     <>
@@ -23,6 +40,8 @@ const RoleRequestsList: FC = () => {
             <TableHead>{t("userListPage.firstName")}</TableHead>
             <TableHead>{t("userListPage.lastName")}</TableHead>
             <TableHead className="w-1"></TableHead>
+            <TableHead className="w-1"></TableHead>
+            <TableHead className="w-1"></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -33,6 +52,30 @@ const RoleRequestsList: FC = () => {
                 <TableCell>{request.email}</TableCell>
                 <TableCell>{request.firstName}</TableCell>
                 <TableCell>{request.lastName}</TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => navigate(`/admin/users/${request.userId}`)}
+                    variant="secondary"
+                  >
+                    {t("notApprovedActionsPage.show")}
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => approveRole(request.id)}
+                    variant="default"
+                  >
+                    {t("notApprovedActionsPage.approve")}
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button
+                    onClick={() => rejectRole(request.id)}
+                    variant="destructive"
+                  >
+                    {t("notApprovedActionsPage.reject")}
+                  </Button>
+                </TableCell>
               </TableRow>
             ))
           ) : (

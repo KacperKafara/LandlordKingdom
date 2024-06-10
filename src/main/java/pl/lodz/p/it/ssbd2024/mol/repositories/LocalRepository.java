@@ -43,4 +43,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @NonNull
     List<Local> findAll();
+
+    @PreAuthorize("hasRole('TENANT')")
+    Optional<Local> findByIdAndState(UUID id, LocalState state);
 }
