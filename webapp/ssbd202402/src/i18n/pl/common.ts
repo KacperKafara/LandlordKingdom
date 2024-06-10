@@ -646,6 +646,7 @@ const breadcrumbs = {
 const tenantApplications = {
   createdAt: "Data utworzenia aplikacji o wynajem",
   linkToLocal: "Przejdź do lokalu",
+  applicationsNotFund: "Brak aplikacji o wynajem",
 };
 
 export default {

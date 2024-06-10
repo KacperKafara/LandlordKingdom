@@ -1,5 +1,3 @@
-import DataField from "@/components/DataField";
-import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,36 +11,49 @@ import { useGetOwnApplications } from "@/data/tenant/useGetOwnApplications";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { RefreshCw } from "lucide-react";
+import RefreshQueryButton from "@/components/RefreshQueryButton";
+import DataField from "@/components/DataField";
 
 const OwnApplicationsPage: FC = () => {
-  const { data, isLoading } = useGetOwnApplications();
+  const { data: applications, isLoading } = useGetOwnApplications();
   const { t } = useTranslation();
   const breadcrumbs = useBreadcrumbs([
     { title: "Tenant", path: "/tenant" },
     { title: t("navLinks.applications"), path: "/tenant/applications" },
   ]);
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (!data) {
-    return <div>No data</div>;
-  }
+  const navigate = useNavigate();
 
   return (
     <div className="relative pt-2">
       {breadcrumbs}
-      <div className=" flex w-full justify-center">
-        <ul className="flex w-4/5 flex-wrap gap-2 py-4">
-          {data?.map((application) => (
-            <li key={application.id} className="min-w-80 flex-1">
-              <Card className="">
+      <div className="relative flex h-full justify-center pt-2">
+        {isLoading && <RefreshCw className="animate-spin" />}
+        {!isLoading && (!applications || applications.length === 0) && (
+          <div>{t("tenantApplications.applicationsNotFund")}</div>
+        )}
+        {!isLoading && applications && applications.length > 0 && (
+          <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
+            {applications.map((application) => (
+              <Card className="relative" key={application.id}>
+                <Button
+                  className="absolute right-1 top-1"
+                  variant="ghost"
+                  onClick={() =>
+                    navigate(`/tenant/locals/${application.localId}`)
+                  }
+                >
+                  {t("tenantApplications.linkToLocal")}
+                </Button>
                 <CardHeader>
                   <CardTitle className="text-2xl">
                     {application.localName}
                   </CardTitle>
-                  <CardDescription>{application.createdAt}</CardDescription>
-                  <p></p>
+                  <CardDescription>
+                    {application.country} {application.city}{" "}
+                    {application.street}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2">
                   <DataField
@@ -51,19 +62,14 @@ const OwnApplicationsPage: FC = () => {
                   />
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
-                  <Button className="flex-auto" asChild>
-                    <NavLink to={`/locals/local/${application.localId}`}>
-                      {t("tenantApplications.linkToLocal")}
-                    </NavLink>
-                  </Button>
                   <Button className="flex-auto">Action 2</Button>
                 </CardFooter>
               </Card>
-            </li>
-          ))}
-        </ul>
+            ))}
+          </div>
+        )}
       </div>
-      <div className="absolute -right-10 top-0 ">
+      <div className="absolute -right-10 top-0">
         <RefreshQueryButton queryKeys={["tenantOwnApplications"]} />
       </div>
     </div>

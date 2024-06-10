@@ -633,6 +633,7 @@ const ownerRentDetails = {
 const tenantApplications = {
   createdAt: "Created at",
   linkToLocal: "Link to local",
+  applicationsNotFund: "No applications found",
 };
 
 const breadcrumbs = {
