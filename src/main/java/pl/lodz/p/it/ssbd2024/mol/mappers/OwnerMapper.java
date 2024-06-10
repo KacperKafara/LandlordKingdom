@@ -16,6 +16,9 @@ public class OwnerMapper {
     }
 
     public static OwnerForAdminResponse toOwnerForAdminResponse(Owner owner) {
+        if (owner == null) {
+            return null;
+        }
         return new OwnerForAdminResponse(
                 owner.getUser().getId(),
                 owner.getUser().getFirstName(),
