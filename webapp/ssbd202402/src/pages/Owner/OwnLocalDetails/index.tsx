@@ -15,6 +15,7 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import UpdateOwnLocalFixedFee from "./UpdateOwnLocalFixedFee";
+import UpdateLocalDetailsForm from "@/pages/Owner/OwnLocalDetails/UpdateOwnLocal.tsx";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -131,6 +132,14 @@ const OwnLocalDetailsPage: FC = () => {
                         {t("ownLocalDetails.updateData")}
                       </CardTitle>
                     </CardHeader>
+                    <CardContent className="pb-2">
+                      <UpdateLocalDetailsForm
+                          id={id!}
+                          initialName={data.name}
+                          initialDescription={data.description}
+                          initialSize={data.size}
+                      />
+                    </CardContent>
                   </Card>
                 </TabsContent>
                 <TabsContent value="changeFixedFee">

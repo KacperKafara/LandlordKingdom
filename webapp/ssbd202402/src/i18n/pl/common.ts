@@ -570,6 +570,22 @@ const ownLocalDetails = {
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
 };
 
+const updateLocalPage = {
+  name: "Nazwa nieruchomości",
+  description: "Opis nieruchomości",
+  size: "Powierzchnia",
+  reset: "Resetuj",
+  submit: "Zgłoś",
+  wrong: {
+    name: "Nieprawidłowa nazwa",
+    description: "Nieprawidłowy opis",
+    size: "Nieprawidłowa powierzchnia",
+  },
+  successTitle: "Sukces",
+  successDescription: "Nieruchomość zaktualizowana",
+  errorTitle: "Błąd",
+};
+
 const changeEndDate = {
   successTitle: "Sukces",
   successDescription: "Data zakończenia została zmieniona",
@@ -660,6 +676,7 @@ export default {
   currentTenantRents,
   allLocals,
   ownerLocals,
+  updateLocalPage,
   localState,
   notFoundPage,
   sessionExpiredDialog,

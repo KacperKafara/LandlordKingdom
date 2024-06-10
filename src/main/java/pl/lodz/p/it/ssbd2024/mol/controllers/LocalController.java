@@ -100,7 +100,7 @@ public class LocalController {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestBody EditLocalRequest editLocalRequest) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
+     }
 
     @PatchMapping("/{id}/archive")
     @PreAuthorize("hasRole('ADMINISTRATOR')")

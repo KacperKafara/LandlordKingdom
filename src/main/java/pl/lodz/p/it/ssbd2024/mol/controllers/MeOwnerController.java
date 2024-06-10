@@ -91,7 +91,14 @@ public class MeOwnerController {
     @PutMapping("/locals/{id}")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestBody EditLocalRequest editLocalRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID userId = UUID.fromString(jwt.getSubject());
+        try {
+            return ResponseEntity.ok(LocalMapper.toEditLocalResponse(localService.editLocal(userId, id, editLocalRequest)));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 
     @GetMapping("/rents/current")

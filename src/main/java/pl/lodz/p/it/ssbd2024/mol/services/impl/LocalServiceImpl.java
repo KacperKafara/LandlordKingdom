@@ -11,6 +11,7 @@ import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
+import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
@@ -19,10 +20,6 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,8 +62,12 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local editLocal(UUID id, Local local) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest) throws NotFoundException {
+        Local local = localRepository.findByOwner_User_IdAndId(userId, localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        local.setName(editLocalRequest.name());
+        local.setDescription(editLocalRequest.description());
+        local.setSize(editLocalRequest.size());
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
