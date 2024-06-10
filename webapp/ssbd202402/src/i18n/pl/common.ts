@@ -475,8 +475,8 @@ const leaveLocal = {
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
   dialogTitle: "Czy na pewno chcesz opuścić lokal?",
-  dialogDescription: "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
-
+  dialogDescription:
+    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
 };
 
 const tenantRents = {
@@ -577,9 +577,9 @@ const ownLocalDetails = {
   changeFixedFee: "Zmień wartość opłaty stałej",
   changeFixedFeeDescription:
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
-    leaveLocal: "Opuść lokal",
+  leaveLocal: "Opuść lokal",
   leaveLocalDescription:
-  "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
 };
 
 const activeLocals = {
@@ -700,6 +700,9 @@ const tenantApplications = {
   createdAt: "Data utworzenia aplikacji o wynajem",
   linkToLocal: "Przejdź do lokalu",
   applicationsNotFund: "Brak aplikacji o wynajem",
+  deleteApplication: "Usuń aplikację",
+  deleteApplicationDescription: "Czy na pewno chcesz usunąć aplikację?",
+  aplicationDeleted: "Usunięto aplikację",
 };
 
 export default {

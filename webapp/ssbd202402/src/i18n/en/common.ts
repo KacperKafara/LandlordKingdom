@@ -486,7 +486,7 @@ const leaveLocal = {
   buttonText: "Leave local",
   dialogTitle: "Are you sure you want to continue?",
   dialogDescription:
-    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",  
+    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
 };
 
 const currentTenantRents = {
@@ -599,9 +599,9 @@ const ownLocalDetails = {
   changeFixedFee: "Change fixed fee",
   changeFixedFeeDescription:
     "Changes to the fixed fees will be effective from the next billing period.",
-    leaveLocal: "Leave local",
-    leaveLocalDescription:
-    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
+  leaveLocal: "Leave local",
+  leaveLocalDescription:
+    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
 };
 
 const activeLocals = {
@@ -687,6 +687,9 @@ const tenantApplications = {
   createdAt: "Created at",
   linkToLocal: "Link to local",
   applicationsNotFund: "No applications found",
+  deleteApplication: "Remove application",
+  deleteApplicationDescription: "Are you sure you want to delete application?",
+  aplicationDeleted: "Application deleted",
 };
 
 const breadcrumbs = {
