@@ -389,7 +389,6 @@ const errors = {
   passwordRepetition: "Hasło musi się różnić od poprzednich haseł",
   invalidRefreshToken: "Bład podczas odświeżania sesji",
   signInBlocked: "Logowanie jest zablokowane, sprawdź email",
-  timezoneNotFound: "Strefa czasowa niepraawidłowa",
   userAlreadyBlocked: "Użytkownik jest już zablokowany",
   userAlreadyUnblocked: "Użytkownik jest już odblokowany",
   userBlocked: "Twoje konto jest zablokowane",
@@ -422,6 +421,13 @@ const errors = {
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
+  variableFeeAlreadyExists: "Opłata zmienna już istnieje",
+  dateParsingError: "Błąd parsowania daty",
+  rollback: "Operacja została cofnięta",
+  unexpectedRollback: "Nieoczekiwane cofnięcie operacji",
+  transaction: "Błąd transakcji",
+  roleRequestAlreadyExists: "Wniosek o rolę już istnieje",
+  userAlreadyHasRole: "Użytkownik już ma tę rolę",
   applicationExists: "Aplikacja do tego lokalu już istnieje",
 } satisfies {
   [key in ExceptionCode]: string;
@@ -705,7 +711,15 @@ const tenantApplications = {
   aplicationDeleted: "Usunięto aplikację",
 };
 
+const createVariableFeeDialog = {
+  title: "Dodaj opłatę zmienną",
+  amount: "Kwota*",
+  amountMustBePositive: "Kwota musi być większa od 0",
+  success: "Opłata zmienna została dodana",
+};
+
 export default {
+  createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
   activeLocalDetails,

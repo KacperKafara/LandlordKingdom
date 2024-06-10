@@ -24,7 +24,6 @@ const RentDetailsPage: FC = () => {
     },
     { title: "Rent", path: `/tenant/rent/${id}` },
   ]);
-  console.log(rent);
   return (
     <div className="flex justify-center">
       <div className="flex w-10/12 flex-col pt-10">
