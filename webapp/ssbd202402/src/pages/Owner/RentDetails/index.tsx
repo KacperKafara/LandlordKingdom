@@ -9,6 +9,7 @@ import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useTranslation } from "react-i18next";
 import { RentFixedFees } from "./RentFixedFees";
 import { RentVariableFees } from "./RentVariableFees";
+import { LoadingData } from "@/components/LoadingData";
 
 const OwnerRentDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,7 +25,7 @@ const OwnerRentDetailsPage: FC = () => {
   ]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingData />;
   }
 
   return (

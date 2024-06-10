@@ -1,10 +1,12 @@
 import DataField from "@/components/DataField";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RentDetailsForOwner } from "@/types/owner/RentDetailsForOwner";
 import { getAddressString } from "@/utils/address";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 type RentInformationCardProps = {
   rent?: RentDetailsForOwner;
@@ -12,6 +14,7 @@ type RentInformationCardProps = {
 
 const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <Card className="relative">
       <RefreshQueryButton
@@ -65,6 +68,17 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
             label={t("ownerRentDetails.email")}
             value={rent?.tenant.email ?? ""}
           />
+          <div className="col-span-2 flex gap-3">
+            <Button
+              variant="secondary"
+              className="mt-3 w-full text-lg font-normal"
+              onClick={() => {
+                navigate(`/owner/locals/local/${rent?.local.id}`);
+              }}
+            >
+              {t("ownerRentDetails.showLocalDetails")}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>

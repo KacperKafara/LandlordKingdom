@@ -14,6 +14,7 @@ import PaymentsPageChanger from "./PaymentsPageChanger";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTranslation } from "react-i18next";
 import { useRentVariableFees } from "@/data/rent/useRentVariableFees";
+import { LoadingData } from "@/components/LoadingData";
 
 type RentVariableFeesProps = {
   id: string;
@@ -34,7 +35,7 @@ export const RentVariableFees: FC<RentVariableFeesProps> = ({
   const [selectEndDate, setSelectEndDate] = useState<Date | undefined>(
     new Date(endDate)
   );
-  const { data } = useRentVariableFees({
+  const { data, isLoading } = useRentVariableFees({
     id: id!,
     pageNumber: pageNumber,
     pageSize: pageSize,
@@ -42,6 +43,10 @@ export const RentVariableFees: FC<RentVariableFeesProps> = ({
     endDate: format(selectEndDate!.toString(), "yyyy-MM-dd"),
   });
   const { t } = useTranslation();
+
+  if (isLoading) {
+    return <LoadingData />;
+  }
 
   return (
     <Card className="relative">

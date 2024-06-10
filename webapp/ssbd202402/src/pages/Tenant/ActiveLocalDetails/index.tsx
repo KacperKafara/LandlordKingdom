@@ -20,11 +20,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import LoadingButton from "@/components/LoadingButton";
 import { useGetUserApplication } from "@/data/application/useGetUserApplication";
-import React from "react";
 import { useCreateApplication } from "@/data/application/useCreateApplication";
 import { useQueryClient } from "@tanstack/react-query";
 
-const ActiveLocalDetails: FC = () => {
+const ActiveLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { local } = useGetActiveLocal(id!);
   const { application, isError } = useGetUserApplication(id!);
@@ -144,7 +143,5 @@ const ActiveLocalDetails: FC = () => {
     </>
   );
 };
-
-const ActiveLocalDetailsPage = React.memo(ActiveLocalDetails);
 
 export default ActiveLocalDetailsPage;

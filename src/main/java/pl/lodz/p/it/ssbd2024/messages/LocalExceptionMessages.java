@@ -6,4 +6,5 @@ public class LocalExceptionMessages {
     public static final String LOCAL_NOT_INACTIVE = "Local must be inactive for this operation";
     public static final String LOCAL_NOT_UNAPPROVED = "Local must be unapproved for this operation";
     public static final String INVALID_LOCAL_STATE_ARCHIVE = "Invalid local state. Local cannot be archived.";
+    public static final String ADDRESS_ALREADY_ASSIGNED = "Address is already assigned to another local";
 }

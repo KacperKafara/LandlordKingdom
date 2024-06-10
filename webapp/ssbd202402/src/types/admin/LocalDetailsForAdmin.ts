@@ -1,3 +1,5 @@
+import { LocalState } from "@/@types/localState";
+
 export type LocalDetailsForAdmin = {
   name: string;
   size: number;
@@ -20,5 +22,5 @@ export type LocalDetailsForAdmin = {
   rentalFee: number;
   nextMarginFee: number;
   nextRentalFee: number;
-  state: string;
+  state: LocalState;
 };

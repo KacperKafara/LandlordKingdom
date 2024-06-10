@@ -24,10 +24,10 @@ const CurrentRentsPage: FC = () => {
     { title: t("navLinks.currentRents"), path: "/tenant/current-rents" },
   ]);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingData />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <div>{t("tenantRents.noData")}</div>;
   }
 
   return (
@@ -66,13 +66,15 @@ const CurrentRentsPage: FC = () => {
                   />
                   <DataField
                     label={t("tenantRents.fixedFee")}
-                    value={(
-                      rent.local.rentalFee + rent.local.marginFee
-                    ).toString()}
+                    value={
+                      (rent.local.rentalFee + rent.local.marginFee).toString() +
+                      " " +
+                      t("currency")
+                    }
                   />
                   <DataField
                     label={t("tenantRents.balance")}
-                    value={rent.balance.toString()}
+                    value={rent.balance.toString() + " " + t("currency")}
                   />
                   <DataField
                     label={t("tenantRents.localSize")}

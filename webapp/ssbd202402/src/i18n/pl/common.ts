@@ -260,6 +260,7 @@ const navLinks = {
   locals: "Nieruchomości",
   currentRents: "Aktualne wynajmy",
   archivalRents: "Archiwalne wynajmy",
+  applications: "Wnioski o wynajem",
 };
 
 const userDataPage = {
@@ -420,6 +421,7 @@ const errors = {
   rentNotFound: "Nie znaleziono wynajmu",
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
+  addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
   applicationExists: "Aplikacja do tego lokalu już istnieje",
 } satisfies {
   [key in ExceptionCode]: string;
@@ -472,6 +474,9 @@ const leaveLocal = {
   successDescription: "Opuściłeś lokal",
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
+  dialogTitle: "Czy na pewno chcesz opuścić lokal?",
+  dialogDescription: "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
+
 };
 
 const tenantRents = {
@@ -484,6 +489,7 @@ const tenantRents = {
   name: "Imię",
   email: "Email",
   login: "Login",
+  noData: "Aktualnie nie wynajmujesz żadnych lokali",
 };
 
 const currentOwnerRents = {
@@ -546,6 +552,7 @@ const localDetails = {
   close: "Zamknij",
   archiveError: "Błąd podczas archiwizacji",
   archiveSuccess: "Lokal został zarchiwizowany",
+  state: "Stan",
 };
 
 const ownLocalDetails = {
@@ -570,6 +577,16 @@ const ownLocalDetails = {
   changeFixedFee: "Zmień wartość opłaty stałej",
   changeFixedFeeDescription:
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
+    leaveLocal: "Opuść lokal",
+  leaveLocalDescription:
+  "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+};
+
+const activeLocals = {
+  error: "Błąd podczas pobierania danych aktywnych nieruchomości",
+  size: "Powierzchnia",
+  city: "Miasto",
+  show: "Wyświetl szczegóły",
 };
 
 const activeLocalDetails = {
@@ -600,6 +617,21 @@ const changeEndDate = {
   formDescription:
     "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
   spanText: "Wybierz datę",
+};
+
+const changeAddressForm = {
+  cityValidation: "Miasto musi zawierać od 1 do 100 znaków",
+  countryValidation: "Kraj musi zawierać od 1 do 100 znaków",
+  streetValidation: "Ulica musi zawierać od 1 do 100 znaków",
+  numberValidation: "Numer musi zawierać od 1 do 10 znaków",
+  zipCodeValidation: "Kod pocztowy musi być w formacie 12-345",
+  country: "Kraj*",
+  city: "Miasto*",
+  street: "Ulica*",
+  number: "Numer*",
+  zipCode: "Kod pocztowy*",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić adres?",
+  addressUpdateSuccess: "Adres został zaktualizowany",
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -655,6 +687,7 @@ const ownerRentDetails = {
   margin: "Marża",
   rental: "Opłata za wynajem",
   summary: "Razem",
+  showLocalDetails: "Pokaż szczegóły lokalu",
 };
 
 const breadcrumbs = {
@@ -663,7 +696,15 @@ const breadcrumbs = {
   local: "Lokal",
 };
 
+const tenantApplications = {
+  createdAt: "Data utworzenia aplikacji o wynajem",
+  linkToLocal: "Przejdź do lokalu",
+  applicationsNotFund: "Brak aplikacji o wynajem",
+};
+
 export default {
+  changeAddressForm,
+  tenantApplications,
   activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
@@ -679,6 +720,7 @@ export default {
   currentTenantRents,
   allLocals,
   ownerLocals,
+  activeLocals,
   localState,
   notFoundPage,
   sessionExpiredDialog,

@@ -14,7 +14,7 @@ public interface ApplicationService {
 
     List<Application> getLocalApplications(UUID localId, UUID ownerId);
 
-    List<Application> getUserApplications(UUID id);
+    List<Application> getUserApplications(UUID id) throws NotFoundException;
 
     Application getUserApplication(UUID userId, UUID localId) throws NotFoundException;
 

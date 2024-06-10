@@ -15,11 +15,16 @@ import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.model.VariableFee;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
+import pl.lodz.p.it.ssbd2024.mol.mappers.ApplicationMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
+import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
+import pl.lodz.p.it.ssbd2024.mol.mappers.VariableFeeMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
+import pl.lodz.p.it.ssbd2024.mol.services.VariableFeeService;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +37,8 @@ import java.util.UUID;
 public class MeTenantController {
     private final RoleService roleService;
     private final RentService rentService;
+    private final ApplicationService applicationService;
+    private final VariableFeeService variableFeeService;
 
     @PostMapping("/role-request")
     @PreAuthorize("hasRole('TENANT')")
@@ -80,13 +87,16 @@ public class MeTenantController {
 
     @GetMapping("/applications")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<ApplicationResponse>> getApplications() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<OwnApplicationResponse>> getApplications() throws NotFoundException {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(ApplicationMapper.toGetOwnApplications(applicationService.getUserApplications(userId)));
     }
 
     @PostMapping("/rents/{id}/variable-fee")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<VariableFeeResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<VariableFeeResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest) throws NotFoundException {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+        VariableFee variableFee = variableFeeService.create(userId, id, variableFeeRequest.amount());
+        return ResponseEntity.ok(VariableFeeMapper.variableFeeResponse(variableFee));
     }
 }
