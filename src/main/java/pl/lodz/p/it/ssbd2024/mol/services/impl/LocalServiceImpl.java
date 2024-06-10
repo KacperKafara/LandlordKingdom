@@ -5,9 +5,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
+import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
@@ -18,6 +20,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
+import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -29,6 +32,7 @@ import java.util.UUID;
 public class LocalServiceImpl implements LocalService {
     private final LocalRepository localRepository;
     private final AddressRepository addressRepository;
+    private final SignVerifier signVerifier;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
@@ -62,8 +66,12 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest) throws NotFoundException {
-        Local local = localRepository.findByOwner_User_IdAndId(userId, localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+    public Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
+        Local local = localRepository.findByOwner_User_IdAndId(userId, localId).orElseThrow(() ->
+                new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (!signVerifier.verifySignature(localId, local.getVersion(), tagValue)) {
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
+        }
         local.setName(editLocalRequest.name());
         local.setDescription(editLocalRequest.description());
         local.setSize(editLocalRequest.size());

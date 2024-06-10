@@ -10,6 +10,8 @@ import * as z from "zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { useUpdateLocalData } from "@/data/local/useMutateOwnLocalUpdate"
 import {TFunction} from "i18next";
+import {toast} from "@/components/ui/use-toast.ts";
+import {useGetOwnLocalDetails} from "@/data/local/useGetOwnLocalDetails.ts";
 
 interface UpdateLocalDetailsFormProps {
     id: string;
@@ -19,6 +21,7 @@ interface UpdateLocalDetailsFormProps {
 }
 
 const updateLocalDetailsSchema = (t: TFunction) => z.object({
+    id: z.string(),
     name: z.string().min(1, { message: t("updateLocalPage.wrong.name") }),
     description: z.string().min(1, { message: t("updateLocalPage.wrong.description") }),
     size: z.number().min(1, { message: t("updateLocalPage.wrong.size") }),
@@ -33,10 +36,12 @@ const UpdateLocalDetailsForm: FC<UpdateLocalDetailsFormProps> = ({
                                                                      initialSize,
                                                                  }) => {
     const { t } = useTranslation();
-    const { mutateAsync } = useUpdateLocalData();
+    const { data } = useGetOwnLocalDetails(id!);
+    const mutateAsync  = useUpdateLocalData();
     const form = useForm<UpdateLocalFormData>({
         resolver: zodResolver(updateLocalDetailsSchema(t)),
         defaultValues: {
+            id: id,
             name: initialName,
             description: initialDescription,
             size: initialSize,
@@ -44,14 +49,17 @@ const UpdateLocalDetailsForm: FC<UpdateLocalDetailsFormProps> = ({
     });
 
     const updateLocalData = form.handleSubmit(
-        async (data: UpdateLocalFormData) => {
-            const formattedData = {
-                id,
-                name: data.name,
-                description: data.description,
-                size: data.size
-            };
-            await mutateAsync(formattedData);
+        (request ) => {
+            let etag: string = data?.headers.etag;
+            if (!etag) {
+                toast({
+                    variant: "destructive",
+                    title: t("updateLocalPage.errorTitle"),
+                })
+                return;
+            }
+            etag = etag.substring(1, etag.length - 1);
+            mutateAsync.mutate({request, etag});
             form.reset();
         }
     );

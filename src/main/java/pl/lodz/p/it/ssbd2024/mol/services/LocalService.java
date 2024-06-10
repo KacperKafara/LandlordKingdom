@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
@@ -24,7 +25,7 @@ public interface LocalService {
 
     LocalReportResponse getLocalReport(UUID id) throws NotFoundException;
 
-    Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest) throws NotFoundException;
+    Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
     Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException;
 

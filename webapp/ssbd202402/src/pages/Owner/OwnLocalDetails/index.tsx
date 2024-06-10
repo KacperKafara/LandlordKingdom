@@ -24,7 +24,7 @@ const OwnLocalDetailsPage: FC = () => {
   const breadcrumbs = useBreadcrumbs([
     { title: t("ownerLocals.title"), path: "/owner" },
     { title: t("ownerLocals.locals"), path: "/owner/locals" },
-    { title: data?.name ?? "", path: `/owner/locals/local/${id}` },
+    { title: data?.data.name ?? "", path: `/owner/locals/local/${id}` },
   ]);
 
   if (isLoading) {
@@ -38,7 +38,7 @@ const OwnLocalDetailsPage: FC = () => {
         <>
           <Card className="mt-2">
             <CardHeader>
-              <CardTitle className="text-center">{data.name}</CardTitle>
+              <CardTitle className="text-center">{data.data.name}</CardTitle>
             </CardHeader>
           </Card>
           <div className="flex w-full justify-center">
@@ -66,24 +66,24 @@ const OwnLocalDetailsPage: FC = () => {
                       <div className="grid w-2/3 grid-cols-2 gap-2">
                         <DataField
                           label={t("ownLocalDetails.size")}
-                          value={data.size.toString()}
+                          value={data.data.size.toString()}
                         />
                         <DataField
                           label={t("ownLocalDetails.rentalFee")}
-                          value={data.rentalFee.toString()}
+                          value={data.data.rentalFee.toString()}
                         />
                         <DataField
                           label={t("ownLocalDetails.marginFee")}
-                          value={data.marginFee.toString()}
+                          value={data.data.marginFee.toString()}
                         />
 
                         <DataField
                           label={t("ownLocalDetails.nextRentalFee")}
-                          value={data?.nextRentalFee?.toString() ?? "-"}
+                          value={data?.data.nextRentalFee?.toString() ?? "-"}
                         />
                         <DataField
                           label={t("ownLocalDetails.nextMarginFee")}
-                          value={data?.nextMarginFee?.toString() ?? "-"}
+                          value={data?.data.nextMarginFee?.toString() ?? "-"}
                         />
 
                         <p className="col-span-2 text-xl font-semibold">
@@ -92,30 +92,30 @@ const OwnLocalDetailsPage: FC = () => {
 
                         <DataField
                           label={t("ownLocalDetails.country")}
-                          value={data.address.country}
+                          value={data.data.address.country}
                         />
                         <DataField
                           label={t("ownLocalDetails.city")}
-                          value={data.address.city}
+                          value={data.data.address.city}
                         />
                         <DataField
                           label={t("ownLocalDetails.street")}
-                          value={data.address.street}
+                          value={data.data.address.street}
                         />
                         <DataField
                           label={t("ownLocalDetails.number")}
-                          value={data.address.number}
+                          value={data.data.address.number}
                         />
                         <DataField
                           label={t("ownLocalDetails.zipCode")}
-                          value={`${data.address.zipCode}`}
+                          value={`${data.data.address.zipCode}`}
                         />
 
                         <div className="col-span-2 flex flex-col">
                           <div className="text-sm font-semibold">
                             {t("ownLocalDetails.description")}
                           </div>
-                          <div>{data.description}</div>
+                          <div>{data.data.description}</div>
                         </div>
                       </div>
                     </CardContent>
@@ -135,9 +135,9 @@ const OwnLocalDetailsPage: FC = () => {
                     <CardContent className="pb-2">
                       <UpdateLocalDetailsForm
                           id={id!}
-                          initialName={data.name}
-                          initialDescription={data.description}
-                          initialSize={data.size}
+                          initialName={data.data.name}
+                          initialDescription={data.data.description}
+                          initialSize={data.data.size}
                       />
                     </CardContent>
                   </Card>
@@ -153,8 +153,8 @@ const OwnLocalDetailsPage: FC = () => {
                       <div className="flex justify-center">
                         <UpdateOwnLocalFixedFee
                           id={id || ""}
-                          initialRentalFee={data.rentalFee}
-                          initialMarginFee={data.marginFee}
+                          initialRentalFee={data.data.rentalFee}
+                          initialMarginFee={data.data.marginFee}
                         />
                       </div>
                     </CardContent>
