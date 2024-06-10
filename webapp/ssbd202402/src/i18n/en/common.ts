@@ -409,6 +409,7 @@ const errors = {
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
+  localNotActive: "Local must be active for this operation",
   localNotInactive: "Local must be inactive for this operation",
   localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
@@ -416,6 +417,7 @@ const errors = {
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
   addressAlreadyAssigned: "Address asigned to another local",
+  applicationExists: "Application for this local already exists",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -484,7 +486,7 @@ const leaveLocal = {
   buttonText: "Leave local",
   dialogTitle: "Are you sure you want to continue?",
   dialogDescription:
-    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
+    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",  
 };
 
 const currentTenantRents = {
@@ -597,9 +599,9 @@ const ownLocalDetails = {
   changeFixedFee: "Change fixed fee",
   changeFixedFeeDescription:
     "Changes to the fixed fees will be effective from the next billing period.",
-  leaveLocal: "Leave local",
-  leaveLocalDescription:
-    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
+    leaveLocal: "Leave local",
+    leaveLocalDescription:
+    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
 };
 
 const activeLocals = {
@@ -607,6 +609,22 @@ const activeLocals = {
   size: "Size",
   city: "City",
   show: "Show details",
+};
+
+const activeLocalDetails = {
+  firstName: "First name",
+  size: "Size",
+  price: "Price",
+  owner: "Owner",
+  city: "City",
+  description: "Description",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  apply: "Apply",
+  applicationTitle: "Application",
+  applicationDescription: "Are you sure you want to apply for this local?",
+  applicationExistsDescription: "You apply for this local: ",
+  applicationCreated: "Application created",
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -680,6 +698,7 @@ const breadcrumbs = {
 export default {
   tenantApplications,
   changeAddressForm,
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,
