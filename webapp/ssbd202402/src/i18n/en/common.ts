@@ -477,7 +477,6 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
-
 };
 
 const leaveLocal = {
@@ -487,8 +486,7 @@ const leaveLocal = {
   buttonText: "Leave local",
   dialogTitle: "Are you sure you want to continue?",
   dialogDescription:
-    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
-
+    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",  
 };
 
 const currentTenantRents = {
@@ -604,7 +602,6 @@ const ownLocalDetails = {
     leaveLocal: "Leave local",
     leaveLocalDescription:
     "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
-
 };
 
 const activeLocals = {
@@ -612,7 +609,6 @@ const activeLocals = {
   size: "Size",
   city: "City",
   show: "Show details",
-
 };
 
 const activeLocalDetails = {
@@ -685,7 +681,7 @@ const ownerRentDetails = {
   rental: "Rental Fee",
   summary: "Total",
   showLocalDetails: "Show local details",
-}
+};
 
 const tenantApplications = {
   createdAt: "Created at",
@@ -700,7 +696,7 @@ const breadcrumbs = {
 };
 
 export default {
-    tenantApplications,
+  tenantApplications,
   changeAddressForm,
   activeLocalDetails,
   ownerRentDetails,

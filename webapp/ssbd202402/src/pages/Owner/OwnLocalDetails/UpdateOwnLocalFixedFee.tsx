@@ -82,9 +82,6 @@ const UpdateOwnLocalFixedFee: FC<Props> = ({
         marginFee: parseFloat(data.marginFee),
       };
       await mutateAsync(formattedData);
-      form.reset();
-      form.setValue("rentalFee", formattedData.rentalFee.toString());
-      form.setValue("marginFee", formattedData.marginFee.toString());
     }
   );
 
