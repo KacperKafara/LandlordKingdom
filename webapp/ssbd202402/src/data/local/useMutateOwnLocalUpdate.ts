@@ -19,10 +19,6 @@ export const useUpdateLocalData = () => {
 
     return useMutation({
         mutationFn: async (data: UpdateLocalData) => {
-            console.log(data.id);
-            console.log(data.name);
-            console.log(data.description);
-            console.log(data.size);
             await api.put(`/me/locals/${data.id}`, {
                 id: data.id,
                 name: data.name,
