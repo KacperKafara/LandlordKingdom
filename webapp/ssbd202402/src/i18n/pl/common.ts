@@ -344,7 +344,6 @@ const notApprovedActionsPage = {
     details: "Szczegóły",
   },
   approve: "Zaakceptuj",
-  reject: "Odrzuć",
   show: "Pokaż",
   roleRequestApproveSuccess: "Zgłoszenie o rolę zaakceptowane",
   roleRequestRejectSuccess: "Zgłoszenie o rolę odrzucone",
@@ -510,12 +509,15 @@ const currentTenantRents = {
 };
 
 const localDetails = {
+  name: "Nazwa",
   error: "Błąd podczas pobierania danych o nieruchomości",
   firstName: "Imię",
   lastName: "Nazwisko",
   size: "Powierzchnia",
   rentalFee: "Opłata za wynajem",
   marginFee: "Marża właściciela",
+  price: "Cena",
+  totalPrice: "Razem",
   owner: "Właściciel",
   login: "Login",
   email: "Email",
@@ -555,7 +557,14 @@ const changeEndDate = {
   spanText: "Wybierz datę",
 };
 
+const breadcrumbs = {
+  tenant: "Najemca",
+  locals: "Lokale",
+  local: "Lokal",
+};
+
 export default {
+  breadcrumbs,
   localDetails,
   roleRequestDialog,
   changeEndDate,
