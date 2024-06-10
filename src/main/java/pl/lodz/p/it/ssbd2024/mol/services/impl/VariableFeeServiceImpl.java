@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -38,4 +40,11 @@ public class VariableFeeServiceImpl implements VariableFeeService {
         VariableFee variableFee = new VariableFee(amount, LocalDate.now(), rent);
         return variableFeeRepository.saveAndFlush(variableFee);
     }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Page<VariableFee> getRentVariableFees(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return variableFeeRepository.findRentVariableFeesBetween(rentId, userId, startDate, endDate, pageable);
+    }
+
 }

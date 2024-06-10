@@ -93,9 +93,18 @@ const RentsPage: FC = () => {
                   />
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
-                  <ChangeEndDate startDate={rent.startDate} id={rent.id} endDate={rent.endDate}/>
-                  <Button className="flex-auto" onClick={() => navigate(`rent/${rent.id}`) }>Rent details</Button>
-                  <Button className="flex-auto">Action 3</Button>
+                  <ChangeEndDate
+                    startDate={rent.startDate}
+                    id={rent.id}
+                    endDate={rent.endDate}
+                  />
+                  <Button
+                    className="flex-1"
+                    onClick={() => navigate(`rent/${rent.id}`)}
+                  >
+                    {t("currentOwnerRents.rentDetails")}
+                  </Button>
+                  <Button className="flex-1">Action 3</Button>
                 </CardFooter>
               </Card>
             </li>
