@@ -677,7 +677,15 @@ const breadcrumbs = {
   local: "Local",
 };
 
+const createVariableFeeDialog = {
+  title: "Add Variable fee",
+  amount: "Amount*",
+  amountMustBePositive: "Amount must be positive",
+  success: "Variable fee created",
+};
+
 export default {
+  createVariableFeeDialog,
   tenantApplications,
   changeAddressForm,
   ownerRentDetails,

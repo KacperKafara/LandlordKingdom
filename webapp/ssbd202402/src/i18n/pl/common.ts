@@ -473,8 +473,8 @@ const leaveLocal = {
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
   dialogTitle: "Czy na pewno chcesz opuścić lokal?",
-  dialogDescription: "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
-
+  dialogDescription:
+    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
 };
 
 const tenantRents = {
@@ -575,9 +575,9 @@ const ownLocalDetails = {
   changeFixedFee: "Zmień wartość opłaty stałej",
   changeFixedFeeDescription:
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
-    leaveLocal: "Opuść lokal",
-  leaveLocalDescription: 
-  "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+  leaveLocal: "Opuść lokal",
+  leaveLocalDescription:
+    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
 };
 
 const activeLocals = {
@@ -670,7 +670,7 @@ const ownerRentDetails = {
   rental: "Opłata za wynajem",
   summary: "Razem",
   showLocalDetails: "Pokaż szczegóły lokalu",
-}
+};
 
 const breadcrumbs = {
   tenant: "Najemca",
@@ -684,7 +684,15 @@ const tenantApplications = {
   applicationsNotFund: "Brak aplikacji o wynajem",
 };
 
+const createVariableFeeDialog = {
+  title: "Dodaj opłatę zmienną",
+  amount: "Kwota*",
+  amountMustBePositive: "Kwota musi być większa od 0",
+  success: "Opłata zmienna została dodana",
+};
+
 export default {
+  createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
   ownerRentDetails,
