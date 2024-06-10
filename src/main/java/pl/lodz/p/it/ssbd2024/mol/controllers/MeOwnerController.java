@@ -25,13 +25,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
-import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
-import pl.lodz.p.it.ssbd2024.mol.mappers.PaymentMapper;
-import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
-import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
-import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
-import pl.lodz.p.it.ssbd2024.mol.services.PaymentService;
-import pl.lodz.p.it.ssbd2024.mol.services.RentService;
+import pl.lodz.p.it.ssbd2024.mol.mappers.*;
+import pl.lodz.p.it.ssbd2024.mol.services.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -48,6 +43,9 @@ public class MeOwnerController {
     private final ApplicationService applicationService;
     private final RentService rentService;
     private final PaymentService paymentService;
+    private final VariableFeeService variableFeeService;
+    private final FixedFeeService fixedFeeService;
+
 
     @GetMapping("/locals")
     @PreAuthorize("hasRole('OWNER')")
@@ -121,8 +119,47 @@ public class MeOwnerController {
         try {
             LocalDate startDate =  LocalDate.parse(rentPaymentsRequest.startDate());
             LocalDate endDate =  LocalDate.parse(rentPaymentsRequest.endDate());
-            paymentService.getRentPayments(id, userId, startDate, endDate, pageable);
             return ResponseEntity.ok(PaymentMapper.toRentPaymentsResponse(paymentService.getRentPayments(id, userId, startDate, endDate, pageable)));
+        }catch (DateTimeParseException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    RentExceptionMessages.DATE_PARSING_ERROR,
+                    new DateParsingException(RentExceptionMessages.DATE_PARSING_ERROR, exception, ErrorCodes.DATE_PARSING_ERROR));
+        }
+
+    }
+
+    @PostMapping("/rents/{id}/fixed-fees")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<RentFixedFeesResponse> getFixedFees(@PathVariable UUID id,
+                                                                @RequestBody RentPaymentsRequest rentPaymentsRequest,
+                                                                @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
+                                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        try {
+            LocalDate startDate =  LocalDate.parse(rentPaymentsRequest.startDate());
+            LocalDate endDate =  LocalDate.parse(rentPaymentsRequest.endDate());
+            return ResponseEntity.ok(FixedFeeMapper.toRentFixedFeesResponse(fixedFeeService.getRentFixedFees(id, userId, startDate, endDate, pageable)));
+        }catch (DateTimeParseException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    RentExceptionMessages.DATE_PARSING_ERROR,
+                    new DateParsingException(RentExceptionMessages.DATE_PARSING_ERROR, exception, ErrorCodes.DATE_PARSING_ERROR));
+        }
+
+    }
+
+    @PostMapping("/rents/{id}/variable-fees")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<RentVariableFeesResponse> getVariableFees(@PathVariable UUID id,
+                                                             @RequestBody RentPaymentsRequest rentPaymentsRequest,
+                                                             @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
+                                                             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
+        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        try {
+            LocalDate startDate =  LocalDate.parse(rentPaymentsRequest.startDate());
+            LocalDate endDate =  LocalDate.parse(rentPaymentsRequest.endDate());
+            return ResponseEntity.ok(VariableFeeMapper.toRentVariableFeesResponse(variableFeeService.getRentVariableFees(id, userId, startDate, endDate, pageable)));
         }catch (DateTimeParseException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     RentExceptionMessages.DATE_PARSING_ERROR,

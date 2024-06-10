@@ -490,7 +490,7 @@ const currentOwnerRents = {
   rents: "Obence wynajmy",
   startDate: "Data rozpoczęcia",
   endDate: "Data zakończenia",
-  balance: "Balans",
+  balance: "Bilans",
   tenant: "Najemca",
   name: "Imię i nazwisko",
   email: "Email",
@@ -633,8 +633,11 @@ const ownerRentDetails = {
   selectEnd: "Wybierz datę końcową",
   number: "Nr",
   localName: "Nazwa",
-  balance: "Balans",
+  balance: "Bilans",
   pickDate: "Wybierz datę",
+  margin: "Marża",
+  rental: "Opłata za wynajem",
+  summary: "Razem",
 };
 
 const breadcrumbs = {
@@ -701,4 +704,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",
   cancel: "Anuluj",
+  currency: " zł",
 };
