@@ -570,6 +570,13 @@ const ownLocalDetails = {
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
 };
 
+const activeLocals = {
+  error: "Błąd podczas pobierania danych aktywnych nieruchomości",
+  size: "Powierzchnia",
+  city: "Miasto",
+  show: "Wyświetl szczegóły",
+};
+
 const changeEndDate = {
   successTitle: "Sukces",
   successDescription: "Data zakończenia została zmieniona",
@@ -660,6 +667,7 @@ export default {
   currentTenantRents,
   allLocals,
   ownerLocals,
+  activeLocals,
   localState,
   notFoundPage,
   sessionExpiredDialog,

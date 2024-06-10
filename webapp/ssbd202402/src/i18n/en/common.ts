@@ -577,6 +577,14 @@ const ownLocalDetails = {
     "Changes to the fixed fees will be effective from the next billing period.",
 };
 
+const activeLocals = {
+  error: "Error while fetching active locals",
+  size: "Size",
+  city: "City",
+  show: "Show details",
+
+};
+
 const updateOwnLocalFixedFeeForm = {
   rentalFeeNotEmpty: "Rental fee cannot be empty.",
   rentalFeeNotValid:
@@ -654,6 +662,7 @@ export default {
   allLocals,
   localState,
   ownerLocals,
+  activeLocals,
   notFoundPage,
   sessionExpiredDialog,
   error,
