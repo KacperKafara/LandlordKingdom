@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useCreateVariableFee } from "@/data/rent/useCreateVariableFee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FC } from "react";
 import { useForm } from "react-hook-form";
@@ -41,9 +42,10 @@ const CreateVariableFeeDialog: FC<CreateVariableFeeDialogProps> = ({
       amount: 0,
     },
   });
+  const { createVariableFee } = useCreateVariableFee();
 
-  const handleSubmit = form.handleSubmit((values) => {
-    console.log(values);
+  const handleSubmit = form.handleSubmit(async (values) => {
+    await createVariableFee(values);
   });
 
   return (
