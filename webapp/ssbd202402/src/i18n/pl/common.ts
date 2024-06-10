@@ -411,6 +411,7 @@ const errors = {
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
+  localNotActive: "Nieruchomość musi być aktywna, aby wykonać tę operację",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
   localNotUnapproved:
     "Nieruchomość musi być niezatwierdzona, aby wykonać tę operację",
@@ -419,6 +420,7 @@ const errors = {
   rentNotFound: "Nie znaleziono wynajmu",
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
+  applicationExists: "Aplikacja do tego lokalu już istnieje",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -570,6 +572,22 @@ const ownLocalDetails = {
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
 };
 
+const activeLocalDetails = {
+  firstName: "Imię",
+  size: "Powierzchnia",
+  price: "Cena",
+  owner: "Właściciel",
+  city: "Miasto",
+  description: "Opis",
+  localInformation: "Informacje o nieruchomości",
+  ownerInformation: "Informacje o właścicielu",
+  apply: "Aplikuj",
+  applicationTitle: "Aplikacja",
+  applicationDescription: "Na pewno chcesz aplikować do lokalu?",
+  applicationExistsDescription: "Aplikowałeś do lokalu: ",
+  applicationCreated: "Utworzono aplikacje",
+};
+
 const changeEndDate = {
   successTitle: "Sukces",
   successDescription: "Data zakończenia została zmieniona",
@@ -637,7 +655,7 @@ const ownerRentDetails = {
   margin: "Marża",
   rental: "Opłata za wynajem",
   summary: "Razem",
-}
+};
 
 const breadcrumbs = {
   tenant: "Najemca",
@@ -646,6 +664,7 @@ const breadcrumbs = {
 };
 
 export default {
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

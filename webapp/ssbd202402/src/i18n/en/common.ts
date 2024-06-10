@@ -408,12 +408,14 @@ const errors = {
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
+  localNotActive: "Local must be active for this operation",
   localNotInactive: "Local must be inactive for this operation",
   localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
     "End date must be in the future Sunday, after start date and different from current end date",
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
+  applicationExists: "Application for this local already exists",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -577,6 +579,22 @@ const ownLocalDetails = {
     "Changes to the fixed fees will be effective from the next billing period.",
 };
 
+const activeLocalDetails = {
+  firstName: "First name",
+  size: "Size",
+  price: "Price",
+  owner: "Owner",
+  city: "City",
+  description: "Description",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  apply: "Apply",
+  applicationTitle: "Application",
+  applicationDescription: "Are you sure you want to apply for this local?",
+  applicationExistsDescription: "You apply for this local: ",
+  applicationCreated: "Application created",
+};
+
 const updateOwnLocalFixedFeeForm = {
   rentalFeeNotEmpty: "Rental fee cannot be empty.",
   rentalFeeNotValid:
@@ -630,7 +648,7 @@ const ownerRentDetails = {
   margin: "Margin Fee",
   rental: "Rental Fee",
   summary: "Total",
-}
+};
 
 const breadcrumbs = {
   tenant: "Tenant",
@@ -639,6 +657,7 @@ const breadcrumbs = {
 };
 
 export default {
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

@@ -22,6 +22,9 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
     @PreAuthorize("hasAnyRole('TENANT' , 'OWNER')")
     Optional<Application> findById(@NonNull UUID id);
 
+    @PreAuthorize("hasRole('TENANT')")
+    Optional<Application> findByTenantUserIdAndLocalId(UUID userId, UUID localId);
+
     @NonNull
     @PreAuthorize("hasRole('TENANT')")
     Application saveAndFlush(@NonNull Application application);

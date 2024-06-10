@@ -39,9 +39,11 @@ public class ErrorCodes {
     public static final String USER_ALREADY_HAS_ROLE = "userAlreadyHasRole";
     public static final String LOCAL_NOT_FOUND = "localNotFound";
     public static final String INVALID_LOCAL_STATE_ARCHIVE = "invalidLocalStateArchive";
+    public static final String LOCAL_NOT_ACTIVE = "localNotActive";
     public static final String LOCAL_NOT_INACTIVE = "localNotInactive";
     public static final String LOCAL_NOT_UNAPPROVED = "localNotUnapproved";
     public static final String WRONG_END_DATE = "wrongEndDate";
     public static final String RENT_NOT_FOUND = "rentNotFound";
     public static final String DATE_PARSING_ERROR = "dateParsingError";
+    public static final String APPLICATION_EXISTS = "applicationExists";
 }
