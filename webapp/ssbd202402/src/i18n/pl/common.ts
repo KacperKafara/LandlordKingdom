@@ -470,6 +470,9 @@ const leaveLocal = {
   successDescription: "Opuściłeś lokal",
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
+  dialogTitle: "Czy na pewno chcesz opuścić lokal?",
+  dialogDescription: "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
+
 };
 
 const tenantRents = {
@@ -568,6 +571,9 @@ const ownLocalDetails = {
   changeFixedFee: "Zmień wartość opłaty stałej",
   changeFixedFeeDescription:
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
+    leaveLocal: "Opuść lokal",
+  leaveLocalDescription: 
+  "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
 };
 
 const changeEndDate = {

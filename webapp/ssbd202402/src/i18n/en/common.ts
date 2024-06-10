@@ -472,6 +472,7 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
+
 };
 
 const leaveLocal = {
@@ -479,6 +480,10 @@ const leaveLocal = {
   successDescription: "You have left the local",
   errorTitle: "Error",
   buttonText: "Leave local",
+  dialogTitle: "Are you sure you want to continue?",
+  dialogDescription:
+    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
+    
 };
 
 const currentTenantRents = {
@@ -575,6 +580,10 @@ const ownLocalDetails = {
   changeFixedFee: "Change fixed fee",
   changeFixedFeeDescription:
     "Changes to the fixed fees will be effective from the next billing period.",
+    leaveLocal: "Leave local",
+    leaveLocalDescription: 
+    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
+    
 };
 
 const updateOwnLocalFixedFeeForm = {
