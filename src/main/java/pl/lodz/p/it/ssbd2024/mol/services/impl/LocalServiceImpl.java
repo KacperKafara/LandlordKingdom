@@ -76,8 +76,8 @@ public class LocalServiceImpl implements LocalService {
     public Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         Local local = localRepository.findByOwner_User_IdAndId(userId, localId).orElseThrow(() ->
                 new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
-        if (!signVerifier.verifySignature(localId, local.getVersion(), tagValue)) {
-            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.USER_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
+        if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.LOCAL_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
         }
         local.setName(editLocalRequest.name());
         local.setDescription(editLocalRequest.description());

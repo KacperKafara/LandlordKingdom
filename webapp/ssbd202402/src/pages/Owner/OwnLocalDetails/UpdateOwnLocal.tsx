@@ -2,7 +2,6 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { CardFooter } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,13 +11,7 @@ import { useUpdateLocalData } from "@/data/local/useMutateOwnLocalUpdate"
 import {TFunction} from "i18next";
 import {toast} from "@/components/ui/use-toast.ts";
 import {useGetOwnLocalDetails} from "@/data/local/useGetOwnLocalDetails.ts";
-
-interface UpdateLocalDetailsFormProps {
-    id: string;
-    initialName: string;
-    initialDescription: string;
-    initialSize: number;
-}
+import {useParams} from "react-router-dom";
 
 const updateLocalDetailsSchema = (t: TFunction) => z.object({
     id: z.string(),
@@ -29,12 +22,8 @@ const updateLocalDetailsSchema = (t: TFunction) => z.object({
 
 type UpdateLocalFormData = z.infer<ReturnType<typeof updateLocalDetailsSchema>>;
 
-const UpdateLocalDetailsForm: FC<UpdateLocalDetailsFormProps> = ({
-                                                                     id,
-                                                                     initialName,
-                                                                     initialDescription,
-                                                                     initialSize,
-                                                                 }) => {
+const UpdateLocalDetailsForm: FC = () => {
+    const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
     const { data } = useGetOwnLocalDetails(id!);
     const mutateAsync  = useUpdateLocalData();
@@ -42,14 +31,13 @@ const UpdateLocalDetailsForm: FC<UpdateLocalDetailsFormProps> = ({
         resolver: zodResolver(updateLocalDetailsSchema(t)),
         defaultValues: {
             id: id,
-            name: initialName,
-            description: initialDescription,
-            size: initialSize,
+            name: data?.data.name,
+            description: data?.data.description,
+            size: data?.data.size,
         },
     });
 
-    const updateLocalData = form.handleSubmit(
-        (request ) => {
+    const updateLocalData = form.handleSubmit((request ) => {
             let etag: string = data?.headers.etag;
             if (!etag) {
                 toast({
@@ -60,7 +48,6 @@ const UpdateLocalDetailsForm: FC<UpdateLocalDetailsFormProps> = ({
             }
             etag = etag.substring(1, etag.length - 1);
             mutateAsync.mutate({request, etag});
-            form.reset();
         }
     );
 
@@ -113,12 +100,12 @@ const UpdateLocalDetailsForm: FC<UpdateLocalDetailsFormProps> = ({
                         </FormItem>
                     )}
                 />
-                <CardFooter className="flex justify-end space-x-2">
+                <div>
                     <Button type="button" variant="outline" onClick={() => form.reset()}>
                         {t("updateLocalPage.reset")}
                     </Button>
-                    <Button type="submit" onClick={() => updateLocalData()}>{t("updateLocalPage.submit")}</Button>
-                </CardFooter>
+                    <Button type="submit">{t("updateLocalPage.submit")}</Button>
+                </div>
             </form>
         </Form>
     );

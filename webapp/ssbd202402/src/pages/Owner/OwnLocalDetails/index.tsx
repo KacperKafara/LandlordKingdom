@@ -125,8 +125,8 @@ const OwnLocalDetailsPage: FC = () => {
                       </div>
                     </CardContent>
                     <RefreshQueryButton
-                      className="absolute right-1 top-1"
-                      queryKeys={["ownLocalDetails"]}
+                        className="absolute right-1 top-1"
+                        queryKeys={["ownLocalDetails"]}
                     />
                   </Card>
                 </TabsContent>
@@ -138,12 +138,7 @@ const OwnLocalDetailsPage: FC = () => {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="pb-2">
-                      <UpdateLocalDetailsForm
-                          id={id!}
-                          initialName={data.data.name}
-                          initialDescription={data.data.description}
-                          initialSize={data.data.size}
-                      />
+                      <UpdateLocalDetailsForm/>
                     </CardContent>
                   </Card>
                 </TabsContent>
