@@ -6,7 +6,7 @@ export const useGetUserApplication = (id: string) => {
   const { api } = useAxiosPrivate();
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["userApplication"],
+    queryKey: ["userApplication", id],
     queryFn: async () => {
       try {
         const response = await api.get<OwnApplication>(
