@@ -12,7 +12,6 @@ import { useGetOwnLocals } from "@/data/mol/useGetOwnLocals";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
 import { FC } from "react";
-import { LeaveLocalButton } from "./LeaveLocalButton";
 import { LoadingData } from "@/components/LoadingData";
 import { useNavigate } from "react-router-dom";
 
@@ -60,9 +59,6 @@ const Locals: FC = () => {
                   >
                     {t("ownerLocals.show")}
                   </Button>
-                  {local.state === "INACTIVE" && (
-                    <LeaveLocalButton id={local.id} />
-                  )}
                   <CardHeader>
                     <CardTitle>{local.name}</CardTitle>
                     <CardDescription>{local.description}</CardDescription>
