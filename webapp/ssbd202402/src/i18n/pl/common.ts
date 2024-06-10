@@ -419,6 +419,7 @@ const errors = {
   rentNotFound: "Nie znaleziono wynajmu",
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
+  addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -585,17 +586,18 @@ const changeEndDate = {
 };
 
 const changeAddressForm = {
-    cityValidation: "Miasto musi zawierać od 1 do 100 znaków",
-    countryValidation: "Kraj musi zawierać od 1 do 100 znaków",
-    streetValidation: "Ulica musi zawierać od 1 do 100 znaków",
-    numberValidation: "Numer musi zawierać od 1 do 10 znaków",
-    zipCodeValidation: "Kod pocztowy musi być w formacie 12-345",
-    country: "Kraj*",
-    city: "Miasto*",
-    street: "Ulica*",
-    number: "Numer*",
-    zipCode: "Kod pocztowy*",
-    confirmDialogDescription: "Czy na pewno chcesz zmienić adres?",
+  cityValidation: "Miasto musi zawierać od 1 do 100 znaków",
+  countryValidation: "Kraj musi zawierać od 1 do 100 znaków",
+  streetValidation: "Ulica musi zawierać od 1 do 100 znaków",
+  numberValidation: "Numer musi zawierać od 1 do 10 znaków",
+  zipCodeValidation: "Kod pocztowy musi być w formacie 12-345",
+  country: "Kraj*",
+  city: "Miasto*",
+  street: "Ulica*",
+  number: "Numer*",
+  zipCode: "Kod pocztowy*",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić adres?",
+  addressUpdateSuccess: "Adres został zaktualizowany",
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -651,7 +653,7 @@ const ownerRentDetails = {
   margin: "Marża",
   rental: "Opłata za wynajem",
   summary: "Razem",
-}
+};
 
 const breadcrumbs = {
   tenant: "Najemca",

@@ -414,6 +414,7 @@ const errors = {
     "End date must be in the future Sunday, after start date and different from current end date",
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
+  addressAlreadyAssigned: "Address asigned to another local",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -554,17 +555,18 @@ const localDetails = {
 };
 
 const changeAddressForm = {
-    cityValidation: "City must be between 1 and 100 characters",
-    countryValidation: "Country must be between 1 and 100 characters",
-    streetValidation: "Street must be between 1 and 100 characters",
-    numberValidation: "Number must be between 1 and 10 characters",
-    zipCodeValidation: "Zip code must be in format 12-345",
-    country: "Country*",
-    city: "City*",
-    street: "Street*",
-    number: "Number*",
-    zipCode: "Zip code*",
-    confirmDialogDescription: "Are you sure you want to change address?",
+  cityValidation: "City must be between 1 and 100 characters",
+  countryValidation: "Country must be between 1 and 100 characters",
+  streetValidation: "Street must be between 1 and 100 characters",
+  numberValidation: "Number must be between 1 and 10 characters",
+  zipCodeValidation: "Zip code must be in format 12-345",
+  country: "Country*",
+  city: "City*",
+  street: "Street*",
+  number: "Number*",
+  zipCode: "Zip code*",
+  confirmDialogDescription: "Are you sure you want to change address?",
+  addressUpdateSuccess: "Address has been updated",
 };
 
 const ownLocalDetails = {
@@ -644,7 +646,7 @@ const ownerRentDetails = {
   margin: "Margin Fee",
   rental: "Rental Fee",
   summary: "Total",
-}
+};
 
 const breadcrumbs = {
   tenant: "Tenant",

@@ -36,7 +36,8 @@ public class Local extends AbstractEntity {
     @Column(name = "state", nullable = false)
     private LocalState state = LocalState.UNAPPROVED;
 
-    @OneToOne
+    @ManyToOne
+    @Setter
     @JoinColumn(name = "address_id", nullable = false, updatable = false)
     private Address address;
 

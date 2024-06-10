@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useEditLocalAddress } from "@/data/local/useEditLocalAddress";
 import { useGetLocalDetailsForAdmin } from "@/data/local/useGetLocalDetailsForAdmin";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFunction, t } from "i18next";
@@ -50,6 +51,7 @@ const ChangeAddressFormComponent: FC<ChangeAddressFormComponentProps> = ({
   localId,
 }) => {
   const { data } = useGetLocalDetailsForAdmin(localId);
+  const { editLocalAddress } = useEditLocalAddress();
 
   const form = useForm<AddressSchema>({
     resolver: zodResolver(getAddressSchema(t)),
@@ -63,7 +65,7 @@ const ChangeAddressFormComponent: FC<ChangeAddressFormComponentProps> = ({
   });
 
   const handleFormSubmit = form.handleSubmit((data) => {
-    console.log(data);
+    editLocalAddress({ id: localId, address: data });
   });
 
   return (
