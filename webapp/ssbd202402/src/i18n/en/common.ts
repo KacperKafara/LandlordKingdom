@@ -572,6 +572,9 @@ const ownerRentDetails = {
   localName: "Name",
   balance: "Balance",
   pickDate: "Pick a date",
+  margin: "Margin Fee",
+  rental: "Rental Fee",
+  summary: "Total",
 }
 
 export default {
@@ -621,4 +624,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Confirm",
   cancel: "Cancel",
+  currency: "PLN",
 } as const;

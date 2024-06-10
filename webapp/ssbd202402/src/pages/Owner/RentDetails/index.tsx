@@ -7,6 +7,8 @@ import { useOwnerRent } from "@/data/rent/useOwnerRent";
 import { RentPayments } from "./RentPayments";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useTranslation } from "react-i18next";
+import { RentFixedFees } from "./RentFixedFees";
+import { RentVariableFees } from "./RentVariableFees";
 
 const OwnerRentDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -70,10 +72,18 @@ const OwnerRentDetailsPage: FC = () => {
                 )}
               </TabsContent>
               <TabsContent value="fixedFees">
-                {t("ownerRentDetails.fixedFees")}
+                <RentFixedFees
+                  id={id!}
+                  startDate={data!.startDate}
+                  endDate={data!.endDate}
+                />
               </TabsContent>
               <TabsContent value="variableFees">
-                {t("ownerRentDetails.variableFees")}
+                <RentVariableFees
+                  id={id!}
+                  startDate={data!.startDate}
+                  endDate={data!.endDate}
+                />
               </TabsContent>
             </Tabs>
           </div>
