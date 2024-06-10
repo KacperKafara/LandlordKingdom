@@ -86,7 +86,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <RoleRequestDialog />
+      {roles?.includes("TENANT") && <RoleRequestDialog />}
       <nav
         className={cn(
           "flex h-20 flex-row items-center justify-between px-10",
@@ -110,12 +110,11 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                   isActive && colors.accentColor
                 )
               }
-            >   
-              
-                 {i18n.exists(`navLinks.${link.label}`)
-                //  @ts-expect-error error handled
-                  ? t(`navLinks.${link.label}`) 
-                  : link.label}
+            >
+              {i18n.exists(`navLinks.${link.label}`)
+                ? //  @ts-expect-error error handled
+                  t(`navLinks.${link.label}`)
+                : link.label}
             </NavLink>
           ))}
           <ModeToggle />
@@ -150,7 +149,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                   </NavLink>
                 </DropdownMenuItem>
               ))}
-              {!roles?.includes("OWNER") && (
+              {roles?.includes("TENANT") && (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => openDialog("roleRequest")}>
