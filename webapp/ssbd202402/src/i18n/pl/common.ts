@@ -411,6 +411,7 @@ const errors = {
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
+  localNotActive: "Nieruchomość musi być aktywna, aby wykonać tę operację",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
   localNotUnapproved:
     "Nieruchomość musi być niezatwierdzona, aby wykonać tę operację",
@@ -427,6 +428,7 @@ const errors = {
   transaction: "Błąd transakcji",
   roleRequestAlreadyExists: "Wniosek o rolę już istnieje",
   userAlreadyHasRole: "Użytkownik już ma tę rolę",
+  applicationExists: "Aplikacja do tego lokalu już istnieje",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -593,6 +595,22 @@ const activeLocals = {
   show: "Wyświetl szczegóły",
 };
 
+const activeLocalDetails = {
+  firstName: "Imię",
+  size: "Powierzchnia",
+  price: "Cena",
+  owner: "Właściciel",
+  city: "Miasto",
+  description: "Opis",
+  localInformation: "Informacje o nieruchomości",
+  ownerInformation: "Informacje o właścicielu",
+  apply: "Aplikuj",
+  applicationTitle: "Aplikacja",
+  applicationDescription: "Na pewno chcesz aplikować do lokalu?",
+  applicationExistsDescription: "Aplikowałeś do lokalu: ",
+  applicationCreated: "Utworzono aplikacje",
+};
+
 const changeEndDate = {
   successTitle: "Sukces",
   successDescription: "Data zakończenia została zmieniona",
@@ -701,6 +719,7 @@ export default {
   createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

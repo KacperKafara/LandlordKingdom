@@ -27,7 +27,7 @@ const OwnerRentDetailsPage: FC = () => {
   if (isLoading) {
     return <LoadingData />;
   }
-
+  console.log(data);
   return (
     <>
       <div className="flex flex-col py-2">

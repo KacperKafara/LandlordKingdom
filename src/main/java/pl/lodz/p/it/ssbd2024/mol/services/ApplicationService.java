@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
+import pl.lodz.p.it.ssbd2024.exceptions.CreationException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Application;
@@ -15,11 +16,13 @@ public interface ApplicationService {
 
     List<Application> getUserApplications(UUID id) throws NotFoundException;
 
+    Application getUserApplication(UUID userId, UUID localId) throws NotFoundException;
+
     Rent acceptApplication(UUID applicationId) throws NotFoundException, LocalAlreadyRentedException;
 
     void rejectApplication(UUID applicationId) throws NotFoundException;
 
-    Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState;
+    Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState, CreationException;
 
     void removeApplication(UUID localId, UUID userId) throws NotFoundException;
 }

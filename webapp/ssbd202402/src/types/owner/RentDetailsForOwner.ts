@@ -8,7 +8,7 @@ export type RentDetailsForOwner = {
         description: string;
         size: number;
         marginFee: number;
-        rentalFee: number;
+        rentFee: number;
         address: Address;
     }
     tenant: {

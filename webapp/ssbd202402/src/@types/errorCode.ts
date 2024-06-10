@@ -41,11 +41,16 @@ export type ExceptionCode =
   | "roleRequestAlreadyExists"
   | "userAlreadyHasRole"
   | "localNotFound"
+  | "localNotActive"
   | "invalidLocalStateArchive"
   | "localNotInactive"
   | "localNotUnapproved"
   | "wrongEndDate"
   | "rentNotFound"
+  | "invalidLocalStateArchive"
+  | "applicationExists"
+  | "addressAlreadyAssigned";
   | "dateParsingError"
   | "addressAlreadyAssigned"
   | "variableFeeAlreadyExists";
+  | "wrongEndDate"
