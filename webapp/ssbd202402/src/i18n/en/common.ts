@@ -415,6 +415,7 @@ const errors = {
     "End date must be in the future Sunday, after start date and different from current end date",
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
+  addressAlreadyAssigned: "Address asigned to another local",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -455,11 +456,12 @@ const tenantRents = {
   endDate: "End date",
   fixedFee: "Fixed fee",
   balance: "Balance",
-  size: "Local size",
+  localSize: "Local size",
   owner: "Owner",
   name: "Name",
   email: "Email",
   login: "Login",
+  noData: "Currently you have no rents",
 };
 
 const currentOwnerRents = {
@@ -473,6 +475,7 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
+
 };
 
 const leaveLocal = {
@@ -480,6 +483,10 @@ const leaveLocal = {
   successDescription: "You have left the local",
   errorTitle: "Error",
   buttonText: "Leave local",
+  dialogTitle: "Are you sure you want to continue?",
+  dialogDescription:
+    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
+    
 };
 
 const currentTenantRents = {
@@ -552,6 +559,22 @@ const localDetails = {
   close: "Close",
   archiveError: "Archive error",
   archiveSuccess: "Local has been archived",
+  state: "State",
+};
+
+const changeAddressForm = {
+  cityValidation: "City must be between 1 and 100 characters",
+  countryValidation: "Country must be between 1 and 100 characters",
+  streetValidation: "Street must be between 1 and 100 characters",
+  numberValidation: "Number must be between 1 and 10 characters",
+  zipCodeValidation: "Zip code must be in format 12-345",
+  country: "Country*",
+  city: "City*",
+  street: "Street*",
+  number: "Number*",
+  zipCode: "Zip code*",
+  confirmDialogDescription: "Are you sure you want to change address?",
+  addressUpdateSuccess: "Address has been updated",
 };
 
 const ownLocalDetails = {
@@ -576,6 +599,18 @@ const ownLocalDetails = {
   changeFixedFee: "Change fixed fee",
   changeFixedFeeDescription:
     "Changes to the fixed fees will be effective from the next billing period.",
+    leaveLocal: "Leave local",
+    leaveLocalDescription: 
+    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
+    
+};
+
+const activeLocals = {
+  error: "Error while fetching active locals",
+  size: "Size",
+  city: "City",
+  show: "Show details",
+
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -628,10 +663,11 @@ const ownerRentDetails = {
   localName: "Name",
   balance: "Balance",
   pickDate: "Pick a date",
-    margin: "Margin Fee",
-    rental: "Rental Fee",
-    summary: "Total",
-};
+  margin: "Margin Fee",
+  rental: "Rental Fee",
+  summary: "Total",
+  showLocalDetails: "Show local details",
+}
 
 const tenantApplications = {
   createdAt: "Created at",
@@ -646,7 +682,7 @@ const breadcrumbs = {
 };
 
 export default {
-  tenantApplications,
+  changeAddressForm,
   ownerRentDetails,
   breadcrumbs,
   localDetails,
@@ -662,6 +698,7 @@ export default {
   allLocals,
   localState,
   ownerLocals,
+  activeLocals,
   notFoundPage,
   sessionExpiredDialog,
   error,

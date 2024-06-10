@@ -9,7 +9,6 @@ import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
 import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
-import ActiveLocals from "@/pages/Tenant/Locals";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
 const MePage = loadable(() => import("./pages/Me"));
@@ -37,6 +36,7 @@ const OwnLocalDetailsPage = loadable(
   () => import("./pages/Owner/OwnLocalDetails")
 );
 const RentDetailsPage = loadable(() => import("./pages/Tenant/RentDetails"));
+const ActiveLocalsPage = loadable(() => import("./pages/Tenant/Locals"));
 const ActiveLocalDetailsPage = loadable(
   () => import("./pages/Tenant/ActiveLocalDetails")
 );
@@ -85,7 +85,7 @@ const TenantRoutes: RouteObject[] = [
   { path: "archival-rents", Component: ArchivalRentsPage },
   { path: "applications", Component: OwnApplicationPage },
   { path: "rents/:id", Component: RentDetailsPage },
-  { path: "locals", Component: ActiveLocals },
+  { path: "active-locals", Component: ActiveLocalsPage },
   { path: "locals/:id", Component: ActiveLocalDetailsPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];

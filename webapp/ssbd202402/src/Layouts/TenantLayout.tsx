@@ -10,7 +10,7 @@ const links: NavigationLink[] = [
   },
   {
     label: "Locals",
-    path: "./locals",
+    path: "./active-locals",
   },
   {
     label: "archivalRents",
