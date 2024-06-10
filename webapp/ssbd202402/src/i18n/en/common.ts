@@ -253,6 +253,7 @@ const navLinks = {
   locals: "Locals",
   currentRents: "Current rents",
   archivalRents: "Archival rents",
+  addLocal: "Add local",
 } satisfies {
   [key in string]: string;
 };
@@ -335,7 +336,8 @@ const addLocalPage = {
     country: "Wrong country",
     marginFee: "Wrong margin fee",
     rentalFee: "Wrong rental fee",
-  }
+  },
+  error: "Failed to add local",
 }
 
 const registerSuccessPage = {

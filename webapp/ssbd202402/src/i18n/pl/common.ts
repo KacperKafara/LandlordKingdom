@@ -260,6 +260,7 @@ const navLinks = {
   locals: "Nieruchomości",
   currentRents: "Aktualne wynajmy",
   archivalRents: "Archiwalne wynajmy",
+  addLocal: "Dodaj lokal",
 };
 
 const userDataPage = {
@@ -340,7 +341,8 @@ const addLocalPage = {
     country: "Niepoprawny kraj",
     marginFee: "Niepoprawna opłata stała",
     rentalFee: "Niepoprawna cena wynajmu",
-  }
+  },
+  error: "Failed to add local",
 };
 
 const registerSuccessPage = {

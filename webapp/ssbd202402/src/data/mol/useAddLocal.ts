@@ -4,11 +4,12 @@ import { ErrorCode } from "@/@types/errorCode.ts";
 import useAxiosPrivate from "@/data/useAxiosPrivate.ts";
 import {AddLocal} from "@/types/mol/Locals.ts";
 import {toast} from "@/components/ui/use-toast.ts";
-import {t} from "i18next";
+import {useTranslation} from "react-i18next";
 
 
 export const useAddLocal = () => {
     const { api } = useAxiosPrivate();
+    const { t } = useTranslation();
 
     const { mutateAsync } = useMutation({
         mutationFn: async (data: AddLocal) => {
@@ -18,7 +19,7 @@ export const useAddLocal = () => {
         onError: (error: AxiosError) => {
             toast({
                 variant: "destructive",
-                title: "Failed to add local",
+                title: t("addLocalPage.error"),
                 description: t(
                     `errors.${(error.response?.data as ErrorCode).exceptionCode}`
                 ),

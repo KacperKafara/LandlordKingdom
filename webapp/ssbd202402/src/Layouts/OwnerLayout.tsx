@@ -8,6 +8,7 @@ import { useTranslation } from "react-i18next";
 const links = (t: TFunction): NavigationLink[] => [
   { path: "locals", label: t("navLinks.locals") },
   { path: "rents", label: t("navLinks.currentRents") },
+  { path: "addLocalForm", label: t("navLinks.addLocal") },
 ];
 
 const OwnerLayout: FC = () => {

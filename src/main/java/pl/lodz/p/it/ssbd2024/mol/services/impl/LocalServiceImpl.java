@@ -12,11 +12,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
-import pl.lodz.p.it.ssbd2024.model.Address;
-import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
-import pl.lodz.p.it.ssbd2024.model.LocalState;
-import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
@@ -25,10 +22,6 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,8 +37,7 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
-        Owner owner = ownerRepository.findById(ownerId).orElseThrow(() -> new
-                NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        Owner owner = ownerRepository.findByUserId(ownerId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
         Local newLocal = new Local(
                 addLocalRequest.name(),
                 addLocalRequest.description(),
@@ -55,33 +47,31 @@ public class LocalServiceImpl implements LocalService {
                 addLocalRequest.marginFee(),
                 addLocalRequest.rentalFee()
         );
-        throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
-                ErrorCodes.ADDRESS_ASSIGNED);
-//        Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
-//                addLocalRequest.address().getNumber(),
-//                addLocalRequest.address().getStreet(),
-//                addLocalRequest.address().getCity(),
-//                addLocalRequest.address().getZip(),
-//                addLocalRequest.address().getCountry()
-//        );
-//        if (existingAddress.isPresent()) {
-//            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(addLocalRequest.address(), LocalState.ARCHIVED);
-//            if (!existingLocal.isEmpty()) {
-//                boolean hasOtherState = existingLocal.stream()
-//                        .anyMatch(local -> local.getState() != LocalState.WITHOUT_OWNER);
-//                if (hasOtherState && existingLocal.size() > 1) {
-//                    throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
-//                            ErrorCodes.ADDRESS_ASSIGNED);
-//                } else {
-//                    newLocal = existingLocal.getFirst();
-//                    newLocal.setOwner(owner);
-//                    newLocal.setState(LocalState.UNAPPROVED);
-//                }
-//            }
-//        } else {
-//            addressRepository.saveAndFlush(addLocalRequest.address());
-//        }
-//        return localRepository.saveAndFlush(newLocal);
+        Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
+                addLocalRequest.address().getNumber(),
+                addLocalRequest.address().getStreet(),
+                addLocalRequest.address().getCity(),
+                addLocalRequest.address().getZip(),
+                addLocalRequest.address().getCountry()
+        );
+        if (existingAddress.isPresent()) {
+            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(addLocalRequest.address(), LocalState.ARCHIVED);
+            if (!existingLocal.isEmpty()) {
+                boolean hasOtherState = existingLocal.stream()
+                        .anyMatch(local -> local.getState() != LocalState.WITHOUT_OWNER);
+                if (hasOtherState && existingLocal.size() > 1) {
+                    throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
+                            ErrorCodes.ADDRESS_ASSIGNED);
+                } else {
+                    newLocal = existingLocal.getFirst();
+                    newLocal.setOwner(owner);
+                    newLocal.setState(LocalState.UNAPPROVED);
+                }
+            }
+        } else {
+            addressRepository.saveAndFlush(addLocalRequest.address());
+        }
+        return localRepository.saveAndFlush(newLocal);
     }
 
     @Override

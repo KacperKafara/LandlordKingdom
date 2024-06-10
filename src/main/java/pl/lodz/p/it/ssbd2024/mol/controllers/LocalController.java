@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
@@ -16,21 +15,13 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
-import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
-import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
-import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -60,9 +51,9 @@ public class LocalController {
     public ResponseEntity<AddLocalResponse> addLocal(@RequestBody AddLocalRequest addLocalRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
-        UUID ownerId = UUID.fromString(jwt.getSubject());
+        UUID userId = UUID.fromString(jwt.getSubject());
         try {
-            return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(addLocalRequest, ownerId)));
+            return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(addLocalRequest, userId)));
         } catch (GivenAddressAssignedToOtherLocalException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (NotFoundException e) {
