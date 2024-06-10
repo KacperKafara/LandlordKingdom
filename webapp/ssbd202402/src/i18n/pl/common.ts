@@ -412,6 +412,7 @@ const errors = {
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
+  localNotActive: "Nieruchomość musi być aktywna, aby wykonać tę operację",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
   localNotUnapproved:
     "Nieruchomość musi być niezatwierdzona, aby wykonać tę operację",
@@ -421,6 +422,7 @@ const errors = {
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
+  applicationExists: "Aplikacja do tego lokalu już istnieje",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -576,7 +578,7 @@ const ownLocalDetails = {
   changeFixedFeeDescription:
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
     leaveLocal: "Opuść lokal",
-  leaveLocalDescription: 
+  leaveLocalDescription:
   "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
 };
 
@@ -585,6 +587,22 @@ const activeLocals = {
   size: "Powierzchnia",
   city: "Miasto",
   show: "Wyświetl szczegóły",
+};
+
+const activeLocalDetails = {
+  firstName: "Imię",
+  size: "Powierzchnia",
+  price: "Cena",
+  owner: "Właściciel",
+  city: "Miasto",
+  description: "Opis",
+  localInformation: "Informacje o nieruchomości",
+  ownerInformation: "Informacje o właścicielu",
+  apply: "Aplikuj",
+  applicationTitle: "Aplikacja",
+  applicationDescription: "Na pewno chcesz aplikować do lokalu?",
+  applicationExistsDescription: "Aplikowałeś do lokalu: ",
+  applicationCreated: "Utworzono aplikacje",
 };
 
 const changeEndDate = {
@@ -670,7 +688,7 @@ const ownerRentDetails = {
   rental: "Opłata za wynajem",
   summary: "Razem",
   showLocalDetails: "Pokaż szczegóły lokalu",
-}
+};
 
 const breadcrumbs = {
   tenant: "Najemca",
@@ -687,6 +705,7 @@ const tenantApplications = {
 export default {
   changeAddressForm,
   tenantApplications,
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

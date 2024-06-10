@@ -37,9 +37,11 @@ export type ExceptionCode =
   | "accessLevelTaken"
   | "undefined"
   | "localNotFound"
+  | "localNotActive"
   | "localNotInactive"
   | "localNotUnapproved"
   | "rentNotFound"
   | "wrongEndDate"
   | "invalidLocalStateArchive"
+  | "applicationExists"
   | "addressAlreadyAssigned";
