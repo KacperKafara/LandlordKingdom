@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { useMutation } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import { ErrorCode } from "@/@types/errorCode";
 
 export const useApproveLocal = () => {
   const { toast } = useToast();

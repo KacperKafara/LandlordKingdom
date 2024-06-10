@@ -19,6 +19,10 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,7 +42,7 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("isAuthenticated()")
     public List<Local> getActiveLocals() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return localRepository.findAllByState(LocalState.ACTIVE);
     }
 
     @Override
@@ -80,8 +84,18 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local setFixedFee(UUID localId, UUID ownerId,  BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException {
+        Local local = localRepository.findByOwner_User_IdAndId(ownerId, localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+
+        if (local.getState() == LocalState.RENTED) {
+            local.setNextMarginFee(marginFee);
+            local.setNextRentalFee(rentalFee);
+        } else {
+            local.setMarginFee(marginFee);
+            local.setRentalFee(rentalFee);
+        }
+
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
@@ -157,5 +171,10 @@ public class LocalServiceImpl implements LocalService {
     @PreAuthorize("hasRole('OWNER')")
     public Local getOwnLocal(UUID id, UUID ownerId) throws NotFoundException {
         return localRepository.findByOwner_User_IdAndId(ownerId, id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+    }
+
+    @Override
+    public Local getActiveLocal(UUID id) throws NotFoundException {
+        return localRepository.findByIdAndState(id, LocalState.ACTIVE).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
     }
 }

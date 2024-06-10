@@ -18,5 +18,7 @@ export type LocalDetailsForAdmin = {
   };
   marginFee: number;
   rentalFee: number;
+  nextMarginFee: number;
+  nextRentalFee: number;
   state: string;
 };

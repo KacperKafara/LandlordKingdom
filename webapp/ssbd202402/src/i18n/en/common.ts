@@ -338,6 +338,10 @@ const notApprovedActionsPage = {
     owner: "Owner",
     details: "Details",
   },
+  approve: "Approve",
+  show: "Show",
+  roleRequestApproveSuccess: "Role request approved",
+  roleRequestRejectSuccess: "Role request rejected",
 };
 
 const validation = {
@@ -467,6 +471,7 @@ const currentOwnerRents = {
   name: "Name",
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
+  rentDetails: "Rent details",
 };
 
 const leaveLocal = {
@@ -512,6 +517,7 @@ const roleRequestDialog = {
 };
 
 const localDetails = {
+  name: "Name",
   error: "Error while fetching local details",
   firstName: "First name",
   lastName: "Last name",
@@ -522,6 +528,10 @@ const localDetails = {
   size: "Size",
   rentalFee: "Rental fee",
   marginFee: "Margin fee",
+  nextRentalFee: "Next rental fee",
+  nextMarginlFee: "Next margin fee",
+  price: "Price",
+  totalPrice: "Total",
   description: "Description",
   country: "Country",
   city: "City",
@@ -543,8 +553,95 @@ const localDetails = {
   archiveSuccess: "Local has been archived",
 };
 
+const ownLocalDetails = {
+  error: "Error while fetching local details",
+  address: "Address",
+  size: "Size",
+  rentalFee: "Rental fee",
+  marginFee: "Margin fee",
+  nextRentalFee: "Next rental fee",
+  nextMarginFee: "Next margin fee",
+  description: "Description",
+  country: "Country",
+  city: "City",
+  street: "Street",
+  number: "Number",
+  zipCode: "Zip code",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  addressInformation: "Address information",
+  basicInformation: "Basic information",
+  updateData: "Update data",
+  changeFixedFee: "Change fixed fee",
+  changeFixedFeeDescription:
+    "Changes to the fixed fees will be effective from the next billing period.",
+};
+
+const updateOwnLocalFixedFeeForm = {
+  rentalFeeNotEmpty: "Rental fee cannot be empty.",
+  rentalFeeNotValid:
+    "Rental fee must be a valid monetary amount with up to 2 decimal places.",
+  marginFeeNotEmpty: "Margin fee cannot be empty.",
+  marginFeeNotValid:
+    "Margin fee must be a valid monetary amount with up to 2 decimal places.",
+  rentalFeeInput: "Enter Rental Fee",
+  marginFeeInput: "Enter Margin Fee",
+  updateFixedFee: "Update Fixed Fee",
+  updateFixedFeeTitle: "Confirm Update",
+  updateFixedFeeDescription: "Are you sure you want to update the fixed fee?",
+  rentalFeeTooLarge: "Rental fee cannot exceed 10,000.",
+  marginFeeTooLarge: "Margin fee cannot exceed 10,000.",
+};
+
+const changeFixedFee = {
+  successTitle: "Success",
+  successDescription: "Fixed fee has been changed",
+  errorTitle: "Error",
+};
+
+const ownerRentDetails = {
+  error: "Error while fetching rent details",
+  ownerMainPage: "Owner",
+  rents: "Current rents",
+  rent: "Rent of local ",
+  rentDetails: "Rent details",
+  rentInfo: "Rent information",
+  tenantInfo: "Tenant information",
+  addressInfo: "Address information",
+  payments: "Payments",
+  fixedFees: "Fixed fees",
+  noPayments: "No payments",
+  variableFees: "Variable fees",
+  localInfo: "Local information",
+  startDate: "Start date",
+  endDate: "End date",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+  address: "Address",
+  date: "Date",
+  amount: "Amount",
+  selectStart: "Select start date",
+  selectEnd: "Select end date",
+  number: "No.",
+  localName: "Name",
+  balance: "Balance",
+  pickDate: "Pick a date",
+}
+
+const breadcrumbs = {
+  tenant: "Tenant",
+  locals: "Locals",
+  local: "Local",
+};
+
 export default {
+  ownerRentDetails,
+  breadcrumbs,
   localDetails,
+  ownLocalDetails,
+  updateOwnLocalFixedFeeForm,
+  changeFixedFee,
   changeEndDate,
   currentOwnerRents,
   currentTenantRents,

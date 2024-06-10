@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.RentMessages;
 import pl.lodz.p.it.ssbd2024.messages.RentMessages;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
@@ -83,6 +85,12 @@ public class RentServiceImpl implements RentService {
     @PreAuthorize("hasRole('TENANT')")
     public List<Rent> getArchivalRentsForTenant(UUID userId) {
         return rentRepository.findAllPastRentsByTenantUserId(userId);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public Rent getOwnerRent(UUID userId, UUID rentId) throws NotFoundException {
+        return rentRepository.findByOwner_User_IdAndId(userId, rentId).orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
     }
 
 }

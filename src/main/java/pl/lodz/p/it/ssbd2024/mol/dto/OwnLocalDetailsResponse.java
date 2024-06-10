@@ -8,6 +8,8 @@ public record OwnLocalDetailsResponse(String name,
                                       String state,
                                       AddressResponse address,
                                       BigDecimal marginFee,
-                                      BigDecimal rentalFee
+                                      BigDecimal rentalFee,
+                                      BigDecimal nextMarginFee,
+                                      BigDecimal nextRentalFee
 ) {
 }

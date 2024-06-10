@@ -25,4 +25,7 @@ public interface RentService {
     List<Rent> getCurrentTenantRents(UUID userId);
 
     List<Rent> getArchivalRentsForTenant(UUID userId);
+
+    Rent getOwnerRent(UUID userId, UUID rentId) throws NotFoundException;
+
 }

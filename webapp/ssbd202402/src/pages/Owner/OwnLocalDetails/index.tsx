@@ -1,14 +1,20 @@
 import { useGetOwnLocalDetails } from "@/data/local/useGetOwnLocalDetails";
 import { FC } from "react";
 import { useParams } from "react-router-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import DataField from "@/components/DataField";
-import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { LoadingData } from "@/components/LoadingData";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import UpdateOwnLocalFixedFee from "./UpdateOwnLocalFixedFee";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -39,78 +45,76 @@ const OwnLocalDetailsPage: FC = () => {
               <Tabs defaultValue="basic">
                 <TabsList className="mt-1">
                   <TabsTrigger value="basic">
-                    {t("localDetails.basicInformation")}
+                    {t("ownLocalDetails.basicInformation")}
                   </TabsTrigger>
                   <TabsTrigger value="updateData">
-                    {t("localDetails.updateData")}
+                    {t("ownLocalDetails.updateData")}
                   </TabsTrigger>
-                  <TabsTrigger value="changeAddress">
-                    {t("localDetails.changeAddress")}
+                  <TabsTrigger value="changeFixedFee">
+                    {t("ownLocalDetails.changeFixedFee")}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="basic">
                   <Card className="relative mb-2">
                     <CardHeader>
                       <CardTitle className="text-center">
-                        {t("localDetails.localInformation")}
+                        {t("ownLocalDetails.localInformation")}
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="flex justify-center">
                       <div className="grid w-2/3 grid-cols-2 gap-2">
                         <DataField
-                          label={t("localDetails.size")}
+                          label={t("ownLocalDetails.size")}
                           value={data.size.toString()}
                         />
                         <DataField
-                          label={t("localDetails.rentalFee")}
+                          label={t("ownLocalDetails.rentalFee")}
                           value={data.rentalFee.toString()}
                         />
                         <DataField
-                          label={t("localDetails.marginFee")}
+                          label={t("ownLocalDetails.marginFee")}
                           value={data.marginFee.toString()}
                         />
 
+                        <DataField
+                          label={t("ownLocalDetails.nextRentalFee")}
+                          value={data?.nextRentalFee?.toString() ?? "-"}
+                        />
+                        <DataField
+                          label={t("ownLocalDetails.nextMarginFee")}
+                          value={data?.nextMarginFee?.toString() ?? "-"}
+                        />
+
                         <p className="col-span-2 text-xl font-semibold">
-                          {t("localDetails.addressInformation")}{" "}
+                          {t("ownLocalDetails.addressInformation")}{" "}
                         </p>
 
                         <DataField
-                          label={t("localDetails.country")}
+                          label={t("ownLocalDetails.country")}
                           value={data.address.country}
                         />
                         <DataField
-                          label={t("localDetails.city")}
+                          label={t("ownLocalDetails.city")}
                           value={data.address.city}
                         />
                         <DataField
-                          label={t("localDetails.street")}
+                          label={t("ownLocalDetails.street")}
                           value={data.address.street}
                         />
                         <DataField
-                          label={t("localDetails.number")}
+                          label={t("ownLocalDetails.number")}
                           value={data.address.number}
                         />
                         <DataField
-                          label={t("localDetails.zipCode")}
+                          label={t("ownLocalDetails.zipCode")}
                           value={`${data.address.zipCode}`}
                         />
 
                         <div className="col-span-2 flex flex-col">
                           <div className="text-sm font-semibold">
-                            {t("localDetails.description")}
+                            {t("ownLocalDetails.description")}
                           </div>
                           <div>{data.description}</div>
-                        </div>
-
-                        <div className="col-span-2 flex gap-3">
-                          {data.state === "UNAPPROVED" && (
-                            <Button
-                              variant="default"
-                              className="mt-3 w-full text-lg font-normal"
-                            >
-                              {t("localDetails.approveLocal")}
-                            </Button>
-                          )}
                         </div>
                       </div>
                     </CardContent>
@@ -124,18 +128,30 @@ const OwnLocalDetailsPage: FC = () => {
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-center">
-                        {t("localDetails.updateData")}
+                        {t("ownLocalDetails.updateData")}
                       </CardTitle>
                     </CardHeader>
                   </Card>
                 </TabsContent>
-                <TabsContent value="changeAddress">
+                <TabsContent value="changeFixedFee">
                   <Card>
                     <CardHeader>
                       <CardTitle className="text-center">
-                        {t("localDetails.changeAddress")}
+                        {t("ownLocalDetails.changeFixedFee")}
                       </CardTitle>
                     </CardHeader>
+                    <CardContent className="pb-2">
+                      <div className="flex justify-center">
+                        <UpdateOwnLocalFixedFee
+                          id={id || ""}
+                          initialRentalFee={data.rentalFee}
+                          initialMarginFee={data.marginFee}
+                        />
+                      </div>
+                    </CardContent>
+                    <CardDescription className="flex justify-center px-6 pb-5 ">
+                      {t("ownLocalDetails.changeFixedFeeDescription")}
+                    </CardDescription>
                   </Card>
                 </TabsContent>
               </Tabs>

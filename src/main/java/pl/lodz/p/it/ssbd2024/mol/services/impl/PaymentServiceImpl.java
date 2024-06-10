@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -10,6 +12,7 @@ import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.mol.repositories.PaymentRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.PaymentService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,8 +24,8 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<Payment> getRentPayments(UUID rentId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Page<Payment> getRentPayments(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return paymentRepository.findPaymentsForOwnerBetweenDates(userId, rentId, startDate, endDate, pageable);
     }
 
     @Override
