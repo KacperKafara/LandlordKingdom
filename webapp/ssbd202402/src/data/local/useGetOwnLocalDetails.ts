@@ -21,7 +21,7 @@ export const useGetOwnLocalDetails = (id: string) => {
         const axiosError = error as AxiosError;
         toast({
           variant: "destructive",
-          title: t("localDetails.error"),
+          title: t("ownLocalDetails.error"),
           description: t(
             `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
           ),

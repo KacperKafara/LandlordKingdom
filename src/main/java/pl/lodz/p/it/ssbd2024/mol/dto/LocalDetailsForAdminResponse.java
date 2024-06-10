@@ -10,7 +10,9 @@ public record LocalDetailsForAdminResponse(
         OwnerForAdminResponse owner,
         AddressResponse address,
         BigDecimal marginFee,
-        BigDecimal rentalFee
+        BigDecimal rentalFee,
+        BigDecimal nextMarginFee,
+        BigDecimal nextRentFee
 ) {
 
 }

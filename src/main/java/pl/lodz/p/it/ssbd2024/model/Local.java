@@ -50,8 +50,17 @@ public class Local extends AbstractEntity {
     private BigDecimal marginFee;
 
     @Setter
+    @Column(name = "next_margin_fee", precision = 10, scale = 2)
+    private BigDecimal nextMarginFee;
+
+    @Setter
     @Column(name = "rental_fee", nullable = false, precision = 10, scale = 2)
     private BigDecimal rentalFee;
+
+    @Setter
+    @Column(name = "next_rental_fee", precision = 10, scale = 2)
+    private BigDecimal nextRentalFee;
+
 
     @OneToMany(mappedBy = "local")
     private List<Rent> rents = new ArrayList<>();

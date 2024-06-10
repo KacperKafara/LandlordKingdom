@@ -1,0 +1,76 @@
+import DataField from "@/components/DataField";
+import RefreshQueryButton from "@/components/RefreshQueryButton";
+import { Card, CardContent } from "@/components/ui/card";
+import { RentDetailsForOwner } from "@/types/owner/RentDetailsForOwner";
+import { getAddressString } from "@/utils/address";
+import React from "react";
+import { useTranslation } from "react-i18next";
+
+type RentInformationCardProps = {
+  rent?: RentDetailsForOwner;
+};
+
+const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
+  const { t } = useTranslation();
+  return (
+    <Card className="relative">
+      <RefreshQueryButton
+        className="absolute right-0 top-0"
+        queryKeys={["rentDetailsForOwner"]}
+      />
+      <CardContent>
+        <div className="grid grid-cols-2 gap-2">
+          <h2 className="col-span-2 pt-4 text-xl font-semibold ">
+            {t("ownerRentDetails.rentInfo")}
+          </h2>
+          <DataField
+            label={t("ownerRentDetails.startDate")}
+            value={rent?.startDate ?? ""}
+          />
+          <DataField
+            label={t("ownerRentDetails.endDate")}
+            value={rent?.endDate ?? ""}
+          />
+          <DataField
+            label={t("ownerRentDetails.balance")}
+            value={(rent?.balance ?? 0.0).toFixed(2) + t("currency")}
+          />
+          <h2 className="col-span-2 pt-4 text-xl font-semibold">
+            {t("ownerRentDetails.localInfo")}
+          </h2>
+          <DataField
+            label={t("ownerRentDetails.localName")}
+            value={rent?.local.name ?? ""}
+          />
+          <DataField
+            label={t("ownerRentDetails.address")}
+            value={getAddressString(rent?.local.address)}
+          />
+          <DataField
+            label="Margin Fee"
+            value={(rent?.local?.marginFee ?? 0.0).toFixed(2) + t("currency")}
+          />
+          <DataField
+            label="Rental Fee"
+            value={(rent?.local?.rentalFee ?? 0.0).toFixed(2) + t("currency")}
+          />
+          <h2 className="col-span-2 pt-4 text-xl font-semibold">
+            {t("ownerRentDetails.tenantInfo")}
+          </h2>
+          <DataField
+            label={t("ownerRentDetails.name")}
+            value={`${rent?.tenant.firstName} ${rent?.tenant.lastName}`}
+          />
+          <DataField
+            label={t("ownerRentDetails.email")}
+            value={rent?.tenant.email ?? ""}
+          />
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+const RentInformationCard = React.memo(RentInformationCardComponent);
+
+export default RentInformationCard;

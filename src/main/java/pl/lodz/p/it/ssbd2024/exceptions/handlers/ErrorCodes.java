@@ -43,4 +43,5 @@ public class ErrorCodes {
     public static final String LOCAL_NOT_UNAPPROVED = "localNotUnapproved";
     public static final String WRONG_END_DATE = "wrongEndDate";
     public static final String RENT_NOT_FOUND = "rentNotFound";
+    public static final String DATE_PARSING_ERROR = "dateParsingError";
 }

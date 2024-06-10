@@ -125,4 +125,15 @@ public class LocalController {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
+
+    @GetMapping("/active/{id}")
+    @PreAuthorize("hasRole('TENANT')")
+    public ResponseEntity<ActiveLocalResponse> getActiveLocal(@PathVariable UUID id) {
+        try {
+            Local local = localService.getActiveLocal(id);
+            return ResponseEntity.ok(LocalMapper.toLocalPublicResponse(local));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
 }

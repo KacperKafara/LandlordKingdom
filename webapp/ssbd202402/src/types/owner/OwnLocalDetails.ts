@@ -11,5 +11,7 @@ export type OwnLocalDetails = {
   };
   marginFee: number;
   rentalFee: number;
+  nextMarginFee: number;
+  nextRentalFee: number;
   state: string;
 };

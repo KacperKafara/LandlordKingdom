@@ -12,6 +12,8 @@ public record GetAllLocalsResponse(
         int size,
         BigDecimal marginFee,
         BigDecimal rentFee,
+        BigDecimal nextMarginFee,
+        BigDecimal nextRentFee,
         AddressResponse address
 ) {
 }
