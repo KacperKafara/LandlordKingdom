@@ -43,6 +43,7 @@ const ActiveLocalDetailsPage = loadable(
 const NotApprovedActionsPage = loadable(
   () => import("./pages/Admin/NotApprovedActions")
 );
+const OwnerRentDetailsPage = loadable(() => import("./pages/Owner/RentDetails"));
 
 const AdminRoutes: RouteObject[] = [
   {
@@ -66,7 +67,10 @@ const OwnerRoutes: RouteObject[] = [
       { path: "local/:id", Component: OwnLocalDetailsPage },
     ],
   },
-  { path: "rents", Component: CurrnetOwnerRentsPage },
+  { path: "rents", children: [
+    { index: true, Component: CurrnetOwnerRentsPage},
+    { path: "rent/:id", Component: OwnerRentDetailsPage },
+  ] },
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },

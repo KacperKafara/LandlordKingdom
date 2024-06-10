@@ -15,6 +15,7 @@ import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
 import { ChangeEndDate } from "./ChangeEndDate";
+import { useNavigate } from "react-router-dom";
 
 const RentsPage: FC = () => {
   const breadCrumbs = useBreadcrumbs([
@@ -22,7 +23,7 @@ const RentsPage: FC = () => {
     { title: t("currentOwnerRents.rents"), path: "/owner/rents" },
   ]);
   const { data: rents, isLoading } = useGetOwnerCurrentRents();
-
+  const navigate = useNavigate();
   if (isLoading) {
     return (
       <div className="flex justify-center">
@@ -93,7 +94,7 @@ const RentsPage: FC = () => {
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
                   <ChangeEndDate startDate={rent.startDate} id={rent.id} endDate={rent.endDate}/>
-                  <Button className="flex-auto">Action 2</Button>
+                  <Button className="flex-auto" onClick={() => navigate(`rent/${rent.id}`) }>Rent details</Button>
                   <Button className="flex-auto">Action 3</Button>
                 </CardFooter>
               </Card>
