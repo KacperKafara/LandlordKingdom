@@ -251,6 +251,10 @@ const navLinks = {
   notApprovedActions: "Not approved actions",
   roles: "Change access level",
   locals: "Locals",
+  currentRents: "Current rents",
+  archivalRents: "Archival rents",
+} satisfies {
+  [key in string]: string;
 };
 
 const userDataPage = {
@@ -291,7 +295,7 @@ const mePage = {
   updateEmailAddressDescription:
     "A link to change the email address will be sent to the user's email address",
   title: "My account",
-  basicInformation: "Basic information's",
+  basicInformation: "Basic information",
   firstNameLabel: "First name",
   lastNamelabel: "Last name",
   emailLabel: "Email",
@@ -342,9 +346,29 @@ const registerSuccessPage = {
 };
 
 const notApprovedActionsPage = {
+  title: "Not approved actions",
   roleRequests: "Requests for role",
   locals: "Locals",
   emptyRoleRequests: "No avaliable role requsts",
+  emptyUnapprovedLocals: "No unapproved locals",
+  actions: "Actions",
+  confirm: "Confirm",
+  reject: "Reject",
+  confirmDialog: {
+    title: "Are you sure?",
+    confirmDescription: "Are you sure you want to confirm this local?",
+    rejectDescription: "Are you sure you want to reject this local?",
+  },
+  unapprovedLocals: {
+    name: "Name",
+    address: "Address",
+    owner: "Owner",
+    details: "Details",
+  },
+  approve: "Approve",
+  show: "Show",
+  roleRequestApproveSuccess: "Role request approved",
+  roleRequestRejectSuccess: "Role request rejected",
 };
 
 const validation = {
@@ -410,6 +434,13 @@ const errors = {
   accessLevelAssigned: "Access level aleady assigned",
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
+  localNotFound: "Local not found",
+  localNotInactive: "Local must be inactive for this operation",
+  localNotUnapproved: "Local must be unapproved for this operation",
+  wrongEndDate:
+    "End date must be in the future Sunday, after start date and different from current end date",
+  rentNotFound: "Rent not found",
+  invalidLocalStateArchive: "Local must be in Without owner state to archive",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -421,11 +452,17 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Show",
+  noLocalsFound: "Currently you have no locals",
+  addFirstLocal: "Add first local",
+  title: "Main page",
+  locals: "Locals",
 };
 
 const allLocals = {
+  title: "All locals",
   show: "Show",
   localOwner: "Owner: ",
+  noLocalsFound: "Currently there are no locals",
 };
 
 const localState = {
@@ -439,7 +476,208 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const tenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
+const currentOwnerRents = {
+  title: "Owner",
+  rents: "Current rents",
+  startDate: "Start date",
+  endDate: "End date",
+  balance: "Balance",
+  tenant: "Tenant",
+  name: "Name",
+  email: "Email",
+  noRentsFound: "Currently your local has no tenants",
+  rentDetails: "Rent details",
+};
+
+const leaveLocal = {
+  successTitle: "Success",
+  successDescription: "You have left the local",
+  errorTitle: "Error",
+  buttonText: "Leave local",
+};
+
+const currentTenantRents = {
+  startDate: "Start date",
+  endDate: "End date",
+  fixedFee: "Fixed fee",
+  balance: "Balance",
+  size: "Local size",
+  owner: "Owner",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+};
+
+const changeEndDate = {
+  successTitle: "Success",
+  successDescription: "End date has been changed",
+  errorTitle: "Error",
+  buttonText: "Change end date",
+  newDateRequired: "New date is required",
+  dialogTitle: "Change rent's end date",
+  dialogDescription: "Choose a new end date for the rent.",
+  formLabel: "New end date",
+  formDescription: "End date must be in the future and it must be Sunday.",
+  spanText: "Pick a date",
+};
+const roleRequestDialog = {
+  description:
+    "You can submit a request for an owner role. Once we receive your request, we will review your account to determine your eligibility. If the role is assigned to you, you will receive an email notification.",
+  requestOwnerRole: "Request Owner role",
+  requestOwnerRoleDescription:
+    "Click this button to submit a request for an owner role.",
+  alreadyPlacedRequest: "You already placed a request for role at: {{when}}",
+  howDoesItWork: "How does this work?",
+  requestRoleButton: "Request role",
+};
+
+const localDetails = {
+  name: "Name",
+  error: "Error while fetching local details",
+  firstName: "First name",
+  lastName: "Last name",
+  owner: "Owner",
+  login: "Login",
+  email: "Email",
+  address: "Address",
+  size: "Size",
+  rentalFee: "Rental fee",
+  marginFee: "Margin fee",
+  nextRentalFee: "Next rental fee",
+  nextMarginlFee: "Next margin fee",
+  price: "Price",
+  totalPrice: "Total",
+  description: "Description",
+  country: "Country",
+  city: "City",
+  street: "Street",
+  number: "Number",
+  zipCode: "Zip code",
+  showOwnerDetails: "Show owner details",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  addressInformation: "Address information",
+  basicInformation: "Basic information",
+  updateData: "Update data",
+  changeAddress: "Change address",
+  archiveLocal: "Archive local",
+  approveLocal: "Approve local",
+  archiveLocalDescription: "Are you sure you want to archive this local?",
+  close: "Close",
+  archiveError: "Archive error",
+  archiveSuccess: "Local has been archived",
+};
+
+const ownLocalDetails = {
+  error: "Error while fetching local details",
+  address: "Address",
+  size: "Size",
+  rentalFee: "Rental fee",
+  marginFee: "Margin fee",
+  nextRentalFee: "Next rental fee",
+  nextMarginFee: "Next margin fee",
+  description: "Description",
+  country: "Country",
+  city: "City",
+  street: "Street",
+  number: "Number",
+  zipCode: "Zip code",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  addressInformation: "Address information",
+  basicInformation: "Basic information",
+  updateData: "Update data",
+  changeFixedFee: "Change fixed fee",
+  changeFixedFeeDescription:
+    "Changes to the fixed fees will be effective from the next billing period.",
+};
+
+const updateOwnLocalFixedFeeForm = {
+  rentalFeeNotEmpty: "Rental fee cannot be empty.",
+  rentalFeeNotValid:
+    "Rental fee must be a valid monetary amount with up to 2 decimal places.",
+  marginFeeNotEmpty: "Margin fee cannot be empty.",
+  marginFeeNotValid:
+    "Margin fee must be a valid monetary amount with up to 2 decimal places.",
+  rentalFeeInput: "Enter Rental Fee",
+  marginFeeInput: "Enter Margin Fee",
+  updateFixedFee: "Update Fixed Fee",
+  updateFixedFeeTitle: "Confirm Update",
+  updateFixedFeeDescription: "Are you sure you want to update the fixed fee?",
+  rentalFeeTooLarge: "Rental fee cannot exceed 10,000.",
+  marginFeeTooLarge: "Margin fee cannot exceed 10,000.",
+};
+
+const changeFixedFee = {
+  successTitle: "Success",
+  successDescription: "Fixed fee has been changed",
+  errorTitle: "Error",
+};
+
+const ownerRentDetails = {
+  error: "Error while fetching rent details",
+  ownerMainPage: "Owner",
+  rents: "Current rents",
+  rent: "Rent of local ",
+  rentDetails: "Rent details",
+  rentInfo: "Rent information",
+  tenantInfo: "Tenant information",
+  addressInfo: "Address information",
+  payments: "Payments",
+  fixedFees: "Fixed fees",
+  noPayments: "No payments",
+  variableFees: "Variable fees",
+  localInfo: "Local information",
+  startDate: "Start date",
+  endDate: "End date",
+  name: "Name",
+  email: "Email",
+  login: "Login",
+  address: "Address",
+  date: "Date",
+  amount: "Amount",
+  selectStart: "Select start date",
+  selectEnd: "Select end date",
+  number: "No.",
+  localName: "Name",
+  balance: "Balance",
+  pickDate: "Pick a date",
+  margin: "Margin Fee",
+  rental: "Rental Fee",
+  summary: "Total",
+}
+
+const breadcrumbs = {
+  tenant: "Tenant",
+  locals: "Locals",
+  local: "Local",
+};
+
 export default {
+  ownerRentDetails,
+  breadcrumbs,
+  localDetails,
+  ownLocalDetails,
+  updateOwnLocalFixedFeeForm,
+  changeFixedFee,
+  changeEndDate,
+  currentOwnerRents,
+  currentTenantRents,
+  tenantRents,
+  leaveLocal,
+  roleRequestDialog,
   allLocals,
   localState,
   ownerLocals,
@@ -479,4 +717,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Confirm",
   cancel: "Cancel",
+  currency: "PLN",
 } as const;

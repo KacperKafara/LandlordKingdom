@@ -9,7 +9,7 @@ import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
 import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
-import NotApprovedActionsPage from "./pages/Admin/NotApprovedActions";
+import ActiveLocals from "@/pages/Tenant/Locals";
 import addLocalForm from "./pages/Owner/addLocalForm";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
@@ -28,10 +28,32 @@ const UpdateEmailPage = loadable(() => import("./pages/UpdateEmail"));
 const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
-const RoleRequestPage = loadable(() => import("./pages/Tenant/RoleRequest"));
+const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
+const CurrnetOwnerRentsPage = loadable(() => import("./pages/Owner/Rents"));
+const ArchivalRentsPage = loadable(
+  () => import("./pages/Tenant/ArchivalRents")
+);
+const LocalDetailsPage = loadable(() => import("./pages/Admin/LocalDetails"));
+const OwnLocalDetailsPage = loadable(
+  () => import("./pages/Owner/OwnLocalDetails")
+);
+const RentDetailsPage = loadable(() => import("./pages/Tenant/RentDetails"));
+const ActiveLocalDetailsPage = loadable(
+  () => import("./pages/Tenant/ActiveLocalDetails")
+);
+const NotApprovedActionsPage = loadable(
+  () => import("./pages/Admin/NotApprovedActions")
+);
+const OwnerRentDetailsPage = loadable(() => import("./pages/Owner/RentDetails"));
 
 const AdminRoutes: RouteObject[] = [
-  { path: "locals", Component: LocalsPage },
+  {
+    path: "locals",
+    children: [
+      { index: true, Component: LocalsPage },
+      { path: "local/:id", Component: LocalDetailsPage },
+    ],
+  },
   { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
@@ -39,12 +61,26 @@ const AdminRoutes: RouteObject[] = [
 ];
 const OwnerRoutes: RouteObject[] = [
   { path: "test", Component: OwnerTestPage },
-  { path: "locals", Component: OwnLocalsPage },
-  { path: "addLocalForm", Component: addLocalForm },
+  {
+    path: "locals",
+    children: [
+      { index: true, Component: OwnLocalsPage },
+      { path: "local/:id", Component: OwnLocalDetailsPage },
+    ],
+  },
+    { path: "addLocalForm", Component: addLocalForm },
+  { path: "rents", children: [
+    { index: true, Component: CurrnetOwnerRentsPage},
+    { path: "rent/:id", Component: OwnerRentDetailsPage },
+  ] },
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
-  { path: "role-request", Component: RoleRequestPage },
+  { path: "current-rents", Component: CurrentRentsPage },
+  { path: "archival-rents", Component: ArchivalRentsPage },
+  { path: "rents/:id", Component: RentDetailsPage },
+  { path: "locals", Component: ActiveLocals },
+  { path: "locals/:id", Component: ActiveLocalDetailsPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];
 

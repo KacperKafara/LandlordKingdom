@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
 import org.aspectj.weaver.ast.Not;
+import org.springframework.security.access.prepost.PreAuthorize;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Application;
@@ -28,9 +29,9 @@ public interface LocalService {
 
     Local editLocal(UUID id, Local local) throws NotFoundException;
 
-    Local leaveLocal(UUID ownerId, UUID localId) throws InvalidLocalState, NotFoundException;
+    Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException;
 
-    Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
+    Local setFixedFee(UUID localId, UUID ownerId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
 
     List<Local> getAllLocals();
 
@@ -38,11 +39,17 @@ public interface LocalService {
 
     Local editLocalByAdmin(UUID id, Local newLocal) throws NotFoundException;
 
-    Local approveLocal(UUID id) throws NotFoundException;
+    Local approveLocal(UUID id) throws NotFoundException, InvalidLocalState;
 
-    Local rejectLocal(UUID id) throws NotFoundException;
+    Local rejectLocal(UUID id) throws NotFoundException, InvalidLocalState;
 
     List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException;
 
     Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState;
+
+    Local getLocal(UUID id) throws NotFoundException;
+
+    Local getOwnLocal(UUID id, UUID ownerId) throws NotFoundException;
+
+    Local getActiveLocal(UUID id) throws NotFoundException;
 }

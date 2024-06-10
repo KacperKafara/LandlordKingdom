@@ -1,4 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record VariableFeeRequest() {
+import java.math.BigDecimal;
+
+public record VariableFeeRequest(BigDecimal amount) {
 }

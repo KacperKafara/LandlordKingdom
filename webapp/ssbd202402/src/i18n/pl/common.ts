@@ -258,6 +258,8 @@ const navLinks = {
   notApprovedActions: "Niezatwierdzone operację",
   roles: "Zmień poziom dostępu",
   locals: "Nieruchomości",
+  currentRents: "Aktualne wynajmy",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const userDataPage = {
@@ -349,9 +351,29 @@ const registerSuccessPage = {
 };
 
 const notApprovedActionsPage = {
+  title: "Niezatwierdzone operacje",
   roleRequests: "Zgłoszenia o rolę",
   locals: "Lokale",
   emptyRoleRequests: "Brak zgłoszeń o rolę",
+  emptyUnapprovedLocals: "Brak niezatwierdzonych lokali",
+  actions: "Akcje",
+  confirm: "Zatwierdź",
+  reject: "Odrzuć",
+  confirmDialog: {
+    title: "Czy jesteś pewny?",
+    confirmDescription: "Czy na pewno chcesz zatwierdzić ten lokal?",
+    rejectDescription: "Czy na pewno chcesz odrzucić ten lokal?",
+  },
+  unapprovedLocals: {
+    name: "Nazwa",
+    address: "Adres",
+    owner: "Właściciel",
+    details: "Szczegóły",
+  },
+  approve: "Zaakceptuj",
+  show: "Pokaż",
+  roleRequestApproveSuccess: "Zgłoszenie o rolę zaakceptowane",
+  roleRequestRejectSuccess: "Zgłoszenie o rolę odrzucone",
 };
 
 const validation = {
@@ -415,6 +437,15 @@ const errors = {
   accessLevelAssigned: "Poziom dostępu został już nadany",
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
+  localNotFound: "Nie znaleziono nieruchomości",
+  localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
+  localNotUnapproved:
+    "Nieruchomość musi być niezatwierdzona, aby wykonać tę operację",
+  wrongEndDate:
+    "Data zakończenia musi być późniejsza niż data rozpoczęcia, musi być w przyszłości i musi być Niedzielą",
+  rentNotFound: "Nie znaleziono wynajmu",
+  invalidLocalStateArchive:
+    "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -426,11 +457,17 @@ const notFoundPage = {
 
 const ownerLocals = {
   show: "Wyświetl",
+  noLocalsFound: "Aktualnie nie posiadasz żadnych nieruchomości",
+  addFirstLocal: "Dodaj pierwszą nieruchomość",
+  title: "Strona główna",
+  locals: "Nieruchomości",
 };
 
 const allLocals = {
+  title: "Wszystkie nieruchomości",
   show: "Wyświetl",
   localOwner: "Właściciel: ",
+  noLocalsFound: "Aktualnie nie ma żadnych nieruchomości",
 };
 
 const localState = {
@@ -444,7 +481,210 @@ const localState = {
   [key in LocalState]: string;
 };
 
+const roleRequestDialog = {
+  description:
+    "Możesz złożyć wniosek o przyznanie roli właściciela. Po otrzymaniu wniosku przeanalizujemy Twoje konto, aby ocenić Twoją kwalifikację. Jeśli rola zostanie Ci przyznana, otrzymasz powiadomienie e-mail.",
+  requestOwnerRole: "Złóż prośbę o role właściciela",
+  requestOwnerRoleDescription:
+    "Kliknij ten przycisk, aby złożyć wniosek o przyznanie roli właściciela.",
+  alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: {{when}}",
+  howDoesItWork: "Jak to działa?",
+  requestRoleButton: "Złóż wniosek",
+};
+
+const leaveLocal = {
+  successTitle: "Sukces",
+  successDescription: "Opuściłeś lokal",
+  errorTitle: "Błąd",
+  buttonText: "Opuść lokal",
+};
+
+const tenantRents = {
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  fixedFee: "Opłata stała",
+  balance: "Bilans",
+  localSize: "Powierzchnia",
+  owner: "Właściciel",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+};
+
+const currentOwnerRents = {
+  title: "Właściciel",
+  rents: "Obence wynajmy",
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  balance: "Bilans",
+  tenant: "Najemca",
+  name: "Imię i nazwisko",
+  email: "Email",
+  noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
+  rentDetails: "Szczegóły wynajmu",
+};
+
+const currentTenantRents = {
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  fixedFee: "Opłata stała",
+  balance: "Bilans",
+  localSize: "Powierzchnia",
+  owner: "Właściciel",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+};
+
+const localDetails = {
+  name: "Nazwa",
+  error: "Błąd podczas pobierania danych o nieruchomości",
+  firstName: "Imię",
+  lastName: "Nazwisko",
+  size: "Powierzchnia",
+  rentalFee: "Opłata za wynajem",
+  marginFee: "Marża właściciela",
+  nextRentalFee: "Przyszła opłata za wynajem",
+  nextMarginFee: "Przyszła marża właściciela",
+  price: "Cena",
+  totalPrice: "Razem",
+  owner: "Właściciel",
+  login: "Login",
+  email: "Email",
+  address: "Adres",
+  country: "Kraj",
+  city: "Miasto",
+  street: "Ulica",
+  number: "Numer",
+  zipCode: "Kod pocztowy",
+  description: "Opis",
+  showOwnerDetails: "Pokaż dane właściciela",
+  localInformation: "Informacje o nieruchomości",
+  ownerInformation: "Informacje o właścicielu",
+  addressInformation: "Informacje o adresie",
+  basicInformation: "Podstawowe informacje",
+  updateData: "Zaktualizuj dane lokalu",
+  changeAddress: "Zmień adres",
+  archiveLocal: "Zarchiwizuj lokal",
+  approveLocal: "Zaakceptuj lokal",
+  archiveLocalDescription: "Czy na pewno chcesz zarchiwizować lokal?",
+  close: "Zamknij",
+  archiveError: "Błąd podczas archiwizacji",
+  archiveSuccess: "Lokal został zarchiwizowany",
+};
+
+const ownLocalDetails = {
+  error: "Błąd podczas pobierania danych o nieruchomości",
+  size: "Powierzchnia",
+  rentalFee: "Opłata za wynajem",
+  marginFee: "Marża właściciela",
+  nextRentalFee: "Przyszła opłata za wynajem",
+  nextMarginFee: "Przyszła marża właściciela",
+  address: "Adres",
+  country: "Kraj",
+  city: "Miasto",
+  street: "Ulica",
+  number: "Numer",
+  zipCode: "Kod pocztowy",
+  description: "Opis",
+  localInformation: "Informacje o nieruchomości",
+  addressInformation: "Informacje o adresie",
+  basicInformation: "Podstawowe informacje",
+  updateData: "Zaktualizuj dane lokalu",
+  changeAddress: "Zmień adres",
+  changeFixedFee: "Zmień wartość opłaty stałej",
+  changeFixedFeeDescription:
+    "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
+};
+
+const changeEndDate = {
+  successTitle: "Sukces",
+  successDescription: "Data zakończenia została zmieniona",
+  errorTitle: "Błąd",
+  buttonText: "Zmień datę zakończenia",
+  newDateRequired: "Nowa data jest wymagana",
+  dialogTitle: "Zmień datę zakończenia wynajmu",
+  dialogDescription: "Wybierz nową datę zakończenia wynajmu",
+  formLabel: "Nowa data zakończenia",
+  formDescription:
+    "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
+  spanText: "Wybierz datę",
+};
+
+const updateOwnLocalFixedFeeForm = {
+  rentalFeeNotEmpty: "Opłata za wynajem nie może być pusta.",
+  rentalFeeNotValid:
+    "Opłata za wynajem musi być prawidłową kwotą pieniężną z maksymalnie 2 miejscami po przecinku.",
+  marginFeeNotEmpty: "Marża nie może być pusta.",
+  marginFeeNotValid:
+    "Marża musi być prawidłową kwotą pieniężną z maksymalnie 2 miejscami po przecinku.",
+  rentalFeeInput: "Wprowadź opłatę za wynajem",
+  marginFeeInput: "Wprowadź marżę",
+  updateFixedFee: "Zaktualizuj stałą opłatę",
+  updateFixedFeeTitle: "Potwierdź aktualizację",
+  updateFixedFeeDescription: "Czy na pewno chcesz zaktualizować stałą opłatę?",
+  rentalFeeTooLarge: "Opłata za wynajem nie może przekroczyć 10 000.",
+  marginFeeTooLarge: "Marża nie może przekroczyć 10 000.",
+};
+
+const changeFixedFee = {
+  successTitle: "Sukces",
+  successDescription: "Opłata stała została zmieniona",
+  errorTitle: "Błąd",
+};
+
+const ownerRentDetails = {
+  error: "Błąd podczas pobierania danych o wynajmie",
+  ownerMainPage: "Właściciel",
+  rents: "Obecne wynajmy",
+  rent: "Wynajem lokalu ",
+  rentDetails: "Szczegóły wynajmu",
+  rentInfo: "Informacje o wynajmie",
+  tenantInfo: "Informacje o najemcy",
+  addressInfo: "Informacje o adresie",
+  payments: "Płatności",
+  fixedFees: "Opłaty stałe",
+  noPayments: "Brak płatności",
+  variableFees: "Opłaty zmienne",
+  localInfo: "Informacje o lokalu",
+  startDate: "Data rozpoczęcia",
+  endDate: "Data zakończenia",
+  name: "Imię",
+  email: "Email",
+  login: "Login",
+  address: "Adres",
+  date: "Data",
+  amount: "Kwota",
+  selectStart: "Wybierz datę początkową",
+  selectEnd: "Wybierz datę końcową",
+  number: "Nr",
+  localName: "Nazwa",
+  balance: "Bilans",
+  pickDate: "Wybierz datę",
+  margin: "Marża",
+  rental: "Opłata za wynajem",
+  summary: "Razem",
+}
+
+const breadcrumbs = {
+  tenant: "Najemca",
+  locals: "Lokale",
+  local: "Lokal",
+};
+
 export default {
+  ownerRentDetails,
+  breadcrumbs,
+  localDetails,
+  updateOwnLocalFixedFeeForm,
+  ownLocalDetails,
+  changeFixedFee,
+  roleRequestDialog,
+  changeEndDate,
+  leaveLocal,
+  tenantRents,
+  currentOwnerRents,
+  currentTenantRents,
   allLocals,
   ownerLocals,
   localState,
@@ -484,4 +724,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",
   cancel: "Anuluj",
+  currency: " zł",
 };

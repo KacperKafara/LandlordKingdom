@@ -1,4 +1,10 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record RentPaymentsResponse() {
+import java.util.List;
+
+public record RentPaymentsResponse(
+        List<PaymentResponse> rentPayments,
+        long totalPages
+) {
+
 }
