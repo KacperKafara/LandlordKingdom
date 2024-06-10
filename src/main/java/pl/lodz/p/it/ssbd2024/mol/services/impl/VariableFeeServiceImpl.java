@@ -8,11 +8,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.Rent;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
+import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
+import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.VariableFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.VariableFeeService;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -21,12 +28,19 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class VariableFeeServiceImpl implements VariableFeeService {
     private final VariableFeeRepository variableFeeRepository;
-    private final LocalRepository localRepository;
+    private final TenantMolRepository tenantRepository;
+    private final RentRepository rentRepository;
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public VariableFee create(VariableFee fee) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public VariableFee create(UUID userId, UUID rentId, BigDecimal amount) throws NotFoundException {
+        Tenant tenant = tenantRepository.findByUserId(userId).get();
+        Rent rent = rentRepository.findByIdAndTenantId(rentId, tenant.getId())
+                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        VariableFee variableFee = new VariableFee(amount, LocalDate.now(), rent);
+        rent.setBalance(rent.getBalance().subtract(amount));
+        rentRepository.saveAndFlush(rent);
+        return variableFeeRepository.saveAndFlush(variableFee);
     }
 
     @Override
