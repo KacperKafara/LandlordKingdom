@@ -1,11 +1,9 @@
 package pl.lodz.p.it.ssbd2024.util;
 
-import java.time.DateTimeException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 
 public class DateUtils {
@@ -26,4 +24,16 @@ public class DateUtils {
 
         return longDate.format(formatter);
     }
+
+    public static LocalDate getFirstDayOfCurrentWeek() {
+        DayOfWeek firstDayOfWeek = DayOfWeek.SUNDAY;
+        return LocalDate.now().with(TemporalAdjusters.previousOrSame(firstDayOfWeek));
+    }
+
+    public static LocalDate getLastDayOfCurrentWeek() {
+        DayOfWeek firstDayOfWeek = DayOfWeek.SUNDAY;
+        DayOfWeek lastDayOfWeek = DayOfWeek.of(((firstDayOfWeek.getValue() + 5) % DayOfWeek.values().length) + 1);
+        return LocalDate.now().with(TemporalAdjusters.nextOrSame(lastDayOfWeek));
+    }
+
 }
