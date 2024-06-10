@@ -38,6 +38,8 @@ public class VariableFeeServiceImpl implements VariableFeeService {
         Rent rent = rentRepository.findByIdAndTenantId(rentId, tenant.getId())
                 .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
         VariableFee variableFee = new VariableFee(amount, LocalDate.now(), rent);
+        rent.setBalance(rent.getBalance().subtract(amount));
+        rentRepository.saveAndFlush(rent);
         return variableFeeRepository.saveAndFlush(variableFee);
     }
 
