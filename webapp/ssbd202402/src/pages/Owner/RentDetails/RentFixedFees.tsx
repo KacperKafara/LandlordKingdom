@@ -14,6 +14,7 @@ import PaymentsPageChanger from "./PaymentsPageChanger";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTranslation } from "react-i18next";
 import { useRentFixedFees } from "@/data/rent/useRentFixedFees";
+import { LoadingData } from "@/components/LoadingData";
 
 type RentFixedFeesProps = {
   id: string;
@@ -34,7 +35,7 @@ export const RentFixedFees: FC<RentFixedFeesProps> = ({
   const [selectEndDate, setSelectEndDate] = useState<Date | undefined>(
     new Date(endDate)
   );
-  const { data } = useRentFixedFees({
+  const { data, isLoading } = useRentFixedFees({
     id: id!,
     pageNumber: pageNumber,
     pageSize: pageSize,
@@ -43,7 +44,9 @@ export const RentFixedFees: FC<RentFixedFeesProps> = ({
   });
   const { t } = useTranslation();
 
-  console.log(data);
+  if (isLoading) {
+    return <LoadingData />;
+  }
 
   return (
     <Card className="relative">

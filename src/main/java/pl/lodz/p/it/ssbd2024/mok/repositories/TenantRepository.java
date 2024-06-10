@@ -36,5 +36,6 @@ public interface TenantRepository extends JpaRepository<Tenant, UUID>, JpaSpecif
     @PreAuthorize("permitAll()")
     Tenant saveAndFlush(@NonNull Tenant tenant);
 
+    @PreAuthorize("permitAll()")
     Optional<Tenant> findByUserId(UUID id);
 }

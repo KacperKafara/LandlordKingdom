@@ -17,8 +17,10 @@ import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
+import pl.lodz.p.it.ssbd2024.mol.mappers.ApplicationMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
+import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 import pl.lodz.p.it.ssbd2024.mol.mappers.VariableFeeMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
@@ -35,6 +37,7 @@ import java.util.UUID;
 public class MeTenantController {
     private final RoleService roleService;
     private final RentService rentService;
+    private final ApplicationService applicationService;
     private final VariableFeeService variableFeeService;
 
     @PostMapping("/role-request")
@@ -84,8 +87,9 @@ public class MeTenantController {
 
     @GetMapping("/applications")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<List<ApplicationResponse>> getApplications() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<List<OwnApplicationResponse>> getApplications() throws NotFoundException {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(ApplicationMapper.toGetOwnApplications(applicationService.getUserApplications(userId)));
     }
 
     @PostMapping("/rents/{id}/variable-fee")

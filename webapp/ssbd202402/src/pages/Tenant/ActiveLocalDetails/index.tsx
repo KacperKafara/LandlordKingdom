@@ -5,11 +5,31 @@ import { useGetActiveLocal } from "@/data/local/useGetActiveLocal";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
 import { FC } from "react";
+import { Button } from "@/components/ui/button";
 import { useParams } from "react-router-dom";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import LoadingButton from "@/components/LoadingButton";
+import { useGetUserApplication } from "@/data/application/useGetUserApplication";
+import { useCreateApplication } from "@/data/application/useCreateApplication";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ActiveLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { local } = useGetActiveLocal(id!);
+  const { application, isError } = useGetUserApplication(id!);
+  const { createApplication } = useCreateApplication();
+  const queryClient = useQueryClient();
+
   const breadcrumbs = useBreadcrumbs([
     {
       title: t("breadcrumbs.tenant"),
@@ -24,6 +44,11 @@ const ActiveLocalDetailsPage: FC = () => {
       path: `/tenant/locals/${id}`,
     },
   ]);
+
+  const handleCreateApplication = async () => {
+    await createApplication(id!);
+    queryClient.invalidateQueries({ queryKey: ["userApplication"] });
+  };
 
   return (
     <>
@@ -41,26 +66,26 @@ const ActiveLocalDetailsPage: FC = () => {
                 <CardContent>
                   <div className="grid w-2/3 grid-cols-3 gap-2">
                     <p className="col-span-3 text-xl font-semibold">
-                      {t("localDetails.localInformation")}
+                      {t("activeLocalDetails.localInformation")}
                     </p>
                     <DataField
-                      label={t("localDetails.city")}
+                      label={t("activeLocalDetails.city")}
                       value={local.city}
                     />
                     <DataField
-                      label={t("localDetails.size")}
+                      label={t("activeLocalDetails.size")}
                       value={local.size}
                     />
                     <DataField
-                      label={t("localDetails.price")}
+                      label={t("activeLocalDetails.price")}
                       value={local.price}
                     />
 
                     <p className="col-span-3 text-xl font-semibold">
-                      {t("localDetails.ownerInformation")}
+                      {t("activeLocalDetails.ownerInformation")}
                     </p>
                     <DataField
-                      label={t("localDetails.firstName")}
+                      label={t("activeLocalDetails.firstName")}
                       value={local.ownerName}
                     />
                   </div>
@@ -69,6 +94,41 @@ const ActiveLocalDetailsPage: FC = () => {
                     {t("localDetails.description")}
                   </p>
                   <div>{local.description}</div>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button className="mt-4">
+                        {t("activeLocalDetails.apply")}
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          {t("activeLocalDetails.applicationTitle")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          {application
+                            ? t(
+                                "activeLocalDetails.applicationExistsDescription"
+                              ) + application.createdAt
+                            : t("activeLocalDetails.applicationDescription")}
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogAction asChild>
+                          <LoadingButton
+                            text={t("confirm")}
+                            isLoading={!isError && !application}
+                            disableButton={application != undefined}
+                            onClick={async () =>
+                              await handleCreateApplication()
+                            }
+                          />
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
 
                   <RefreshQueryButton
                     className="absolute right-1 top-1"

@@ -1,10 +1,12 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
 import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
@@ -23,7 +25,12 @@ import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -115,8 +122,30 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {GivenAddressAssignedToOtherLocalException.class, NotFoundException.class})
     public Local changeLocalAddress(UUID id, Address address) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Optional<Address> addressOptional = addressRepository.findByAddress(address.getCountry(), address.getCity(), address.getStreet(), address.getNumber(), address.getZip());
+        Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (addressOptional.isPresent()) {
+            Address foundAddress = addressOptional.get();
+            for (Local l : foundAddress.getLocals()) {
+                if (!l.getState().equals(LocalState.ARCHIVED)) {
+                    throw new GivenAddressAssignedToOtherLocalException(LocalExceptionMessages.ADDRESS_ALREADY_ASSIGNED, ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
+                }
+            }
+            local.setAddress(foundAddress);
+            return localRepository.saveAndFlush(local);
+        }
+
+        Address oldAddress = local.getAddress();
+        oldAddress.setAddress(address);
+        try {
+            addressRepository.saveAndFlush(oldAddress);
+        } catch (ConstraintViolationException e) {
+            throw new GivenAddressAssignedToOtherLocalException(LocalExceptionMessages.ADDRESS_ALREADY_ASSIGNED, ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
+        }
+
+        return local;
     }
 
 

@@ -1,27 +1,27 @@
 import useAxiosPrivate from "../useAxiosPrivate";
 import { useQuery } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { toast } from "@/components/ui/use-toast";
-import { t } from "i18next";
-import { ActiveLocalDetails } from "@/types/local/ActiveLocalDetails";
+import { useTranslation } from "react-i18next";
+import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
+import { ApplicationsForTenant } from "@/types/tenant/ApplicationsForTenant";
 
-export const useGetActiveLocal = (id: string) => {
+export const useGetOwnApplications = () => {
   const { api } = useAxiosPrivate();
+  const { t } = useTranslation();
 
-  const { data } = useQuery({
-    queryKey: ["activeLocalDetails"],
+  return useQuery({
+    queryKey: ["tenantOwnApplications"],
     queryFn: async () => {
       try {
-        const response = await api.get<ActiveLocalDetails>(
-          `/locals/active/${id}`
-        );
+        const response =
+          await api.get<ApplicationsForTenant[]>("/me/applications");
         return response.data;
       } catch (error) {
         const axiosError = error as AxiosError;
         toast({
           variant: "destructive",
-          title: t("localDetails.error"),
+          title: t("userDataPage.error"),
           description: t(
             `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
           ),
@@ -30,6 +30,4 @@ export const useGetActiveLocal = (id: string) => {
       }
     },
   });
-
-  return { local: data };
 };

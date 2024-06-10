@@ -16,6 +16,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import UpdateOwnLocalFixedFee from "./UpdateOwnLocalFixedFee";
 import UpdateLocalDetailsForm from "@/pages/Owner/OwnLocalDetails/UpdateOwnLocal.tsx";
+import LeaveLocalCard from "./LeaveLocalCard";
+import { LocalState } from "@/@types/localState";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,6 +55,9 @@ const OwnLocalDetailsPage: FC = () => {
                   </TabsTrigger>
                   <TabsTrigger value="changeFixedFee">
                     {t("ownLocalDetails.changeFixedFee")}
+                  </TabsTrigger>
+                  <TabsTrigger value="leaveLocal">
+                    {t("ownLocalDetails.leaveLocal")}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="basic">
@@ -153,8 +158,12 @@ const OwnLocalDetailsPage: FC = () => {
                       <div className="flex justify-center">
                         <UpdateOwnLocalFixedFee
                           id={id || ""}
-                          initialRentalFee={data.data.rentalFee}
-                          initialMarginFee={data.data.marginFee}
+                          initialRentalFee={
+                            data.data.nextRentalFee ?? data.data.rentalFee
+                          }
+                          initialMarginFee={
+                            data.data.nextMarginFee ?? data.data.marginFee
+                          }
                         />
                       </div>
                     </CardContent>
@@ -162,6 +171,9 @@ const OwnLocalDetailsPage: FC = () => {
                       {t("ownLocalDetails.changeFixedFeeDescription")}
                     </CardDescription>
                   </Card>
+                </TabsContent>
+                <TabsContent value="leaveLocal">
+                  <LeaveLocalCard state={data.data.state as LocalState} id={id!} />
                 </TabsContent>
               </Tabs>
             </div>

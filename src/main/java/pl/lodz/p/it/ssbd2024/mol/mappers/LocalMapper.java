@@ -27,9 +27,10 @@ public class LocalMapper {
     }
 
     public static GetAllLocalsResponse toGetAllLocalsResponse(Local local) {
+        String login = local.getOwner() == null ? null : local.getOwner().getUser().getLogin();
         return new GetAllLocalsResponse(
                 local.getId(),
-                local.getOwner().getUser().getLogin(),
+                login,
                 local.getName(),
                 local.getDescription(),
                 local.getState().toString(),
@@ -47,9 +48,10 @@ public class LocalMapper {
     }
 
     public static LocalForAdministratorResponse toLocalForAdministratorResponse(Local local) {
+        String login = local.getOwner() == null ? null : local.getOwner().getUser().getLogin();
         return new LocalForAdministratorResponse(
                 local.getId(),
-                local.getOwner().getUser().getLogin(),
+                login,
                 local.getName(),
                 local.getDescription(),
                 local.getState().toString(),
@@ -118,9 +120,7 @@ public class LocalMapper {
                 local.getName(),
                 local.getDescription(),
                 local.getSize(),
-                local.getMarginFee(),
-                local.getRentalFee(),
-                AddressMapper.toAddressResponse(local.getAddress())
+                local.getAddress().getCity()
         );
     }
 

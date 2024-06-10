@@ -253,6 +253,7 @@ const navLinks = {
   locals: "Locals",
   currentRents: "Current rents",
   archivalRents: "Archival rents",
+  applications: "Rent applications",
 } satisfies {
   [key in string]: string;
 };
@@ -408,12 +409,15 @@ const errors = {
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
+  localNotActive: "Local must be active for this operation",
   localNotInactive: "Local must be inactive for this operation",
   localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
     "End date must be in the future Sunday, after start date and different from current end date",
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
+  addressAlreadyAssigned: "Address asigned to another local",
+  applicationExists: "Application for this local already exists",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -454,11 +458,12 @@ const tenantRents = {
   endDate: "End date",
   fixedFee: "Fixed fee",
   balance: "Balance",
-  size: "Local size",
+  localSize: "Local size",
   owner: "Owner",
   name: "Name",
   email: "Email",
   login: "Login",
+  noData: "Currently you have no rents",
 };
 
 const currentOwnerRents = {
@@ -479,6 +484,9 @@ const leaveLocal = {
   successDescription: "You have left the local",
   errorTitle: "Error",
   buttonText: "Leave local",
+  dialogTitle: "Are you sure you want to continue?",
+  dialogDescription:
+    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
 };
 
 const currentTenantRents = {
@@ -551,6 +559,22 @@ const localDetails = {
   close: "Close",
   archiveError: "Archive error",
   archiveSuccess: "Local has been archived",
+  state: "State",
+};
+
+const changeAddressForm = {
+  cityValidation: "City must be between 1 and 100 characters",
+  countryValidation: "Country must be between 1 and 100 characters",
+  streetValidation: "Street must be between 1 and 100 characters",
+  numberValidation: "Number must be between 1 and 10 characters",
+  zipCodeValidation: "Zip code must be in format 12-345",
+  country: "Country*",
+  city: "City*",
+  street: "Street*",
+  number: "Number*",
+  zipCode: "Zip code*",
+  confirmDialogDescription: "Are you sure you want to change address?",
+  addressUpdateSuccess: "Address has been updated",
 };
 
 const ownLocalDetails = {
@@ -575,6 +599,32 @@ const ownLocalDetails = {
   changeFixedFee: "Change fixed fee",
   changeFixedFeeDescription:
     "Changes to the fixed fees will be effective from the next billing period.",
+    leaveLocal: "Leave local",
+    leaveLocalDescription:
+    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
+};
+
+const activeLocals = {
+  error: "Error while fetching active locals",
+  size: "Size",
+  city: "City",
+  show: "Show details",
+};
+
+const activeLocalDetails = {
+  firstName: "First name",
+  size: "Size",
+  price: "Price",
+  owner: "Owner",
+  city: "City",
+  description: "Description",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  apply: "Apply",
+  applicationTitle: "Application",
+  applicationDescription: "Are you sure you want to apply for this local?",
+  applicationExistsDescription: "You apply for this local: ",
+  applicationCreated: "Application created",
 };
 
 const updateLocalPage = {
@@ -646,7 +696,14 @@ const ownerRentDetails = {
   margin: "Margin Fee",
   rental: "Rental Fee",
   summary: "Total",
-}
+  showLocalDetails: "Show local details",
+};
+
+const tenantApplications = {
+  createdAt: "Created at",
+  linkToLocal: "Link to local",
+  applicationsNotFund: "No applications found",
+};
 
 const breadcrumbs = {
   tenant: "Tenant",
@@ -655,6 +712,9 @@ const breadcrumbs = {
 };
 
 export default {
+  tenantApplications,
+  changeAddressForm,
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,
@@ -671,6 +731,7 @@ export default {
   localState,
   ownerLocals,
   updateLocalPage,
+  activeLocals,
   notFoundPage,
   sessionExpiredDialog,
   error,

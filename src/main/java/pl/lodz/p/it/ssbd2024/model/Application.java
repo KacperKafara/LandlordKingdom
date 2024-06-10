@@ -17,9 +17,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class Application extends AbstractEntity {
-    @Column(name = "order_number", nullable = false, updatable = false)
-    private Long order;
-
     @ManyToOne
     @JoinColumn(name = "tenant_id", nullable = false, updatable = false)
     private Tenant tenant;
@@ -28,8 +25,7 @@ public class Application extends AbstractEntity {
     @JoinColumn(name = "local_id", nullable = false, updatable = false)
     private Local local;
 
-    public Application(Long order, Tenant tenant, Local local) {
-        this.order = order;
+    public Application(Tenant tenant, Local local) {
         this.tenant = tenant;
         this.local = local;
     }
