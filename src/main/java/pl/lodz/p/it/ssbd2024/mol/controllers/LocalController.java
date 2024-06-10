@@ -52,7 +52,7 @@ public class LocalController {
 
     @PostMapping("/applications")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<ApplicationResponse> addApplicationForLocal(@RequestBody ApplicationRequest request) {
+    public ResponseEntity<OwnApplicationResponse> addApplicationForLocal(@RequestBody ApplicationRequest request) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -13,7 +13,7 @@ public interface ApplicationService {
 
     List<Application> getLocalApplications(UUID localId, UUID ownerId);
 
-    List<Application> getUserApplication(UUID id);
+    List<Application> getUserApplications(UUID id) throws NotFoundException;
 
     Rent acceptApplication(UUID applicationId) throws NotFoundException, LocalAlreadyRentedException;
 

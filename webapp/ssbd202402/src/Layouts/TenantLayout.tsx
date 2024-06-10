@@ -15,7 +15,11 @@ const links: NavigationLink[] = [
   {
     label: "archivalRents",
     path: "./archival-rents",
-  }
+  },
+  {
+    label: "applications",
+    path: "./applications",
+  },
 ];
 
 const TenantLayout: FC = () => {

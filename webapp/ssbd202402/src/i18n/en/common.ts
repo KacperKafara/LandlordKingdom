@@ -253,6 +253,7 @@ const navLinks = {
   locals: "Locals",
   currentRents: "Current rents",
   archivalRents: "Archival rents",
+  applications: "Rent applications",
 } satisfies {
   [key in string]: string;
 };
@@ -667,6 +668,12 @@ const ownerRentDetails = {
   summary: "Total",
   showLocalDetails: "Show local details",
 }
+
+const tenantApplications = {
+  createdAt: "Created at",
+  linkToLocal: "Link to local",
+  applicationsNotFund: "No applications found",
+};
 
 const breadcrumbs = {
   tenant: "Tenant",
