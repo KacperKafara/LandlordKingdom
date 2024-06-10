@@ -6,6 +6,9 @@ public record OwnApplicationResponse(
         UUID id,
         String createdAt,
         UUID localId,
-        String localName
+        String localName,
+        String country,
+        String city,
+        String street
         ) {
 }

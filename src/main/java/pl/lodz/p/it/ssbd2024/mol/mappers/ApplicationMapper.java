@@ -19,7 +19,10 @@ public class ApplicationMapper {
                 application.getId(),
                 createdAt,
                 application.getLocal().getId(),
-                application.getLocal().getName());
+                application.getLocal().getName(),
+                application.getLocal().getAddress().getCountry(),
+                application.getLocal().getAddress().getCity(),
+                application.getLocal().getAddress().getStreet());
     }
 
     public static List<OwnApplicationResponse> toGetOwnApplications(List<Application> applications) {
