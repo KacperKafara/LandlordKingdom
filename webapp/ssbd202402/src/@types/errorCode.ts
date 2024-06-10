@@ -42,15 +42,12 @@ export type ExceptionCode =
   | "userAlreadyHasRole"
   | "localNotFound"
   | "localNotActive"
-  | "invalidLocalStateArchive"
   | "localNotInactive"
   | "localNotUnapproved"
-  | "wrongEndDate"
   | "rentNotFound"
   | "invalidLocalStateArchive"
   | "applicationExists"
-  | "addressAlreadyAssigned";
   | "dateParsingError"
   | "addressAlreadyAssigned"
-  | "variableFeeAlreadyExists";
-  | "wrongEndDate"
+  | "variableFeeAlreadyExists"
+  | "wrongEndDate";
