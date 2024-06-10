@@ -253,6 +253,7 @@ const navLinks = {
   locals: "Locals",
   currentRents: "Current rents",
   archivalRents: "Archival rents",
+  applications: "Rent applications",
 } satisfies {
   [key in string]: string;
 };
@@ -627,7 +628,12 @@ const ownerRentDetails = {
   localName: "Name",
   balance: "Balance",
   pickDate: "Pick a date",
-}
+};
+
+const tenantApplications = {
+  createdAt: "Created at",
+  linkToLocal: "Link to local",
+};
 
 const breadcrumbs = {
   tenant: "Tenant",
@@ -636,6 +642,7 @@ const breadcrumbs = {
 };
 
 export default {
+  tenantApplications,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

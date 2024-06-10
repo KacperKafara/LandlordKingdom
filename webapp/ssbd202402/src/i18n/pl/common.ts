@@ -260,6 +260,7 @@ const navLinks = {
   locals: "Nieruchomości",
   currentRents: "Aktualne wynajmy",
   archivalRents: "Archiwalne wynajmy",
+  applications: "Wnioski o wynajem",
 };
 
 const userDataPage = {
@@ -634,7 +635,7 @@ const ownerRentDetails = {
   localName: "Nazwa",
   balance: "Balans",
   pickDate: "Wybierz datę",
-}
+};
 
 const breadcrumbs = {
   tenant: "Najemca",
@@ -642,7 +643,13 @@ const breadcrumbs = {
   local: "Lokal",
 };
 
+const tenantApplications = {
+  createdAt: "Data utworzenia aplikacji o wynajem",
+  linkToLocal: "Przejdź do lokalu",
+};
+
 export default {
+  tenantApplications,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

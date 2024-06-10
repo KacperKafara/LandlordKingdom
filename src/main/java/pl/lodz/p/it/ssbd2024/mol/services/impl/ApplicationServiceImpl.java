@@ -7,13 +7,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
+import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.exceptions.LocalAlreadyRentedException;
-import pl.lodz.p.it.ssbd2024.mol.repositories.ApplicationRepository;
-import pl.lodz.p.it.ssbd2024.mol.repositories.FixedFeeRepository;
-import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
-import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
+import pl.lodz.p.it.ssbd2024.model.Tenant;
+import pl.lodz.p.it.ssbd2024.mol.repositories.*;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 
 import java.util.List;
@@ -27,6 +27,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final RentRepository rentRepository;
     private final LocalRepository localRepository;
     private final FixedFeeRepository fixedFeeRepository;
+    private final TenantMolRepository tenantMolRepository;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
@@ -36,8 +37,9 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
-    public List<Application> getUserApplication(UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public List<Application> getUserApplications(UUID id) throws NotFoundException {
+        Tenant tenant = tenantMolRepository.findByUserId(id).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        return applicationRepository.findByTenantId(tenant.getId());
     }
 
     @Override
@@ -63,6 +65,4 @@ public class ApplicationServiceImpl implements ApplicationService {
     public void removeApplication(UUID localId, UUID userId) throws NotFoundException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-
 }
