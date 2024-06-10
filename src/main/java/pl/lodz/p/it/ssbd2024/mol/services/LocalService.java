@@ -30,7 +30,7 @@ public interface LocalService {
 
     Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException;
 
-    Local setFixedFee(UUID localId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
+    Local setFixedFee(UUID localId, UUID ownerId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
 
     List<Local> getAllLocals();
 

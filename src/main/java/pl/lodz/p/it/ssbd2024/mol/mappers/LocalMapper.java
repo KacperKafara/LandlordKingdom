@@ -16,6 +16,8 @@ public class LocalMapper {
                 local.getSize(),
                 local.getMarginFee(),
                 local.getRentalFee(),
+                local.getNextMarginFee(),
+                local.getNextRentalFee(),
                 AddressMapper.toAddressResponse(local.getAddress())
         );
     }
@@ -34,6 +36,8 @@ public class LocalMapper {
                 local.getSize(),
                 local.getMarginFee(),
                 local.getRentalFee(),
+                local.getNextMarginFee(),
+                local.getNextRentalFee(),
                 AddressMapper.toAddressResponse(local.getAddress())
         );
     }
@@ -52,6 +56,8 @@ public class LocalMapper {
                 local.getSize(),
                 local.getMarginFee(),
                 local.getRentalFee(),
+                local.getNextMarginFee(),
+                local.getNextRentalFee(),
                 AddressMapper.toAddressResponse(local.getAddress())
         );
     }
@@ -75,7 +81,9 @@ public class LocalMapper {
                 OwnerMapper.toOwnerForAdminResponse(local.getOwner()),
                 AddressMapper.toAddressResponse(local.getAddress()),
                 local.getMarginFee(),
-                local.getRentalFee()
+                local.getRentalFee(),
+                local.getNextMarginFee(),
+                local.getNextRentalFee()
         );
     }
 
@@ -87,7 +95,9 @@ public class LocalMapper {
                 local.getState().toString(),
                 AddressMapper.toAddressResponse(local.getAddress()),
                 local.getMarginFee(),
-                local.getRentalFee()
+                local.getRentalFee(),
+                local.getNextMarginFee(),
+                local.getNextRentalFee()
         );
     }
 

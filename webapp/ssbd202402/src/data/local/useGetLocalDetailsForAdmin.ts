@@ -7,32 +7,27 @@ import { ErrorCode } from "@/@types/errorCode";
 
 import { LocalDetailsForAdmin } from "@/types/admin/LocalDetailsForAdmin";
 
-
-
 export const useGetLocalDetailsForAdmin = (id: string) => {
-    const { api } = useAxiosPrivate();
-    const { t } = useTranslation();
+  const { api } = useAxiosPrivate();
+  const { t } = useTranslation();
 
-    return useQuery({
-        queryKey: ["localDetailsForAdmin", id],
-        queryFn: async () => {
-            try {
-                const response = await api.get<LocalDetailsForAdmin>(`/locals/${id}`);    
-                return response.data;
-            } catch (error) {
-                const axiosError = error as AxiosError;
-                toast({
-                  variant: "destructive",
-                  title: t("localDetails.error"),
-                  description: t(
-                      `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
-                  ),
-                });
-                return Promise.reject(error);
-            }
-            
-           
-        },
-    });
-
-}
+  return useQuery({
+    queryKey: ["localDetailsForAdmin", id],
+    queryFn: async () => {
+      try {
+        const response = await api.get<LocalDetailsForAdmin>(`/locals/${id}`);
+        return response.data;
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast({
+          variant: "destructive",
+          title: t("localDetails.error"),
+          description: t(
+            `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
+          ),
+        });
+        return Promise.reject(error);
+      }
+    },
+  });
+};

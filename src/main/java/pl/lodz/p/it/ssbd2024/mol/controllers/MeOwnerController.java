@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
@@ -22,9 +23,7 @@ import pl.lodz.p.it.ssbd2024.model.Rent;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
-import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.PaymentMapper;
@@ -148,8 +147,18 @@ public class MeOwnerController {
 
     @PatchMapping("/locals/{id}/fixed-fee")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<SetFixedFeeResponse> setFixedFee(@PathVariable UUID id, @RequestBody SetFixedFeeRequest setFixedFeeRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<GetOwnLocalsResponse> setFixedFee(@PathVariable UUID id, @RequestBody @Valid SetFixedFeeRequest setFixedFeeRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID ownerId = UUID.fromString(jwt.getSubject());
+
+        try {
+            Local local = localService.setFixedFee(id, ownerId, setFixedFeeRequest.rentalFee(), setFixedFeeRequest.marginFee());
+            return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponse(local));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+
     }
 
     @PatchMapping("/rents/{id}/end-date")
