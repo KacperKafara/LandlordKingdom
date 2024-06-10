@@ -454,11 +454,12 @@ const tenantRents = {
   endDate: "End date",
   fixedFee: "Fixed fee",
   balance: "Balance",
-  size: "Local size",
+  localSize: "Local size",
   owner: "Owner",
   name: "Name",
   email: "Email",
   login: "Login",
+  noData: "Currently you have no rents",
 };
 
 const currentOwnerRents = {
@@ -556,6 +557,7 @@ const localDetails = {
   close: "Close",
   archiveError: "Archive error",
   archiveSuccess: "Local has been archived",
+  state: "State",
 };
 
 const ownLocalDetails = {
@@ -647,6 +649,7 @@ const ownerRentDetails = {
   margin: "Margin Fee",
   rental: "Rental Fee",
   summary: "Total",
+  showLocalDetails: "Show local details",
 }
 
 const breadcrumbs = {

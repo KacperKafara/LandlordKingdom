@@ -485,6 +485,7 @@ const tenantRents = {
   name: "Imię",
   email: "Email",
   login: "Login",
+  noData: "Aktualnie nie wynajmujesz żadnych lokali",
 };
 
 const currentOwnerRents = {
@@ -547,6 +548,7 @@ const localDetails = {
   close: "Zamknij",
   archiveError: "Błąd podczas archiwizacji",
   archiveSuccess: "Lokal został zarchiwizowany",
+  state: "Stan",
 };
 
 const ownLocalDetails = {
@@ -650,6 +652,7 @@ const ownerRentDetails = {
   margin: "Marża",
   rental: "Opłata za wynajem",
   summary: "Razem",
+  showLocalDetails: "Pokaż szczegóły lokalu",
 }
 
 const breadcrumbs = {

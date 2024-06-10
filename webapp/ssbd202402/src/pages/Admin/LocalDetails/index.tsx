@@ -84,7 +84,10 @@ const LocalDetailsPage: FC = () => {
                           label={t("localDetails.marginFee")}
                           value={data.marginFee.toString()}
                         />
-
+                        <DataField
+                          label={t("localDetails.state")}
+                          value={t(`localState.${data.state}`)}
+                        />
                         <p className="col-span-2 text-xl font-semibold">
                           {t("localDetails.ownerInformation")}{" "}
                         </p>
