@@ -16,7 +16,6 @@ const RoleRequestDialogComponent: FC = () => {
   const { isOpened, closeDialog } = useDialogStore();
   const { roleRequest, isError } = useGetRoleRequest();
   const { createRoleRequest } = useCreateRoleRequest();
-  console.log(roleRequest);
   return (
     <Dialog open={isOpened("roleRequest")} onOpenChange={closeDialog}>
       <DialogContent>
