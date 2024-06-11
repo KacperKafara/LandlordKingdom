@@ -636,6 +636,7 @@ const activeLocalDetails = {
 };
 
 const updateLocalPage = {
+  updateData: "Update local data",
   name: "Local name",
   description: "Local description",
   size: "Size",

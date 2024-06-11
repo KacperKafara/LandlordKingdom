@@ -56,11 +56,11 @@ const ChangeAddressFormComponent: FC<ChangeAddressFormComponentProps> = ({
   const form = useForm<AddressSchema>({
     resolver: zodResolver(getAddressSchema(t)),
     defaultValues: {
-      country: data?.address.country || "",
-      city: data?.address.city || "",
-      street: data?.address.street || "",
-      number: data?.address.number || "",
-      zipCode: data?.address.zipCode || "",
+      country: data?.data.address.country || "",
+      city: data?.data.address.city || "",
+      street: data?.data.address.street || "",
+      number: data?.data.address.number || "",
+      zipCode: data?.data.address.zipCode || "",
     },
   });
 

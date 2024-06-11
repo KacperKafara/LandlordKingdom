@@ -614,6 +614,7 @@ const activeLocalDetails = {
 };
 
 const updateLocalPage = {
+  updateData: "Zaktualizuj dane lokalu",
   name: "Nazwa nieruchomości",
   description: "Opis nieruchomości",
   size: "Powierzchnia",

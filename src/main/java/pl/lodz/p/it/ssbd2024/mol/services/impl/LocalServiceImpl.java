@@ -150,11 +150,18 @@ public class LocalServiceImpl implements LocalService {
         return local;
     }
 
-
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Local editLocalByAdmin(UUID id, Local newLocal) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local editLocalByAdmin(UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException{
+        Local local = localRepository.findById(localId).orElseThrow(() ->
+                new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.LOCAL_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
+        }
+        local.setName(editLocalRequest.name());
+        local.setDescription(editLocalRequest.description());
+        local.setSize(editLocalRequest.size());
+        return localRepository.saveAndFlush(local);
     }
 
     @Override

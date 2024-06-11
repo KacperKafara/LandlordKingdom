@@ -41,7 +41,7 @@ public interface LocalService {
 
     Local changeLocalAddress(UUID id, Address address) throws GivenAddressAssignedToOtherLocalException, NotFoundException;
 
-    Local editLocalByAdmin(UUID id, Local newLocal) throws NotFoundException;
+    Local editLocalByAdmin(UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
     Local approveLocal(UUID id) throws NotFoundException, InvalidLocalState;
 
