@@ -18,6 +18,7 @@ import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
@@ -158,15 +159,18 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Local editLocalByAdmin(UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException{
+    public Local editLocalByAdmin(UUID localId, EditLocalRequestAdmin editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException{
         Local local = localRepository.findById(localId).orElseThrow(() ->
                 new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
         if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
             throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.LOCAL_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
         }
+        System.out.println(editLocalRequest);
         local.setName(editLocalRequest.name());
         local.setDescription(editLocalRequest.description());
         local.setSize(editLocalRequest.size());
+        LocalState newState = LocalState.valueOf(editLocalRequest.state());
+        local.setState(newState);
         return localRepository.saveAndFlush(local);
     }
 

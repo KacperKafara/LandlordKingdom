@@ -618,6 +618,15 @@ const activeLocalDetails = {
 };
 
 const updateLocalPage = {
+  state: "Stan",
+  states: {
+    withoutOwner: "Bez własciciela",
+    unapproved: "Nie zatwierdzony",
+    archived: "Zarchiwizowany",
+    active: "Aktywny",
+    inactive: "Nieaktywny",
+    rented: "Wynajety",
+  },
   updateData: "Zaktualizuj dane lokalu",
   name: "Nazwa nieruchomości",
   description: "Opis nieruchomości",
@@ -628,6 +637,7 @@ const updateLocalPage = {
     name: "Nieprawidłowa nazwa",
     description: "Nieprawidłowy opis",
     size: "Nieprawidłowa powierzchnia",
+    state: "Nieprawidłowy stan",
   },
   successTitle: "Sukces",
   successDescription: "Nieruchomość zaktualizowana",

@@ -111,7 +111,7 @@ public class LocalController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody EditLocalRequest editLocalRequest) {
+    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody EditLocalRequestAdmin editLocalRequest) {
         try {
             return ResponseEntity.ok(LocalMapper.toEditLocalResponse(localService.editLocalByAdmin(id, editLocalRequest, tagValue)));
         } catch (NotFoundException e) {
