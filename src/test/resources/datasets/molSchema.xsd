@@ -1,0 +1,70 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="dataset">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="addresses" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="locals" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="rents" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+
+    <xs:element name="locals">
+            <xs:complexType>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="name" type="xs:string" use="required"/>
+                <xs:attribute name="description" type="xs:string" use="required"/>
+                <xs:attribute name="size" type="xs:integer" use="required"/>
+                <xs:attribute name="state" type="xs:integer" use="required"/>
+                <xs:attribute name="address_id" type="xs:string" use="required"/>
+                <xs:attribute name="owner_id" type="xs:string" use="optional"/>
+                <xs:attribute name="margin_fee" type="xs:integer" use="required"/>
+                <xs:attribute name="next_margin_fee" type="xs:integer" use="optional"/>
+                <xs:attribute name="rental_fee" type="xs:integer" use="required"/>
+                <xs:attribute name="next_rental_fee" type="xs:integer" use="optional"/>
+                <xs:attribute name="version" type="xs:integer" use="required"/>
+                <xs:attribute name="created_at" type="xs:string" use="required"/>
+                <xs:attribute name="modified_at" type="xs:string" use="required"/>
+                <xs:attribute name="created_by" type="xs:string" use="optional"/>
+                <xs:attribute name="modified_by" type="xs:string" use="optional"/>
+            </xs:complexType>
+    </xs:element>
+
+    <xs:element name="addresses">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="number" type="xs:string" use="required"/>
+            <xs:attribute name="street" type="xs:string" use="required"/>
+            <xs:attribute name="city" type="xs:string" use="required"/>
+            <xs:attribute name="zip" type="xs:string" use="required"/>
+            <xs:attribute name="country" type="xs:string" use="required"/>
+            <xs:attribute name="version" type="xs:integer" use="required"/>
+            <xs:attribute name="created_at" type="xs:string" use="required"/>
+            <xs:attribute name="modified_at" type="xs:string" use="required"/>
+            <xs:attribute name="created_by" type="xs:string" use="optional"/>
+            <xs:attribute name="modified_by" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="rents">
+        <xs:complexType>
+                <xs:attribute name="id" type="xs:string" use="required"/>
+                <xs:attribute name="local_id" type="xs:string" use="required"/>
+                <xs:attribute name="tenant_id" type="xs:string" use="required"/>
+                <xs:attribute name="owner_id" type="xs:string" use="required"/>
+                <xs:attribute name="start_date" type="xs:string" use="required"/>
+                <xs:attribute name="end_date" type="xs:string" use="required"/>
+                <xs:attribute name="balance" type="xs:integer" use="required"/>
+                <xs:attribute name="version" type="xs:integer" use="required"/>
+                <xs:attribute name="created_at" type="xs:string" use="required"/>
+                <xs:attribute name="modified_at" type="xs:string" use="required"/>
+                <xs:attribute name="created_by" type="xs:string" use="optional"/>
+                <xs:attribute name="modified_by" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+
+
+
+</xs:schema>

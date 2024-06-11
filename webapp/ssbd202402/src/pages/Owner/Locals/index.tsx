@@ -51,7 +51,7 @@ const Locals: FC = () => {
           <div className="relative flex w-full justify-center">
             <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
               {locals.map((local) => (
-                <Card className="relative" key={local.id}>
+                <Card className="relative flex flex-col" key={local.id}>
                   <Button
                     onClick={() => navigate(`local/${local.id}`)}
                     className="absolute right-1 top-1"
@@ -61,13 +61,15 @@ const Locals: FC = () => {
                   </Button>
                   <CardHeader>
                     <CardTitle>{local.name}</CardTitle>
-                    <CardDescription>{local.description}</CardDescription>
+                    <CardDescription>
+                      <p>
+                        {local.address.street} {local.address.number},{" "}
+                        {local.address.zipCode} {local.address.city}
+                      </p>
+                    </CardDescription>
                   </CardHeader>
-                  <CardContent>
-                    <p>
-                      {local.address.street} {local.address.number},{" "}
-                      {local.address.zipCode} {local.address.city}
-                    </p>
+                  <CardContent className="flex-grow">
+                    <p>{local.description}</p>
                   </CardContent>
                   <CardFooter>
                     <p>{t(`localState.${local.state}`)}</p>

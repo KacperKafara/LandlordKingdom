@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
+import org.springframework.data.domain.Page;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 
@@ -45,6 +46,13 @@ public class LocalMapper {
 
     public static List<GetAllLocalsResponse> toGetAllLocalsResponseList(List<Local> locals) {
         return locals.stream().map(LocalMapper::toGetAllLocalsResponse).collect(Collectors.toList());
+    }
+
+    public static GetAllLocalsFiltered toGetAllLocalsFiltered(Page<Local> localsPage) {
+        return new GetAllLocalsFiltered(
+                localsPage.map(LocalMapper::toGetAllLocalsResponse).toList(),
+                localsPage.getTotalPages()
+        );
     }
 
     public static LocalForAdministratorResponse toLocalForAdministratorResponse(Local local) {

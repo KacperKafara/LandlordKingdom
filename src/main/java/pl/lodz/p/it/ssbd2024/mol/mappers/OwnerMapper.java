@@ -25,6 +25,6 @@ public class OwnerMapper {
                 owner.getUser().getLastName(),
                 owner.getUser().getLogin(),
                 owner.getUser().getEmail()
-                );
+        );
     }
 }

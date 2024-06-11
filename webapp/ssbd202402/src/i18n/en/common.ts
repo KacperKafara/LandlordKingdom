@@ -416,6 +416,7 @@ const errors = {
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
   addressAlreadyAssigned: "Address asigned to another local",
+  rentEnded: "Rent has already ended",
   dateParsingError: "Date parsing error",
   variableFeeAlreadyExists: "Variable fee already exists",
   roleRequestAlreadyExists: "Role request already exists",
@@ -446,6 +447,7 @@ const allLocals = {
   show: "Show",
   localOwner: "Owner: ",
   noLocalsFound: "Currently there are no locals",
+  noOwner: "No owner",
 };
 
 const localState = {
@@ -525,7 +527,7 @@ const roleRequestDialog = {
   requestOwnerRole: "Request Owner role",
   requestOwnerRoleDescription:
     "Click this button to submit a request for an owner role.",
-  alreadyPlacedRequest: "You already placed a request for role at: {{when}}",
+  alreadyPlacedRequest: "You already placed a request for role at: ",
   howDoesItWork: "How does this work?",
   requestRoleButton: "Request role",
 };

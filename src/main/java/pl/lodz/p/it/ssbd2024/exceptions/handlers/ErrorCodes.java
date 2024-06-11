@@ -50,4 +50,5 @@ public class ErrorCodes {
     public static final String APPLICATION_EXISTS = "applicationExists";
     public static final String ADDRESS_ALREADY_ASSIGNED = "addressAlreadyAssigned";
     public static final String VARIABLE_FEE_ALREADY_EXISTS = "variableFeeAlreadyExists";
+    public static final String RENT_ENDED = "rentEnded";
 }

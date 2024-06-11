@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -116,8 +118,8 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public List<Local> getAllLocals() {
-        return localRepository.findAll();
+    public Page<Local> getAllLocals(Pageable pageable) {
+        return localRepository.findAll(pageable);
     }
 
     @Override
