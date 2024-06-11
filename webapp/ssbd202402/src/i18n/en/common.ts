@@ -440,6 +440,9 @@ const ownerLocals = {
   addFirstLocal: "Add first local",
   title: "Main page",
   locals: "Locals",
+  localState: "Local state",
+  all: "All",
+  noLocalsFoundForThisState: "Currently you have no locals in this state",
 };
 
 const allLocals = {

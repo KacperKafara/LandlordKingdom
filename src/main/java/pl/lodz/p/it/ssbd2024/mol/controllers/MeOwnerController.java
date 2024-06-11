@@ -49,12 +49,16 @@ public class MeOwnerController {
 
     @GetMapping("/locals")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<GetOwnLocalsResponse>> getOwnLocals() {
+    public ResponseEntity<GetOwnLocalsPage> getOwnLocals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "ALL") String state
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());
-
-        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id)));
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id, pageable, state)));
     }
 
     @GetMapping("locals/{id}")
@@ -134,7 +138,7 @@ public class MeOwnerController {
 
     @PatchMapping("/rents/{id}/end-date")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
+    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody @Valid SetEndDateRequest setEndDateRequest) {
         try {
             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
             LocalDate newDate = LocalDate.parse(setEndDateRequest.newEndDate());
