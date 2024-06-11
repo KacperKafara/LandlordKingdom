@@ -20,11 +20,9 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.AddressMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
-import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.util.List;
@@ -37,7 +35,7 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.NEVER)
 public class LocalController {
     private final LocalService localService;
-    private final OwnerMolRepository ownerRepository;
+
     @GetMapping("/active")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<GetActiveLocalsResponse>> getActiveLocals() {
@@ -58,9 +56,23 @@ public class LocalController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID userId = UUID.fromString(jwt.getSubject());
         try {
-            System.out.println("addLocalRequest1: " + addLocalRequest);
-            System.out.println("addLocalRequest.address1: " + addLocalRequest.address());
-            return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(addLocalRequest, userId)));
+            Address address = new Address(
+                    addLocalRequest.address().country(),
+                    addLocalRequest.address().city(),
+                    addLocalRequest.address().street(),
+                    addLocalRequest.address().number(),
+                    addLocalRequest.address().zipCode()
+            );
+            Local local = new Local(
+                    addLocalRequest.name(),
+                    addLocalRequest.description(),
+                    addLocalRequest.size(),
+                    address,
+                    null,
+                    addLocalRequest.marginFee(),
+                    addLocalRequest.rentalFee()
+            );
+            return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(local, userId)));
         } catch (GivenAddressAssignedToOtherLocalException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (NotFoundException e) {

@@ -18,11 +18,11 @@ import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
-import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
+import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.math.BigDecimal;
@@ -42,56 +42,33 @@ import java.util.UUID;
 public class LocalServiceImpl implements LocalService {
     private final LocalRepository localRepository;
     private final AddressRepository addressRepository;
-    private final OwnerRepository ownerRepository;
+    private final OwnerMolRepository ownerRepository;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
     @Transactional(rollbackFor = {IdenticalFieldValueException.class}, propagation = Propagation.REQUIRES_NEW)
-    public Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException {
-        Owner owner = ownerRepository.findByUserId(ownerId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
-        Address newAddress = new Address(
-                addLocalRequest.address().number(),
-                addLocalRequest.address().street(),
-                addLocalRequest.address().city(),
-                addLocalRequest.address().zipCode(),
-                addLocalRequest.address().country()
-        );
-        Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
-                newAddress.getNumber(),
-                newAddress.getStreet(),
-                newAddress.getCity(),
-                newAddress.getZip(),
-                newAddress.getCountry()
+    public Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException {
+        Owner owner = ownerRepository.findByUserIdAndActiveIsTrue(ownerId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        Optional<Address> existingAddress = addressRepository.findByAddress(
+                local.getAddress().getCountry(),
+                local.getAddress().getCity(),
+                local.getAddress().getStreet(),
+                local.getAddress().getNumber(),
+                local.getAddress().getZip()
         );
         if (existingAddress.isPresent()) {
-            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(newAddress, LocalState.ARCHIVED);
-            if (!existingLocal.isEmpty()) {
-                boolean hasOtherState = existingLocal.stream()
-                        .anyMatch(local -> local.getState() != LocalState.WITHOUT_OWNER);
-                if (hasOtherState && existingLocal.size() > 1) {
-                    throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
-                            ErrorCodes.ADDRESS_ASSIGNED);
-                } else {
-                    existingLocal.getFirst().setOwner(owner);
-                    existingLocal.getFirst().setState(LocalState.UNAPPROVED);
-                    return localRepository.saveAndFlush(existingLocal.getFirst());
-                }
+            Local existingLocal = localRepository.findByAddressAndStateNotContaining(local.getAddress(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+            if (local.getState() != LocalState.WITHOUT_OWNER) {
+                throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
+                        ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
             } else {
-                throw new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND);
+                existingLocal.setOwner(owner);
+                existingLocal.setState(LocalState.UNAPPROVED);
+                return localRepository.saveAndFlush(existingLocal);
             }
         } else {
             try {
-                Address savedAddress = addressRepository.saveAndFlush(newAddress);
-                Local rewriteLocal = new Local(
-                        addLocalRequest.name(),
-                        addLocalRequest.description(),
-                        addLocalRequest.size(),
-                        savedAddress,
-                        owner,
-                        addLocalRequest.marginFee(),
-                        addLocalRequest.rentalFee()
-                );
-                return localRepository.saveAndFlush(rewriteLocal);
+                return localRepository.saveAndFlush(local);
             } catch (ConstraintViolationException e) {
                 throw new CreationException(UserExceptionMessages.CREATION_FAILED, ErrorCodes.REGISTRATION_ERROR);
             }

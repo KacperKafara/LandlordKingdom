@@ -21,7 +21,7 @@ import java.util.UUID;
 
 public interface LocalService {
 
-    Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException;
+    Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException;
 
     List<Local> getActiveLocals();
 

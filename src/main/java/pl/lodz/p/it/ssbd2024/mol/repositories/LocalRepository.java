@@ -31,7 +31,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT l FROM Local l WHERE l.address = :address AND l.state != :state")
-    List<Local> findByAddressAndStateNotContaining(@Param("address") Address address, @Param("state") LocalState state);
+    Optional<Local> findByAddressAndStateNotContaining(@Param("address") Address address, @Param("state") LocalState state);
 
     @NonNull
     @PreAuthorize("permitAll()")
