@@ -85,7 +85,7 @@ const TenantRoutes: RouteObject[] = [
   { path: "archival-rents", Component: ArchivalRentsPage },
   { path: "applications", Component: OwnApplicationPage },
   { path: "rents/:id", Component: RentDetailsPage },
-  { path: "active-locals", Component: ActiveLocalsPage },
+  { path: "locals", Component: ActiveLocalsPage },
   { path: "locals/:id", Component: ActiveLocalDetailsPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];

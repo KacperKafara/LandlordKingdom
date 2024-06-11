@@ -389,7 +389,6 @@ const errors = {
   passwordRepetition: "Hasło musi się różnić od poprzednich haseł",
   invalidRefreshToken: "Bład podczas odświeżania sesji",
   signInBlocked: "Logowanie jest zablokowane, sprawdź email",
-  timezoneNotFound: "Strefa czasowa niepraawidłowa",
   userAlreadyBlocked: "Użytkownik jest już zablokowany",
   userAlreadyUnblocked: "Użytkownik jest już odblokowany",
   userBlocked: "Twoje konto jest zablokowane",
@@ -412,6 +411,7 @@ const errors = {
   accessLevelTaken: "Poziom dostępu został już zabrany",
   undefined: "Wystpi nieoczekiwany błąd",
   localNotFound: "Nie znaleziono nieruchomości",
+  localNotActive: "Nieruchomość musi być aktywna, aby wykonać tę operację",
   localNotInactive: "Nieruchomość musi być nieaktywna, aby wykonać tę operację",
   localNotUnapproved:
     "Nieruchomość musi być niezatwierdzona, aby wykonać tę operację",
@@ -421,6 +421,14 @@ const errors = {
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
+  variableFeeAlreadyExists: "Opłata zmienna już istnieje",
+  dateParsingError: "Błąd parsowania daty",
+  rollback: "Operacja została cofnięta",
+  unexpectedRollback: "Nieoczekiwane cofnięcie operacji",
+  transaction: "Błąd transakcji",
+  roleRequestAlreadyExists: "Wniosek o rolę już istnieje",
+  userAlreadyHasRole: "Użytkownik już ma tę rolę",
+  applicationExists: "Aplikacja do tego lokalu już istnieje",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -473,8 +481,8 @@ const leaveLocal = {
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
   dialogTitle: "Czy na pewno chcesz opuścić lokal?",
-  dialogDescription: "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
-
+  dialogDescription:
+    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
 };
 
 const tenantRents = {
@@ -575,9 +583,9 @@ const ownLocalDetails = {
   changeFixedFee: "Zmień wartość opłaty stałej",
   changeFixedFeeDescription:
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
-    leaveLocal: "Opuść lokal",
-  leaveLocalDescription: 
-  "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+  leaveLocal: "Opuść lokal",
+  leaveLocalDescription:
+    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
 };
 
 const activeLocals = {
@@ -585,6 +593,22 @@ const activeLocals = {
   size: "Powierzchnia",
   city: "Miasto",
   show: "Wyświetl szczegóły",
+};
+
+const activeLocalDetails = {
+  firstName: "Imię",
+  size: "Powierzchnia",
+  price: "Cena",
+  owner: "Właściciel",
+  city: "Miasto",
+  description: "Opis",
+  localInformation: "Informacje o nieruchomości",
+  ownerInformation: "Informacje o właścicielu",
+  apply: "Aplikuj",
+  applicationTitle: "Aplikacja",
+  applicationDescription: "Na pewno chcesz aplikować do lokalu?",
+  applicationExistsDescription: "Aplikowałeś do lokalu: ",
+  applicationCreated: "Utworzono aplikacje",
 };
 
 const changeEndDate = {
@@ -670,7 +694,7 @@ const ownerRentDetails = {
   rental: "Opłata za wynajem",
   summary: "Razem",
   showLocalDetails: "Pokaż szczegóły lokalu",
-}
+};
 
 const breadcrumbs = {
   tenant: "Najemca",
@@ -682,11 +706,23 @@ const tenantApplications = {
   createdAt: "Data utworzenia aplikacji o wynajem",
   linkToLocal: "Przejdź do lokalu",
   applicationsNotFund: "Brak aplikacji o wynajem",
+  deleteApplication: "Usuń aplikację",
+  deleteApplicationDescription: "Czy na pewno chcesz usunąć aplikację?",
+  aplicationDeleted: "Usunięto aplikację",
+};
+
+const createVariableFeeDialog = {
+  title: "Dodaj opłatę zmienną",
+  amount: "Kwota*",
+  amountMustBePositive: "Kwota musi być większa od 0",
+  success: "Opłata zmienna została dodana",
 };
 
 export default {
+  createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

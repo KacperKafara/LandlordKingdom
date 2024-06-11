@@ -52,18 +52,6 @@ public class LocalController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PostMapping("/applications")
-    @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<OwnApplicationResponse> addApplicationForLocal(@RequestBody ApplicationRequest request) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @DeleteMapping("/applications")
-    @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<Void> deleteApplicationForLocal(@RequestBody ApplicationRequest request) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @PatchMapping("/{id}/approve")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<LocalResponse> approveLocal(@PathVariable UUID id) {

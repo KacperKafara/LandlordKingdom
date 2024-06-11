@@ -4,8 +4,6 @@ import pl.lodz.p.it.ssbd2024.model.Owner;
 import pl.lodz.p.it.ssbd2024.mol.dto.OwnerForAdminResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.OwnerForTenantResponse;
 
-import java.util.UUID;
-
 public class OwnerMapper {
 
     public static OwnerForTenantResponse ownerForTenantResponse(Owner owner){
@@ -18,12 +16,9 @@ public class OwnerMapper {
     }
 
     public static OwnerForAdminResponse toOwnerForAdminResponse(Owner owner) {
-        if(owner == null){
-            return new OwnerForAdminResponse(
-                    null,"","","",""
-            );
+        if (owner == null) {
+            return null;
         }
-
         return new OwnerForAdminResponse(
                 owner.getUser().getId(),
                 owner.getUser().getFirstName(),

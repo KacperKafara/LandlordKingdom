@@ -385,7 +385,6 @@ const errors = {
   invalidRefreshToken: "Error while refreshing session, login required",
   signInBlocked:
     "You give incorrect data too many times, your account is blocked, check email",
-  timezoneNotFound: "Timezone not found",
   userAlreadyBlocked: "User already blocked",
   userAlreadyUnblocked: "User already unblocked",
   userBlocked: "You are blocked",
@@ -409,6 +408,7 @@ const errors = {
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
+  localNotActive: "Local must be active for this operation",
   localNotInactive: "Local must be inactive for this operation",
   localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
@@ -416,6 +416,14 @@ const errors = {
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
   addressAlreadyAssigned: "Address asigned to another local",
+  dateParsingError: "Date parsing error",
+  variableFeeAlreadyExists: "Variable fee already exists",
+  roleRequestAlreadyExists: "Role request already exists",
+  rollback: "Rollback",
+  transaction: "Transaction",
+  unexpectedRollback: "Unexpected rollback",
+  userAlreadyHasRole: "User already has this role",
+  applicationExists: "Application for this local already exists",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -609,6 +617,22 @@ const activeLocals = {
   show: "Show details",
 };
 
+const activeLocalDetails = {
+  firstName: "First name",
+  size: "Size",
+  price: "Price",
+  owner: "Owner",
+  city: "City",
+  description: "Description",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  apply: "Apply",
+  applicationTitle: "Application",
+  applicationDescription: "Are you sure you want to apply for this local?",
+  applicationExistsDescription: "You apply for this local: ",
+  applicationCreated: "Application created",
+};
+
 const updateOwnLocalFixedFeeForm = {
   rentalFeeNotEmpty: "Rental fee cannot be empty.",
   rentalFeeNotValid:
@@ -669,6 +693,9 @@ const tenantApplications = {
   createdAt: "Created at",
   linkToLocal: "Link to local",
   applicationsNotFund: "No applications found",
+  deleteApplication: "Remove application",
+  deleteApplicationDescription: "Are you sure you want to delete application?",
+  aplicationDeleted: "Application deleted",
 };
 
 const breadcrumbs = {
@@ -677,9 +704,18 @@ const breadcrumbs = {
   local: "Local",
 };
 
+const createVariableFeeDialog = {
+  title: "Add Variable fee",
+  amount: "Amount*",
+  amountMustBePositive: "Amount must be positive",
+  success: "Variable fee created",
+};
+
 export default {
-  changeAddressForm,
+  createVariableFeeDialog,
   tenantApplications,
+  changeAddressForm,
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

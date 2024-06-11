@@ -4,7 +4,7 @@ import { toast } from "@/components/ui/use-toast";
 import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
-import { ApplicationsForTenant } from "@/types/tenant/applicationsForTenant";
+import { ApplicationsForTenant } from "@/types/tenant/ApplicationsForTenant";
 
 export const useGetOwnApplications = () => {
   const { api } = useAxiosPrivate();

@@ -149,8 +149,12 @@ const OwnLocalDetailsPage: FC = () => {
                       <div className="flex justify-center">
                         <UpdateOwnLocalFixedFee
                           id={id || ""}
-                          initialRentalFee={data.rentalFee}
-                          initialMarginFee={data.marginFee}
+                          initialRentalFee={
+                            data.nextRentalFee ?? data.rentalFee
+                          }
+                          initialMarginFee={
+                            data.nextMarginFee ?? data.marginFee
+                          }
                         />
                       </div>
                     </CardContent>
