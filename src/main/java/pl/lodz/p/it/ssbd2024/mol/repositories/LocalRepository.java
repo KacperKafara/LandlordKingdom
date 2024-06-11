@@ -34,7 +34,11 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT l FROM Local l WHERE l.owner.user.id = :id")
-    List<Local> findAllByOwnerId(UUID id);
+    Page<Local> findAllByOwnerId(UUID id, Pageable pageable);
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT l FROM Local l WHERE l.owner.user.id = :id AND l.state = :state")
+    Page<Local> findAllByOwnerIdAndState(UUID id, Pageable pageable, LocalState state);
 
     @PreAuthorize("isAuthenticated()")
     List<Local> findAllByState(LocalState localState);

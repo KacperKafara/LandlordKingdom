@@ -445,6 +445,10 @@ const ownerLocals = {
   addFirstLocal: "Dodaj pierwszą nieruchomość",
   title: "Strona główna",
   locals: "Nieruchomości",
+  localState: "Stan lokalu",
+  all: "Wszystkie",
+  noLocalsFoundForThisState:
+    "Aktualnie nie posiadasz żadnych lokali w tym stanie",
 };
 
 const allLocals = {

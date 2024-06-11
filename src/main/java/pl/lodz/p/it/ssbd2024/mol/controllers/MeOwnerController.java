@@ -49,12 +49,16 @@ public class MeOwnerController {
 
     @GetMapping("/locals")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<GetOwnLocalsResponse>> getOwnLocals() {
+    public ResponseEntity<GetOwnLocalsPage> getOwnLocals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "ALL") String state
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());
-
-        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id)));
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id, pageable, state)));
     }
 
     @GetMapping("locals/{id}")

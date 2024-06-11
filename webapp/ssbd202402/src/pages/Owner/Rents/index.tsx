@@ -16,6 +16,7 @@ import { RefreshCw } from "lucide-react";
 import { FC } from "react";
 import { ChangeEndDate } from "./ChangeEndDate";
 import { useNavigate } from "react-router-dom";
+import { getAddressString } from "@/utils/address";
 
 const RentsPage: FC = () => {
   const breadCrumbs = useBreadcrumbs([
@@ -60,11 +61,7 @@ const RentsPage: FC = () => {
                 <CardHeader>
                   <CardTitle>{rent.local.name}</CardTitle>
                   <CardDescription>
-                    {rent.local.address.country}, {rent.local.address.street}{" "}
-                    {rent.local.address.number},{" "}
-                    {rent.local.address.zipCode.substring(0, 2)}-
-                    {rent.local.address.zipCode.substring(2)}{" "}
-                    {rent.local.address.city}
+                    {getAddressString(rent.local.address)}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2">
@@ -78,7 +75,7 @@ const RentsPage: FC = () => {
                   />
                   <DataField
                     label={t("currentOwnerRents.balance")}
-                    value={rent.balance.toString()}
+                    value={rent.balance.toString() + " " + t("currency")}
                   />
                   <p className="col-span-2 my-3 text-xl font-bold">
                     {t("currentOwnerRents.tenant")}
