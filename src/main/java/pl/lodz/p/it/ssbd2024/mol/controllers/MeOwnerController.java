@@ -109,7 +109,7 @@ public class MeOwnerController {
 
     @PostMapping("/rents/{id}/payment")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<PaymentResponse> payRent(@PathVariable UUID id, @RequestBody NewPaymentRequest newPaymentRequest) throws NotFoundException {
+    public ResponseEntity<PaymentResponse> payRent(@PathVariable UUID id, @RequestBody @Valid NewPaymentRequest newPaymentRequest) throws NotFoundException {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
         try {
             Payment payment = paymentService.create(userId, id, newPaymentRequest.amount());
