@@ -143,15 +143,17 @@ const LocalDetailsPage: FC = () => {
                         </div>
 
                         <div className="col-span-2 flex gap-3">
-                          <Button
-                            variant="secondary"
-                            className="mt-3 w-full text-lg font-normal"
-                            onClick={() => {
-                              navigate(`/admin/users/${data.owner.userId}`);
-                            }}
-                          >
-                            {t("localDetails.showOwnerDetails")}
-                          </Button>
+                          {data.state !== "WITHOUT_OWNER" && (
+                            <Button
+                              variant="secondary"
+                              className="mt-3 w-full text-lg font-normal"
+                              onClick={() => {
+                                navigate(`/admin/users/${data.owner.userId}`);
+                              }}
+                            >
+                              {t("localDetails.showOwnerDetails")}
+                            </Button>
+                          )}
                           {data.state === "WITHOUT_OWNER" && (
                             <Dialog>
                               <DialogTrigger asChild>

@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
@@ -42,7 +44,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @NonNull
-    List<Local> findAll();
+    Page<Local> findAll(@NonNull Pageable pageable);
 
     @PreAuthorize("hasRole('TENANT')")
     Optional<Local> findByIdAndState(UUID id, LocalState state);

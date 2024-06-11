@@ -1,15 +1,46 @@
 import { AllLocals } from "@/types/mol/Locals";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { useQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
+import { toast } from "@/components/ui/use-toast";
+import { t } from "i18next";
+import { ErrorCode } from "@/@types/errorCode";
 
-export const useGetAllLocals = () => {
+interface AllLocalsRequest {
+  pageNumber: number;
+  pageSize: number;
+}
+
+interface AllLocalsResponse {
+  locals: AllLocals[];
+  totalPages: number;
+}
+
+export const useGetAllLocals = (request: AllLocalsRequest) => {
   const { api } = useAxiosPrivate();
 
   return useQuery({
-    queryKey: ["allLocals"],
+    queryKey: ["allLocals", request.pageNumber, request.pageSize],
     queryFn: async () => {
-      const response = await api.get<AllLocals[]>("/locals");
-      return response.data;
+      try {
+        const response = await api.get<AllLocalsResponse>("/locals", {
+          params: {
+            page: request.pageNumber,
+            size: request.pageSize,
+          },
+        });
+        return response.data;
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast({
+          variant: "destructive",
+          title: t("error.baseTitle"),
+          description: t(
+            `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
+          ),
+        });
+        return Promise.reject(axiosError);
+      }
     },
   });
 };

@@ -451,6 +451,7 @@ const allLocals = {
   show: "Wyświetl",
   localOwner: "Właściciel: ",
   noLocalsFound: "Aktualnie nie ma żadnych nieruchomości",
+  noOwner: "Brak właściciela",
 };
 
 const localState = {

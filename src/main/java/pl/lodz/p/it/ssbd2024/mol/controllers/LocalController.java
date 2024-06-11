@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,8 +80,12 @@ public class LocalController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<List<GetAllLocalsResponse>> getAllLocals() {
-        return ResponseEntity.ok(LocalMapper.toGetAllLocalsResponseList(localService.getAllLocals()));
+    public ResponseEntity<GetAllLocalsFiltered> getAllLocals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(LocalMapper.toGetAllLocalsFiltered(localService.getAllLocals(pageable)));
     }
 
     @PatchMapping("/{id}/address")
