@@ -111,7 +111,7 @@ public class MeOwnerController {
     @PostMapping("/rents/{id}/payments")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<RentPaymentsResponse> getRentPayments(@PathVariable UUID id,
-                                                                      @RequestBody RentPaymentsRequest rentPaymentsRequest,
+                                                                      @RequestBody @Valid RentPaymentsRequest rentPaymentsRequest,
                                                                       @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
                                                                       @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
@@ -131,7 +131,7 @@ public class MeOwnerController {
     @PostMapping("/rents/{id}/fixed-fees")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<RentFixedFeesResponse> getFixedFees(@PathVariable UUID id,
-                                                                @RequestBody RentPaymentsRequest rentPaymentsRequest,
+                                                                @RequestBody @Valid RentPaymentsRequest rentPaymentsRequest,
                                                                 @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
                                                                 @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
@@ -151,7 +151,7 @@ public class MeOwnerController {
     @PostMapping("/rents/{id}/variable-fees")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<RentVariableFeesResponse> getVariableFees(@PathVariable UUID id,
-                                                             @RequestBody RentPaymentsRequest rentPaymentsRequest,
+                                                             @RequestBody @Valid RentPaymentsRequest rentPaymentsRequest,
                                                              @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
                                                              @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
         Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
@@ -194,7 +194,7 @@ public class MeOwnerController {
 
     @PatchMapping("/rents/{id}/end-date")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
+    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody @Valid SetEndDateRequest setEndDateRequest) {
         try {
             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
             LocalDate newDate =  LocalDate.parse(setEndDateRequest.newEndDate());
