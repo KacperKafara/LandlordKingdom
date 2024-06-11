@@ -4,10 +4,22 @@
 
     <addresses id="1ae4ec9b-286d-4506-b915-b5b9527284e0"
                number="1"
-               street="mol8street"
-               city="mol8city"
+               street="inactiveLocalStreet"
+               city="inactiveLocalCity"
                zip="123-12"
-               country="mol8country"
+               country="inactiveLocalCountry"
+               version="0"
+               created_at="2024-05-04 14:33:01.413581"
+               modified_at="2024-05-04 14:33:01.413581"
+               created_by="[NULL]"
+               modified_by="[NULL]"/>
+
+    <addresses id="947ce115-d492-4508-b432-8a5711bad5d4"
+               number="1"
+               street="rentedLocalStreet"
+               city="rentedLocalCity"
+               zip="123-12"
+               country="rentedLocalCountry"
                version="0"
                created_at="2024-05-04 14:33:01.413581"
                modified_at="2024-05-04 14:33:01.413581"
@@ -15,7 +27,7 @@
                modified_by="[NULL]"/>
 
     <locals id="3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0"
-            name="mol8local"
+            name="inactiveLocal"
             description="mol8local description"
             size="100"
             state="3"
@@ -29,6 +41,31 @@
             created_by="[NULL]"
             modified_by="[NULL]"/>
 
+    <locals id="a51f1e3e-e0e6-4a7d-80e5-16e245554c77"
+            name="rentedLocal"
+            description="mol8local description"
+            size="100"
+            state="5"
+            address_id="947ce115-d492-4508-b432-8a5711bad5d4"
+            owner_id="d1130c9a-3bbb-4927-b79f-0fd521fa55ea"
+            margin_fee="100"
+            rental_fee="1000"
+            version="0"
+            created_at="2024-05-04 14:33:01.413581"
+            modified_at="2024-05-04 14:33:01.413581"
+            created_by="[NULL]"
+            modified_by="[NULL]"/>
 
-
+    <rents id="5571842e-ec61-4a03-8715-36ccf3c5aa35"
+            balance="1000"
+           local_id="a51f1e3e-e0e6-4a7d-80e5-16e245554c77"
+           owner_id="d1130c9a-3bbb-4927-b79f-0fd521fa55ea"
+           tenant_id="23aeee47-6b75-4de3-8313-5fccd3de841f"
+           version="0"
+           start_date="2024-01-20"
+           end_date="2024-09-02"
+           created_at="2024-05-04 14:33:01.413581"
+           modified_at="2024-05-04 14:33:01.413581"
+           created_by="[NULL]"
+           modified_by="[NULL]"/>
 </dataset>
