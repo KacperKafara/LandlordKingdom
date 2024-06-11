@@ -421,6 +421,7 @@ const errors = {
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
+  rentEnded: "Wynajem zakończony",
   variableFeeAlreadyExists: "Opłata zmienna już istnieje",
   dateParsingError: "Błąd parsowania daty",
   rollback: "Operacja została cofnięta",

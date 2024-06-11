@@ -50,4 +50,5 @@ export type ExceptionCode =
   | "dateParsingError"
   | "addressAlreadyAssigned"
   | "variableFeeAlreadyExists"
-  | "wrongEndDate";
+  | "wrongEndDate"
+  | "rentEnded";
