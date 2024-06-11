@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
+import org.springframework.data.domain.Page;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 
@@ -27,9 +28,10 @@ public class LocalMapper {
     }
 
     public static GetAllLocalsResponse toGetAllLocalsResponse(Local local) {
+        String ownerLogin = local.getOwner() != null ? local.getOwner().getUser().getLogin() : "";
         return new GetAllLocalsResponse(
                 local.getId(),
-                local.getOwner().getUser().getLogin(),
+                ownerLogin,
                 local.getName(),
                 local.getDescription(),
                 local.getState().toString(),
@@ -46,10 +48,18 @@ public class LocalMapper {
         return locals.stream().map(LocalMapper::toGetAllLocalsResponse).collect(Collectors.toList());
     }
 
+    public static GetAllLocalsFiltered toGetAllLocalsFiltered(Page<Local> localsPage) {
+        return new GetAllLocalsFiltered(
+                localsPage.map(LocalMapper::toGetAllLocalsResponse).toList(),
+                localsPage.getTotalPages()
+        );
+    }
+
     public static LocalForAdministratorResponse toLocalForAdministratorResponse(Local local) {
+        String ownerLogin = local.getOwner() != null ? local.getOwner().getUser().getLogin() : "";
         return new LocalForAdministratorResponse(
                 local.getId(),
-                local.getOwner().getUser().getLogin(),
+                ownerLogin,
                 local.getName(),
                 local.getDescription(),
                 local.getState().toString(),
@@ -73,6 +83,7 @@ public class LocalMapper {
     }
 
     public static LocalDetailsForAdminResponse toLocalDetailsForAdminResponse(Local local) {
+
         return new LocalDetailsForAdminResponse(
                 local.getName(),
                 local.getSize(),

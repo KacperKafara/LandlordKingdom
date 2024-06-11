@@ -9,18 +9,28 @@ import {
 } from "@/components/ui/card";
 import { useGetAllLocals } from "@/data/mol/useGetAllLocals";
 import { t } from "i18next";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useNavigate } from "react-router-dom";
 import { LoadingData } from "@/components/LoadingData";
+import { PageChangerComponent } from "./PageChangerComponent";
 
 const AllLocals: FC = () => {
-  const { data: locals, isLoading } = useGetAllLocals();
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState(6);
+
+  const { data: localsPage, isLoading } = useGetAllLocals({
+    pageNumber: pageNumber,
+    pageSize: pageSize,
+  });
+  const locals = localsPage?.locals;
+
   const breadCrumbs = useBreadcrumbs([
     { title: t("roles.administrator"), path: "/admin" },
     { title: t("allLocals.title"), path: "/admin/locals" },
   ]);
+
   const navigate = useNavigate();
   if (isLoading) {
     return <LoadingData />;
@@ -42,36 +52,52 @@ const AllLocals: FC = () => {
   }
 
   return (
-    <div className="relative mt-1 flex h-full flex-col justify-center">
+    <div className="relative mt-1 flex flex-col justify-center">
       {breadCrumbs}
-      <div className="my-3 grid w-11/12 grid-cols-1 gap-2 self-center md:grid-cols-2">
-        {locals.map((local) => (
-          <Card className="relative" key={local.id}>
-            <Button
-              onClick={() => navigate(`local/${local.id}`)}
-              className="absolute right-1 top-1"
-              variant="ghost"
-            >
-              {t("allLocals.show")}
-            </Button>
-            <CardHeader>
-              <CardTitle>{local.name}</CardTitle>
-              <CardDescription>
-                <p>{t("allLocals.localOwner") + " " + local.ownerLogin}</p>
-                <p>{local.description}</p>
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p>
-                {local.address.street} {local.address.number},{" "}
-                {local.address.zipCode} {local.address.city}
-              </p>
-            </CardContent>
-            <CardFooter>
-              <p>{t(`localState.${local.state}`)}</p>
-            </CardFooter>
-          </Card>
-        ))}
+      <div className="flex justify-center">
+        <div className="flex h-full w-11/12 flex-col justify-center">
+          <ul className="flex flex-wrap gap-2 py-4">
+            {locals.map((local) => (
+              <li key={local.id} className="w-full min-w-[31rem] flex-1">
+                <Card className="relative">
+                  <Button
+                    onClick={() => navigate(`local/${local.id}`)}
+                    className="absolute right-1 top-1"
+                    variant="ghost"
+                  >
+                    {t("allLocals.show")}
+                  </Button>
+                  <CardHeader>
+                    <CardTitle>{local.name}</CardTitle>
+                    <CardDescription>
+                      <p>
+                        {local.address.street} {local.address.number},{" "}
+                        {local.address.zipCode} {local.address.city}
+                      </p>
+                      <p>
+                        {t("allLocals.localOwner") + " " + local.ownerLogin}
+                      </p>
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    <p>{local.description}</p>
+                  </CardContent>
+                  <CardFooter>
+                    <p>{t(`localState.${local.state}`)}</p>
+                  </CardFooter>
+                </Card>
+              </li>
+            ))}
+          </ul>
+          <PageChangerComponent
+            totalPages={localsPage.totalPages}
+            pageNumber={pageNumber}
+            pageSize={pageSize}
+            setPageNumber={setPageNumber}
+            setNumberOfElements={setPageSize}
+            className="mb-3 flex items-center justify-end gap-12"
+          />
+        </div>
       </div>
       <RefreshQueryButton
         className="absolute -right-9 top-0"
