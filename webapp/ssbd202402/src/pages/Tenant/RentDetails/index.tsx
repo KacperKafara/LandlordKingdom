@@ -1,18 +1,22 @@
 import RefreshQueryButton from "@/components/RefreshQueryButton";
-import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTenantRent } from "@/data/rent/useTenantRent";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import RentInformationCard from "./RentInformationCard";
 import CreateVariableFeeDialog from "./CreateVariableFeeDialog";
+import { RentPayments } from "@/components/RentPayments";
+import { RentFixedFees } from "@/components/RentFixedFees";
+import { RentVariableFees } from "@/components/RentVariableFees";
 
 const RentDetailsPage: FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
   const { rent } = useTenantRent(id!);
+  const referer = searchParams.get("referer");
   const breadcrumbs = useBreadcrumbs([
     {
       title: t("roles.tenant"),
@@ -20,7 +24,7 @@ const RentDetailsPage: FC = () => {
     },
     {
       title: t("notApprovedActionsPage.title"),
-      path: "/tenant/rent",
+      path: `/tenant/${referer !== "current-rents" ? "archival-rents" : "current-rents"}`,
     },
     { title: "Rent", path: `/tenant/rent/${id}` },
   ]);
@@ -32,23 +36,43 @@ const RentDetailsPage: FC = () => {
           <RefreshQueryButton queryKeys={["tenantRent"]} />
         </div>
         {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
-        <Tabs defaultValue="payments">
+        <Tabs defaultValue="details">
           <TabsList>
-            <TabsTrigger value="details">Payments</TabsTrigger>
+            <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="fixedFees">Fixed Fees</TabsTrigger>
             <TabsTrigger value="variableFees">Variable Fees</TabsTrigger>
           </TabsList>
-          <Card>
-            <CardContent>
-              <TabsContent value="details">
-                <RentInformationCard rent={rent} />
-              </TabsContent>
-              <TabsContent value="payments">Payments</TabsContent>
-              <TabsContent value="fixedFees">Fixed Fees</TabsContent>
-              <TabsContent value="variableFees">Variable Fees</TabsContent>
-            </CardContent>
-          </Card>
+          <TabsContent value="details">
+            <RentInformationCard rent={rent} />
+          </TabsContent>
+          <TabsContent value="payments">
+            {rent && (
+              <RentPayments
+                id={id!}
+                startDate={rent.startDate}
+                endDate={rent.endDate}
+              />
+            )}
+          </TabsContent>
+          <TabsContent value="fixedFees">
+            {rent && (
+              <RentFixedFees
+                id={id!}
+                startDate={rent.startDate}
+                endDate={rent.endDate}
+              />
+            )}
+          </TabsContent>
+          <TabsContent value="variableFees">
+            {rent && (
+              <RentVariableFees
+                id={id!}
+                startDate={rent.startDate}
+                endDate={rent.endDate}
+              />
+            )}
+          </TabsContent>
         </Tabs>
       </div>
     </div>
