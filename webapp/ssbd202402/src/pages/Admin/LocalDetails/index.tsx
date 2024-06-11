@@ -75,7 +75,7 @@ const LocalDetailsPage: FC = () => {
                       <div className="grid w-2/3 grid-cols-2 gap-2">
                         <DataField
                           label={t("localDetails.size")}
-                          value={data.size.toString()}
+                          value={data.size.toString() + " m²"}
                         />
                         <DataField
                           label={t("localDetails.rentalFee")}

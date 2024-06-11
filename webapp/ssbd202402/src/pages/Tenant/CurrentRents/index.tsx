@@ -48,7 +48,6 @@ const CurrentRentsPage: FC = () => {
                       rent.local.address.number +
                       ", " +
                       rent.local.address.zipCode.substring(0, 2) +
-                      "-" +
                       rent.local.address.zipCode.substring(2) +
                       " " +
                       rent.local.address.city}
@@ -67,18 +66,22 @@ const CurrentRentsPage: FC = () => {
                   <DataField
                     label={t("tenantRents.fixedFee")}
                     value={
-                      (rent.local.rentalFee + rent.local.marginFee).toString() +
+                      (rent.local.rentalFee + rent.local.marginFee)
+                        .toFixed(2)
+                        .toString() +
                       " " +
                       t("currency")
                     }
                   />
                   <DataField
                     label={t("tenantRents.balance")}
-                    value={rent.balance.toString() + " " + t("currency")}
+                    value={
+                      rent.balance.toFixed(2).toString() + " " + t("currency")
+                    }
                   />
                   <DataField
                     label={t("tenantRents.localSize")}
-                    value={rent.local.size.toString()}
+                    value={rent.local.size.toString() + " m²"}
                   />
                   <p className="col-span-2 my-3 text-xl font-bold">
                     {t("tenantRents.owner")}
