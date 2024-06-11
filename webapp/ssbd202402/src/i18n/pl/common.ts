@@ -720,7 +720,24 @@ const createVariableFeeDialog = {
   success: "Opłata zmienna została dodana",
 };
 
+const rentDetailsPage = {
+  rentDetails: "Szczegóły wynajmu",
+  localDetails: "Szczegóły lokalu",
+  ownerDetails: "Informacje o właściciela",
+  labels: {
+    startDate: "Data rozpoczęcia",
+    endDate: "Data zakończenia",
+    balance: "Bilans",
+    localName: "Nazwa",
+    address: "Adres",
+    fixedFee: "Opłata stała",
+    name: "Imię",
+    email: "Email",
+  },
+};
+
 export default {
+  rentDetailsPage,
   createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
@@ -776,5 +793,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",
   cancel: "Anuluj",
-  currency: " zł",
+  currency: "zł",
 };

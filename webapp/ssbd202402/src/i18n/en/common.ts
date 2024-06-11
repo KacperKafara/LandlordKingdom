@@ -713,7 +713,24 @@ const createVariableFeeDialog = {
   success: "Variable fee created",
 };
 
+const rentDetailsPage = {
+  rentDetails: "Rent details",
+  localDetails: "Local details",
+  ownerDetails: "Owner details",
+  labels: {
+    startDate: "Start date",
+    endDate: "End date",
+    balance: "Balance",
+    localName: "Local name",
+    address: "Address",
+    fixedFee: "Fixed fee",
+    name: "Name",
+    email: "Email",
+  },
+};
+
 export default {
+  rentDetailsPage,
   createVariableFeeDialog,
   tenantApplications,
   changeAddressForm,
