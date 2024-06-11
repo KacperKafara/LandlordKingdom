@@ -1,4 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record NewPaymentRequest() {
+import java.math.BigDecimal;
+
+public record NewPaymentRequest(BigDecimal amount) {
 }

@@ -726,6 +726,10 @@ const createVariableFeeDialog = {
   success: "Opłata zmienna została dodana",
 };
 
+const createPaymentDialog = {
+  success: "Płatność została dodana",
+};
+
 const rentDetailsPage = {
   rentDetails: "Szczegóły wynajmu",
   localDetails: "Szczegóły lokalu",
@@ -748,6 +752,7 @@ const rentDetailsPage = {
 
 export default {
   rentDetailsPage,
+  createPaymentDialog,
   createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
@@ -803,5 +808,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",
   cancel: "Anuluj",
-  currency: "zł",
+  currency: " zł",
 };
