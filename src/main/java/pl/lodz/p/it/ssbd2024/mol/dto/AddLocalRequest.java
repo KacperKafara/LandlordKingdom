@@ -8,7 +8,7 @@ public record AddLocalRequest(
         String name,
         String description,
         int size,
-        Address address,
+        AddressResponse address,
         BigDecimal marginFee,
         BigDecimal rentalFee
 ) {

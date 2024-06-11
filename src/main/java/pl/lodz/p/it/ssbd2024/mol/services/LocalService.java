@@ -2,14 +2,12 @@ package pl.lodz.p.it.ssbd2024.mol.services;
 
 import org.aspectj.weaver.ast.Not;
 import org.springframework.security.access.prepost.PreAuthorize;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
-import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -17,7 +15,7 @@ import java.util.UUID;
 
 public interface LocalService {
 
-    Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException;
+    Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException;
 
     List<Local> getActiveLocals();
 

@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -9,7 +10,6 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
@@ -36,26 +36,25 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class}, propagation = Propagation.REQUIRES_NEW)
+    public Local addLocal(AddLocalRequest addLocalRequest, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException {
         Owner owner = ownerRepository.findByUserId(ownerId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
-        Local newLocal = new Local(
-                addLocalRequest.name(),
-                addLocalRequest.description(),
-                addLocalRequest.size(),
-                addLocalRequest.address(),
-                owner,
-                addLocalRequest.marginFee(),
-                addLocalRequest.rentalFee()
+        Address newAddress = new Address(
+                addLocalRequest.address().number(),
+                addLocalRequest.address().street(),
+                addLocalRequest.address().city(),
+                addLocalRequest.address().zipCode(),
+                addLocalRequest.address().country()
         );
         Optional<Address> existingAddress = addressRepository.findByNumberAndStreetAndCityAndZipAndCountry(
-                addLocalRequest.address().getNumber(),
-                addLocalRequest.address().getStreet(),
-                addLocalRequest.address().getCity(),
-                addLocalRequest.address().getZip(),
-                addLocalRequest.address().getCountry()
+                newAddress.getNumber(),
+                newAddress.getStreet(),
+                newAddress.getCity(),
+                newAddress.getZip(),
+                newAddress.getCountry()
         );
         if (existingAddress.isPresent()) {
-            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(addLocalRequest.address(), LocalState.ARCHIVED);
+            List<Local> existingLocal = localRepository.findByAddressAndStateNotContaining(newAddress, LocalState.ARCHIVED);
             if (!existingLocal.isEmpty()) {
                 boolean hasOtherState = existingLocal.stream()
                         .anyMatch(local -> local.getState() != LocalState.WITHOUT_OWNER);
@@ -63,15 +62,30 @@ public class LocalServiceImpl implements LocalService {
                     throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
                             ErrorCodes.ADDRESS_ASSIGNED);
                 } else {
-                    newLocal = existingLocal.getFirst();
-                    newLocal.setOwner(owner);
-                    newLocal.setState(LocalState.UNAPPROVED);
+                    existingLocal.getFirst().setOwner(owner);
+                    existingLocal.getFirst().setState(LocalState.UNAPPROVED);
+                    return localRepository.saveAndFlush(existingLocal.getFirst());
                 }
+            } else {
+                throw new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND);
             }
         } else {
-            addressRepository.saveAndFlush(addLocalRequest.address());
+            try {
+                Address savedAddress = addressRepository.saveAndFlush(newAddress);
+                Local rewriteLocal = new Local(
+                        addLocalRequest.name(),
+                        addLocalRequest.description(),
+                        addLocalRequest.size(),
+                        savedAddress,
+                        owner,
+                        addLocalRequest.marginFee(),
+                        addLocalRequest.rentalFee()
+                );
+                return localRepository.saveAndFlush(rewriteLocal);
+            } catch (ConstraintViolationException e) {
+                throw new CreationException(UserExceptionMessages.CREATION_FAILED, ErrorCodes.REGISTRATION_ERROR);
+            }
         }
-        return localRepository.saveAndFlush(newLocal);
     }
 
     @Override

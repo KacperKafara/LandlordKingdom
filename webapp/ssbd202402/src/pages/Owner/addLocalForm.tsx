@@ -35,6 +35,7 @@ const AddLocalForm: FC = () => {
     });
 
     const onSubmit: SubmitHandler<AddLocalFormData> = async (data) => {
+        console.log(data);
         try {
             await addLocal({
                 name: data.name,

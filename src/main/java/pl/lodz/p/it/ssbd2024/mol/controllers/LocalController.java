@@ -12,10 +12,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.mok.repositories.OwnerRepository;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
@@ -53,11 +51,15 @@ public class LocalController {
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID userId = UUID.fromString(jwt.getSubject());
         try {
+            System.out.println("addLocalRequest1: " + addLocalRequest);
+            System.out.println("addLocalRequest.address1: " + addLocalRequest.address());
             return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(addLocalRequest, userId)));
         } catch (GivenAddressAssignedToOtherLocalException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (CreationException e) {
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 
