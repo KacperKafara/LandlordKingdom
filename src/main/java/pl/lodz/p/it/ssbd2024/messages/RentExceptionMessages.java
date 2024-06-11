@@ -6,4 +6,5 @@ public class RentExceptionMessages {
     public static final String WRONG_DATE_FORMAT = "Wrong date format";
     public static final String DATE_PARSING_ERROR = "Date parsing error";
     public static final String RENT_ENDED = "Rent you are trying to edit has already ended";
+    public static final String VARIABLE_FEE_ALREADY_EXISTS = "Variable fee for this week already exists";
 }

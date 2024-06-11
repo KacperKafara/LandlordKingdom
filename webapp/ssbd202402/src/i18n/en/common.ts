@@ -385,7 +385,6 @@ const errors = {
   invalidRefreshToken: "Error while refreshing session, login required",
   signInBlocked:
     "You give incorrect data too many times, your account is blocked, check email",
-  timezoneNotFound: "Timezone not found",
   userAlreadyBlocked: "User already blocked",
   userAlreadyUnblocked: "User already unblocked",
   userBlocked: "You are blocked",
@@ -409,6 +408,7 @@ const errors = {
   accessLevelTaken: "Access level already taken",
   undefined: "Unexpected error occurred",
   localNotFound: "Local not found",
+  localNotActive: "Local must be active for this operation",
   localNotInactive: "Local must be inactive for this operation",
   localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
@@ -417,6 +417,14 @@ const errors = {
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
   addressAlreadyAssigned: "Address asigned to another local",
   rentEnded: "Rent has already ended",
+  dateParsingError: "Date parsing error",
+  variableFeeAlreadyExists: "Variable fee already exists",
+  roleRequestAlreadyExists: "Role request already exists",
+  rollback: "Rollback",
+  transaction: "Transaction",
+  unexpectedRollback: "Unexpected rollback",
+  userAlreadyHasRole: "User already has this role",
+  applicationExists: "Application for this local already exists",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -476,7 +484,6 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
-
 };
 
 const leaveLocal = {
@@ -487,7 +494,6 @@ const leaveLocal = {
   dialogTitle: "Are you sure you want to continue?",
   dialogDescription:
     "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
-    
 };
 
 const currentTenantRents = {
@@ -600,10 +606,9 @@ const ownLocalDetails = {
   changeFixedFee: "Change fixed fee",
   changeFixedFeeDescription:
     "Changes to the fixed fees will be effective from the next billing period.",
-    leaveLocal: "Leave local",
-    leaveLocalDescription: 
-    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented."
-    
+  leaveLocal: "Leave local",
+  leaveLocalDescription:
+    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
 };
 
 const activeLocals = {
@@ -611,7 +616,22 @@ const activeLocals = {
   size: "Size",
   city: "City",
   show: "Show details",
+};
 
+const activeLocalDetails = {
+  firstName: "First name",
+  size: "Size",
+  price: "Price",
+  owner: "Owner",
+  city: "City",
+  description: "Description",
+  localInformation: "Local information",
+  ownerInformation: "Owner information",
+  apply: "Apply",
+  applicationTitle: "Application",
+  applicationDescription: "Are you sure you want to apply for this local?",
+  applicationExistsDescription: "You apply for this local: ",
+  applicationCreated: "Application created",
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -668,12 +688,15 @@ const ownerRentDetails = {
   rental: "Rental Fee",
   summary: "Total",
   showLocalDetails: "Show local details",
-}
+};
 
 const tenantApplications = {
   createdAt: "Created at",
   linkToLocal: "Link to local",
   applicationsNotFund: "No applications found",
+  deleteApplication: "Remove application",
+  deleteApplicationDescription: "Are you sure you want to delete application?",
+  aplicationDeleted: "Application deleted",
 };
 
 const breadcrumbs = {
@@ -682,8 +705,18 @@ const breadcrumbs = {
   local: "Local",
 };
 
+const createVariableFeeDialog = {
+  title: "Add Variable fee",
+  amount: "Amount*",
+  amountMustBePositive: "Amount must be positive",
+  success: "Variable fee created",
+};
+
 export default {
+  createVariableFeeDialog,
+  tenantApplications,
   changeAddressForm,
+  activeLocalDetails,
   ownerRentDetails,
   breadcrumbs,
   localDetails,

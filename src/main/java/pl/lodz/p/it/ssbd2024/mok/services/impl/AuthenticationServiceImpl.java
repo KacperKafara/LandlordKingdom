@@ -3,8 +3,6 @@ package pl.lodz.p.it.ssbd2024.mok.services.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -27,7 +25,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.AuthenticationService;
 import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
-import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
+import pl.lodz.p.it.ssbd2024.util.DateUtils;
 
 import java.security.InvalidKeyException;
 import java.time.Duration;
@@ -198,8 +196,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
             if (user.getTimezone() != null) {
                 timezone = user.getTimezone().getName();
             }
-            String unblockDate = TimezoneMapper.convertUTCToAnotherTimezoneSimple(LocalDateTime.now().plusSeconds(loginTimeOut), timezone, user.getLanguage());
-            String lastFailedLogin = TimezoneMapper.convertUTCToAnotherTimezoneSimple(user.getLastFailedLogin(), timezone, user.getLanguage());
+            String unblockDate = DateUtils.convertUTCToAnotherTimezoneSimple(LocalDateTime.now().plusSeconds(loginTimeOut), timezone, user.getLanguage());
+            String lastFailedLogin = DateUtils.convertUTCToAnotherTimezoneSimple(user.getLastFailedLogin(), timezone, user.getLanguage());
             emailService.sendLoginBlockEmail(user.getEmail(), user.getLoginAttempts(), lastFailedLogin, unblockDate, user.getLastFailedLoginIp(), user.getLanguage());
         }
     }
