@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.SetEndDateRequest;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -181,4 +182,142 @@ public class MeOwnerControllerIT extends BaseConfig{
 
     }
 
+    @Test
+    public void changeRentEndDate_userNotAuthorized_returnUnauthorized(){
+        String newEndDate = "2024-07-21";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void changeRentEndDate_rentDoesNotExist_returnNotFound(){
+        String newEndDate = "2024-07-21";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa36/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void changeRentEndDate_newEndDateIsBeforeNow_returnBadRequest(){
+        LocalDate now = LocalDate.now();
+        String newEndDate = now.minusDays( now.getDayOfWeek().getValue() % 7 ).toString();
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void changeRentEndDate_newEndDateIsBeforeStartDate_returnBadRequest(){
+        String newEndDate = "2024-01-14";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void changeRentEndDate_endDateIsNotInCorrectFormat_returnBadRequest(){
+        String newEndDate = "07/07/2024";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void changeRentEndDate_endDateTheSame_returnBadRequest(){
+        String newEndDate = "2024-09-02";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void changeRentEndDate_raceCondition_returnOkAndBadRequest(){
+        String newEndDate = "2024-07-21";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+        try {
+            List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                    given()
+                            .contentType(ContentType.JSON)
+                            .auth().oauth2(ownerToken)
+                            .body(setEndDateRequest)
+                    , 2, Method.PATCH,  ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/end-date");
+            int status1 = response.get(0).getStatusCode();
+            int status2 = response.get(1).getStatusCode();
+            log.info("Status1: %d Status2: %d".formatted(status1, status2));
+            if (status1 == 200){
+                Assertions.assertEquals(status1, 200);
+                Assertions.assertEquals(status2, 400);
+            } else {
+                Assertions.assertEquals(status1, 400);
+                Assertions.assertEquals(status2, 200);
+            }
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEach(log::error);
+        }
+    }
+
+    @Test
+    public void changeRentEndDate_rentAlreadyEnded_returnBadRequest(){
+        String newEndDate = "2024-07-21";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/31658859-f2dc-425a-bb98-8f444960bb35/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
 }
