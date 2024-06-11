@@ -23,10 +23,18 @@ const RentDetailsPage: FC = () => {
       path: "/tenant",
     },
     {
-      title: t("notApprovedActionsPage.title"),
-      path: `/tenant/${referer !== "current-rents" ? "archival-rents" : "current-rents"}`,
+      title:
+        referer === "archival-rents"
+          ? t("breadcrumbs.archivalRents")
+          : t("breadcrumbs.currentRents"),
+      path: `/tenant/${referer === "archival-rents" ? "archival-rents" : "current-rents"}`,
     },
-    { title: "Rent", path: `/tenant/rent/${id}` },
+    {
+      title: rent
+        ? `${rent.local.name} (${rent.startDate} - ${rent.endDate})`
+        : "",
+      path: `/tenant/rents/${id}`,
+    },
   ]);
   return (
     <div className="flex justify-center">
@@ -35,14 +43,16 @@ const RentDetailsPage: FC = () => {
           {breadcrumbs}
           <RefreshQueryButton queryKeys={["tenantRent"]} />
         </div>
-        {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
         <Tabs defaultValue="details">
-          <TabsList>
-            <TabsTrigger value="details">Details</TabsTrigger>
-            <TabsTrigger value="payments">Payments</TabsTrigger>
-            <TabsTrigger value="fixedFees">Fixed Fees</TabsTrigger>
-            <TabsTrigger value="variableFees">Variable Fees</TabsTrigger>
-          </TabsList>
+          <div className="flex flex-row justify-between">
+            <TabsList>
+              <TabsTrigger value="details">Details</TabsTrigger>
+              <TabsTrigger value="payments">Payments</TabsTrigger>
+              <TabsTrigger value="fixedFees">Fixed Fees</TabsTrigger>
+              <TabsTrigger value="variableFees">Variable Fees</TabsTrigger>
+            </TabsList>
+            {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
+          </div>
           <TabsContent value="details">
             <RentInformationCard rent={rent} />
           </TabsContent>

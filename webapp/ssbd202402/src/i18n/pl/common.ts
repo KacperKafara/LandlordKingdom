@@ -702,6 +702,8 @@ const breadcrumbs = {
   tenant: "Najemca",
   locals: "Lokale",
   local: "Lokal",
+  currentRents: "Aktualne wynajmy",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const tenantApplications = {

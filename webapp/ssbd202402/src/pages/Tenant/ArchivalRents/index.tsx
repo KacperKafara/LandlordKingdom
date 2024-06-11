@@ -14,6 +14,7 @@ import {
 import DataField from "@/components/DataField";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { LoadingData } from "@/components/LoadingData";
+import { NavLink } from "react-router-dom";
 
 const ArchivalRentsPage: FC = () => {
   const { t } = useTranslation();
@@ -97,7 +98,13 @@ const ArchivalRentsPage: FC = () => {
                   />
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
-                  <Button className="flex-auto">Action 1</Button>
+                  <Button className="flex-auto" asChild>
+                    <NavLink
+                      to={`/tenant/rents/${rent.id}?referer=archival-rents`}
+                    >
+                      Details
+                    </NavLink>
+                  </Button>
                   <Button className="flex-auto">Action 2</Button>
                   <Button className="flex-auto">Action 3</Button>
                 </CardFooter>
