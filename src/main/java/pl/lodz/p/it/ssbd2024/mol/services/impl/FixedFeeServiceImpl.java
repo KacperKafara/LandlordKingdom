@@ -30,7 +30,7 @@ public class FixedFeeServiceImpl implements FixedFeeService {
     }
 
     @Override
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
     public Page<FixedFee> getRentFixedFees(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         return fixedFeeRepository.findRentVariableFeesBetween(rentId, userId, startDate, endDate, pageable);
     }

@@ -27,7 +27,7 @@ public interface LocalService {
 
     List<Local> getUnapprovedLocals();
 
-    List<Local> getOwnLocals(UUID id);
+    Page<Local> getOwnLocals(UUID id, Pageable pageable, String state);
 
     LocalReportResponse getLocalReport(UUID id) throws NotFoundException;
 

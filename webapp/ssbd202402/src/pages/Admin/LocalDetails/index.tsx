@@ -75,7 +75,7 @@ const LocalDetailsPage: FC = () => {
                       <div className="grid w-2/3 grid-cols-2 gap-2">
                         <DataField
                           label={t("localDetails.size")}
-                          value={data.size.toString()}
+                          value={data.size.toString() + " m²"}
                         />
                         <DataField
                           label={t("localDetails.rentalFee")}
@@ -155,17 +155,20 @@ const LocalDetailsPage: FC = () => {
                         </div>
 
                         <div className="col-span-2 flex gap-3">
-                          {data.state !== "WITHOUT_OWNER" && (
-                            <Button
-                              variant="secondary"
-                              className="mt-3 w-full text-lg font-normal"
-                              onClick={() => {
-                                navigate(`/admin/users/${data.owner!.userId}`);
-                              }}
-                            >
-                              {t("localDetails.showOwnerDetails")}
-                            </Button>
-                          )}
+                          {data.state !== "WITHOUT_OWNER" &&
+                            data.state !== "ARCHIVED" && (
+                              <Button
+                                variant="secondary"
+                                className="mt-3 w-full text-lg font-normal"
+                                onClick={() => {
+                                  navigate(
+                                    `/admin/users/${data.owner!.userId}`
+                                  );
+                                }}
+                              >
+                                {t("localDetails.showOwnerDetails")}
+                              </Button>
+                            )}
                           {data.state === "WITHOUT_OWNER" && (
                             <Dialog>
                               <DialogTrigger asChild>

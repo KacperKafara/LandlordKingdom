@@ -14,6 +14,7 @@ import {
 import DataField from "@/components/DataField";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { LoadingData } from "@/components/LoadingData";
+import { NavLink } from "react-router-dom";
 
 const ArchivalRentsPage: FC = () => {
   const { t } = useTranslation();
@@ -48,7 +49,6 @@ const ArchivalRentsPage: FC = () => {
                       rent.local.address.number +
                       ", " +
                       rent.local.address.zipCode.substring(0, 2) +
-                      "-" +
                       rent.local.address.zipCode.substring(2) +
                       " " +
                       rent.local.address.city}
@@ -67,18 +67,22 @@ const ArchivalRentsPage: FC = () => {
                   <DataField
                     label={t("tenantRents.fixedFee")}
                     value={
-                      (rent.local.rentalFee + rent.local.marginFee).toString() +
+                      (rent.local.rentalFee + rent.local.marginFee)
+                        .toFixed(2)
+                        .toString() +
                       " " +
                       t("currency")
                     }
                   />
                   <DataField
                     label={t("tenantRents.balance")}
-                    value={rent.balance.toString() + " " + t("currency")}
+                    value={
+                      rent.balance.toFixed(2).toString() + " " + t("currency")
+                    }
                   />
                   <DataField
                     label={t("tenantRents.localSize")}
-                    value={rent.local.size.toString()}
+                    value={rent.local.size.toString() + " m²"}
                   />
                   <p className="col-span-2 my-3 text-xl font-bold">
                     {t("tenantRents.owner")}
@@ -97,7 +101,13 @@ const ArchivalRentsPage: FC = () => {
                   />
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
-                  <Button className="flex-auto">Action 1</Button>
+                  <Button className="flex-auto" asChild>
+                    <NavLink
+                      to={`/tenant/rents/${rent.id}?referer=archival-rents`}
+                    >
+                      Details
+                    </NavLink>
+                  </Button>
                   <Button className="flex-auto">Action 2</Button>
                   <Button className="flex-auto">Action 3</Button>
                 </CardFooter>

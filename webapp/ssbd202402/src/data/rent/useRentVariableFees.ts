@@ -5,52 +5,56 @@ import { useTranslation } from "react-i18next";
 import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
 
-
-
-
 type RentVariableFeesRequest = {
-    id: string;
-    pageNumber: number;
-    pageSize: number;
-    startDate: string;
-    endDate: string;
-}
+  id: string;
+  pageNumber: number;
+  pageSize: number;
+  startDate: string;
+  endDate: string;
+};
 
 type RentVariableFee = {
-    rentVariableFees: {
-        date: string;
-        amount: number;
-    }[];
-    totalPages: number;
-}
-
-
+  rentVariableFees: {
+    date: string;
+    amount: number;
+  }[];
+  totalPages: number;
+};
 
 export const useRentVariableFees = (request: RentVariableFeesRequest) => {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
 
-    return useQuery({
-      queryKey: ["rentVariableFees", request.id, request.pageNumber, request.pageSize, request.startDate, request.endDate],
-      queryFn: async () => {
-        try {
-          const query = `?pageNum=${request.pageNumber}&pageSize=${request.pageSize}`;
-          const result = await api.post<RentVariableFee>(`/me/rents/${request.id}/variable-fees` + query, {
-              startDate: request.startDate,
-              endDate: request.endDate,            
-          });
-          return result.data;
-        } catch (error) {
-          const axiosError = error as AxiosError;
-          toast({
-            variant: "destructive",
-            title: t("userDataPage.error"),
-            description: t(
-                `errors.${(axiosError.response?.data as ErrorCode).exceptionCode}`
-            ),
-          });
-          return Promise.reject(error);
-        }
-      },
-    });
-  };
-  
+  return useQuery({
+    queryKey: [
+      "rentVariableFees",
+      request.id,
+      request.pageNumber,
+      request.pageSize,
+      request.startDate,
+      request.endDate,
+    ],
+    queryFn: async () => {
+      try {
+        const query = `?pageNum=${request.pageNumber}&pageSize=${request.pageSize}`;
+        const result = await api.post<RentVariableFee>(
+          `/rents/${request.id}/variable-fees` + query,
+          {
+            startDate: request.startDate,
+            endDate: request.endDate,
+          }
+        );
+        return result.data;
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast({
+          variant: "destructive",
+          title: t("userDataPage.error"),
+          description: t(
+            `errors.${(axiosError.response?.data as ErrorCode).exceptionCode}`
+          ),
+        });
+        return Promise.reject(error);
+      }
+    },
+  });
+};
