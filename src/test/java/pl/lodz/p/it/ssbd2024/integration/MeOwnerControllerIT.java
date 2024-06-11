@@ -320,4 +320,20 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
     }
+
+    @Test
+    public void changeRentEndDate_newEndDateIsNotSunday_returnBadRequest(){
+        String newEndDate = "2024-07-22";
+        SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(setEndDateRequest)
+                .patch(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/end-date")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
 }
