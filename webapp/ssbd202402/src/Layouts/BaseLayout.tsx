@@ -86,7 +86,9 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
 
   return (
     <div className="flex min-h-screen flex-col">
-      {roles?.includes("TENANT") && <RoleRequestDialog />}
+      {roles?.includes("TENANT") && !roles.includes("OWNER") && (
+        <RoleRequestDialog />
+      )}
       <nav
         className={cn(
           "flex h-20 flex-row items-center justify-between px-10",
@@ -149,7 +151,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                   </NavLink>
                 </DropdownMenuItem>
               ))}
-              {roles?.includes("TENANT") && (
+              {roles?.includes("TENANT") && !roles.includes("OWNER") && (
                 <>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => openDialog("roleRequest")}>

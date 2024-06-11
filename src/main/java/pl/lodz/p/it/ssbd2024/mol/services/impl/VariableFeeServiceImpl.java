@@ -37,7 +37,8 @@ public class VariableFeeServiceImpl implements VariableFeeService {
     @PreAuthorize("hasRole('TENANT')")
     public VariableFee create(UUID userId, UUID rentId, BigDecimal amount)
             throws NotFoundException, VariableFeeAlreadyExistsException {
-        Tenant tenant = tenantRepository.findByUserId(userId).get();
+        Tenant tenant = tenantRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
         Rent rent = rentRepository.findByIdAndTenantId(rentId, tenant.getId())
                 .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
 

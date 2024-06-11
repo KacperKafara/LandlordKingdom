@@ -65,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
             throw new RoleRequestAlreadyExistsException(RoleRequestMessages.ROLE_REQUEST_ALREADY_EXISTS, ErrorCodes.ROLE_REQUEST_ALREADY_EXISTS);
         }
 
-        if (ownerRepository.findByUserId(userId).isPresent()) {
+        if (ownerRepository.findByUserIdAndActiveIsTrue(userId).isPresent()) {
             throw new UserAlreadyHasRoleException(RoleRequestMessages.USER_ALREADY_HAS_ROLE, ErrorCodes.USER_ALREADY_HAS_ROLE);
         }
 

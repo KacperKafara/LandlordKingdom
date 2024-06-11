@@ -527,7 +527,7 @@ const roleRequestDialog = {
   requestOwnerRole: "Request Owner role",
   requestOwnerRoleDescription:
     "Click this button to submit a request for an owner role.",
-  alreadyPlacedRequest: "You already placed a request for role at: {{when}}",
+  alreadyPlacedRequest: "You already placed a request for role at: ",
   howDoesItWork: "How does this work?",
   requestRoleButton: "Request role",
 };

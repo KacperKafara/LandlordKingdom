@@ -25,9 +25,8 @@ const RoleRequestDialogComponent: FC = () => {
         <div className="flex flex-col gap-3">
           {roleRequest && (
             <div>
-              {t("roleRequestDialog.alreadyPlacedRequest", {
-                when: roleRequest?.createdAt.toString() ?? "",
-              })}
+              {t("roleRequestDialog.alreadyPlacedRequest")}
+              {roleRequest?.createdAt.toString() ?? ""}
             </div>
           )}
           <h2 className="font-bold">{t("roleRequestDialog.howDoesItWork")}</h2>
