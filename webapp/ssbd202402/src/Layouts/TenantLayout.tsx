@@ -9,13 +9,17 @@ const links: NavigationLink[] = [
     path: "./current-rents",
   },
   {
-    label: "Locals",
+    label: "locals",
     path: "./locals",
   },
   {
     label: "archivalRents",
     path: "./archival-rents",
-  }
+  },
+  {
+    label: "applications",
+    path: "./applications",
+  },
 ];
 
 const TenantLayout: FC = () => {

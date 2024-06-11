@@ -15,6 +15,8 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import UpdateOwnLocalFixedFee from "./UpdateOwnLocalFixedFee";
+import LeaveLocalCard from "./LeaveLocalCard";
+import { LocalState } from "@/@types/localState";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,6 +54,9 @@ const OwnLocalDetailsPage: FC = () => {
                   </TabsTrigger>
                   <TabsTrigger value="changeFixedFee">
                     {t("ownLocalDetails.changeFixedFee")}
+                  </TabsTrigger>
+                  <TabsTrigger value="leaveLocal">
+                    {t("ownLocalDetails.leaveLocal")}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="basic">
@@ -144,8 +149,12 @@ const OwnLocalDetailsPage: FC = () => {
                       <div className="flex justify-center">
                         <UpdateOwnLocalFixedFee
                           id={id || ""}
-                          initialRentalFee={data.rentalFee}
-                          initialMarginFee={data.marginFee}
+                          initialRentalFee={
+                            data.nextRentalFee ?? data.rentalFee
+                          }
+                          initialMarginFee={
+                            data.nextMarginFee ?? data.marginFee
+                          }
                         />
                       </div>
                     </CardContent>
@@ -153,6 +162,9 @@ const OwnLocalDetailsPage: FC = () => {
                       {t("ownLocalDetails.changeFixedFeeDescription")}
                     </CardDescription>
                   </Card>
+                </TabsContent>
+                <TabsContent value="leaveLocal">
+                  <LeaveLocalCard state={data.state as LocalState} id={id!} />
                 </TabsContent>
               </Tabs>
             </div>

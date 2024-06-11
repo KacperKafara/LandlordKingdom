@@ -38,14 +38,19 @@ const OwnLocalDetailsPage = loadable(
   () => import("./pages/Owner/OwnLocalDetails")
 );
 const RentDetailsPage = loadable(() => import("./pages/Tenant/RentDetails"));
+const ActiveLocalsPage = loadable(() => import("./pages/Tenant/Locals"));
 const ActiveLocalDetailsPage = loadable(
   () => import("./pages/Tenant/ActiveLocalDetails")
 );
 const NotApprovedActionsPage = loadable(
   () => import("./pages/Admin/NotApprovedActions")
 );
-const OwnerRentDetailsPage = loadable(() => import("./pages/Owner/RentDetails"));
-
+const OwnerRentDetailsPage = loadable(
+  () => import("./pages/Owner/RentDetails")
+);
+const OwnApplicationPage = loadable(
+  () => import("./pages/Tenant/Applications")
+);
 const AdminRoutes: RouteObject[] = [
   {
     path: "locals",
@@ -68,18 +73,22 @@ const OwnerRoutes: RouteObject[] = [
       { path: "local/:id", Component: OwnLocalDetailsPage },
     ],
   },
-    { path: "addLocalForm", Component: addLocalForm },
-  { path: "rents", children: [
-    { index: true, Component: CurrnetOwnerRentsPage},
-    { path: "rent/:id", Component: OwnerRentDetailsPage },
-  ] },
+  { path: "addLocalForm", Component: addLocalForm },
+  {
+    path: "rents",
+    children: [
+      { index: true, Component: CurrnetOwnerRentsPage },
+      { path: "rent/:id", Component: OwnerRentDetailsPage },
+    ],
+  },
 ];
 const TenantRoutes: RouteObject[] = [
   { path: "test", Component: TenantTestPage },
   { path: "current-rents", Component: CurrentRentsPage },
   { path: "archival-rents", Component: ArchivalRentsPage },
+  { path: "applications", Component: OwnApplicationPage },
   { path: "rents/:id", Component: RentDetailsPage },
-  { path: "locals", Component: ActiveLocals },
+  { path: "locals", Component: ActiveLocalsPage },
   { path: "locals/:id", Component: ActiveLocalDetailsPage },
 ];
 const AccountRoutes: RouteObject[] = [{ index: true, Component: MePage }];

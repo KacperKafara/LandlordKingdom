@@ -17,6 +17,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { useArchiveLocal } from "@/data/local/useArchiveLocal";
+import ChangeAddressFormComponent from "./ChangeAddressFormComponent";
 
 const LocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -74,37 +75,52 @@ const LocalDetailsPage: FC = () => {
                       <div className="grid w-2/3 grid-cols-2 gap-2">
                         <DataField
                           label={t("localDetails.size")}
-                          value={data.size.toString()}
+                          value={data.size.toString() + " m²"}
                         />
                         <DataField
                           label={t("localDetails.rentalFee")}
-                          value={data.rentalFee.toString()}
+                          value={
+                            data.rentalFee.toFixed(2).toString() +
+                            " " +
+                            t("currency")
+                          }
                         />
                         <DataField
                           label={t("localDetails.marginFee")}
-                          value={data.marginFee.toString()}
+                          value={
+                            data.marginFee.toFixed(2).toString() +
+                            " " +
+                            t("currency")
+                          }
+                        />
+                        <DataField
+                          label={t("localDetails.state")}
+                          value={t(`localState.${data.state}`)}
                         />
 
-                        <p className="col-span-2 text-xl font-semibold">
-                          {t("localDetails.ownerInformation")}{" "}
-                        </p>
-
-                        <DataField
-                          label={t("localDetails.firstName")}
-                          value={data.owner.firstName}
-                        />
-                        <DataField
-                          label={t("localDetails.lastName")}
-                          value={data.owner.lastName}
-                        />
-                        <DataField
-                          label={t("localDetails.login")}
-                          value={data.owner.login}
-                        />
-                        <DataField
-                          label={t("localDetails.email")}
-                          value={data.owner.email}
-                        />
+                        {data.owner && (
+                          <>
+                            <p className="col-span-2 text-xl font-semibold">
+                              {t("localDetails.ownerInformation")}
+                            </p>
+                            <DataField
+                              label={t("localDetails.firstName")}
+                              value={data.owner.firstName}
+                            />
+                            <DataField
+                              label={t("localDetails.lastName")}
+                              value={data.owner.lastName}
+                            />
+                            <DataField
+                              label={t("localDetails.login")}
+                              value={data.owner.login}
+                            />
+                            <DataField
+                              label={t("localDetails.email")}
+                              value={data.owner.email}
+                            />
+                          </>
+                        )}
 
                         <p className="col-span-2 text-xl font-semibold">
                           {t("localDetails.addressInformation")}{" "}
@@ -139,15 +155,20 @@ const LocalDetailsPage: FC = () => {
                         </div>
 
                         <div className="col-span-2 flex gap-3">
-                          <Button
-                            variant="secondary"
-                            className="mt-3 w-full text-lg font-normal"
-                            onClick={() => {
-                              navigate(`/admin/users/${data.owner.userId}`);
-                            }}
-                          >
-                            {t("localDetails.showOwnerDetails")}
-                          </Button>
+                          {data.state !== "WITHOUT_OWNER" &&
+                            data.state !== "ARCHIVED" && (
+                              <Button
+                                variant="secondary"
+                                className="mt-3 w-full text-lg font-normal"
+                                onClick={() => {
+                                  navigate(
+                                    `/admin/users/${data.owner!.userId}`
+                                  );
+                                }}
+                              >
+                                {t("localDetails.showOwnerDetails")}
+                              </Button>
+                            )}
                           {data.state === "WITHOUT_OWNER" && (
                             <Dialog>
                               <DialogTrigger asChild>
@@ -214,13 +235,7 @@ const LocalDetailsPage: FC = () => {
                   </Card>
                 </TabsContent>
                 <TabsContent value="changeAddress">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-center">
-                        {t("localDetails.changeAddress")}
-                      </CardTitle>
-                    </CardHeader>
-                  </Card>
+                  <ChangeAddressFormComponent localId={id!} />
                 </TabsContent>
               </Tabs>
             </div>

@@ -12,17 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
 
 import java.time.LocalDate;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
-public interface VariableFeeRepository extends JpaRepository<VariableFee, UUID>{
+public interface VariableFeeRepository extends JpaRepository<VariableFee, UUID> {
 
     @NonNull
     @PreAuthorize("hasRole('TENANT')")
     VariableFee saveAndFlush(@NonNull VariableFee variableFee);
 
-    @PreAuthorize("hasRole('OWNER')")
-    @Query("SELECT fee FROM VariableFee fee WHERE fee.rent.id = :rentId AND fee.rent.owner.user.id = :userId AND fee.date BETWEEN :startDate AND :endDate")
+    @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
+    @Query("SELECT fee FROM VariableFee fee WHERE fee.rent.id = :rentId AND (fee.rent.owner.user.id = :userId OR fee.rent.tenant.user.id = :userId) AND fee.date BETWEEN :startDate AND :endDate")
     Page<VariableFee> findRentVariableFeesBetween(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable);
+
+    @PreAuthorize("hasRole('TENANT')")
+    @Query("SELECT fee FROM VariableFee fee WHERE fee.rent.id = :rentId AND fee.rent.tenant.user.id = :userId AND fee.date BETWEEN :startDate AND :endDate")
+    Optional<VariableFee> findByRentIdBetween(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate);
 }

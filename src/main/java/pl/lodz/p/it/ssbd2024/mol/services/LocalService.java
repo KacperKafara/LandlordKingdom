@@ -1,13 +1,19 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
 import org.aspectj.weaver.ast.Not;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
+import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
+import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
+import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
+import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,7 +27,7 @@ public interface LocalService {
 
     List<Local> getUnapprovedLocals();
 
-    List<Local> getOwnLocals(UUID id);
+    Page<Local> getOwnLocals(UUID id, Pageable pageable, String state);
 
     LocalReportResponse getLocalReport(UUID id) throws NotFoundException;
 
@@ -31,7 +37,7 @@ public interface LocalService {
 
     Local setFixedFee(UUID localId, UUID ownerId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
 
-    List<Local> getAllLocals();
+    Page<Local> getAllLocals(Pageable pageable);
 
     Local changeLocalAddress(UUID id, Address address) throws GivenAddressAssignedToOtherLocalException, NotFoundException;
 

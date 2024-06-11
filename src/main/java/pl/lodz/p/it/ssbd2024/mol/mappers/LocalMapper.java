@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
+import org.springframework.data.domain.Page;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 
@@ -22,14 +23,18 @@ public class LocalMapper {
         );
     }
 
-    public static List<GetOwnLocalsResponse> toGetOwnLocalsResponseList(List<Local> locals) {
-        return locals.stream().map(LocalMapper::toGetOwnLocalsResponse).collect(Collectors.toList());
+    public static GetOwnLocalsPage toGetOwnLocalsResponseList(Page<Local> locals) {
+        return new GetOwnLocalsPage(
+                locals.map(LocalMapper::toGetOwnLocalsResponse).toList(),
+                locals.getTotalPages()
+        );
     }
 
     public static GetAllLocalsResponse toGetAllLocalsResponse(Local local) {
+        String login = local.getOwner() == null ? null : local.getOwner().getUser().getLogin();
         return new GetAllLocalsResponse(
                 local.getId(),
-                local.getOwner().getUser().getLogin(),
+                login,
                 local.getName(),
                 local.getDescription(),
                 local.getState().toString(),
@@ -46,10 +51,18 @@ public class LocalMapper {
         return locals.stream().map(LocalMapper::toGetAllLocalsResponse).collect(Collectors.toList());
     }
 
+    public static GetAllLocalsFiltered toGetAllLocalsFiltered(Page<Local> localsPage) {
+        return new GetAllLocalsFiltered(
+                localsPage.map(LocalMapper::toGetAllLocalsResponse).toList(),
+                localsPage.getTotalPages()
+        );
+    }
+
     public static LocalForAdministratorResponse toLocalForAdministratorResponse(Local local) {
+        String login = local.getOwner() == null ? null : local.getOwner().getUser().getLogin();
         return new LocalForAdministratorResponse(
                 local.getId(),
-                local.getOwner().getUser().getLogin(),
+                login,
                 local.getName(),
                 local.getDescription(),
                 local.getState().toString(),
@@ -118,9 +131,7 @@ public class LocalMapper {
                 local.getName(),
                 local.getDescription(),
                 local.getSize(),
-                local.getMarginFee(),
-                local.getRentalFee(),
-                AddressMapper.toAddressResponse(local.getAddress())
+                local.getAddress().getCity()
         );
     }
 

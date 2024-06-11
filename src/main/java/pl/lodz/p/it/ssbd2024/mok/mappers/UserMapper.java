@@ -6,7 +6,7 @@ import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.UpdateUserDataRequest;
 import pl.lodz.p.it.ssbd2024.mok.dto.DetailedUserResponse;
 import pl.lodz.p.it.ssbd2024.mok.dto.UserResponse;
-import pl.lodz.p.it.ssbd2024.util.TimezoneMapper;
+import pl.lodz.p.it.ssbd2024.util.DateUtils;
 
 import java.util.List;
 
@@ -37,11 +37,11 @@ public class UserMapper {
         String lastFailedLogin = null;
 
         if (user.getLastSuccessfulLogin() != null) {
-            lastSuccessfulLogin = TimezoneMapper.convertUTCToAnotherTimezoneSimple(user.getLastSuccessfulLogin(), timezone, user.getLanguage());
+            lastSuccessfulLogin = DateUtils.convertUTCToAnotherTimezoneSimple(user.getLastSuccessfulLogin(), timezone, user.getLanguage());
         }
 
         if (user.getLastFailedLogin() != null) {
-            lastFailedLogin = TimezoneMapper.convertUTCToAnotherTimezoneSimple(user.getLastFailedLogin(), timezone, user.getLanguage());
+            lastFailedLogin = DateUtils.convertUTCToAnotherTimezoneSimple(user.getLastFailedLogin(), timezone, user.getLanguage());
         }
 
         return new DetailedUserResponse(user.getId(),

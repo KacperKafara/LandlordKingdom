@@ -1,8 +1,10 @@
+import { LocalState } from "@/@types/localState";
+
 export type LocalDetailsForAdmin = {
   name: string;
   size: number;
   description: string;
-  owner: {
+  owner?: {
     userId: string;
     firstName: string;
     lastName: string;
@@ -20,5 +22,5 @@ export type LocalDetailsForAdmin = {
   rentalFee: number;
   nextMarginFee: number;
   nextRentalFee: number;
-  state: string;
+  state: LocalState;
 };

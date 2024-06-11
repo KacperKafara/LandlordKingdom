@@ -4,11 +4,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useParams } from "react-router-dom";
 import { useOwnerRent } from "@/data/rent/useOwnerRent";
-import { RentPayments } from "./RentPayments";
+import { RentPayments } from "@/components/RentPayments";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useTranslation } from "react-i18next";
-import { RentFixedFees } from "./RentFixedFees";
-import { RentVariableFees } from "./RentVariableFees";
+import { RentFixedFees } from "@/components/RentFixedFees";
+import { RentVariableFees } from "@/components/RentVariableFees";
+import { LoadingData } from "@/components/LoadingData";
 
 const OwnerRentDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,9 +25,8 @@ const OwnerRentDetailsPage: FC = () => {
   ]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingData />;
   }
-
   return (
     <>
       <div className="flex flex-col py-2">

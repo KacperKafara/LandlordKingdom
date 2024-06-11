@@ -21,9 +21,9 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RoleRequestRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.UserMolRepository;
+import pl.lodz.p.it.ssbd2024.mol.services.MolEmailService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +35,7 @@ public class RoleServiceImpl implements RoleService {
     private final TenantMolRepository tenantRepository;
     private final RoleRequestRepository roleRequestRepository;
     private final OwnerMolRepository ownerRepository;
+    private final MolEmailService molEmailService;
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -64,7 +65,7 @@ public class RoleServiceImpl implements RoleService {
             throw new RoleRequestAlreadyExistsException(RoleRequestMessages.ROLE_REQUEST_ALREADY_EXISTS, ErrorCodes.ROLE_REQUEST_ALREADY_EXISTS);
         }
 
-        if (ownerRepository.findByUserId(userId).isPresent()) {
+        if (ownerRepository.findByUserIdAndActiveIsTrue(userId).isPresent()) {
             throw new UserAlreadyHasRoleException(RoleRequestMessages.USER_ALREADY_HAS_ROLE, ErrorCodes.USER_ALREADY_HAS_ROLE);
         }
 
@@ -76,17 +77,21 @@ public class RoleServiceImpl implements RoleService {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void accept(UUID id) throws NotFoundException {
         RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        User user = roleRequest.getTenant().getUser();
         Owner owner = new Owner();
-        owner.setUser(roleRequest.getTenant().getUser());
+        owner.setUser(user);
         owner.setActive(true);
         ownerRepository.saveAndFlush(owner);
         roleRequestRepository.delete(roleRequest);
+        molEmailService.sendRoleRequestAcceptedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void reject(UUID id) throws NotFoundException {
         RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        User user = roleRequest.getTenant().getUser();
         roleRequestRepository.delete(roleRequest);
+        molEmailService.sendRoleRequestRejectedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());
     }
 }

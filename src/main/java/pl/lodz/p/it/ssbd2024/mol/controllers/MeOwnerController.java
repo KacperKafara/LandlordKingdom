@@ -49,12 +49,16 @@ public class MeOwnerController {
 
     @GetMapping("/locals")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<GetOwnLocalsResponse>> getOwnLocals() {
+    public ResponseEntity<GetOwnLocalsPage> getOwnLocals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "ALL") String state
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID id = UUID.fromString(jwt.getSubject());
-
-        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id)));
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponseList(localService.getOwnLocals(id, pageable, state)));
     }
 
     @GetMapping("locals/{id}")
@@ -108,73 +112,13 @@ public class MeOwnerController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PostMapping("/rents/{id}/payments")
-    @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentPaymentsResponse> getRentPayments(@PathVariable UUID id,
-                                                                      @RequestBody RentPaymentsRequest rentPaymentsRequest,
-                                                                      @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
-                                                                      @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
-        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
-        try {
-            LocalDate startDate =  LocalDate.parse(rentPaymentsRequest.startDate());
-            LocalDate endDate =  LocalDate.parse(rentPaymentsRequest.endDate());
-            return ResponseEntity.ok(PaymentMapper.toRentPaymentsResponse(paymentService.getRentPayments(id, userId, startDate, endDate, pageable)));
-        }catch (DateTimeParseException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    RentExceptionMessages.DATE_PARSING_ERROR,
-                    new DateParsingException(RentExceptionMessages.DATE_PARSING_ERROR, exception, ErrorCodes.DATE_PARSING_ERROR));
-        }
-
-    }
-
-    @PostMapping("/rents/{id}/fixed-fees")
-    @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentFixedFeesResponse> getFixedFees(@PathVariable UUID id,
-                                                                @RequestBody RentPaymentsRequest rentPaymentsRequest,
-                                                                @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
-                                                                @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
-        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
-        try {
-            LocalDate startDate =  LocalDate.parse(rentPaymentsRequest.startDate());
-            LocalDate endDate =  LocalDate.parse(rentPaymentsRequest.endDate());
-            return ResponseEntity.ok(FixedFeeMapper.toRentFixedFeesResponse(fixedFeeService.getRentFixedFees(id, userId, startDate, endDate, pageable)));
-        }catch (DateTimeParseException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    RentExceptionMessages.DATE_PARSING_ERROR,
-                    new DateParsingException(RentExceptionMessages.DATE_PARSING_ERROR, exception, ErrorCodes.DATE_PARSING_ERROR));
-        }
-
-    }
-
-    @PostMapping("/rents/{id}/variable-fees")
-    @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentVariableFeesResponse> getVariableFees(@PathVariable UUID id,
-                                                             @RequestBody RentPaymentsRequest rentPaymentsRequest,
-                                                             @RequestParam(name = "pageNum", defaultValue = "0") int pageNum,
-                                                             @RequestParam(name = "pageSize", defaultValue = "10") int pageSize){
-        Pageable pageable = PageRequest.of(pageNum, pageSize, Sort.by("date").descending());
-        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
-        try {
-            LocalDate startDate =  LocalDate.parse(rentPaymentsRequest.startDate());
-            LocalDate endDate =  LocalDate.parse(rentPaymentsRequest.endDate());
-            return ResponseEntity.ok(VariableFeeMapper.toRentVariableFeesResponse(variableFeeService.getRentVariableFees(id, userId, startDate, endDate, pageable)));
-        }catch (DateTimeParseException exception) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    RentExceptionMessages.DATE_PARSING_ERROR,
-                    new DateParsingException(RentExceptionMessages.DATE_PARSING_ERROR, exception, ErrorCodes.DATE_PARSING_ERROR));
-        }
-
-    }
-
     @PatchMapping("/locals/{id}/leave")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<LeaveLocalResponse> leaveLocal(@PathVariable UUID id) {
-        try{
-             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
-             localService.leaveLocal(userId, id);
-             return ResponseEntity.ok(new LeaveLocalResponse(true));
+        try {
+            UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+            localService.leaveLocal(userId, id);
+            return ResponseEntity.ok(new LeaveLocalResponse(true));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (InvalidLocalState e) {
@@ -184,32 +128,26 @@ public class MeOwnerController {
 
     @PatchMapping("/locals/{id}/fixed-fee")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<GetOwnLocalsResponse> setFixedFee(@PathVariable UUID id, @RequestBody @Valid SetFixedFeeRequest setFixedFeeRequest) {
+    public ResponseEntity<GetOwnLocalsResponse> setFixedFee(@PathVariable UUID id, @RequestBody @Valid SetFixedFeeRequest setFixedFeeRequest) throws NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID ownerId = UUID.fromString(jwt.getSubject());
-
-        try {
-            Local local = localService.setFixedFee(id, ownerId, setFixedFeeRequest.rentalFee(), setFixedFeeRequest.marginFee());
-            return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponse(local));
-        } catch (NotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
-
+        Local local = localService.setFixedFee(id, ownerId, setFixedFeeRequest.marginFee(), setFixedFeeRequest.rentalFee());
+        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponse(local));
     }
 
     @PatchMapping("/rents/{id}/end-date")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody SetEndDateRequest setEndDateRequest) {
+    public ResponseEntity<RentForOwnerResponse> editEndDate(@PathVariable UUID id, @RequestBody @Valid SetEndDateRequest setEndDateRequest) {
         try {
             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
-            LocalDate newDate =  LocalDate.parse(setEndDateRequest.newEndDate());
+            LocalDate newDate = LocalDate.parse(setEndDateRequest.newEndDate());
             return ResponseEntity.ok(RentMapper.rentForOwnerResponse(rentService.editEndDate(id, userId, newDate)));
         } catch (DateTimeParseException exception) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, RentExceptionMessages.WRONG_DATE_FORMAT, new WrongEndDateException(RentExceptionMessages.WRONG_DATE_FORMAT, ErrorCodes.WRONG_END_DATE));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        } catch (WrongEndDateException e) {
+        } catch (WrongEndDateException | RentAlreadyEndedException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }

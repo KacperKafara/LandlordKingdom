@@ -19,7 +19,6 @@ export const useGetActiveLocal = (id: string) => {
         return response.data;
       } catch (error) {
         const axiosError = error as AxiosError;
-
         toast({
           variant: "destructive",
           title: t("localDetails.error"),

@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -37,7 +39,11 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT l FROM Local l WHERE l.owner.user.id = :id")
-    List<Local> findAllByOwnerId(UUID id);
+    Page<Local> findAllByOwnerId(UUID id, Pageable pageable);
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT l FROM Local l WHERE l.owner.user.id = :id AND l.state = :state")
+    Page<Local> findAllByOwnerIdAndState(UUID id, Pageable pageable, LocalState state);
 
     @PreAuthorize("isAuthenticated()")
     List<Local> findAllByState(LocalState localState);
@@ -47,7 +53,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @NonNull
-    List<Local> findAll();
+    Page<Local> findAll(@NonNull Pageable pageable);
 
     @PreAuthorize("hasRole('TENANT')")
     Optional<Local> findByIdAndState(UUID id, LocalState state);

@@ -11,6 +11,7 @@ import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
+import DataField from "@/components/DataField.tsx";
 
 const ActiveLocals: FC = () => {
   const { data: locals, isLoading } = useGetActiveLocals();
@@ -20,7 +21,7 @@ const ActiveLocals: FC = () => {
     <div className="flex h-full justify-center">
       {isLoading && <RefreshCw className="animate-spin" />}
       {!isLoading && locals && locals.length === 0 && (
-        <div>No locals found</div>
+        <div>{t("activeLocals.error")}</div>
       )}
       {!isLoading && locals && locals.length > 0 && (
         <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
@@ -31,19 +32,23 @@ const ActiveLocals: FC = () => {
                 variant="ghost"
                 onClick={() => navigate(`/tenant/locals/${local.id}`)}
               >
-                {t("allLocals.show")}
+                {t("activeLocals.show")}
               </Button>
               <CardHeader>
                 <CardTitle>{local.name}</CardTitle>
-                <CardDescription>
-                  <p>{local.description}</p>
-                </CardDescription>
+                <CardDescription>{local.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <p>
-                  {local.address.street} {local.address.number},{" "}
-                  {local.address.zipCode} {local.address.city}
-                </p>
+                <div className="grid w-2/3 grid-cols-4">
+                  <DataField
+                    label={t("activeLocals.city")}
+                    value={local.city}
+                  />
+                  <DataField
+                    label={t("activeLocals.size")}
+                    value={local.size}
+                  />
+                </div>
               </CardContent>
             </Card>
           ))}

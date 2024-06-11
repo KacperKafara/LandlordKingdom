@@ -24,10 +24,10 @@ const CurrentRentsPage: FC = () => {
     { title: t("navLinks.currentRents"), path: "/tenant/current-rents" },
   ]);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingData />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <div>{t("tenantRents.noData")}</div>;
   }
 
   return (
@@ -48,7 +48,6 @@ const CurrentRentsPage: FC = () => {
                       rent.local.address.number +
                       ", " +
                       rent.local.address.zipCode.substring(0, 2) +
-                      "-" +
                       rent.local.address.zipCode.substring(2) +
                       " " +
                       rent.local.address.city}
@@ -66,17 +65,23 @@ const CurrentRentsPage: FC = () => {
                   />
                   <DataField
                     label={t("tenantRents.fixedFee")}
-                    value={(
-                      rent.local.rentalFee + rent.local.marginFee
-                    ).toString()}
+                    value={
+                      (rent.local.rentalFee + rent.local.marginFee)
+                        .toFixed(2)
+                        .toString() +
+                      " " +
+                      t("currency")
+                    }
                   />
                   <DataField
                     label={t("tenantRents.balance")}
-                    value={rent.balance.toString()}
+                    value={
+                      rent.balance.toFixed(2).toString() + " " + t("currency")
+                    }
                   />
                   <DataField
                     label={t("tenantRents.localSize")}
-                    value={rent.local.size.toString()}
+                    value={rent.local.size.toString() + " m²"}
                   />
                   <p className="col-span-2 my-3 text-xl font-bold">
                     {t("tenantRents.owner")}
@@ -96,7 +101,11 @@ const CurrentRentsPage: FC = () => {
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
                   <Button className="flex-auto" asChild>
-                    <NavLink to={`/tenant/rents/${rent.id}`}>Details</NavLink>
+                    <NavLink
+                      to={`/tenant/rents/${rent.id}?referer=current-rents`}
+                    >
+                      Details
+                    </NavLink>
                   </Button>
                   <Button className="flex-auto">Action 2</Button>
                   <Button className="flex-auto">Action 3</Button>

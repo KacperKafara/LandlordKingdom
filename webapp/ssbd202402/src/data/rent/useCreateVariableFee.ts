@@ -1,6 +1,9 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosPrivate from "../useAxiosPrivate";
+import { AxiosError } from "axios";
+import { ErrorCode } from "@/@types/errorCode";
+import { useTranslation } from "react-i18next";
 
 type CreateVariableFeeRequest = {
   rentId: string;
@@ -8,6 +11,7 @@ type CreateVariableFeeRequest = {
 };
 
 export const useCreateVariableFee = () => {
+  const { t } = useTranslation();
   const { api } = useAxiosPrivate();
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -17,10 +21,17 @@ export const useCreateVariableFee = () => {
     },
     onSuccess: async () => {
       toast({
-        title: "Variable fee created",
+        title: t("createVariableFeeDialog.success"),
         variant: "success",
       });
       return await queryClient.invalidateQueries({ queryKey: ["tenantRent"] });
+    },
+    onError: (error: AxiosError<ErrorCode>) => {
+      const { data } = error.response!;
+      toast({
+        title: t(`errors.${data.exceptionCode}`),
+        variant: "destructive",
+      });
     },
   });
 
