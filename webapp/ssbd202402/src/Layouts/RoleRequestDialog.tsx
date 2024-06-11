@@ -16,6 +16,7 @@ const RoleRequestDialogComponent: FC = () => {
   const { isOpened, closeDialog } = useDialogStore();
   const { roleRequest, isError } = useGetRoleRequest();
   const { createRoleRequest } = useCreateRoleRequest();
+  console.log(roleRequest);
   return (
     <Dialog open={isOpened("roleRequest")} onOpenChange={closeDialog}>
       <DialogContent>
@@ -25,9 +26,8 @@ const RoleRequestDialogComponent: FC = () => {
         <div className="flex flex-col gap-3">
           {roleRequest && (
             <div>
-              {t("roleRequestDialog.alreadyPlacedRequest", {
-                when: roleRequest?.createdAt.toString() ?? "",
-              })}
+              {t("roleRequestDialog.alreadyPlacedRequest")}
+              {roleRequest?.createdAt.toString() ?? ""}
             </div>
           )}
           <h2 className="font-bold">{t("roleRequestDialog.howDoesItWork")}</h2>

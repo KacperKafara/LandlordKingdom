@@ -471,7 +471,7 @@ const roleRequestDialog = {
   requestOwnerRole: "Złóż prośbę o role właściciela",
   requestOwnerRoleDescription:
     "Kliknij ten przycisk, aby złożyć wniosek o przyznanie roli właściciela.",
-  alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: {{when}}",
+  alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: ",
   howDoesItWork: "Jak to działa?",
   requestRoleButton: "Złóż wniosek",
 };
