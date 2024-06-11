@@ -1,4 +1,5 @@
 import DataField from "@/components/DataField";
+import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { TenantOwnRents } from "@/types/tenant/rentForTenant";
 import { getAddressString } from "@/utils/address";
@@ -12,8 +13,12 @@ type RentInformationCardProps = {
 const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
   const { t } = useTranslation();
   return (
-    <Card>
+    <Card className="relative">
       <CardContent>
+        <RefreshQueryButton
+          queryKeys={["tenantRent"]}
+          className="absolute right-0 top-0"
+        />
         <div className="grid grid-cols-2 gap-2">
           <h2 className="col-span-2 pt-4 text-xl font-semibold">
             {t("rentDetailsPage.rentDetails")}
