@@ -9,3 +9,5 @@ export interface OwnerCurrentRent {
   local: OwnLocals;
   tenant: TenantForOwner;
 }
+
+export type OwnerArchivalRent = OwnerCurrentRent;

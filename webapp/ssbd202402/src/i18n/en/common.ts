@@ -485,6 +485,7 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
+  archivalRents: "Archival rents",
 };
 
 const leaveLocal = {
@@ -520,6 +521,7 @@ const changeEndDate = {
   formLabel: "New end date",
   formDescription: "End date must be in the future and it must be Sunday.",
   spanText: "Pick a date",
+  saveChanges: "Save changes",
 };
 const roleRequestDialog = {
   description:
@@ -689,6 +691,7 @@ const ownerRentDetails = {
   rental: "Rental Fee",
   summary: "Total",
   showLocalDetails: "Show local details",
+  archivalRents: "Archival rents",
 };
 
 const tenantApplications = {
