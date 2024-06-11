@@ -54,7 +54,7 @@ const PaymentsPageChanger: FC<PaymentsPageChangerProps> = ({
       <div className="flex items-center gap-2">
         <p className="mr-1">{t("pageChanger.numberOfElements")}</p>
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button
               className="flex h-8 items-center px-2"
               variant="outline"

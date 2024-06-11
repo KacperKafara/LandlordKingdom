@@ -1,4 +1,3 @@
-import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useTenantRent } from "@/data/rent/useTenantRent";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
@@ -43,10 +42,18 @@ const RentDetailsPage: FC = () => {
         <Tabs defaultValue="details" className="mt-2">
           <div className="flex flex-row justify-between">
             <TabsList>
-              <TabsTrigger value="details">Details</TabsTrigger>
-              <TabsTrigger value="payments">Payments</TabsTrigger>
-              <TabsTrigger value="fixedFees">Fixed Fees</TabsTrigger>
-              <TabsTrigger value="variableFees">Variable Fees</TabsTrigger>
+              <TabsTrigger value="details">
+                {t("rentDetailsPage.details")}
+              </TabsTrigger>
+              <TabsTrigger value="payments">
+                {t("rentDetailsPage.payments")}
+              </TabsTrigger>
+              <TabsTrigger value="fixedFees">
+                {t("rentDetailsPage.fixedFees")}
+              </TabsTrigger>
+              <TabsTrigger value="variableFees">
+                {t("rentDetailsPage.variableFees")}
+              </TabsTrigger>
             </TabsList>
             {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
           </div>

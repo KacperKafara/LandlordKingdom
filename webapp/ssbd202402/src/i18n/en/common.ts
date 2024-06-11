@@ -729,6 +729,10 @@ const rentDetailsPage = {
     name: "Name",
     email: "Email",
   },
+  details: "Details",
+  payments: "Payments",
+  fixedFees: "Fixed fees",
+  variableFees: "Variable fees",
 };
 
 export default {

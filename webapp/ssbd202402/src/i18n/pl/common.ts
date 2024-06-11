@@ -736,6 +736,10 @@ const rentDetailsPage = {
     name: "Imię",
     email: "Email",
   },
+  details: "Szczegóły",
+  payments: "Płatności",
+  fixedFees: "Opłaty stałe",
+  variableFees: "Opłaty zmienne",
 };
 
 export default {
