@@ -16,7 +16,6 @@ import pl.lodz.p.it.ssbd2024.exceptions.RoleRequestAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.exceptions.UserAlreadyHasRoleException;
 import pl.lodz.p.it.ssbd2024.exceptions.VariableFeeAlreadyExistsException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
-import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
@@ -45,17 +44,13 @@ public class MeTenantController {
 
     @PostMapping("/role-request")
     @PreAuthorize("hasRole('TENANT')")
-    public ResponseEntity<GetRoleRequestResponse> requestRole() {
+    public ResponseEntity<GetRoleRequestResponse> requestRole() throws NotFoundException {
         try {
             RoleRequest roleRequest = roleService.requestRole();
             User user = roleRequest.getTenant().getUser();
             return ResponseEntity.ok(RoleRequestMapper.toRoleResponse(roleRequest, user.getTimezone(), user.getLanguage()));
-        } catch (RoleRequestAlreadyExistsException e) {
-            throw new RuntimeException(e);
-        } catch (UserAlreadyHasRoleException e) {
-            throw new RuntimeException(e);
-        } catch (NotFoundException e) {
-            throw new RuntimeException(e);
+        } catch (RoleRequestAlreadyExistsException | UserAlreadyHasRoleException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 

@@ -421,6 +421,7 @@ const errors = {
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
+  rentEnded: "Wynajem zakończony",
   variableFeeAlreadyExists: "Opłata zmienna już istnieje",
   dateParsingError: "Błąd parsowania daty",
   rollback: "Operacja została cofnięta",
@@ -471,7 +472,7 @@ const roleRequestDialog = {
   requestOwnerRole: "Złóż prośbę o role właściciela",
   requestOwnerRoleDescription:
     "Kliknij ten przycisk, aby złożyć wniosek o przyznanie roli właściciela.",
-  alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: {{when}}",
+  alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: ",
   howDoesItWork: "Jak to działa?",
   requestRoleButton: "Złóż wniosek",
 };
