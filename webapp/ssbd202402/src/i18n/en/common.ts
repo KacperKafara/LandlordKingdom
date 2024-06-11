@@ -451,6 +451,11 @@ const allLocals = {
   localOwner: "Owner: ",
   noLocalsFound: "Currently there are no locals",
   noOwner: "No owner",
+  localState: "Local state",
+  all: "All",
+  noLocalsFoundWithGivenParameters:
+    "Currently there are no locals with given parameters",
+  login: "Owner login",
 };
 
 const localState = {
