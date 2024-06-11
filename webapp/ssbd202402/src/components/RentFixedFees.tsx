@@ -7,22 +7,22 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useRentPayments } from "@/data/rent/useRentPayments";
 import { format } from "date-fns";
 import { FC, useState } from "react";
-import DateSelector from "./DateSelector";
-import PaymentsPageChanger from "./PaymentsPageChanger";
+import DateSelector from "../pages/Owner/RentDetails/DateSelector";
+import PaymentsPageChanger from "../pages/Owner/RentDetails/PaymentsPageChanger";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTranslation } from "react-i18next";
+import { useRentFixedFees } from "@/data/rent/useRentFixedFees";
 import { LoadingData } from "@/components/LoadingData";
 
-type RentPaymentProps = {
+type RentFixedFeesProps = {
   id: string;
   startDate: string;
   endDate: string;
 };
 
-export const RentPayments: FC<RentPaymentProps> = ({
+export const RentFixedFees: FC<RentFixedFeesProps> = ({
   id,
   startDate,
   endDate,
@@ -35,7 +35,7 @@ export const RentPayments: FC<RentPaymentProps> = ({
   const [selectEndDate, setSelectEndDate] = useState<Date | undefined>(
     new Date(endDate)
   );
-  const { data, isLoading } = useRentPayments({
+  const { data, isLoading } = useRentFixedFees({
     id: id!,
     pageNumber: pageNumber,
     pageSize: pageSize,
@@ -52,10 +52,10 @@ export const RentPayments: FC<RentPaymentProps> = ({
     <Card className="relative">
       <RefreshQueryButton
         className="absolute right-0 top-0"
-        queryKeys={["rentPayments"]}
+        queryKeys={["rentFixedFees"]}
       />
       <CardHeader className="text-center">
-        <CardTitle>{t("ownerRentDetails.payments")}</CardTitle>
+        <CardTitle>{t("ownerRentDetails.fixedFees")}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap justify-center gap-10 py-5">
@@ -81,17 +81,30 @@ export const RentPayments: FC<RentPaymentProps> = ({
                   </TableHead>
                   <TableHead>{t("ownerRentDetails.date")}</TableHead>
                   <TableHead className="text-right">
-                    {t("ownerRentDetails.amount")}
+                    {t("ownerRentDetails.margin")}
+                  </TableHead>
+                  <TableHead className="w-48 text-right">
+                    {t("ownerRentDetails.rental")}
+                  </TableHead>
+                  <TableHead className="w-48 text-right">
+                    {t("ownerRentDetails.summary")}
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {data?.rentPayments.map((payment, index) => (
-                  <TableRow key={payment.date}>
+                {data?.rentFixedFees.map((fee, index) => (
+                  <TableRow key={fee.date}>
                     <TableCell>{index + 1 + pageSize * pageNumber}</TableCell>
-                    <TableCell>{payment.date}</TableCell>
+                    <TableCell>{fee.date}</TableCell>
                     <TableCell className="text-right">
-                      {payment.amount.toFixed(2) + t("currency")}
+                      {fee.marginFee.toFixed(2) + t("currency")}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {fee.rentalFee.toFixed(2) + t("currency")}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {(fee.rentalFee + fee.marginFee).toFixed(2) +
+                        t("currency")}
                     </TableCell>
                   </TableRow>
                 ))}

@@ -707,6 +707,8 @@ const breadcrumbs = {
   tenant: "Tenant",
   locals: "Locals",
   local: "Local",
+  currentRents: "Current rents",
+  archivalRents: "Archival rents",
 };
 
 const createVariableFeeDialog = {
@@ -716,7 +718,28 @@ const createVariableFeeDialog = {
   success: "Variable fee created",
 };
 
+const rentDetailsPage = {
+  rentDetails: "Rent details",
+  localDetails: "Local details",
+  ownerDetails: "Owner details",
+  labels: {
+    startDate: "Start date",
+    endDate: "End date",
+    balance: "Balance",
+    localName: "Local name",
+    address: "Address",
+    fixedFee: "Fixed fee",
+    name: "Name",
+    email: "Email",
+  },
+  details: "Details",
+  payments: "Payments",
+  fixedFees: "Fixed fees",
+  variableFees: "Variable fees",
+};
+
 export default {
+  rentDetailsPage,
   createVariableFeeDialog,
   tenantApplications,
   changeAddressForm,

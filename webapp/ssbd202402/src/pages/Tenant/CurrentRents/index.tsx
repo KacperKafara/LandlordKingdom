@@ -101,7 +101,11 @@ const CurrentRentsPage: FC = () => {
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
                   <Button className="flex-auto" asChild>
-                    <NavLink to={`/tenant/rents/${rent.id}`}>Details</NavLink>
+                    <NavLink
+                      to={`/tenant/rents/${rent.id}?referer=current-rents`}
+                    >
+                      Details
+                    </NavLink>
                   </Button>
                   <Button className="flex-auto">Action 2</Button>
                   <Button className="flex-auto">Action 3</Button>

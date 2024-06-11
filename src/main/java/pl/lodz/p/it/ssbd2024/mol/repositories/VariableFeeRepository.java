@@ -23,8 +23,8 @@ public interface VariableFeeRepository extends JpaRepository<VariableFee, UUID> 
     @PreAuthorize("hasRole('TENANT')")
     VariableFee saveAndFlush(@NonNull VariableFee variableFee);
 
-    @PreAuthorize("hasRole('OWNER')")
-    @Query("SELECT fee FROM VariableFee fee WHERE fee.rent.id = :rentId AND fee.rent.owner.user.id = :userId AND fee.date BETWEEN :startDate AND :endDate")
+    @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
+    @Query("SELECT fee FROM VariableFee fee WHERE fee.rent.id = :rentId AND (fee.rent.owner.user.id = :userId OR fee.rent.tenant.user.id = :userId) AND fee.date BETWEEN :startDate AND :endDate")
     Page<VariableFee> findRentVariableFeesBetween(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable);
 
     @PreAuthorize("hasRole('TENANT')")
