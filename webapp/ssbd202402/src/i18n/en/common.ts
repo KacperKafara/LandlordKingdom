@@ -419,6 +419,7 @@ const errors = {
   rentEnded: "Rent has already ended",
   dateParsingError: "Date parsing error",
   variableFeeAlreadyExists: "Variable fee already exists",
+  paymentAlreadyExists: "Fixed fee already exists",
   roleRequestAlreadyExists: "Role request already exists",
   rollback: "Rollback",
   transaction: "Transaction",
@@ -718,26 +719,32 @@ const createVariableFeeDialog = {
 
 const createPaymentDialog = {
   success: "Payment created",
+  title: "Create payment",
+  amount: "Amount*",
+  amountMustBePositive: "Amount must be positive",
+  amountMustBeLessThanOrEqualToTenThousand: "Amount must be less than 10,000",
+  amountMustHaveAtMostTwoFractionalDigits:
+    "Amount must have at most two fractional digits",
 };
 
 const rentDetailsPage = {
-    rentDetails: "Rent details",
-    localDetails: "Local details",
-    ownerDetails: "Owner details",
-    labels: {
-        startDate: "Start date",
-        endDate: "End date",
-        balance: "Balance",
-        localName: "Local name",
-        address: "Address",
-        fixedFee: "Fixed fee",
-        name: "Name",
-        email: "Email",
-    },
-    details: "Details",
-    payments: "Payments",
-    fixedFees: "Fixed fees",
-    variableFees: "Variable fees",
+  rentDetails: "Rent details",
+  localDetails: "Local details",
+  ownerDetails: "Owner details",
+  labels: {
+    startDate: "Start date",
+    endDate: "End date",
+    balance: "Balance",
+    localName: "Local name",
+    address: "Address",
+    fixedFee: "Fixed fee",
+    name: "Name",
+    email: "Email",
+  },
+  details: "Details",
+  payments: "Payments",
+  fixedFees: "Fixed fees",
+  variableFees: "Variable fees",
 };
 
 export default {
