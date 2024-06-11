@@ -9,7 +9,6 @@ import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
 import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
-import ActiveLocals from "@/pages/Tenant/Locals";
 import addLocalForm from "./pages/Owner/addLocalForm";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));

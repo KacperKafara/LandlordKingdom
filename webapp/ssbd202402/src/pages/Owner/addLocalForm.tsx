@@ -67,7 +67,7 @@ const AddLocalForm: FC = () => {
                 <Card className="relative mt-3">
                     <CardContent>
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                            <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
                                     name="name"
@@ -219,7 +219,11 @@ const AddLocalForm: FC = () => {
                                         </FormItem>
                                     )}
                                 />
-                                <Button type="submit">{t("addLocalPage.formSubmit")}</Button>
+                                <div className="col-span-2">
+                                    <Button type="submit" className="w-full">
+                                        {t("addLocalPage.formSubmit")}
+                                    </Button>
+                                </div>
                             </form>
                         </Form>
                     </CardContent>
