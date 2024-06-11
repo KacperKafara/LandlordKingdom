@@ -416,6 +416,7 @@ const errors = {
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
   addressAlreadyAssigned: "Address asigned to another local",
+  rentEnded: "Rent has already ended",
 } satisfies {
   [key in ExceptionCode]: string;
 };

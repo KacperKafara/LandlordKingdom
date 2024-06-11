@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mol.services;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.RentAlreadyEndedException;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
@@ -20,7 +21,7 @@ public interface RentService {
 
     Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException;
 
-    Rent editEndDate(UUID rentId, UUID userId, LocalDate newEndDate) throws WrongEndDateException, NotFoundException;
+    Rent editEndDate(UUID rentId, UUID userId, LocalDate newEndDate) throws WrongEndDateException, NotFoundException, RentAlreadyEndedException;
 
     List<Rent> getCurrentTenantRents(UUID userId);
 

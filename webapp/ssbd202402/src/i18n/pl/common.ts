@@ -421,6 +421,7 @@ const errors = {
   invalidLocalStateArchive:
     "Nie można zarchiwizować nieruchomości. Lokal nie może posiadać właściciela",
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
+  rentEnded: "Wynajem zakończony",
 } satisfies {
   [key in ExceptionCode]: string;
 };

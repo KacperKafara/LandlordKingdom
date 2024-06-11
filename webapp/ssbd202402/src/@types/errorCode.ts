@@ -42,4 +42,5 @@ export type ExceptionCode =
   | "rentNotFound"
   | "wrongEndDate"
   | "invalidLocalStateArchive"
-  | "addressAlreadyAssigned";
+  | "addressAlreadyAssigned"
+  | "rentEnded";

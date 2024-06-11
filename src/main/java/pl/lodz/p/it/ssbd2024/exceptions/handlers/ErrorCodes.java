@@ -45,4 +45,5 @@ public class ErrorCodes {
     public static final String RENT_NOT_FOUND = "rentNotFound";
     public static final String DATE_PARSING_ERROR = "dateParsingError";
     public static final String ADDRESS_ALREADY_ASSIGNED = "addressAlreadyAssigned";
+    public static final String RENT_ENDED = "rentEnded";
 }
