@@ -28,6 +28,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,8 +59,13 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<Local> getOwnLocals(UUID id) {
-        return localRepository.findAllByOwnerId(id);
+    public Page<Local> getOwnLocals(UUID id, Pageable pageable, String state) {
+        if(Objects.equals(state, "ALL")) {
+            return localRepository.findAllByOwnerId(id, pageable);
+        }
+
+        LocalState localState = LocalState.valueOf(state);
+        return localRepository.findAllByOwnerIdAndState(id, pageable, localState);
     }
 
     @Override

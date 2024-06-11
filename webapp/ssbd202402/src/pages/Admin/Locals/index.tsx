@@ -15,6 +15,7 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useNavigate } from "react-router-dom";
 import { LoadingData } from "@/components/LoadingData";
 import { PageChangerComponent } from "../Components/PageChangerComponent";
+import { getAddressString } from "@/utils/address";
 
 const AllLocals: FC = () => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -70,23 +71,18 @@ const AllLocals: FC = () => {
                   <CardHeader>
                     <CardTitle>{local.name}</CardTitle>
                     <CardDescription>
-                      <p>
-                        {local.address.street} {local.address.number},{" "}
-                        {local.address.zipCode} {local.address.city}
-                      </p>
+                      {getAddressString(local.address)}
                       {(local.ownerLogin && (
-                        <p>
+                        <>
                           {t("allLocals.localOwner") + " " + local.ownerLogin}
-                        </p>
-                      )) || <p>{t("allLocals.noOwner")}</p>}
+                        </>
+                      )) || <>{t("allLocals.noOwner")}</>}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    <p>{local.description}</p>
+                    {local.description}
                   </CardContent>
-                  <CardFooter>
-                    <p>{t(`localState.${local.state}`)}</p>
-                  </CardFooter>
+                  <CardFooter>{t(`localState.${local.state}`)}</CardFooter>
                 </Card>
               </li>
             ))}
@@ -98,7 +94,7 @@ const AllLocals: FC = () => {
             setPageNumber={setPageNumber}
             setNumberOfElements={setPageSize}
             className="mb-3 flex items-center justify-end gap-12"
-          />
+          ></PageChangerComponent>
         </div>
       </div>
       <RefreshQueryButton
