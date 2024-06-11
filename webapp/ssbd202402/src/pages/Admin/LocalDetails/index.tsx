@@ -79,36 +79,48 @@ const LocalDetailsPage: FC = () => {
                         />
                         <DataField
                           label={t("localDetails.rentalFee")}
-                          value={data.rentalFee.toString()}
+                          value={
+                            data.rentalFee.toFixed(2).toString() +
+                            " " +
+                            t("currency")
+                          }
                         />
                         <DataField
                           label={t("localDetails.marginFee")}
-                          value={data.marginFee.toString()}
+                          value={
+                            data.marginFee.toFixed(2).toString() +
+                            " " +
+                            t("currency")
+                          }
                         />
                         <DataField
                           label={t("localDetails.state")}
                           value={t(`localState.${data.state}`)}
                         />
-                        <p className="col-span-2 text-xl font-semibold">
-                          {t("localDetails.ownerInformation")}{" "}
-                        </p>
 
-                        <DataField
-                          label={t("localDetails.firstName")}
-                          value={data.owner.firstName}
-                        />
-                        <DataField
-                          label={t("localDetails.lastName")}
-                          value={data.owner.lastName}
-                        />
-                        <DataField
-                          label={t("localDetails.login")}
-                          value={data.owner.login}
-                        />
-                        <DataField
-                          label={t("localDetails.email")}
-                          value={data.owner.email}
-                        />
+                        {data.owner && (
+                          <>
+                            <p className="col-span-2 text-xl font-semibold">
+                              {t("localDetails.ownerInformation")}
+                            </p>
+                            <DataField
+                              label={t("localDetails.firstName")}
+                              value={data.owner.firstName}
+                            />
+                            <DataField
+                              label={t("localDetails.lastName")}
+                              value={data.owner.lastName}
+                            />
+                            <DataField
+                              label={t("localDetails.login")}
+                              value={data.owner.login}
+                            />
+                            <DataField
+                              label={t("localDetails.email")}
+                              value={data.owner.email}
+                            />
+                          </>
+                        )}
 
                         <p className="col-span-2 text-xl font-semibold">
                           {t("localDetails.addressInformation")}{" "}
@@ -148,7 +160,7 @@ const LocalDetailsPage: FC = () => {
                               variant="secondary"
                               className="mt-3 w-full text-lg font-normal"
                               onClick={() => {
-                                navigate(`/admin/users/${data.owner.userId}`);
+                                navigate(`/admin/users/${data.owner!.userId}`);
                               }}
                             >
                               {t("localDetails.showOwnerDetails")}

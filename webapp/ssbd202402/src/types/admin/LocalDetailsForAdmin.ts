@@ -4,7 +4,7 @@ export type LocalDetailsForAdmin = {
   name: string;
   size: number;
   description: string;
-  owner: {
+  owner?: {
     userId: string;
     firstName: string;
     lastName: string;
