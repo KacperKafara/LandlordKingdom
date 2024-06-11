@@ -58,7 +58,7 @@ public class VariableFeeServiceImpl implements VariableFeeService {
     }
 
     @Override
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
     public Page<VariableFee> getRentVariableFees(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         return variableFeeRepository.findRentVariableFeesBetween(rentId, userId, startDate, endDate, pageable);
     }

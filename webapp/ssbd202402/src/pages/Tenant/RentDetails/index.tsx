@@ -32,15 +32,18 @@ const RentDetailsPage: FC = () => {
           <RefreshQueryButton queryKeys={["tenantRent"]} />
         </div>
         {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
-        <RentInformationCard rent={rent} />
         <Tabs defaultValue="payments">
           <TabsList>
+            <TabsTrigger value="details">Payments</TabsTrigger>
             <TabsTrigger value="payments">Payments</TabsTrigger>
             <TabsTrigger value="fixedFees">Fixed Fees</TabsTrigger>
             <TabsTrigger value="variableFees">Variable Fees</TabsTrigger>
           </TabsList>
           <Card>
             <CardContent>
+              <TabsContent value="details">
+                <RentInformationCard rent={rent} />
+              </TabsContent>
               <TabsContent value="payments">Payments</TabsContent>
               <TabsContent value="fixedFees">Fixed Fees</TabsContent>
               <TabsContent value="variableFees">Variable Fees</TabsContent>

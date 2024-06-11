@@ -1,6 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record RentPaymentsRequest(
+public record PaymentsAndFeesRequest(
         String startDate,
         String endDate
 ) {
