@@ -14,7 +14,7 @@ import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useNavigate } from "react-router-dom";
 import { LoadingData } from "@/components/LoadingData";
-import { PageChangerComponent } from "./PageChangerComponent";
+import { PageChangerComponent } from "../Components/PageChangerComponent";
 
 const AllLocals: FC = () => {
   const [pageNumber, setPageNumber] = useState(0);
@@ -58,7 +58,7 @@ const AllLocals: FC = () => {
         <div className="flex h-full w-11/12 flex-col justify-center">
           <ul className="flex flex-wrap gap-2 py-4">
             {locals.map((local) => (
-              <li key={local.id} className="w-full min-w-[31rem] flex-1">
+              <li key={local.id} className="w-full min-w-[35rem] flex-1">
                 <Card className="relative">
                   <Button
                     onClick={() => navigate(`local/${local.id}`)}
