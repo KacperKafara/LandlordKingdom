@@ -74,9 +74,11 @@ const AllLocals: FC = () => {
                         {local.address.street} {local.address.number},{" "}
                         {local.address.zipCode} {local.address.city}
                       </p>
-                      <p>
-                        {t("allLocals.localOwner") + " " + local.ownerLogin}
-                      </p>
+                      {(local.ownerLogin && (
+                        <p>
+                          {t("allLocals.localOwner") + " " + local.ownerLogin}
+                        </p>
+                      )) || <p>{t("allLocals.noOwner")}</p>}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
