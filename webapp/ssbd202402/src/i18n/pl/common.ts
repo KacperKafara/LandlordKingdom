@@ -445,6 +445,10 @@ const ownerLocals = {
   addFirstLocal: "Dodaj pierwszą nieruchomość",
   title: "Strona główna",
   locals: "Nieruchomości",
+  localState: "Stan lokalu",
+  all: "Wszystkie",
+  noLocalsFoundForThisState:
+    "Aktualnie nie posiadasz żadnych lokali w tym stanie",
 };
 
 const allLocals = {
@@ -719,6 +723,8 @@ const breadcrumbs = {
   tenant: "Najemca",
   locals: "Lokale",
   local: "Lokal",
+  currentRents: "Aktualne wynajmy",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const tenantApplications = {
@@ -737,7 +743,28 @@ const createVariableFeeDialog = {
   success: "Opłata zmienna została dodana",
 };
 
+const rentDetailsPage = {
+  rentDetails: "Szczegóły wynajmu",
+  localDetails: "Szczegóły lokalu",
+  ownerDetails: "Informacje o właściciela",
+  labels: {
+    startDate: "Data rozpoczęcia",
+    endDate: "Data zakończenia",
+    balance: "Bilans",
+    localName: "Nazwa",
+    address: "Adres",
+    fixedFee: "Opłata stała",
+    name: "Imię",
+    email: "Email",
+  },
+  details: "Szczegóły",
+  payments: "Płatności",
+  fixedFees: "Opłaty stałe",
+  variableFees: "Opłaty zmienne",
+};
+
 export default {
+  rentDetailsPage,
   createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
@@ -794,5 +821,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",
   cancel: "Anuluj",
-  currency: " zł",
+  currency: "zł",
 };

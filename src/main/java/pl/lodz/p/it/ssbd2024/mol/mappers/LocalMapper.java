@@ -23,8 +23,11 @@ public class LocalMapper {
         );
     }
 
-    public static List<GetOwnLocalsResponse> toGetOwnLocalsResponseList(List<Local> locals) {
-        return locals.stream().map(LocalMapper::toGetOwnLocalsResponse).collect(Collectors.toList());
+    public static GetOwnLocalsPage toGetOwnLocalsResponseList(Page<Local> locals) {
+        return new GetOwnLocalsPage(
+                locals.map(LocalMapper::toGetOwnLocalsResponse).toList(),
+                locals.getTotalPages()
+        );
     }
 
     public static GetAllLocalsResponse toGetAllLocalsResponse(Local local) {

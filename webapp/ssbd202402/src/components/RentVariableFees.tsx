@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { FC, useState } from "react";
-import DateSelector from "./DateSelector";
-import PaymentsPageChanger from "./PaymentsPageChanger";
+import DateSelector from "../pages/Owner/RentDetails/DateSelector";
+import PaymentsPageChanger from "../pages/Owner/RentDetails/PaymentsPageChanger";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTranslation } from "react-i18next";
 import { useRentVariableFees } from "@/data/rent/useRentVariableFees";

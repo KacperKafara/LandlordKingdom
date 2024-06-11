@@ -27,7 +27,7 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
     @PreAuthorize("hasRole('OWNER')")
     Payment saveAndFlush(@NonNull Payment payment);
 
-    @PreAuthorize("hasRole('OWNER')")
-    @Query("SELECT payment FROM Payment payment WHERE payment.rent.id = :rentId AND payment.rent.owner.user.id = :userId AND payment.date >= :startDate AND payment.date <= :endDate")
+    @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
+    @Query("SELECT payment FROM Payment payment WHERE payment.rent.id = :rentId AND (payment.rent.owner.user.id = :userId OR payment.rent.tenant.user.id = :userId) AND payment.date >= :startDate AND payment.date <= :endDate")
     Page<Payment> findPaymentsForOwnerBetweenDates(@Param("userId") UUID userId, @Param("rentId") UUID rentId, @Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate, Pageable pageable);
 }

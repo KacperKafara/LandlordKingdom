@@ -23,7 +23,7 @@ public interface FixedFeeRepository extends JpaRepository<FixedFee, UUID> {
     @PreAuthorize("hasRole('OWNER')")
     FixedFee saveAndFlush(@NonNull FixedFee fixedFee);
 
-    @PreAuthorize("hasRole('OWNER')")
-    @Query("SELECT fee FROM FixedFee fee WHERE fee.rent.id = :rentId AND fee.rent.owner.user.id = :userId AND fee.date BETWEEN :startDate AND :endDate")
+    @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
+    @Query("SELECT fee FROM FixedFee fee WHERE fee.rent.id = :rentId AND (fee.rent.owner.user.id = :userId OR fee.rent.tenant.user.id = :userId) AND fee.date BETWEEN :startDate AND :endDate")
     Page<FixedFee> findRentVariableFeesBetween(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable);
 }
