@@ -27,6 +27,14 @@ export interface OwnLocals {
   nextRentalFee: number;
   address: Address;
 }
+export interface AddLocal {
+  name: string;
+  description: string;
+  size: number;
+  marginFee: number;
+  rentalFee: number;
+  address: Address;
+}
 
 export interface ActiveLocals {
   id: string;

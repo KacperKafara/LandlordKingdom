@@ -20,8 +20,8 @@ import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.AddressMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
@@ -56,7 +56,34 @@ public class LocalController {
     @PostMapping
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<AddLocalResponse> addLocal(@RequestBody AddLocalRequest addLocalRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID userId = UUID.fromString(jwt.getSubject());
+        try {
+            Address address = new Address(
+                    addLocalRequest.address().country(),
+                    addLocalRequest.address().city(),
+                    addLocalRequest.address().street(),
+                    addLocalRequest.address().number(),
+                    addLocalRequest.address().zipCode()
+            );
+            Local local = new Local(
+                    addLocalRequest.name(),
+                    addLocalRequest.description(),
+                    addLocalRequest.size(),
+                    address,
+                    null,
+                    addLocalRequest.marginFee(),
+                    addLocalRequest.rentalFee()
+            );
+            return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(local, userId)));
+        } catch (GivenAddressAssignedToOtherLocalException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (CreationException e) {
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/{id}/approve")

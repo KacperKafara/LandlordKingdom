@@ -18,6 +18,7 @@ import UpdateOwnLocalFixedFee from "./UpdateOwnLocalFixedFee";
 import UpdateLocalDetailsForm from "@/pages/Owner/OwnLocalDetails/UpdateOwnLocal.tsx";
 import LeaveLocalCard from "./LeaveLocalCard";
 import { LocalState } from "@/@types/localState";
+import LocalApplications from "@/pages/Owner/OwnLocalDetails/ShowApplications.tsx";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -58,6 +59,9 @@ const OwnLocalDetailsPage: FC = () => {
                   </TabsTrigger>
                   <TabsTrigger value="leaveLocal">
                     {t("ownLocalDetails.leaveLocal")}
+                  </TabsTrigger>
+                  <TabsTrigger value="checkApplications">
+                    {t("ownLocalDetails.showApplications")}
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="basic">
@@ -169,6 +173,9 @@ const OwnLocalDetailsPage: FC = () => {
                 </TabsContent>
                 <TabsContent value="leaveLocal">
                   <LeaveLocalCard state={data.data.state as LocalState} id={id!} />
+                </TabsContent>
+                <TabsContent value="checkApplications">
+                  <LocalApplications />
                 </TabsContent>
               </Tabs>
             </div>
