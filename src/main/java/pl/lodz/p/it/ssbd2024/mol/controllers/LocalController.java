@@ -5,22 +5,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.AddressMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
+import pl.lodz.p.it.ssbd2024.util.Signer;
 
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +38,7 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.NEVER)
 public class LocalController {
     private final LocalService localService;
+    private final Signer signer;
 
     @GetMapping("/active")
     @PreAuthorize("isAuthenticated()")
@@ -49,7 +56,34 @@ public class LocalController {
     @PostMapping
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<AddLocalResponse> addLocal(@RequestBody AddLocalRequest addLocalRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID userId = UUID.fromString(jwt.getSubject());
+        try {
+            Address address = new Address(
+                    addLocalRequest.address().country(),
+                    addLocalRequest.address().city(),
+                    addLocalRequest.address().street(),
+                    addLocalRequest.address().number(),
+                    addLocalRequest.address().zipCode()
+            );
+            Local local = new Local(
+                    addLocalRequest.name(),
+                    addLocalRequest.description(),
+                    addLocalRequest.size(),
+                    address,
+                    null,
+                    addLocalRequest.marginFee(),
+                    addLocalRequest.rentalFee()
+            );
+            return ResponseEntity.ok(LocalMapper.toGetAddLocalResponse(localService.addLocal(local, userId)));
+        } catch (GivenAddressAssignedToOtherLocalException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (CreationException e) {
+        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/{id}/approve")
@@ -106,9 +140,15 @@ public class LocalController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestBody EditLocalRequest editLocalRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody EditLocalRequestAdmin editLocalRequest) {
+        try {
+            return ResponseEntity.ok(LocalMapper.toEditLocalResponse(localService.editLocalByAdmin(id, editLocalRequest, tagValue)));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
+        }
+     }
 
     @PatchMapping("/{id}/archive")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
@@ -128,7 +168,10 @@ public class LocalController {
     public ResponseEntity<LocalDetailsForAdminResponse> getLocal(@PathVariable UUID id) {
         try {
             Local local = localService.getLocal(id);
-            return ResponseEntity.ok(LocalMapper.toLocalDetailsForAdminResponse(local));
+            return ResponseEntity
+                    .ok()
+                    .eTag(signer.generateSignature(local.getId(), local.getVersion()))
+                    .body(LocalMapper.toLocalDetailsForAdminResponse(local));
         } catch (NotFoundException e) {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }

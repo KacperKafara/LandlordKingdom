@@ -31,5 +31,6 @@ public interface OwnerRepository extends JpaRepository<Owner, UUID>, JpaSpecific
     @PreAuthorize("permitAll()")
     Optional<Owner> findByUserIdAndActive(UUID user_id, boolean active);
 
+    @PreAuthorize("permitAll()")
     Optional<Owner> findByUserId(UUID id);
 }
