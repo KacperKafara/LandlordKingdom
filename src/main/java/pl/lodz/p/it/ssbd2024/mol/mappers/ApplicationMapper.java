@@ -2,6 +2,7 @@ package pl.lodz.p.it.ssbd2024.mol.mappers;
 
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.User;
+import pl.lodz.p.it.ssbd2024.mol.dto.GetOwnLocalApplicationsResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.OwnApplicationResponse;
 import pl.lodz.p.it.ssbd2024.util.DateUtils;
 
@@ -25,5 +26,20 @@ public class ApplicationMapper {
 
     public static List<OwnApplicationResponse> toGetOwnApplications(List<Application> applications) {
         return applications.stream().map(ApplicationMapper::toOwnApplicationResponse).toList();
+    }
+
+    public static GetOwnLocalApplicationsResponse toGetOwnLocalApplicationResponse(Application application) {
+        User user = application.getTenant().getUser();
+        String timezone = user.getTimezone() != null ?
+                user.getTimezone().getName() : "UTC";
+        String createdAt = DateUtils.convertUTCToAnotherTimezoneSimple(application.getCreatedAt(), timezone, user.getLanguage());
+        return new GetOwnLocalApplicationsResponse(
+                application.getId(),
+                createdAt,
+                user.getLogin());
+    }
+
+    public static List<GetOwnLocalApplicationsResponse> getOwnLocalApplicationsResponses(List<Application> applications) {
+        return applications.stream().map(ApplicationMapper::toGetOwnLocalApplicationResponse).toList();
     }
 }
