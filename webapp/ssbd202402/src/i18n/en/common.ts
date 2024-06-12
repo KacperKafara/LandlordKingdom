@@ -688,6 +688,17 @@ const activeLocalDetails = {
 };
 
 const updateLocalPage = {
+  state: "State",
+  states: {
+    withoutOwner: "Without owner",
+    unapproved: "Unapproved",
+    archived: "Archived",
+    active: "Active",
+    inactive: "Inactive",
+    rented: "Rented",
+    unknown: "Unknown",
+  },
+  updateData: "Update local data",
   name: "Local name",
   description: "Local description",
   size: "Size",
@@ -697,6 +708,7 @@ const updateLocalPage = {
     name: "Wrong name",
     description: "Wrong description",
     size: "Wrong size",
+    state: "Wrong state",
   },
   successTitle: "Success",
   successDescription: "Local updated",
