@@ -13,6 +13,7 @@ import pl.lodz.p.it.ssbd2024.model.FixedFee;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -26,4 +27,8 @@ public interface FixedFeeRepository extends JpaRepository<FixedFee, UUID> {
     @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
     @Query("SELECT fee FROM FixedFee fee WHERE fee.rent.id = :rentId AND (fee.rent.owner.user.id = :userId OR fee.rent.tenant.user.id = :userId) AND fee.date BETWEEN :startDate AND :endDate")
     Page<FixedFee> findRentVariableFeesBetween(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable);
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT fee FROM FixedFee fee WHERE fee.rent.local.id = :localId AND fee.rent.owner.user.id = :userId")
+    List<FixedFee> findByLocalIdAndUserId(UUID localId, UUID userId);
 }

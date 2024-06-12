@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
@@ -23,10 +22,6 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
