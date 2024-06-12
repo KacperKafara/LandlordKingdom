@@ -253,6 +253,7 @@ const navLinks = {
   locals: "Locals",
   currentRents: "Current rents",
   archivalRents: "Archival rents",
+  addLocal: "Add local",
   applications: "Rent applications",
 } satisfies {
   [key in string]: string;
@@ -311,6 +312,34 @@ const mePage = {
   emailInput: "Email*",
   timezone: "Timezone",
 };
+
+const addLocalPage = {
+  title: "Add new local",
+  name: "Name",
+  description: "Description",
+  size: "Size",
+  number: "Number",
+  street: "Street name",
+  city: "City",
+  zip: "Postal code",
+  country: "Country",
+  marginFee: "Margin fee",
+  rentalFee: "Rental fee",
+  formSubmit: "Send form",
+  wrong: {
+    name: "Wrong local name",
+    description: "Wrong local description",
+    size: "Wrong local size",
+    number: "Wrong local number",
+    street: "Wrong street name",
+    city: "Wrong city",
+    zip: "Wrong postal code",
+    country: "Wrong country",
+    marginFee: "Wrong margin fee",
+    rentalFee: "Wrong rental fee",
+  },
+  error: "Failed to add local",
+}
 
 const registerSuccessPage = {
   title: "Thanks for creating an account",
@@ -621,6 +650,7 @@ const ownLocalDetails = {
   leaveLocal: "Leave local",
   leaveLocalDescription:
     "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
+  showApplications: "Show applications",
 };
 
 const activeLocals = {
@@ -628,6 +658,17 @@ const activeLocals = {
   size: "Size",
   city: "City",
   show: "Show details",
+};
+
+const localApplications = {
+  errorTitle: "Error loading applications",
+  showApplications: "Show applications",
+  applicantLogin: "Applicant login",
+  createdAt: "Created at",
+  accept: "Accept",
+  reject: "Reject",
+  noApplications: "No applications available"
+
 };
 
 const activeLocalDetails = {
@@ -815,6 +856,8 @@ export default {
   userDetailsPage,
   updateDataForm,
   mePage,
+  addLocalPage,
+  localApplications,
   userDataPage,
   updateEmailPage,
   validation,

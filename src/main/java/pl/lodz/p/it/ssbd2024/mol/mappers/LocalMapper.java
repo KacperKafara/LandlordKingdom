@@ -147,4 +147,17 @@ public class LocalMapper {
     public static List<GetActiveLocalsResponse> toGetAllActiveLocalsResponseList(List<Local> locals) {
         return locals.stream().map(LocalMapper::toGetAllActiveLocalsResponse).collect(Collectors.toList());
     }
+
+    public static AddLocalResponse toGetAddLocalResponse(Local local) {
+        return new AddLocalResponse(
+                local.getId(),
+                local.getName(),
+                local.getDescription(),
+                local.getState().toString(),
+                local.getSize(),
+                local.getMarginFee(),
+                local.getRentalFee(),
+                AddressMapper.toAddressResponse(local.getAddress())
+        );
+    }
 }

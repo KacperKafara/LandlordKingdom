@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -13,16 +14,20 @@ import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
+import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
+import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.*;
 import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
+import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
-import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
+import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
@@ -32,6 +37,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.Optional;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -43,11 +49,37 @@ public class LocalServiceImpl implements LocalService {
     private final LocalRepository localRepository;
     private final AddressRepository addressRepository;
     private final SignVerifier signVerifier;
+    private final OwnerMolRepository ownerRepository;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    @Transactional(rollbackFor = {IdenticalFieldValueException.class}, propagation = Propagation.REQUIRES_NEW)
+    public Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException {
+        Owner owner = ownerRepository.findByUserIdAndActiveIsTrue(ownerId).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+        Optional<Address> existingAddress = addressRepository.findByAddress(
+                local.getAddress().getCountry(),
+                local.getAddress().getCity(),
+                local.getAddress().getStreet(),
+                local.getAddress().getNumber(),
+                local.getAddress().getZip()
+        );
+        if (existingAddress.isPresent()) {
+            Local existingLocal = localRepository.findByAddressAndStateNotContaining(local.getAddress(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+            if (local.getState() != LocalState.WITHOUT_OWNER) {
+                throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
+                        ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
+            }
+            existingLocal.setOwner(owner);
+            existingLocal.setState(LocalState.UNAPPROVED);
+            return localRepository.saveAndFlush(existingLocal);
+        } else {
+            try {
+                local.setOwner(owner);
+                return localRepository.saveAndFlush(local);
+            } catch (ConstraintViolationException e) {
+                throw new CreationException(UserExceptionMessages.CREATION_FAILED, ErrorCodes.REGISTRATION_ERROR);
+            }
+        }
     }
 
     @Override
