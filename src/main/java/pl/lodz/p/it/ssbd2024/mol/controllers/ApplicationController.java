@@ -16,8 +16,13 @@ import pl.lodz.p.it.ssbd2024.exceptions.CreationException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Application;
+import pl.lodz.p.it.ssbd2024.model.Rent;
+import pl.lodz.p.it.ssbd2024.mol.dto.AcceptApplicationRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.AcceptApplicationResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.OwnApplicationResponse;
+import pl.lodz.p.it.ssbd2024.mol.dto.RentForOwnerResponse;
 import pl.lodz.p.it.ssbd2024.mol.mappers.ApplicationMapper;
+import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 
 import java.util.UUID;
@@ -66,6 +71,32 @@ public class ApplicationController {
         try {
             UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
             applicationService.removeApplication(id, userId);
+            return ResponseEntity.ok().build();
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @PostMapping("/applications/{id}")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<RentForOwnerResponse> acceptApplication(@PathVariable UUID id, @RequestBody AcceptApplicationRequest request) {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        try {
+            Rent rent = applicationService.acceptApplication(id, userId, request.endDate());
+            return ResponseEntity.status(HttpStatus.CREATED).body(RentMapper.rentForOwnerResponse(rent));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (InvalidLocalState e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        }
+    }
+
+    @DeleteMapping("/applications/{id}")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<Void> rejectApplication(@PathVariable UUID id) {
+        try {
+            UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+            applicationService.rejectApplication(id, userId);
             return ResponseEntity.ok().build();
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);

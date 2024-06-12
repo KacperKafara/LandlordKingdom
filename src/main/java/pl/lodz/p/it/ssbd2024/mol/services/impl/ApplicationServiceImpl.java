@@ -13,20 +13,17 @@ import pl.lodz.p.it.ssbd2024.messages.ApplicationExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
-import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.exceptions.LocalAlreadyRentedException;
 import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.ApplicationRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.FixedFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
-import pl.lodz.p.it.ssbd2024.mol.repositories.*;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -61,14 +58,39 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Rent acceptApplication(UUID applicationId) throws NotFoundException, LocalAlreadyRentedException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Rent acceptApplication(UUID applicationId, UUID ownerUserId, LocalDate endDate) throws NotFoundException, InvalidLocalState {
+        Application application = applicationRepository.findApplicationForOwner(applicationId, ownerUserId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.NOT_FOUND));
+        List<Application> restApplications = applicationRepository.findByLocalId(application.getLocal().getId());
+        Tenant tenant = application.getTenant();
+        Owner owner = application.getLocal().getOwner();
+        Local local = application.getLocal();
+
+        if (local.getState() != LocalState.ACTIVE) {
+            throw new InvalidLocalState(LocalExceptionMessages.LOCAL_NOT_ACTIVE, ErrorCodes.LOCAL_NOT_ACTIVE, LocalState.ACTIVE, local.getState());
+        }
+
+        local.setState(LocalState.RENTED);
+        localRepository.saveAndFlush(local);
+
+        Rent rent = new Rent(local, tenant, owner, LocalDate.now(), endDate, local.getRentalFee().subtract(local.getMarginFee()));
+        rent = rentRepository.saveAndFlush(rent);
+
+        FixedFee fixedFee = new FixedFee(local.getRentalFee(), local.getMarginFee(), LocalDate.now(), rent);
+        fixedFeeRepository.saveAndFlush(fixedFee);
+
+        for (Application appl : restApplications) {
+            applicationRepository.delete(appl);
+        }
+
+        return rent;
     }
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public void rejectApplication(UUID applicationId) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void rejectApplication(UUID applicationId, UUID ownerUserId) throws NotFoundException {
+        Application application = applicationRepository.findApplicationForOwner(applicationId, ownerUserId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.NOT_FOUND));
+
+        applicationRepository.delete(application);
     }
 
     @Override

@@ -43,4 +43,8 @@ public interface ApplicationRepository extends JpaRepository<Application, UUID> 
 
     @PreAuthorize("hasAnyRole('TENANT' , 'OWNER')")
     void delete(@NonNull Application application);
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT a FROM Application a WHERE a.id = :applicationId AND a.local.owner.user.id = :ownerUserId AND a.local.owner.active = TRUE")
+    Optional<Application> findApplicationForOwner(UUID applicationId, UUID ownerUserId);
 }

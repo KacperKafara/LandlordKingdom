@@ -81,12 +81,6 @@ public class MeOwnerController {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @PostMapping("/locals/{id}/rent")
-    @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<AcceptApplicationResponse> acceptApplication(@PathVariable UUID id, @RequestBody AcceptApplicationRequest acceptApplicationRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     @GetMapping("/locals/{id}/reports")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<LocalReportResponse> getReportData(@PathVariable UUID id) {
