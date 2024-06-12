@@ -51,4 +51,5 @@ export type ExceptionCode =
   | "addressAlreadyAssigned"
   | "variableFeeAlreadyExists"
   | "wrongEndDate"
-  | "rentEnded";
+  | "rentEnded"
+  | "paymentAlreadyExists";
