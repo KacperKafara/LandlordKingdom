@@ -111,8 +111,17 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Page<Local> getAllLocals(Pageable pageable) {
-        return localRepository.findAll(pageable);
+    public Page<Local> getAllLocals(Pageable pageable, String state, String ownerLogin) {
+        if(state.equals(LocalState.ARCHIVED.name()) || state.equals(LocalState.WITHOUT_OWNER.name()))
+            return localRepository.findAllByState(pageable, LocalState.valueOf(state));
+
+        if(state.equals("ALL") && ownerLogin.isEmpty())
+            return localRepository.findAll(pageable);
+
+        if(state.equals("ALL"))
+            return localRepository.findAll(pageable, ownerLogin);
+
+        return localRepository.findAllByStateAndOwnerLogin(pageable, LocalState.valueOf(state), ownerLogin);
     }
 
     @Override

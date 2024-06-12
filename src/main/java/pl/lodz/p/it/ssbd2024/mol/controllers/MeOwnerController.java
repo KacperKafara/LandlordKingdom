@@ -19,6 +19,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
@@ -107,10 +108,23 @@ public class MeOwnerController {
         return ResponseEntity.ok(RentMapper.rentForOwnerResponseList(rents));
     }
 
+    @GetMapping("/owner/rents/archival")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<List<RentForOwnerResponse>> getArchivalRents() {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(RentMapper.rentForOwnerResponseList(rentService.getArchivalOwnerRents(userId)));
+    }
+
     @PostMapping("/rents/{id}/payment")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<RentForOwnerResponse> payRent(@PathVariable UUID id, @RequestBody NewPaymentRequest newPaymentRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<PaymentResponse> payRent(@PathVariable UUID id, @RequestBody @Valid NewPaymentRequest newPaymentRequest) throws NotFoundException {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+        try {
+            Payment payment = paymentService.create(userId, id, newPaymentRequest.amount());
+            return ResponseEntity.ok(PaymentMapper.toPaymentResponse(payment));
+        } catch (PaymentAlreadyExistsException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/locals/{id}/leave")
