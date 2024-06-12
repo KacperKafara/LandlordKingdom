@@ -2,6 +2,7 @@ import { ExceptionCode } from "@/@types/errorCode";
 import { LocalState } from "@/@types/localState";
 import { Role } from "@/store/userStore";
 
+
 const error = {
   baseTitle: "Wystąpił błąd",
   baseDescription: "Coś poszło nie tak...",
@@ -515,6 +516,7 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
   rentDetails: "Szczegóły wynajmu",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const currentTenantRents = {
@@ -629,6 +631,7 @@ const changeEndDate = {
   formDescription:
     "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
   spanText: "Wybierz datę",
+  saveChanges: "Zapisz zmiany",
 };
 
 const changeAddressForm = {
@@ -700,6 +703,7 @@ const ownerRentDetails = {
   rental: "Opłata za wynajem",
   summary: "Razem",
   showLocalDetails: "Pokaż szczegóły lokalu",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const breadcrumbs = {
