@@ -4,18 +4,12 @@ import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import {useGetLocalApplications} from "@/data/local/useGetLocalApplications.ts";
 import {useParams} from "react-router-dom";
-import { LocalApplications as ApplicationType } from "@/types/local/LocalApplications";
 
 const LocalApplications: FC = () => {
     const { id } = useParams<{ id: string }>();
     const { t } = useTranslation();
     const { applications   } = useGetLocalApplications(id!);
-    const applicationsList: ApplicationType[] = Array.isArray(applications) ? applications : [];
-    const sortedApplicationsList = applicationsList.sort((a, b) => {
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
-        return dateA - dateB;
-    });
+
     return (
         <Card>
             <CardHeader>
@@ -24,8 +18,8 @@ const LocalApplications: FC = () => {
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                {sortedApplicationsList.length > 0 ? (
-                    sortedApplicationsList.map((application) => (
+                {applications != undefined ? (
+                    applications.sort().map((application) => (
                         <Card key={application.id} className="p-4">
                             <div className="flex justify-between items-center">
                                 <div>
