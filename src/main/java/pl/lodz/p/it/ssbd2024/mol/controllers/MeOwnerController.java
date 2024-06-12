@@ -77,7 +77,8 @@ public class MeOwnerController {
     @GetMapping("/locals/{id}/applications")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<List<GetOwnLocalApplicationsResponse>> getOwnLocalApplications(@PathVariable UUID id) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        UUID ownerId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(ApplicationMapper.getOwnLocalApplicationsResponses(applicationService.getLocalApplications(id, ownerId)));
     }
 
     @PostMapping("/locals/{id}/rent")
