@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
@@ -21,4 +20,7 @@ public interface OwnerMolRepository extends JpaRepository<Owner, UUID> {
     @NonNull
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     Owner saveAndFlush(@NonNull Owner owner);
+
+    @PreAuthorize("hasAnyRole('OWNER')")
+    Optional<Owner> findByUserId(UUID id);
 }

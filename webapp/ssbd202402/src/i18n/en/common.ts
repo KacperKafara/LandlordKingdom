@@ -448,6 +448,7 @@ const errors = {
   rentEnded: "Rent has already ended",
   dateParsingError: "Date parsing error",
   variableFeeAlreadyExists: "Variable fee already exists",
+  paymentAlreadyExists: "Fixed fee already exists",
   roleRequestAlreadyExists: "Role request already exists",
   rollback: "Rollback",
   transaction: "Transaction",
@@ -480,6 +481,11 @@ const allLocals = {
   localOwner: "Owner: ",
   noLocalsFound: "Currently there are no locals",
   noOwner: "No owner",
+  localState: "Local state",
+  all: "All",
+  noLocalsFoundWithGivenParameters:
+    "Currently there are no locals with given parameters",
+  login: "Owner login",
 };
 
 const localState = {
@@ -517,6 +523,7 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
+  archivalRents: "Archival rents",
 };
 
 const leaveLocal = {
@@ -552,6 +559,7 @@ const changeEndDate = {
   formLabel: "New end date",
   formDescription: "End date must be in the future and it must be Sunday.",
   spanText: "Pick a date",
+  saveChanges: "Save changes",
 };
 const roleRequestDialog = {
   description:
@@ -721,6 +729,7 @@ const ownerRentDetails = {
   rental: "Rental Fee",
   summary: "Total",
   showLocalDetails: "Show local details",
+  archivalRents: "Archival rents",
 };
 
 const tenantApplications = {
@@ -736,8 +745,6 @@ const breadcrumbs = {
   tenant: "Tenant",
   locals: "Locals",
   local: "Local",
-  currentRents: "Current rents",
-  archivalRents: "Archival rents",
 };
 
 const createVariableFeeDialog = {
@@ -745,6 +752,16 @@ const createVariableFeeDialog = {
   amount: "Amount*",
   amountMustBePositive: "Amount must be positive",
   success: "Variable fee created",
+};
+
+const createPaymentDialog = {
+  success: "Payment created",
+  title: "Create payment",
+  amount: "Amount*",
+  amountMustBePositive: "Amount must be positive",
+  amountMustBeLessThanOrEqualToTenThousand: "Amount must be less than 10,000",
+  amountMustHaveAtMostTwoFractionalDigits:
+    "Amount must have at most two fractional digits",
 };
 
 const rentDetailsPage = {
@@ -769,6 +786,7 @@ const rentDetailsPage = {
 
 export default {
   rentDetailsPage,
+  createPaymentDialog,
   createVariableFeeDialog,
   tenantApplications,
   changeAddressForm,

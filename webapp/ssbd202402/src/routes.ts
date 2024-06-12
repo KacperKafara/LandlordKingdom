@@ -28,7 +28,8 @@ const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
 const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
-const CurrnetOwnerRentsPage = loadable(() => import("./pages/Owner/Rents"));
+const CurrentOwnerRentsPage = loadable(() => import("./pages/Owner/CurrentRents"));
+const ArchivalOwnerRentsPage = loadable(() => import("./pages/Owner/ArchivalRents"));
 const ArchivalRentsPage = loadable(
   () => import("./pages/Tenant/ArchivalRents")
 );
@@ -74,9 +75,16 @@ const OwnerRoutes: RouteObject[] = [
   },
   { path: "addLocalForm", Component: addLocalForm },
   {
-    path: "rents",
+    path: "current-rents",
     children: [
-      { index: true, Component: CurrnetOwnerRentsPage },
+      { index: true, Component: CurrentOwnerRentsPage },
+      { path: "rent/:id", Component: OwnerRentDetailsPage },
+    ],
+  },
+  {
+    path: "archival-rents",
+    children: [
+      { index: true, Component: ArchivalOwnerRentsPage },
       { path: "rent/:id", Component: OwnerRentDetailsPage },
     ],
   },

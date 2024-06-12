@@ -14,7 +14,7 @@ import { t } from "i18next";
 import { FC, useState } from "react";
 import { LoadingData } from "@/components/LoadingData";
 import { useNavigate } from "react-router-dom";
-import { PageChangerComponent } from "@/pages/Admin/Components/PageChangerComponent";
+import { PageChangerComponent } from "@/pages/Components/PageChangerComponent";
 import { getAddressString } from "@/utils/address";
 import {
   DropdownMenu,
