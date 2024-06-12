@@ -638,8 +638,8 @@ const localApplications = {
   createdAt: "Application date",
   accept: "Accept",
   reject: "Reject",
-  noApplications: "No applications available"
-
+  noApplications: "No applications available",
+  email: "Email",
 };
 
 const activeLocalDetails = {

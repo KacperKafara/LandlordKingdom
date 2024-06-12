@@ -29,12 +29,19 @@ const LocalApplications: FC = () => {
                         <Card key={application.id} className="p-4">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <p><strong>{t("localApplications.applicant")}:</strong> {application.applicantFirstName + " " + application.applicantLastName}</p>
-                                    <p><strong>{t("localApplications.createdAt")}:</strong> {new Date(application.createdAt).toLocaleString()}</p>
+                                    <p>
+                                        <strong>{t("localApplications.applicant")}:</strong> {application.applicantFirstName + " " + application.applicantLastName}
+                                    </p>
+                                    <p>
+                                        <strong>{t("localApplications.createdAt")}:</strong> {new Date(application.createdAt).toLocaleString()}
+                                    </p>
+                                    <p>
+                                        <strong>{t("localApplications.email")}:</strong> {application.applicantEmail}
+                                    </p>
                                 </div>
                                 <div className="flex space-x-2">
                                     <Button variant="default">
-                                        {t("localApplications.accept")}
+                                    {t("localApplications.accept")}
                                     </Button>
                                     <Button variant="destructive">
                                         {t("localApplications.reject")}

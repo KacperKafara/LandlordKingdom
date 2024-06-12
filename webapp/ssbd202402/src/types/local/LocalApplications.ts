@@ -3,4 +3,5 @@ export type LocalApplications = {
     createdAt: string;
     applicantFirstName: string;
     applicantLastName: string;
+    applicantEmail: string;
 };

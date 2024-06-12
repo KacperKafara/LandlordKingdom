@@ -6,6 +6,7 @@ public record GetOwnLocalApplicationsResponse(
         UUID id,
         String createdAt,
         String applicantFirstName,
-        String applicantLastName
+        String applicantLastName,
+        String applicantEmail
 ) {
 }
