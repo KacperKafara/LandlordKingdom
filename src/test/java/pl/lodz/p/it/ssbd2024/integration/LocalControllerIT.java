@@ -20,13 +20,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
 public class LocalControllerIT extends BaseConfig {
-    private static String LOCALS_URL = baseUrl + "/locals";
+    private static String LOCALS_URL;
     private String adminToken;
     private String userToken;
 
     @BeforeEach
     public void setUp() {
         String AUTH_URL = baseUrl + "/auth";
+        LOCALS_URL = baseUrl + "/locals";
         loadDataSet("src/test/resources/datasets/userDataForMeOwnerIT.xml");
         loadDataSet("src/test/resources/datasets/molDataForLocalControllerIT.xml");
 
