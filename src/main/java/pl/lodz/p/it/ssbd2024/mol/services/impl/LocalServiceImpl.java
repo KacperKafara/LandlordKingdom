@@ -67,7 +67,7 @@ public class LocalServiceImpl implements LocalService {
                 local.getAddress().getZip()
         );
         if (existingAddress.isPresent()) {
-            Local existingLocal = localRepository.findByAddressAndStateNotContaining(local.getAddress(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
+            Local existingLocal = localRepository.findByAddressAndStateNotContaining(local.getAddress(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
             if (existingLocal.getState() != LocalState.WITHOUT_OWNER) {
                 throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
                         ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
@@ -80,7 +80,7 @@ public class LocalServiceImpl implements LocalService {
                 local.setOwner(owner);
                 return localRepository.saveAndFlush(local);
             } catch (ConstraintViolationException e) {
-                throw new CreationException(UserExceptionMessages.CREATION_FAILED, ErrorCodes.REGISTRATION_ERROR);
+                throw new CreationException(LocalExceptionMessages.CREATION_FAILED, ErrorCodes.LOCAL_CREATION_ERROR);
             }
         }
     }
