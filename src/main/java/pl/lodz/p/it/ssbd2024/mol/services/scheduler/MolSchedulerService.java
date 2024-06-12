@@ -11,9 +11,9 @@ import pl.lodz.p.it.ssbd2024.model.FixedFee;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.mol.repositories.FixedFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
+import pl.lodz.p.it.ssbd2024.mol.services.FixedFeeService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -27,7 +27,7 @@ import java.util.List;
 public class MolSchedulerService {
     private final RentRepository rentRepository;
     private final LocalRepository localRepository;
-    private final FixedFeeRepository fixedFeeRepository;
+    private final FixedFeeService fixedFeeService;
 
     @PreAuthorize("permitAll()")
     public void changeLocalState() {
@@ -41,7 +41,6 @@ public class MolSchedulerService {
     }
 
     @PreAuthorize("permitAll()")
-    @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     public void createFixedFee() {
         List<Rent> rents = rentRepository.findAllByEndDateGreaterThanEqual(LocalDate.now());
         LocalDate today = LocalDate.now();
@@ -50,7 +49,6 @@ public class MolSchedulerService {
             long daysPassed = ChronoUnit.DAYS.between(rent.getStartDate(), today);
             BigDecimal rentalFee = rent.getLocal().getRentalFee();
             BigDecimal marginFee = rent.getLocal().getMarginFee();
-            Local local = rent.getLocal();
 
             if (daysPassed == 0) {
                 continue;
@@ -62,24 +60,7 @@ public class MolSchedulerService {
             }
 
             FixedFee fixedFee = new FixedFee(rentalFee, marginFee, today, rent);
-            fixedFeeRepository.saveAndFlush(fixedFee);
-            rent.setBalance(rent.getBalance().subtract(rentalFee).subtract(marginFee));
-            rentRepository.saveAndFlush(rent);
-
-            BigDecimal nextMarginFee = local.getNextMarginFee();
-            BigDecimal nextRentalFee = local.getNextRentalFee();
-
-            if (nextMarginFee != null) {
-                local.setMarginFee(nextMarginFee);
-                local.setNextMarginFee(null);
-            }
-
-            if (nextRentalFee != null) {
-                local.setRentalFee(nextRentalFee);
-                local.setNextRentalFee(null);
-            }
-
-            localRepository.saveAndFlush(local);
+            fixedFeeService.createFixedFeeForEndOfBillingPeriod(fixedFee);
         }
     }
 }
