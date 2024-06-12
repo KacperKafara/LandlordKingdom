@@ -82,10 +82,12 @@ public class LocalController {
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<GetAllLocalsFiltered> getAllLocals(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size
+            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "ALL") String state,
+            @RequestParam(defaultValue = "") String ownerLogin
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(LocalMapper.toGetAllLocalsFiltered(localService.getAllLocals(pageable)));
+        return ResponseEntity.ok(LocalMapper.toGetAllLocalsFiltered(localService.getAllLocals(pageable, state, ownerLogin)));
     }
 
     @PatchMapping("/{id}/address")

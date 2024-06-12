@@ -458,6 +458,10 @@ const allLocals = {
   localOwner: "Właściciel: ",
   noLocalsFound: "Aktualnie nie ma żadnych nieruchomości",
   noOwner: "Brak właściciela",
+  localState: "Stan lokalu",
+  all: "Wszystkie",
+  noLocalsFoundWithGivenParameters: "Brak lokali spełniających kryteria",
+  login: "Login właściciela",
 };
 
 const localState = {
