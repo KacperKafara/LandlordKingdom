@@ -38,7 +38,7 @@ public class Local extends AbstractEntity {
 
     @ManyToOne
     @Setter
-    @JoinColumn(name = "address_id", nullable = false, updatable = false)
+    @JoinColumn(name = "address_id", nullable = false, updatable = true)
     private Address address;
 
     @Setter
