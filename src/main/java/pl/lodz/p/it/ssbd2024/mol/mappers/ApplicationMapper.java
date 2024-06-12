@@ -36,7 +36,8 @@ public class ApplicationMapper {
         return new GetOwnLocalApplicationsResponse(
                 application.getId(),
                 createdAt,
-                user.getLogin());
+                user.getFirstName(),
+                user.getLastName());
     }
 
     public static List<GetOwnLocalApplicationsResponse> getOwnLocalApplicationsResponses(List<Application> applications) {

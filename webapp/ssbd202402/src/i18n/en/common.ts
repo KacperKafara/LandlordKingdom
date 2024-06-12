@@ -634,8 +634,8 @@ const activeLocals = {
 const localApplications = {
   errorTitle: "Error loading applications",
   showApplications: "Show applications",
-  applicantLogin: "Applicant login",
-  createdAt: "Created at",
+  applicant: "Applicant",
+  createdAt: "Application date",
   accept: "Accept",
   reject: "Reject",
   noApplications: "No applications available"

@@ -612,8 +612,8 @@ const activeLocals = {
 const localApplications = {
   errorTitle: "Błąd podczas pobierania aplikacji",
   showApplications: "Pokaż aplikacje",
-  applicantLogin: "Login wnioskodawcy",
-  createdAt: "Utworzony",
+  applicant: "Wnioskodawca",
+  createdAt: "Data złożenia aplikacji",
   accept: "Zaakceptuj",
   reject: "Odrzuć",
   noApplications: "Brak aplikacji"

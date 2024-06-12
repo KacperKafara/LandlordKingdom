@@ -11,6 +11,11 @@ const LocalApplications: FC = () => {
     const { t } = useTranslation();
     const { applications   } = useGetLocalApplications(id!);
     const applicationsList: ApplicationType[] = Array.isArray(applications) ? applications : [];
+    const sortedApplicationsList = applicationsList.sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return dateA - dateB;
+    });
     return (
         <Card>
             <CardHeader>
@@ -19,12 +24,12 @@ const LocalApplications: FC = () => {
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-                {applicationsList.length > 0 ? (
-                    applicationsList.map((application) => (
+                {sortedApplicationsList.length > 0 ? (
+                    sortedApplicationsList.map((application) => (
                         <Card key={application.id} className="p-4">
                             <div className="flex justify-between items-center">
                                 <div>
-                                    <p><strong>{t("localApplications.applicantLogin")}:</strong> {application.applicantLogin}</p>
+                                    <p><strong>{t("localApplications.applicant")}:</strong> {application.applicantFirstName + " " + application.applicantLastName}</p>
                                     <p><strong>{t("localApplications.createdAt")}:</strong> {new Date(application.createdAt).toLocaleString()}</p>
                                 </div>
                                 <div className="flex space-x-2">
