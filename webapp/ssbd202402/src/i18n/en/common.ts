@@ -638,8 +638,16 @@ const localApplications = {
   createdAt: "Created at",
   accept: "Accept",
   reject: "Reject",
-  noApplications: "No applications available"
-
+  noApplications: "No applications available",
+  rejectTitle: "Reject application",
+  rejectDescription: "Are you sure you want to reject this application?",
+  rejectSuccess: "Application rejected",
+  acceptTitle: "Confirm Application Acceptance",
+  acceptDescription:
+    "You are about to accept this application. Upon acceptance, a rental agreement will be created with an end date. Please ensure all details are correct before proceeding",
+  acceptFooter: "After accepting the application local will be rented",
+  acceptSuccess: "Application accepted",
+  endDateNeeded: "End date is required",
 };
 
 const activeLocalDetails = {

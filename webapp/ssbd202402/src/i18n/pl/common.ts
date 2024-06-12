@@ -2,7 +2,6 @@ import { ExceptionCode } from "@/@types/errorCode";
 import { LocalState } from "@/@types/localState";
 import { Role } from "@/store/userStore";
 
-
 const error = {
   baseTitle: "Wystąpił błąd",
   baseDescription: "Coś poszło nie tak...",
@@ -616,7 +615,16 @@ const localApplications = {
   createdAt: "Utworzony",
   accept: "Zaakceptuj",
   reject: "Odrzuć",
-  noApplications: "Brak aplikacji"
+  noApplications: "Brak aplikacji",
+  rejectTitle: "Odrzuć aplikację",
+  rejectDescription: "Czy na pewno chcesz odrzucić aplikację?",
+  rejectSuccess: "Aplikacja została odrzucona",
+  acceptTitle: "Potwierdzenie akceptacji wniosku",
+  acceptDescription:
+    "Zaraz zaakceptujesz ten wniosek. Po akceptacji zostanie utworzony najem z datą zakończenia. Upewnij się, że wszystkie szczegóły są poprawne przed kontynuacją.",
+  acceptFooter: "Po zaakceptowaniu aplikacji lokal zostanie wynajęty",
+  acceptSuccess: "Aplikacja została zaakceptowana",
+  endDateNeeded: "Musisz wprowadzić datę",
 };
 
 const activeLocalDetails = {

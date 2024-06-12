@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.CreationException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.mol.dto.AcceptApplicationRequest;
@@ -25,6 +26,7 @@ import pl.lodz.p.it.ssbd2024.mol.mappers.ApplicationMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RentMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 
@@ -82,12 +84,14 @@ public class ApplicationController {
     public ResponseEntity<RentForOwnerResponse> acceptApplication(@PathVariable UUID id, @RequestBody AcceptApplicationRequest request) {
         UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
         try {
-            Rent rent = applicationService.acceptApplication(id, userId, request.endDate());
+            Rent rent = applicationService.acceptApplication(id, userId, LocalDate.parse(request.endDate()));
             return ResponseEntity.status(HttpStatus.CREATED).body(RentMapper.rentForOwnerResponse(rent));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (InvalidLocalState e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (WrongEndDateException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 
