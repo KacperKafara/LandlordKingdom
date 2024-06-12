@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +37,7 @@ public class RoleController {
 
     @PostMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Retryable(retryFor = {RuntimeException.class})
     public ResponseEntity<Void> acceptRoleRequest(@PathVariable UUID id) {
         try {
             roleService.accept(id);
@@ -47,6 +49,7 @@ public class RoleController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Retryable(retryFor = {RuntimeException.class})
     public ResponseEntity<Void> rejectRoleRequest(@PathVariable UUID id) {
         try {
             roleService.reject(id);
