@@ -26,12 +26,13 @@ import static org.hamcrest.Matchers.equalTo;
 public class MeOwnerControllerIT extends BaseConfig{
 
     private static String ME_URL = baseUrl;
-    private static String LOCALS_URL = baseUrl + "/locals";
+    private static String LOCALS_URL;
     private String ownerToken;
     private String adminToken;
     @BeforeEach
     public void setUp() {
         ME_URL = baseUrl + "/me";
+        LOCALS_URL = baseUrl + "/locals";
         String AUTH_URL = baseUrl + "/auth";
         loadDataSet("src/test/resources/datasets/userDataForMeOwnerIT.xml");
         loadDataSet("src/test/resources/datasets/molDataForMeOwnerIT.xml");

@@ -102,6 +102,5 @@ public class MeTenantController {
         } catch (VariableFeeAlreadyExistsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
-
     }
 }

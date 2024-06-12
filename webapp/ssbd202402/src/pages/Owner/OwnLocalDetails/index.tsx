@@ -15,8 +15,10 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import UpdateOwnLocalFixedFee from "./UpdateOwnLocalFixedFee";
+import UpdateLocalDetailsForm from "@/pages/Owner/OwnLocalDetails/UpdateOwnLocal.tsx";
 import LeaveLocalCard from "./LeaveLocalCard";
 import { LocalState } from "@/@types/localState";
+import LocalApplications from "@/pages/Owner/OwnLocalDetails/ShowApplications.tsx";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,7 +27,7 @@ const OwnLocalDetailsPage: FC = () => {
   const breadcrumbs = useBreadcrumbs([
     { title: t("ownerLocals.title"), path: "/owner" },
     { title: t("ownerLocals.locals"), path: "/owner/locals" },
-    { title: data?.name ?? "", path: `/owner/locals/local/${id}` },
+    { title: data?.data.name ?? "", path: `/owner/locals/local/${id}` },
   ]);
 
   if (isLoading) {
@@ -39,7 +41,7 @@ const OwnLocalDetailsPage: FC = () => {
         <>
           <Card className="mt-2">
             <CardHeader>
-              <CardTitle className="text-center">{data.name}</CardTitle>
+              <CardTitle className="text-center">{data.data.name}</CardTitle>
             </CardHeader>
           </Card>
           <div className="flex w-full justify-center">
@@ -58,6 +60,9 @@ const OwnLocalDetailsPage: FC = () => {
                   <TabsTrigger value="leaveLocal">
                     {t("ownLocalDetails.leaveLocal")}
                   </TabsTrigger>
+                  <TabsTrigger value="checkApplications">
+                    {t("ownLocalDetails.showApplications")}
+                  </TabsTrigger>
                 </TabsList>
                 <TabsContent value="basic">
                   <Card className="relative mb-2">
@@ -70,24 +75,24 @@ const OwnLocalDetailsPage: FC = () => {
                       <div className="grid w-2/3 grid-cols-2 gap-2">
                         <DataField
                           label={t("ownLocalDetails.size")}
-                          value={data.size.toString()}
+                          value={data.data.size.toString()}
                         />
                         <DataField
                           label={t("ownLocalDetails.rentalFee")}
-                          value={data.rentalFee.toString()}
+                          value={data.data.rentalFee.toString()}
                         />
                         <DataField
                           label={t("ownLocalDetails.marginFee")}
-                          value={data.marginFee.toString()}
+                          value={data.data.marginFee.toString()}
                         />
 
                         <DataField
                           label={t("ownLocalDetails.nextRentalFee")}
-                          value={data?.nextRentalFee?.toString() ?? "-"}
+                          value={data?.data.nextRentalFee?.toString() ?? "-"}
                         />
                         <DataField
                           label={t("ownLocalDetails.nextMarginFee")}
-                          value={data?.nextMarginFee?.toString() ?? "-"}
+                          value={data?.data.nextMarginFee?.toString() ?? "-"}
                         />
 
                         <p className="col-span-2 text-xl font-semibold">
@@ -96,36 +101,36 @@ const OwnLocalDetailsPage: FC = () => {
 
                         <DataField
                           label={t("ownLocalDetails.country")}
-                          value={data.address.country}
+                          value={data.data.address.country}
                         />
                         <DataField
                           label={t("ownLocalDetails.city")}
-                          value={data.address.city}
+                          value={data.data.address.city}
                         />
                         <DataField
                           label={t("ownLocalDetails.street")}
-                          value={data.address.street}
+                          value={data.data.address.street}
                         />
                         <DataField
                           label={t("ownLocalDetails.number")}
-                          value={data.address.number}
+                          value={data.data.address.number}
                         />
                         <DataField
                           label={t("ownLocalDetails.zipCode")}
-                          value={`${data.address.zipCode}`}
+                          value={`${data.data.address.zipCode}`}
                         />
 
                         <div className="col-span-2 flex flex-col">
                           <div className="text-sm font-semibold">
                             {t("ownLocalDetails.description")}
                           </div>
-                          <div>{data.description}</div>
+                          <div>{data.data.description}</div>
                         </div>
                       </div>
                     </CardContent>
                     <RefreshQueryButton
-                      className="absolute right-1 top-1"
-                      queryKeys={["ownLocalDetails"]}
+                        className="absolute right-1 top-1"
+                        queryKeys={["ownLocalDetails"]}
                     />
                   </Card>
                 </TabsContent>
@@ -136,6 +141,9 @@ const OwnLocalDetailsPage: FC = () => {
                         {t("ownLocalDetails.updateData")}
                       </CardTitle>
                     </CardHeader>
+                    <CardContent className="pb-2">
+                      <UpdateLocalDetailsForm/>
+                    </CardContent>
                   </Card>
                 </TabsContent>
                 <TabsContent value="changeFixedFee">
@@ -150,10 +158,10 @@ const OwnLocalDetailsPage: FC = () => {
                         <UpdateOwnLocalFixedFee
                           id={id || ""}
                           initialRentalFee={
-                            data.nextRentalFee ?? data.rentalFee
+                            data.data.nextRentalFee ?? data.data.rentalFee
                           }
                           initialMarginFee={
-                            data.nextMarginFee ?? data.marginFee
+                            data.data.nextMarginFee ?? data.data.marginFee
                           }
                         />
                       </div>
@@ -164,7 +172,10 @@ const OwnLocalDetailsPage: FC = () => {
                   </Card>
                 </TabsContent>
                 <TabsContent value="leaveLocal">
-                  <LeaveLocalCard state={data.state as LocalState} id={id!} />
+                  <LeaveLocalCard state={data.data.state as LocalState} id={id!} />
+                </TabsContent>
+                <TabsContent value="checkApplications">
+                  <LocalApplications />
                 </TabsContent>
               </Tabs>
             </div>
