@@ -599,6 +599,7 @@ const ownLocalDetails = {
   leaveLocal: "Opuść lokal",
   leaveLocalDescription:
     "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+  showApplications: "Przeglądaj aplikacje",
 };
 
 const activeLocals = {
@@ -606,6 +607,16 @@ const activeLocals = {
   size: "Powierzchnia",
   city: "Miasto",
   show: "Wyświetl szczegóły",
+};
+
+const localApplications = {
+  errorTitle: "Błąd podczas pobierania aplikacji",
+  showApplications: "Pokaż aplikacje",
+  applicantLogin: "Login wnioskodawcy",
+  createdAt: "Utworzony",
+  accept: "Zaakceptuj",
+  reject: "Odrzuć",
+  noApplications: "Brak aplikacji"
 };
 
 const activeLocalDetails = {
@@ -810,6 +821,7 @@ export default {
   updateDataForm,
   mePage,
   userDataPage,
+  localApplications,
   updateEmailPage,
   validation,
   pageChanger,
