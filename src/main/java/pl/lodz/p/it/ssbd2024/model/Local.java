@@ -36,9 +36,9 @@ public class Local extends AbstractEntity {
     @Column(name = "state", nullable = false)
     private LocalState state = LocalState.UNAPPROVED;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @Setter
-    @JoinColumn(name = "address_id", nullable = false, updatable = false)
+    @JoinColumn(name = "address_id", nullable = false, updatable = true)
     private Address address;
 
     @Setter

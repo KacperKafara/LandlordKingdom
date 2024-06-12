@@ -260,6 +260,7 @@ const navLinks = {
   locals: "Nieruchomości",
   currentRents: "Aktualne wynajmy",
   archivalRents: "Archiwalne wynajmy",
+  addLocal: "Dodaj lokal",
   applications: "Wnioski o wynajem",
 };
 
@@ -315,6 +316,34 @@ const mePage = {
     "Naciśnij przycisk, aby otrzymać wiadomość email z linkiem do zmiany adresu email.",
   emailInput: "Email*",
   timezone: "Strefa czasowa",
+};
+
+const addLocalPage = {
+  title: "Dodaj nowy lokal",
+  name: "Nazwa",
+  description: "Opis",
+  size: "Rozmiar",
+  number: "Numer mieszkania",
+  street: "Nazwa ulicy",
+  city: "Miasto",
+  zip: "Kod pocztowy",
+  country: "Kraj",
+  marginFee: "Opłata stała",
+  rentalFee: "Cena wynajmu",
+  formSubmit: "Zgłoś formularz",
+  wrong: {
+    name: "Niepoprawna nazwa lokalu",
+    description: "Niepoprawny opis lokalu",
+    size: "Niepoprawny rozmiar",
+    number: "Niepoprawny numer mieszkania",
+    street: "Niepoprawna nazwa ulicy",
+    city: "Niepoprawne miasto",
+    zip: "Niepoprawny kod pocztowy",
+    country: "Niepoprawny kraj",
+    marginFee: "Niepoprawna opłata stała",
+    rentalFee: "Niepoprawna cena wynajmu",
+  },
+  error: "Failed to add local",
 };
 
 const registerSuccessPage = {
@@ -611,11 +640,12 @@ const activeLocals = {
 const localApplications = {
   errorTitle: "Błąd podczas pobierania aplikacji",
   showApplications: "Pokaż aplikacje",
-  applicantLogin: "Login wnioskodawcy",
-  createdAt: "Utworzony",
+  applicant: "Wnioskodawca",
+  createdAt: "Data złożenia aplikacji",
   accept: "Zaakceptuj",
   reject: "Odrzuć",
   noApplications: "Brak aplikacji",
+  email: "Email",
   rejectTitle: "Odrzuć aplikację",
   rejectDescription: "Czy na pewno chcesz odrzucić aplikację?",
   rejectSuccess: "Aplikacja została odrzucona",
@@ -641,6 +671,34 @@ const activeLocalDetails = {
   applicationDescription: "Na pewno chcesz aplikować do lokalu?",
   applicationExistsDescription: "Aplikowałeś do lokalu: ",
   applicationCreated: "Utworzono aplikacje",
+};
+
+const updateLocalPage = {
+  state: "Stan",
+  states: {
+    withoutOwner: "Bez własciciela",
+    unapproved: "Nie zatwierdzony",
+    archived: "Zarchiwizowany",
+    active: "Aktywny",
+    inactive: "Nieaktywny",
+    rented: "Wynajety",
+    unknown: "Nieznany",
+  },
+  updateData: "Zaktualizuj dane lokalu",
+  name: "Nazwa nieruchomości",
+  description: "Opis nieruchomości",
+  size: "Powierzchnia",
+  reset: "Resetuj",
+  submit: "Zgłoś",
+  wrong: {
+    name: "Nieprawidłowa nazwa",
+    description: "Nieprawidłowy opis",
+    size: "Nieprawidłowa powierzchnia",
+    state: "Nieprawidłowy stan",
+  },
+  successTitle: "Sukces",
+  successDescription: "Nieruchomość zaktualizowana",
+  errorTitle: "Błąd",
 };
 
 const changeEndDate = {
@@ -806,6 +864,7 @@ export default {
   currentTenantRents,
   allLocals,
   ownerLocals,
+  updateLocalPage,
   activeLocals,
   localState,
   notFoundPage,
@@ -828,6 +887,7 @@ export default {
   userDetailsPage,
   updateDataForm,
   mePage,
+  addLocalPage,
   userDataPage,
   localApplications,
   updateEmailPage,

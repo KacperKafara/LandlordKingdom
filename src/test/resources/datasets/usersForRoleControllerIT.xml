@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="userSchema.xsd">
+
+    <users id="093cdb69-4a4f-4932-a575-ffe76f40efce"
+           login="testTenant"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           blocked="false"
+           verified="true"
+           language="EN"
+           version="1"
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           active="true"/>
+
+    <personal_data user_id="093cdb69-4a4f-4932-a575-ffe76f40efce"
+                   email="testTenant@abcd.com"
+                   first_name="test"
+                   last_name="test"/>
+
+    <access_levels active="true"
+                   version="1"
+                   id="9163ede4-241f-4b54-ab1a-d1eb6cc728d8"
+                   user_id="093cdb69-4a4f-4932-a575-ffe76f40efce"
+                   level="TENANT"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"/>
+
+    <tenants id="9163ede4-241f-4b54-ab1a-d1eb6cc728d8"/>
+
+    <users id="b0194a97-9665-46e4-92bd-acf7538d4fa2"
+           login="testTenantDwa"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           blocked="false"
+           verified="true"
+           language="EN"
+           version="1"
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           active="true"/>
+
+    <personal_data user_id="b0194a97-9665-46e4-92bd-acf7538d4fa2"
+                   email="testTenantDwa@abcd.com"
+                   first_name="test"
+                   last_name="test"/>
+
+    <access_levels active="true"
+                   version="1"
+                   id="201b7707-acc8-44d3-8275-4c3af41327eb"
+                   user_id="b0194a97-9665-46e4-92bd-acf7538d4fa2"
+                   level="TENANT"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"/>
+
+    <tenants id="201b7707-acc8-44d3-8275-4c3af41327eb"/>
+
+    <users id="fb3721d1-2e03-40ab-adb5-87545335d232"
+           login="testOwner"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           blocked="false"
+           verified="true"
+           language="EN"
+           version="1"
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           active="true"/>
+
+    <personal_data user_id="fb3721d1-2e03-40ab-adb5-87545335d232"
+                   email="testOwner@abcd.com"
+                   first_name="test"
+                   last_name="test"/>
+
+    <access_levels active="true"
+                   version="1"
+                   id="22f34716-3b77-4e63-809d-35f9a4758012"
+                   user_id="fb3721d1-2e03-40ab-adb5-87545335d232"
+                   level="OWNER"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"/>
+
+    <owners id="22f34716-3b77-4e63-809d-35f9a4758012"/>
+
+    <tokens id="6bcef94d-16f5-401b-a8d0-9461257572f9"
+            token="20099985"
+            purpose="OTP"
+            user_id="fb3721d1-2e03-40ab-adb5-87545335d232"
+            created_at="2024-05-04 14:33:01.413581"
+            modified_at="2024-05-04 14:33:01.413581"
+            expiration_date="2039-05-04 14:33:01.413581"
+            version="0"
+            created_by="[NULL]"
+            modified_by="[NULL]"/>
+
+    <users id="7499b44f-1054-42f7-9ac1-8256840acc2c"
+           login="testAdmin"
+           password="$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4."
+           login_attempts="0"
+           blocked="false"
+           verified="true"
+           language="EN"
+           version="1"
+           created_at="[NOW]"
+           modified_at="[NOW]"
+           active="true"/>
+
+    <personal_data user_id="7499b44f-1054-42f7-9ac1-8256840acc2c"
+                   email="testAdmin@abcd.com"
+                   first_name="testadmin"
+                   last_name="testadmin"/>
+
+    <access_levels id="33a1a4f3-37ca-4db7-955e-990c92622d34"
+                   user_id="7499b44f-1054-42f7-9ac1-8256840acc2c"
+                   level="ADMINISTRATOR"
+                   active="true"
+                   version="1"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"/>
+
+    <administrators id="33a1a4f3-37ca-4db7-955e-990c92622d34"/>
+
+    <tokens id="6bcef94d-16f5-401b-a0d0-9461257572f9"
+            token="20099984"
+            purpose="OTP"
+            user_id="7499b44f-1054-42f7-9ac1-8256840acc2c"
+            created_at="2024-05-04 14:33:01.413581"
+            modified_at="2024-05-04 14:33:01.413581"
+            expiration_date="2039-05-04 14:33:01.413581"
+            version="0"
+            created_by="[NULL]"
+            modified_by="[NULL]"/>
+
+    <role_requests id="b24db498-3048-4282-b33c-241b7cab81de"
+                   version="1"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"
+                   request_date="[NOW]"
+                   tenant_id="9163ede4-241f-4b54-ab1a-d1eb6cc728d8"/>
+
+    <role_requests id="b24db498-3048-4282-b33c-241b7cab81df"
+                   version="1"
+                   created_at="[NOW]"
+                   modified_at="[NOW]"
+                   request_date="[NOW]"
+                   tenant_id="201b7707-acc8-44d3-8275-4c3af41327eb"/>
+
+</dataset>

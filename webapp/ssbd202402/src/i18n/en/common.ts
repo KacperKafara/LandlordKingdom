@@ -253,6 +253,7 @@ const navLinks = {
   locals: "Locals",
   currentRents: "Current rents",
   archivalRents: "Archival rents",
+  addLocal: "Add local",
   applications: "Rent applications",
 } satisfies {
   [key in string]: string;
@@ -311,6 +312,34 @@ const mePage = {
   emailInput: "Email*",
   timezone: "Timezone",
 };
+
+const addLocalPage = {
+  title: "Add new local",
+  name: "Name",
+  description: "Description",
+  size: "Size",
+  number: "Number",
+  street: "Street name",
+  city: "City",
+  zip: "Postal code",
+  country: "Country",
+  marginFee: "Margin fee",
+  rentalFee: "Rental fee",
+  formSubmit: "Send form",
+  wrong: {
+    name: "Wrong local name",
+    description: "Wrong local description",
+    size: "Wrong local size",
+    number: "Wrong local number",
+    street: "Wrong street name",
+    city: "Wrong city",
+    zip: "Wrong postal code",
+    country: "Wrong country",
+    marginFee: "Wrong margin fee",
+    rentalFee: "Wrong rental fee",
+  },
+  error: "Failed to add local",
+}
 
 const registerSuccessPage = {
   title: "Thanks for creating an account",
@@ -634,11 +663,12 @@ const activeLocals = {
 const localApplications = {
   errorTitle: "Error loading applications",
   showApplications: "Show applications",
-  applicantLogin: "Applicant login",
-  createdAt: "Created at",
+  applicant: "Applicant",
+  createdAt: "Application date",
   accept: "Accept",
   reject: "Reject",
   noApplications: "No applications available",
+  email: "Email",
   rejectTitle: "Reject application",
   rejectDescription: "Are you sure you want to reject this application?",
   rejectSuccess: "Application rejected",
@@ -664,6 +694,34 @@ const activeLocalDetails = {
   applicationDescription: "Are you sure you want to apply for this local?",
   applicationExistsDescription: "You apply for this local: ",
   applicationCreated: "Application created",
+};
+
+const updateLocalPage = {
+  state: "State",
+  states: {
+    withoutOwner: "Without owner",
+    unapproved: "Unapproved",
+    archived: "Archived",
+    active: "Active",
+    inactive: "Inactive",
+    rented: "Rented",
+    unknown: "Unknown",
+  },
+  updateData: "Update local data",
+  name: "Local name",
+  description: "Local description",
+  size: "Size",
+  reset: "Reset",
+  submit: "Submit",
+  wrong: {
+    name: "Wrong name",
+    description: "Wrong description",
+    size: "Wrong size",
+    state: "Wrong state",
+  },
+  successTitle: "Success",
+  successDescription: "Local updated",
+  errorTitle: "Error",
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -797,6 +855,7 @@ export default {
   allLocals,
   localState,
   ownerLocals,
+  updateLocalPage,
   activeLocals,
   notFoundPage,
   sessionExpiredDialog,
@@ -818,6 +877,7 @@ export default {
   userDetailsPage,
   updateDataForm,
   mePage,
+  addLocalPage,
   localApplications,
   userDataPage,
   updateEmailPage,

@@ -5,6 +5,8 @@ import java.util.UUID;
 public record GetOwnLocalApplicationsResponse(
         UUID id,
         String createdAt,
-        String applicantLogin
+        String applicantFirstName,
+        String applicantLastName,
+        String applicantEmail
 ) {
 }
