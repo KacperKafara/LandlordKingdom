@@ -650,6 +650,7 @@ const ownLocalDetails = {
   leaveLocal: "Leave local",
   leaveLocalDescription:
     "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
+  showApplications: "Show applications",
 };
 
 const activeLocals = {
@@ -657,6 +658,17 @@ const activeLocals = {
   size: "Size",
   city: "City",
   show: "Show details",
+};
+
+const localApplications = {
+  errorTitle: "Error loading applications",
+  showApplications: "Show applications",
+  applicantLogin: "Applicant login",
+  createdAt: "Created at",
+  accept: "Accept",
+  reject: "Reject",
+  noApplications: "No applications available"
+
 };
 
 const activeLocalDetails = {
@@ -828,6 +840,7 @@ export default {
   updateDataForm,
   mePage,
   addLocalPage,
+  localApplications,
   userDataPage,
   updateEmailPage,
   validation,
