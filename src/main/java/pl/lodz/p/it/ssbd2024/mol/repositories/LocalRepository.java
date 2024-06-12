@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,10 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     List<Local> findByAddress(Address address);
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT l FROM Local l WHERE l.address = :address AND l.state != :state")
+    Optional<Local> findByAddressAndStateNotContaining(@Param("address") Address address, @Param("state") LocalState state);
 
     @NonNull
     @PreAuthorize("permitAll()")

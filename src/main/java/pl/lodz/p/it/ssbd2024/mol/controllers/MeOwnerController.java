@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -28,6 +29,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.*;
 import pl.lodz.p.it.ssbd2024.mol.services.*;
+import pl.lodz.p.it.ssbd2024.util.Signer;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -46,6 +48,7 @@ public class MeOwnerController {
     private final PaymentService paymentService;
     private final VariableFeeService variableFeeService;
     private final FixedFeeService fixedFeeService;
+    private final Signer signer;
 
 
     @GetMapping("/locals")
@@ -66,10 +69,12 @@ public class MeOwnerController {
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<OwnLocalDetailsResponse> getLocal(@PathVariable UUID id) {
         UUID ownerId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
-
         try {
             Local local = localService.getOwnLocal(id, ownerId);
-            return ResponseEntity.ok(LocalMapper.toOwnLocalDetailsResponse(local));
+            return ResponseEntity
+                    .ok()
+                    .eTag(signer.generateSignature(local.getId(), local.getVersion()))
+                    .body(LocalMapper.toOwnLocalDetailsResponse(local));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -96,8 +101,17 @@ public class MeOwnerController {
 
     @PutMapping("/locals/{id}")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestBody EditLocalRequest editLocalRequest) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody EditLocalRequest editLocalRequest) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
+        UUID userId = UUID.fromString(jwt.getSubject());
+        try {
+            return ResponseEntity.ok(LocalMapper.toEditLocalResponse(localService.editLocal(userId, id, editLocalRequest, tagValue)));
+        } catch (NotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
+        }
     }
 
     @GetMapping("/rents/current")

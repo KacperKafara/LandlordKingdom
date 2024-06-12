@@ -16,7 +16,7 @@ export const useGetLocalDetailsForAdmin = (id: string) => {
     queryFn: async () => {
       try {
         const response = await api.get<LocalDetailsForAdmin>(`/locals/${id}`);
-        return response.data;
+        return response;
       } catch (error) {
         const axiosError = error as AxiosError;
         toast({
