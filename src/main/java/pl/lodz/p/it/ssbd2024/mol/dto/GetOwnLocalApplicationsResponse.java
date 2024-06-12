@@ -1,4 +1,10 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record GetOwnLocalApplicationsResponse() {
+import java.util.UUID;
+
+public record GetOwnLocalApplicationsResponse(
+        UUID id,
+        String createdAt,
+        String applicantLogin
+) {
 }

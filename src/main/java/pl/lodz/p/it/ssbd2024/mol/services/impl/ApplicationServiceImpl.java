@@ -43,7 +43,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public List<Application> getLocalApplications(UUID localId, UUID ownerId) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return applicationRepository.findByLocalIdAndLocal_OwnerId(localId, ownerId);
     }
 
     @Override
