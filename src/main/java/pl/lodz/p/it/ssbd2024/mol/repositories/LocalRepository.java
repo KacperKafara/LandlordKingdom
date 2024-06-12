@@ -47,8 +47,20 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     Optional<Local> findByOwner_User_IdAndId(UUID userId, UUID id);
 
     @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Query("SELECT l FROM Local l WHERE LOWER(l.owner.user.login) LIKE LOWER(CONCAT('%', :ownerLogin, '%'))")
     @NonNull
+    Page<Local> findAll(@NonNull Pageable pageable, String ownerLogin);
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    @Query("SELECT l FROM Local l WHERE l.state = :state AND LOWER(l.owner.user.login) LIKE LOWER(CONCAT('%', :ownerLogin, '%'))")
+    Page<Local> findAllByStateAndOwnerLogin(Pageable pageable, LocalState state, String ownerLogin);
+
+    @NonNull
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
     Page<Local> findAll(@NonNull Pageable pageable);
+
+    @PreAuthorize("hasRole('ADMINISTRATOR')")
+    Page<Local> findAllByState(Pageable pageable, LocalState state);
 
     @PreAuthorize("hasRole('TENANT')")
     Optional<Local> findByIdAndState(UUID id, LocalState state);
