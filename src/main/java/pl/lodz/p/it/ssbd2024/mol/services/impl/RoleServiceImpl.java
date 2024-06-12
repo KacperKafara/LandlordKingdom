@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -11,7 +11,21 @@
                 <xs:element ref="owners" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="tenants" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="tokens" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="role_requests" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="role_requests">
+        <xs:complexType>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="version" type="xs:integer" use="required"/>
+            <xs:attribute name="created_at" type="xs:string" use="required"/>
+            <xs:attribute name="modified_at" type="xs:string" use="required"/>
+            <xs:attribute name="created_by" type="xs:string" use="optional"/>
+            <xs:attribute name="modified_by" type="xs:string" use="optional"/>
+            <xs:attribute name="request_date" type="xs:string" use="required"/>
+            <xs:attribute name="tenant_id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 
