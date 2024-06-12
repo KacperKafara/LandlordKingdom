@@ -39,6 +39,10 @@ public interface RentRepository extends JpaRepository<Rent, UUID> {
     List<Rent> findCurrentRentsByOwnerId(UUID ownerId);
 
     @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT r FROM Rent r WHERE r.owner.user.id = :userId AND r.endDate < CURRENT_DATE")
+    List<Rent> findArchivalRentsByOwnerUserId(UUID userId);
+
+    @PreAuthorize("hasRole('OWNER')")
     Optional<Rent> findByOwnerIdAndId(UUID ownerId, UUID rentId);
 
     @PreAuthorize("hasRole('OWNER')")

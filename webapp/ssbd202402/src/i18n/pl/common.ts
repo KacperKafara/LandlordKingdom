@@ -2,6 +2,7 @@ import { ExceptionCode } from "@/@types/errorCode";
 import { LocalState } from "@/@types/localState";
 import { Role } from "@/store/userStore";
 
+
 const error = {
   baseTitle: "Wystąpił błąd",
   baseDescription: "Coś poszło nie tak...",
@@ -423,6 +424,7 @@ const errors = {
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
   rentEnded: "Wynajem zakończony",
   variableFeeAlreadyExists: "Opłata zmienna już istnieje",
+  paymentAlreadyExists: "Opłata stała już istnieje",
   dateParsingError: "Błąd parsowania daty",
   rollback: "Operacja została cofnięta",
   unexpectedRollback: "Nieoczekiwane cofnięcie operacji",
@@ -457,6 +459,10 @@ const allLocals = {
   localOwner: "Właściciel: ",
   noLocalsFound: "Aktualnie nie ma żadnych nieruchomości",
   noOwner: "Brak właściciela",
+  localState: "Stan lokalu",
+  all: "Wszystkie",
+  noLocalsFoundWithGivenParameters: "Brak lokali spełniających kryteria",
+  login: "Login właściciela",
 };
 
 const localState = {
@@ -515,6 +521,7 @@ const currentOwnerRents = {
   email: "Email",
   noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
   rentDetails: "Szczegóły wynajmu",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const currentTenantRents = {
@@ -629,6 +636,7 @@ const changeEndDate = {
   formDescription:
     "Data zakończenie wynajmu musi być w przyszłości i musi być Niedzielą",
   spanText: "Wybierz datę",
+  saveChanges: "Zapisz zmiany",
 };
 
 const changeAddressForm = {
@@ -700,6 +708,7 @@ const ownerRentDetails = {
   rental: "Opłata za wynajem",
   summary: "Razem",
   showLocalDetails: "Pokaż szczegóły lokalu",
+  archivalRents: "Archiwalne wynajmy",
 };
 
 const breadcrumbs = {
@@ -746,8 +755,20 @@ const rentDetailsPage = {
   variableFees: "Opłaty zmienne",
 };
 
+const createPaymentDialog = {
+  success: "Płatność została dodana",
+  title: "Dodaj płatność",
+  amount: "Kwota*",
+  amountMustBePositive: "Kwota musi być większa od 0",
+  amountMustBeLessThanOrEqualToTenThousand:
+    "Kwota musi być mniejsza lub równa 10 000",
+  amountMustHaveAtMostTwoFractionalDigits:
+    "Kwota musi mieć maksymalnie dwie cyfry po przecinku",
+};
+
 export default {
   rentDetailsPage,
+  createPaymentDialog,
   createVariableFeeDialog,
   changeAddressForm,
   tenantApplications,
@@ -803,5 +824,5 @@ export default {
   logoPlaceholder: "Landlord Kingdom",
   confirm: "Potwierdź",
   cancel: "Anuluj",
-  currency: "zł",
+  currency: " zł",
 };

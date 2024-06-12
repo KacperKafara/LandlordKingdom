@@ -35,7 +35,7 @@ public interface LocalService {
 
     Local setFixedFee(UUID localId, UUID ownerId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
 
-    Page<Local> getAllLocals(Pageable pageable);
+    Page<Local> getAllLocals(Pageable pageable, String state, String ownerLogin);
 
     Local changeLocalAddress(UUID id, Address address) throws GivenAddressAssignedToOtherLocalException, NotFoundException;
 
