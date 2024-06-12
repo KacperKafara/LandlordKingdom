@@ -24,8 +24,11 @@ public class LocalScheduler {
         molSchedulerService.changeLocalState();
     }
 
+//    @Scheduled(cron = "0 0 0 * * MON", zone = "UTC")
+    @Scheduled(fixedRate = 50000)
     @PreAuthorize("permitAll()")
     public void createFixedFeeAfterEndOfWeek() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        log.info("Applying fixed fee for all current rents");
+        molSchedulerService.createFixedFee();
     }
 }
