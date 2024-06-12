@@ -16,28 +16,29 @@ const OwnerRentDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const { data, isLoading } = useOwnerRent(id!);
-  const [searchParams] = useSearchParams();
-  const referer = searchParams.get("referer");
+  const path =
+    new Date(data?.endDate ?? Date()) < new Date()
+      ? "/owner/archival-rents"
+      : "/owner/current-rents";
   const breadcrumbs = useBreadcrumbs([
+    { title: t("ownerRentDetails.ownerMainPage"), path: "/owner" },
     {
-      title: t("roles.tenant"),
-      path: "/tenant",
+      title:
+        path === "/owner/current-rents"
+          ? t("ownerRentDetails.rents")
+          : t("ownerRentDetails.archivalRents"),
+      path: path ?? "/owner/current-rents",
     },
     {
       title:
-        referer === "archival-rents"
-          ? t("breadcrumbs.archivalRents")
-          : t("breadcrumbs.currentRents"),
-      path: `/tenant/${referer === "archival-rents" ? "archival-rents" : "current-rents"}`,
-    },
-    {
-      title: data
-        ? `${data.local.name} (${data.startDate} - ${data.endDate})`
-        : "",
-      path: `/tenant/rents/${id}`,
+        `${
+          path === "/owner/current-rents"
+            ? t("ownerRentDetails.rents")
+            : t("ownerRentDetails.archivalRents")
+        } ${data?.local.name}` ?? "",
+      path: `${path}/rent/${id}`,
     },
   ]);
-
   if (isLoading) {
     return <LoadingData />;
   }

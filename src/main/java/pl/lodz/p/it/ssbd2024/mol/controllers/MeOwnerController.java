@@ -107,6 +107,13 @@ public class MeOwnerController {
         return ResponseEntity.ok(RentMapper.rentForOwnerResponseList(rents));
     }
 
+    @GetMapping("/owner/rents/archival")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<List<RentForOwnerResponse>> getArchivalRents() {
+        UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
+        return ResponseEntity.ok(RentMapper.rentForOwnerResponseList(rentService.getArchivalOwnerRents(userId)));
+    }
+
     @PostMapping("/rents/{id}/payment")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<PaymentResponse> payRent(@PathVariable UUID id, @RequestBody @Valid NewPaymentRequest newPaymentRequest) throws NotFoundException {
