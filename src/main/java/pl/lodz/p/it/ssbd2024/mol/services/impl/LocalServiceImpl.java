@@ -61,13 +61,13 @@ public class LocalServiceImpl implements LocalService {
             if (local.getState() != LocalState.WITHOUT_OWNER) {
                 throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
                         ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
-            } else {
-                existingLocal.setOwner(owner);
-                existingLocal.setState(LocalState.UNAPPROVED);
-                return localRepository.saveAndFlush(existingLocal);
             }
+            existingLocal.setOwner(owner);
+            existingLocal.setState(LocalState.UNAPPROVED);
+            return localRepository.saveAndFlush(existingLocal);
         } else {
             try {
+                local.setOwner(owner);
                 return localRepository.saveAndFlush(local);
             } catch (ConstraintViolationException e) {
                 throw new CreationException(UserExceptionMessages.CREATION_FAILED, ErrorCodes.REGISTRATION_ERROR);
