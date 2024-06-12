@@ -9,6 +9,8 @@ import { ErrorCode } from "@/@types/errorCode";
 interface AllLocalsRequest {
   pageNumber: number;
   pageSize: number;
+  state: string;
+  ownerLogin: string;
 }
 
 interface AllLocalsResponse {
@@ -20,13 +22,21 @@ export const useGetAllLocals = (request: AllLocalsRequest) => {
   const { api } = useAxiosPrivate();
 
   return useQuery({
-    queryKey: ["allLocals", request.pageNumber, request.pageSize],
+    queryKey: [
+      "allLocals",
+      request.pageNumber,
+      request.pageSize,
+      request.state,
+      request.ownerLogin,
+    ],
     queryFn: async () => {
       try {
         const response = await api.get<AllLocalsResponse>("/locals", {
           params: {
             page: request.pageNumber,
             size: request.pageSize,
+            state: request.state,
+            ownerLogin: request.ownerLogin,
           },
         });
         return response.data;

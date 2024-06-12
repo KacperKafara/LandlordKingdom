@@ -9,21 +9,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useGetOwnerCurrentRents } from "@/data/mol/useGetOwnerCurrentRents";
+import { useGetOwnerArchivalRents } from "@/data/mol/useGetOwnerArchivalRents";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
-import { ChangeEndDate } from "./ChangeEndDate";
 import { useNavigate } from "react-router-dom";
-import { getAddressString } from "@/utils/address";
 
-const RentsPage: FC = () => {
+const ArchivalOwnerRentsPage: FC = () => {
   const breadCrumbs = useBreadcrumbs([
     { title: t("currentOwnerRents.title"), path: "/owner" },
-    { title: t("currentOwnerRents.rents"), path: "/owner/rents" },
+    {
+      title: t("currentOwnerRents.archivalRents"),
+      path: "/owner/archival-rents",
+    },
   ]);
-  const { data: rents, isLoading } = useGetOwnerCurrentRents();
+  const { data: rents, isLoading } = useGetOwnerArchivalRents();
   const navigate = useNavigate();
   if (isLoading) {
     return (
@@ -61,7 +62,11 @@ const RentsPage: FC = () => {
                 <CardHeader>
                   <CardTitle>{rent.local.name}</CardTitle>
                   <CardDescription>
-                    {getAddressString(rent.local.address)}
+                    {rent.local.address.country}, {rent.local.address.street}{" "}
+                    {rent.local.address.number},{" "}
+                    {rent.local.address.zipCode.substring(0, 2)}-
+                    {rent.local.address.zipCode.substring(2)}{" "}
+                    {rent.local.address.city}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2">
@@ -75,7 +80,7 @@ const RentsPage: FC = () => {
                   />
                   <DataField
                     label={t("currentOwnerRents.balance")}
-                    value={rent.balance.toString() + " " + t("currency")}
+                    value={rent.balance.toString()}
                   />
                   <p className="col-span-2 my-3 text-xl font-bold">
                     {t("currentOwnerRents.tenant")}
@@ -90,18 +95,16 @@ const RentsPage: FC = () => {
                   />
                 </CardContent>
                 <CardFooter className="w-full justify-center gap-3">
-                  <ChangeEndDate
-                    startDate={rent.startDate}
-                    id={rent.id}
-                    endDate={rent.endDate}
-                  />
                   <Button
-                    className="flex-1"
-                    onClick={() => navigate(`rent/${rent.id}`)}
+                    className="flex-auto"
+                    onClick={() =>
+                      navigate(`rent/${rent.id}`, {
+                        state: { prevPath: "/owner/archival-rents" },
+                      })
+                    }
                   >
                     {t("currentOwnerRents.rentDetails")}
                   </Button>
-                  <Button className="flex-1">Action 3</Button>
                 </CardFooter>
               </Card>
             </li>
@@ -110,10 +113,10 @@ const RentsPage: FC = () => {
       </div>
       <RefreshQueryButton
         className="absolute -right-9 top-1"
-        queryKeys={["ownerCurrentRents"]}
+        queryKeys={["ownerArchivalRents"]}
       />
     </div>
   );
 };
 
-export default RentsPage;
+export default ArchivalOwnerRentsPage;
