@@ -655,6 +655,7 @@ const updateLocalPage = {
     active: "Active",
     inactive: "Inactive",
     rented: "Rented",
+    unknown: "Unknown",
   },
   updateData: "Update local data",
   name: "Local name",

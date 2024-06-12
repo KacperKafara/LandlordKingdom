@@ -1,6 +1,7 @@
 import ConfirmDialog from "@/components/ConfirmDialog";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useUpdateLocalData } from "@/data/local/useMutateLocalUpdate";
@@ -59,6 +60,24 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
         mutateAsync.mutate({ request, etag });
     });
 
+    const stateToTranslationKey = (state: string) => {
+        switch (state) {
+            case "WITHOUT_OWNER":
+                return "updateLocalPage.states.withoutOwner";
+            case "UNAPPROVED":
+                return "updateLocalPage.states.unapproved";
+            case "ACTIVE":
+                return "updateLocalPage.states.active";
+            case "INACTIVE":
+                return "updateLocalPage.states.inactive";
+            case "RENTED":
+                return "updateLocalPage.states.rented";
+            case "ARCHIVED":
+                return "updateLocalPage.states.archived";
+            default:
+                return "updateLocalPage.states.unknown";
+        }
+    };
     return (
         <Card className="relative">
             <CardHeader>
@@ -121,20 +140,36 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>{t("updateLocalPage.state")}</FormLabel>
-                                    <FormControl>
-                                        <select {...field} className="form-select">
-                                            <option value="WITHOUT_OWNER">{t("updateLocalPage.states.withoutOwner")}</option>
-                                            <option value="UNAPPROVED">{t("updateLocalPage.states.unapproved")}</option>
-                                            <option value="ACTIVE">{t("updateLocalPage.states.active")}</option>
-                                            <option value="INACTIVE">{t("updateLocalPage.states.inactive")}</option>
-                                            <option value="RENTED">{t("updateLocalPage.states.rented")}</option>
-                                            <option value="ARCHIVED">{t("updateLocalPage.states.archived")}</option>
-                                        </select>
-                                    </FormControl>
-                                    <FormMessage/>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger>
+                                            <Button variant="outline" className="ml-2">{t(stateToTranslationKey(form.getValues('state')))}</Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent>
+                                            <DropdownMenuItem onClick={() => field.onChange("WITHOUT_OWNER")}>
+                                                {t("updateLocalPage.states.withoutOwner")}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => field.onChange("UNAPPROVED")}>
+                                                {t("updateLocalPage.states.unapproved")}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => field.onChange("ACTIVE")}>
+                                                {t("updateLocalPage.states.active")}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => field.onChange("INACTIVE")}>
+                                                {t("updateLocalPage.states.inactive")}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => field.onChange("RENTED")}>
+                                                {t("updateLocalPage.states.rented")}
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem onClick={() => field.onChange("ARCHIVED")}>
+                                                {t("updateLocalPage.states.archived")}
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                    <FormMessage />
                                 </FormItem>
                             )}
                         />
+
                         <Button type="button" variant="outline" onClick={() => form.reset()}>
                             {t("updateLocalPage.reset")}
                         </Button>

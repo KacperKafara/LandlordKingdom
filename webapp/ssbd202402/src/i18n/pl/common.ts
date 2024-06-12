@@ -633,6 +633,7 @@ const updateLocalPage = {
     active: "Aktywny",
     inactive: "Nieaktywny",
     rented: "Wynajety",
+    unknown: "Nieznany",
   },
   updateData: "Zaktualizuj dane lokalu",
   name: "Nazwa nieruchomości",
