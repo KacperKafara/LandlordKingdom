@@ -16,7 +16,7 @@ export const useGetOwnLocalDetails = (id: string) => {
     queryFn: async () => {
       try {
         const response = await api.get<OwnLocalDetails>(`/me/locals/${id}`);
-        return response.data;
+        return response;
       } catch (error) {
         const axiosError = error as AxiosError;
         toast({

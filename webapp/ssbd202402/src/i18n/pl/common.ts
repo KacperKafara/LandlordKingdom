@@ -664,6 +664,22 @@ const activeLocalDetails = {
   applicationCreated: "Utworzono aplikacje",
 };
 
+const updateLocalPage = {
+  name: "Nazwa nieruchomości",
+  description: "Opis nieruchomości",
+  size: "Powierzchnia",
+  reset: "Resetuj",
+  submit: "Zgłoś",
+  wrong: {
+    name: "Nieprawidłowa nazwa",
+    description: "Nieprawidłowy opis",
+    size: "Nieprawidłowa powierzchnia",
+  },
+  successTitle: "Sukces",
+  successDescription: "Nieruchomość zaktualizowana",
+  errorTitle: "Błąd",
+};
+
 const changeEndDate = {
   successTitle: "Sukces",
   successDescription: "Data zakończenia została zmieniona",
@@ -827,6 +843,7 @@ export default {
   currentTenantRents,
   allLocals,
   ownerLocals,
+  updateLocalPage,
   activeLocals,
   localState,
   notFoundPage,

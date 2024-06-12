@@ -687,6 +687,22 @@ const activeLocalDetails = {
   applicationCreated: "Application created",
 };
 
+const updateLocalPage = {
+  name: "Local name",
+  description: "Local description",
+  size: "Size",
+  reset: "Reset",
+  submit: "Submit",
+  wrong: {
+    name: "Wrong name",
+    description: "Wrong description",
+    size: "Wrong size",
+  },
+  successTitle: "Success",
+  successDescription: "Local updated",
+  errorTitle: "Error",
+};
+
 const updateOwnLocalFixedFeeForm = {
   rentalFeeNotEmpty: "Rental fee cannot be empty.",
   rentalFeeNotValid:
@@ -818,6 +834,7 @@ export default {
   allLocals,
   localState,
   ownerLocals,
+  updateLocalPage,
   activeLocals,
   notFoundPage,
   sessionExpiredDialog,

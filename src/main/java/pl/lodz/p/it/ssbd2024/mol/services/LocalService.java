@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import org.aspectj.weaver.ast.Not;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,6 +11,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
@@ -31,7 +33,7 @@ public interface LocalService {
 
     LocalReportResponse getLocalReport(UUID id) throws NotFoundException;
 
-    Local editLocal(UUID id, Local local) throws NotFoundException;
+    Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
     Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException;
 

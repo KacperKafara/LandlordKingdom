@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.IdenticalFieldValueException;
+import pl.lodz.p.it.ssbd2024.exceptions.ApplicationOptimisticLockException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
@@ -17,13 +18,18 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.messages.LocalMessages;
 import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
+import pl.lodz.p.it.ssbd2024.model.Address;
+import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
+import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -42,6 +48,7 @@ import java.util.UUID;
 public class LocalServiceImpl implements LocalService {
     private final LocalRepository localRepository;
     private final AddressRepository addressRepository;
+    private final SignVerifier signVerifier;
     private final OwnerMolRepository ownerRepository;
 
     @Override
@@ -106,8 +113,16 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local editLocal(UUID id, Local local) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
+        Local local = localRepository.findByOwner_User_IdAndId(userId, localId).orElseThrow(() ->
+                new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.LOCAL_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
+        }
+        local.setName(editLocalRequest.name());
+        local.setDescription(editLocalRequest.description());
+        local.setSize(editLocalRequest.size());
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
