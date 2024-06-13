@@ -14,7 +14,7 @@ export const useGetLocalApplications = (id: string) => {
         queryKey: ["localApplications"],
         queryFn: async () => {
             try {
-                const response = await api.get<LocalApplications>(
+                const response = await api.get<LocalApplications[]>(
                     `/me/locals/${id}/applications`
                 );
                 return response.data;

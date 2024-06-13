@@ -21,7 +21,7 @@ import java.util.UUID;
 public interface FixedFeeRepository extends JpaRepository<FixedFee, UUID> {
 
     @NonNull
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("permitAll()")
     FixedFee saveAndFlush(@NonNull FixedFee fixedFee);
 
     @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")

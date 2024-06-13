@@ -23,6 +23,8 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.MANDATORY)
 public interface RentRepository extends JpaRepository<Rent, UUID> {
 
+    @PreAuthorize("permitAll()")
+    List<Rent> findAllByEndDateGreaterThanEqual(LocalDate date);
 
     @PreAuthorize("hasRole('TENANT')")
     Optional<Rent> findByIdAndTenantId(UUID id, UUID tenantId);
@@ -52,7 +54,7 @@ public interface RentRepository extends JpaRepository<Rent, UUID> {
     List<Rent> findAllByTenantIdAndEndDateAfter(UUID tenantId, LocalDate date);
 
     @NonNull
-    @PreAuthorize("hasAnyRole('TENANT', 'OWNER')")
+    @PreAuthorize("permitAll()")
     Rent saveAndFlush(@NonNull Rent rent);
 
     @PreAuthorize("permitAll()")

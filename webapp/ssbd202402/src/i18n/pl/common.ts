@@ -640,11 +640,21 @@ const activeLocals = {
 const localApplications = {
   errorTitle: "Błąd podczas pobierania aplikacji",
   showApplications: "Pokaż aplikacje",
-  applicantLogin: "Login wnioskodawcy",
-  createdAt: "Utworzony",
+  applicant: "Wnioskodawca",
+  createdAt: "Data złożenia aplikacji",
   accept: "Zaakceptuj",
   reject: "Odrzuć",
   noApplications: "Brak aplikacji",
+  email: "Email",
+  rejectTitle: "Odrzuć aplikację",
+  rejectDescription: "Czy na pewno chcesz odrzucić aplikację?",
+  rejectSuccess: "Aplikacja została odrzucona",
+  acceptTitle: "Potwierdzenie akceptacji wniosku",
+  acceptDescription:
+    "Zaraz zaakceptujesz ten wniosek. Po akceptacji zostanie utworzony najem z datą zakończenia. Upewnij się, że wszystkie szczegóły są poprawne przed kontynuacją.",
+  acceptFooter: "Po zaakceptowaniu aplikacji lokal zostanie wynajęty",
+  acceptSuccess: "Aplikacja została zaakceptowana",
+  endDateNeeded: "Musisz wprowadzić datę",
 };
 
 const activeLocalDetails = {

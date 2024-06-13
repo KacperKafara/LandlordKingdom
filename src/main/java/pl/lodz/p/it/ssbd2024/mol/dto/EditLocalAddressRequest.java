@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record EditLocalAddressRequest(
-        @Size(min = 1, max = 100, message = "City length must be between 1 and 100.")
+        @Size(min = 1, max = 100, message = "Country length must be between 1 and 100.")
         @NotBlank(message = "City cannot be blank.")
         String country,
         @Size(min = 1, max = 100, message = "City length must be between 1 and 100.")

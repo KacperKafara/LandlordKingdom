@@ -25,7 +25,7 @@ export const useCreatePayment = () => {
         variant: "success",
       });
       return await queryClient.invalidateQueries({
-        queryKey: ["rentDetailsForOwner", "rentDetailsForOwner"],
+        queryKey: ["rentDetailsForOwner", "rentPayments"],
       });
     },
     onError: (error: AxiosError<ErrorCode>) => {

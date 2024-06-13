@@ -1,12 +1,10 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
-import pl.lodz.p.it.ssbd2024.exceptions.CreationException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.exceptions.LocalAlreadyRentedException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,9 +16,9 @@ public interface ApplicationService {
 
     Application getUserApplication(UUID userId, UUID localId) throws NotFoundException;
 
-    Rent acceptApplication(UUID applicationId) throws NotFoundException, LocalAlreadyRentedException;
+    Rent acceptApplication(UUID applicationId, UUID ownerUserId, LocalDate endDate) throws NotFoundException, InvalidLocalState, WrongEndDateException;
 
-    void rejectApplication(UUID applicationId) throws NotFoundException;
+    void rejectApplication(UUID applicationId, UUID ownerUserId) throws NotFoundException;
 
     Application createApplication(UUID localId, UUID userId) throws NotFoundException, InvalidLocalState, CreationException;
 
