@@ -2,7 +2,7 @@ import { FC } from "react";
 import RentInformation from "./RentInformation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useOwnerRent } from "@/data/rent/useOwnerRent";
 import { RentPayments } from "@/components/RentPayments";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
