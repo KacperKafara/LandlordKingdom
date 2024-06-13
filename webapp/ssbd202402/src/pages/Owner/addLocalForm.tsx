@@ -18,7 +18,7 @@ const addLocalSchema = (t: TFunction) => z.object({
         number: z.string().min(1, { message: t("addLocalPage.wrong.number") }),
         street: z.string().min(1, { message: t("addLocalPage.wrong.street") }),
         city: z.string().min(1, { message: t("addLocalPage.wrong.city") }),
-        zip: z.string().min(1, { message: t("addLocalPage.wrong.zip") }),
+        zip: z.string().regex(/^\d{2}-\d{3}$/, { message: t("addLocalPage.wrong.zip") }),
         country: z.string().min(1, { message: t("addLocalPage.wrong.country") }),
     }),
     marginFee: z.number().min(0, t("addLocalPage.wrong.marginFee")),
