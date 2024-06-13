@@ -23,8 +23,12 @@ import ConfirmDialog from "@/components/ConfirmDialog.tsx";
 
 const updateLocalDetailsSchema = (t: TFunction) => z.object({
     id: z.string(),
-    name: z.string().min(1, { message: t("updateLocalPage.wrong.name") }),
-    description: z.string().min(1, { message: t("updateLocalPage.wrong.description") }),
+    name: z.string()
+        .min(1, { message: t("updateLocalPage.wrong.name") })
+        .max(200, { message: t("updateLocalPage.wrong.name") }),
+    description: z.string()
+        .min(1, { message: t("updateLocalPage.wrong.description") })
+        .max(5000, { message: t("updateLocalPage.wrong.description") }),
     state: z.enum(["WITHOUT_OWNER", "UNAPPROVED", "ACTIVE", "ARCHIVED", "INACTIVE", "RENTED"], {
         errorMap: () => ({ message: t("updateLocalPage.wrong.state") })
     })

@@ -11,15 +11,27 @@ import { useAddLocal } from "@/data/mol/useAddLocal.ts";
 import {TFunction} from "i18next";
 
 const addLocalSchema = (t: TFunction) => z.object({
-    name: z.string().min(1, { message: t("addLocalPage.wrong.name") }),
-    description: z.string().min(1, { message: t("addLocalPage.wrong.description") }),
+    name: z.string()
+        .min(1, { message: t("addLocalPage.wrong.name") })
+        .max(200, { message: t("addLocalPage.wrong.name") }),
+    description: z.string()
+        .min(1, { message: t("addLocalPage.wrong.description") })
+        .max(5000, { message: t("addLocalPage.wrong.description") }),
     size: z.number().min(1, { message: t("addLocalPage.wrong.size") }),
     address: z.object({
-        number: z.string().min(1, { message: t("addLocalPage.wrong.number") }),
-        street: z.string().min(1, { message: t("addLocalPage.wrong.street") }),
-        city: z.string().min(1, { message: t("addLocalPage.wrong.city") }),
+        number: z.string()
+            .min(1, { message: t("addLocalPage.wrong.number") })
+            .max(10, { message: t("addLocalPage.wrong.number") }),
+        street: z.string()
+            .min(1, { message: t("addLocalPage.wrong.street") })
+            .max(100, { message: t("addLocalPage.wrong.street") }),
+        city: z.string()
+            .min(1, { message: t("addLocalPage.wrong.city") })
+            .max(100, { message: t("addLocalPage.wrong.city") }),
         zip: z.string().regex(/^\d{2}-\d{3}$/, { message: t("addLocalPage.wrong.zip") }),
-        country: z.string().min(1, { message: t("addLocalPage.wrong.country") }),
+        country: z.string()
+            .min(1, { message: t("addLocalPage.wrong.country") })
+            .max(100, { message: t("addLocalPage.wrong.country") }),
     }),
     marginFee: z.number().min(0, t("addLocalPage.wrong.marginFee")),
     rentalFee: z.number().min(0, t("addLocalPage.wrong.rentalFee")),
