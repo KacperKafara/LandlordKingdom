@@ -124,7 +124,9 @@ public class LocalServiceImpl implements LocalService {
         }
         local.setName(editLocalRequest.name());
         local.setDescription(editLocalRequest.description());
-        local.setSize(editLocalRequest.size());
+        LocalState newState = LocalState.valueOf(editLocalRequest.state());
+        if (local.getState() == LocalState.ACTIVE || local.getState() == LocalState.INACTIVE)
+            local.setState(newState);
         return localRepository.saveAndFlush(local);
     }
 
@@ -213,7 +215,7 @@ public class LocalServiceImpl implements LocalService {
         local.setDescription(editLocalRequest.description());
         local.setSize(editLocalRequest.size());
         LocalState newState = LocalState.valueOf(editLocalRequest.state());
-        if (local.getState() != LocalState.RENTED)
+        if (local.getState() == LocalState.ACTIVE || local.getState() == LocalState.INACTIVE)
             local.setState(newState);
         return localRepository.saveAndFlush(local);
     }

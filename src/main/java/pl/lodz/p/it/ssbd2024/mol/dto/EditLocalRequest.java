@@ -6,6 +6,6 @@ public record EditLocalRequest(
         UUID id,
         String name,
         String description,
-        int size
+        String state
 ) {
 }

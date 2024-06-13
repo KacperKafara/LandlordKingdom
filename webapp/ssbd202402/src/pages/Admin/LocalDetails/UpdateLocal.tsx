@@ -15,10 +15,14 @@ import { Button } from "@/components/ui/button.tsx";
 import { toast } from "@/components/ui/use-toast.ts";
 import {TFunction} from "i18next";
 
-export const updateLocalDetailsSchema = (t: TFunction) => z.object({
+const updateLocalDetailsSchema = (t: TFunction) => z.object({
     id: z.string(),
-    name: z.string().min(1, { message: t("updateLocalPage.wrong.name") }),
-    description: z.string().min(1, { message: t("updateLocalPage.wrong.description") }),
+    name: z.string()
+        .min(1, { message: t("updateLocalPage.wrong.name") })
+        .max(200, { message: t("updateLocalPage.wrong.name") }),
+    description: z.string()
+        .min(1, { message: t("updateLocalPage.wrong.description") })
+        .max(5000, { message: t("updateLocalPage.wrong.description") }),
     size: z.number().min(1, { message: t("updateLocalPage.wrong.size") }),
     state: z.enum(["WITHOUT_OWNER", "UNAPPROVED", "ACTIVE", "ARCHIVED", "INACTIVE", "RENTED"], {
         errorMap: () => ({ message: t("updateLocalPage.wrong.state") })
@@ -145,7 +149,7 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
                                                 ? t("updateLocalPage.state") + ": " + t(stateToTranslationKey(data?.data.state))
                                                 : t("updateLocalPage.state") + ": " + t("updateLocalPage.states.unknown")
                                         }</FormLabel>
-                                        {data?.data.state !== "RENTED" && (
+                                        {(data?.data.state === "ACTIVE" || data?.data.state === "INACTIVE") && (
                                             <div>
                                                 <FormLabel className="mt-4">{t("updateLocalPage.changeState")}</FormLabel>
                                                 <FormControl>
@@ -179,7 +183,7 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
                             className="mt-5"
                             buttonText={t("common.update")}
                             dialogTitle={t("common.confirmDialogTitle")}
-                            dialogDescription={t("changeAddressForm.confirmDialogDescription")}
+                            dialogDescription={t("updateLocalPage.confirmDialogDescription")}
                             confirmAction={() => updateLocalData()}
                         />
                     </form>

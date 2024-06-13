@@ -32,7 +32,7 @@ const LocalApplications: FC = () => {
                   </p>
                   <p>
                     <strong>{t("localApplications.createdAt")}:</strong>{" "}
-                    {new Date(application.createdAt).toLocaleString()}
+                    {application.createdAt}
                   </p>
                   <p>
                     <strong>{t("localApplications.email")}:</strong>{" "}

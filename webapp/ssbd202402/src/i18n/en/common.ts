@@ -725,6 +725,7 @@ const updateLocalPage = {
   successTitle: "Success",
   successDescription: "Local updated",
   errorTitle: "Error",
+  confirmDialogDescription: "Are you sure you want to change local?",
 };
 
 const updateOwnLocalFixedFeeForm = {

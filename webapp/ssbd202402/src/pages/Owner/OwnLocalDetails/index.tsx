@@ -135,16 +135,7 @@ const OwnLocalDetailsPage: FC = () => {
                   </Card>
                 </TabsContent>
                 <TabsContent value="updateData">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-center">
-                        {t("ownLocalDetails.updateData")}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pb-2">
-                      <UpdateLocalDetailsForm/>
-                    </CardContent>
-                  </Card>
+                    <UpdateLocalDetailsForm/>
                 </TabsContent>
                 <TabsContent value="changeFixedFee">
                   <Card>
