@@ -3,13 +3,13 @@ import AdminLayout from "./Layouts/AdminLayout";
 import OwnerLayout from "./Layouts/OwnerLayout";
 import TenantLayout from "./Layouts/TenantLayout";
 import AccountLayout from "./Layouts/AccountLayout";
-import AdminTestPage from "./pages/Admin/Test";
-import OwnerTestPage from "./pages/Owner/Test";
-import TenantTestPage from "./pages/Tenant/Test";
 import loadable from "@loadable/component";
 import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
 import addLocalForm from "./pages/Owner/addLocalForm";
+import OwnerPage from "./pages/Owner";
+import TenantPage from "./pages/Tenant";
+import AdminPage from "./pages/Admin";
 
 const UserDetailsPage = loadable(() => import("./pages/Admin/UserDetailsPage"));
 const MePage = loadable(() => import("./pages/Me"));
@@ -58,6 +58,7 @@ const OwnApplicationPage = loadable(
 const LocalReportPage = loadable(() => import("./pages/Owner/LocalReport"));
 
 const AdminRoutes: RouteObject[] = [
+  { index: true, Component: AdminPage },
   {
     path: "locals",
     children: [
@@ -65,13 +66,12 @@ const AdminRoutes: RouteObject[] = [
       { path: "local/:id", Component: LocalDetailsPage },
     ],
   },
-  { path: "test", Component: AdminTestPage },
   { path: "users", Component: UserListPage },
   { path: "users/:id", Component: UserDetailsPage },
   { path: "not-approved", Component: NotApprovedActionsPage },
 ];
 const OwnerRoutes: RouteObject[] = [
-  { path: "test", Component: OwnerTestPage },
+  { index: true, Component: OwnerPage },
   {
     path: "locals",
     children: [
@@ -105,7 +105,7 @@ const OwnerRoutes: RouteObject[] = [
   },
 ];
 const TenantRoutes: RouteObject[] = [
-  { path: "test", Component: TenantTestPage },
+  { index: true, Component: TenantPage },
   { path: "current-rents", Component: CurrentRentsPage },
   { path: "archival-rents", Component: ArchivalRentsPage },
   { path: "applications", Component: OwnApplicationPage },

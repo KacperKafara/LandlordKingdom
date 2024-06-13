@@ -784,6 +784,7 @@ const breadcrumbs = {
   local: "Lokal",
   currentRents: "Aktualne wynajmy",
   archivalRents: "Archiwalne wynajmy",
+  report: "Raport",
 };
 
 const tenantApplications = {
@@ -850,6 +851,7 @@ const localReport = {
   shortestRentDays: "Najkrótszy wynajem w dniach",
   rentCount: "Liczba wynajmów",
   summaryPieChart: "Podsumowanie wpłat/opłat",
+  summaryBarChart: "Wpłaty i opłaty podzielone na tygodnie",
 };
 
 export default {

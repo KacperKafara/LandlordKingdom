@@ -15,9 +15,13 @@ const LocalReportPage: FC = () => {
   const { report } = useLocalReport(id!);
 
   const breadcrumbs = useBreadcrumbs([
-    { title: "Owner", path: "/owner" },
-    { title: "Local", path: "/owner/local" },
-    { title: "Report", path: "/owner/local/report" },
+    { title: t("ownerLocals.title"), path: "/owner" },
+    { title: t("ownerLocals.locals"), path: "/owner/locals" },
+    { title: report?.name ?? "", path: `/owner/locals/local/${id}` },
+    {
+      title: t("breadcrumbs.report"),
+      path: `/owner/locals/local/${id}/report`,
+    },
   ]);
 
   const marginFeeSum = report?.fixedFees.reduce(
@@ -90,7 +94,7 @@ const LocalReportPage: FC = () => {
         </div>
         <Card className="mb-10">
           <CardHeader>
-            <CardTitle>Report Combo Chart</CardTitle>
+            <CardTitle>{t("localReport.summaryBarChart")}</CardTitle>
           </CardHeader>
           <CardContent>
             <ReportComboChart report={report} />
