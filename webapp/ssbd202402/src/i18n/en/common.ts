@@ -512,6 +512,7 @@ const tenantRents = {
   email: "Email",
   login: "Login",
   noData: "Currently you have no rents",
+  details: "Details",
 };
 
 const currentOwnerRents = {
