@@ -60,7 +60,7 @@ public class LocalController {
 
     @PostMapping
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<AddLocalResponse> addLocal(@RequestBody AddLocalRequest addLocalRequest) {
+    public ResponseEntity<AddLocalResponse> addLocal(@RequestBody @Valid AddLocalRequest addLocalRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID userId = UUID.fromString(jwt.getSubject());
@@ -87,7 +87,7 @@ public class LocalController {
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (CreationException e) {
-        throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage(), e);
         }
     }
 
@@ -145,7 +145,7 @@ public class LocalController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody EditLocalRequestAdmin editLocalRequest) {
+    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody @Valid EditLocalRequestAdmin editLocalRequest) {
         try {
             return ResponseEntity.ok(LocalMapper.toEditLocalResponse(localService.editLocalByAdmin(id, editLocalRequest, tagValue)));
         } catch (NotFoundException e) {

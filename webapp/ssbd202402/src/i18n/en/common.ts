@@ -339,7 +339,9 @@ const addLocalPage = {
     rentalFee: "Wrong rental fee",
   },
   error: "Failed to add local",
-};
+  successTitle: "Local added",
+  successDescription: "Local successfully added",
+}
 
 const registerSuccessPage = {
   title: "Thanks for creating an account",
@@ -698,6 +700,7 @@ const activeLocalDetails = {
 
 const updateLocalPage = {
   state: "State",
+  changeState: "Change state to",
   states: {
     withoutOwner: "Without owner",
     unapproved: "Unapproved",
@@ -722,6 +725,7 @@ const updateLocalPage = {
   successTitle: "Success",
   successDescription: "Local updated",
   errorTitle: "Error",
+  confirmDialogDescription: "Are you sure you want to change local?",
 };
 
 const updateOwnLocalFixedFeeForm = {

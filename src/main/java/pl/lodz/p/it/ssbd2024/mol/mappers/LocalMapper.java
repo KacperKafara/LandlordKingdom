@@ -105,7 +105,7 @@ public class LocalMapper {
                 local.getName(),
                 local.getSize(),
                 local.getDescription(),
-                local.getState().toString(),
+                local.getState(),
                 AddressMapper.toAddressResponse(local.getAddress()),
                 local.getMarginFee(),
                 local.getRentalFee(),

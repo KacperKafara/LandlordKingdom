@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +43,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRES_NEW)
+@Slf4j
 public class LocalServiceImpl implements LocalService {
     private final LocalRepository localRepository;
     private final AddressRepository addressRepository;
@@ -61,8 +63,8 @@ public class LocalServiceImpl implements LocalService {
                 local.getAddress().getZip()
         );
         if (existingAddress.isPresent()) {
-            Local existingLocal = localRepository.findByAddressAndStateNotContaining(local.getAddress(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(UserExceptionMessages.NOT_FOUND, ErrorCodes.USER_NOT_FOUND));
-            if (local.getState() != LocalState.WITHOUT_OWNER) {
+            Local existingLocal = localRepository.findByAddressAndStateNotContaining(existingAddress.get(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+            if (existingLocal.getState() != LocalState.WITHOUT_OWNER) {
                 throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
                         ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
             }
@@ -74,7 +76,7 @@ public class LocalServiceImpl implements LocalService {
                 local.setOwner(owner);
                 return localRepository.saveAndFlush(local);
             } catch (ConstraintViolationException e) {
-                throw new CreationException(UserExceptionMessages.CREATION_FAILED, ErrorCodes.REGISTRATION_ERROR);
+                throw new CreationException(LocalExceptionMessages.CREATION_FAILED, ErrorCodes.LOCAL_CREATION_ERROR);
             }
         }
     }
@@ -118,7 +120,9 @@ public class LocalServiceImpl implements LocalService {
         }
         local.setName(editLocalRequest.name());
         local.setDescription(editLocalRequest.description());
-        local.setSize(editLocalRequest.size());
+        LocalState newState = LocalState.valueOf(editLocalRequest.state());
+        if (local.getState() == LocalState.ACTIVE || local.getState() == LocalState.INACTIVE)
+            local.setState(newState);
         return localRepository.saveAndFlush(local);
     }
 
@@ -207,7 +211,8 @@ public class LocalServiceImpl implements LocalService {
         local.setDescription(editLocalRequest.description());
         local.setSize(editLocalRequest.size());
         LocalState newState = LocalState.valueOf(editLocalRequest.state());
-        local.setState(newState);
+        if (local.getState() == LocalState.ACTIVE || local.getState() == LocalState.INACTIVE)
+            local.setState(newState);
         return localRepository.saveAndFlush(local);
     }
 

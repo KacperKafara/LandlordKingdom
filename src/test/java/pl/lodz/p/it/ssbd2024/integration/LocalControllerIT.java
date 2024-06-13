@@ -8,16 +8,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalAddressRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public class LocalControllerIT extends BaseConfig {
@@ -287,5 +291,338 @@ public class LocalControllerIT extends BaseConfig {
             assertEquals(status2, HttpStatus.OK.value());
             assertEquals(status1, HttpStatus.CONFLICT.value());
         }
+    }
+
+    @Test
+    public void addLocal_localDataIsValid_returnOk() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new EditLocalAddressRequest("nie", "wiem", "dlaczego", "1", "90-000"),
+                BigDecimal.valueOf(10.5),
+                BigDecimal.valueOf(100L));
+
+        int numberOfLocals = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .body(addLocalRequest)
+                .param("page", 0)
+                .param("size", 200)
+                .param("state", "UNAPPROVED")
+                .param("ownerLogin", "")
+                .when()
+                .get(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .path("locals.size()");
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .body(addLocalRequest)
+                .param("page", 0)
+                .param("size", 200)
+                .param("state", "UNAPPROVED")
+                .param("ownerLogin", "")
+                .when()
+                .get(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("locals", hasSize(numberOfLocals + 1));
+    }
+
+    @Test
+    public void addLocal_userIsNotOwner_returnForbidden() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10L),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void editLocal_localExists_returnOk() {
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("name", equalTo("local"))
+                .extract()
+                .header("ETag");
+
+        EditLocalRequestAdmin editLocalRequest = new EditLocalRequestAdmin(
+                UUID.fromString("64d715a3-0dd5-4520-9716-965db9ce1ac6"),
+                "newLocal",
+                "newLocalDescription",
+                100,
+                "INACTIVE"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", etag.substring(1, etag.length() - 1))
+                .body(editLocalRequest)
+                .when()
+                .put(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("name", equalTo("newLocal"));
+    }
+
+    @Test
+    public void editLocal_localNotExists_returnNotFound() {
+        EditLocalRequestAdmin editLocalRequest = new EditLocalRequestAdmin(
+                UUID.fromString("64d715a3-0dd5-4520-9716-965db9ce1ac7"),
+                "newLocal",
+                "newLocalDescription",
+                100,
+                "INACTIVE"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", "\"1\"")
+                .body(editLocalRequest)
+                .when()
+                .put(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac7")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void editLocal_userIsNotAdmin_returnForbidden() {
+        EditLocalRequestAdmin editLocalRequest = new EditLocalRequestAdmin(
+                UUID.fromString("64d715a3-0dd5-4520-9716-965db9ce1ac6"),
+                "newLocal",
+                "newLocalDescription",
+                100,
+                "INACTIVE"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .header("If-Match", "\"1\"")
+                .body(editLocalRequest)
+                .when()
+                .put(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void editLocal_etagIfMatchNotValid_returnPreconditionFailed() {
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/ff345812-b51c-4518-9c3f-8b0742392170")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("name", equalTo("archivedLocal"))
+                .extract()
+                .header("ETag");
+
+
+        EditLocalRequestAdmin editLocalRequest = new EditLocalRequestAdmin(
+                UUID.fromString("64d715a3-0dd5-4520-9716-965db9ce1ac6"),
+                "newLocal",
+                "newLocalDescription",
+                100,
+                "INACTIVE"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", etag.substring(1, etag.length() - 1))
+                .body(editLocalRequest)
+                .when()
+                .put(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.PRECONDITION_FAILED.value());
+    }
+
+    @Test
+    public void editLocal_raceCondition_returnOkAndConflictOrPreconditionFailed() throws ExecutionException, InterruptedException, TimeoutException {
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .header("ETag");
+
+        EditLocalRequestAdmin editLocalRequest = new EditLocalRequestAdmin(
+                UUID.fromString("64d715a3-0dd5-4520-9716-965db9ce1ac6"),
+                "newLocal",
+                "newLocalDescription",
+                100,
+                "INACTIVE"
+        );
+
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .auth().oauth2(adminToken)
+                        .header("If-Match", etag.substring(1, etag.length() - 1))
+                        .body(editLocalRequest),
+                2, Method.PUT, LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6");
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        log.info("Status1: %d Status2: %d".formatted(status1, status2));
+        if(status1 == HttpStatus.OK.value()) {
+            assertEquals(status1, HttpStatus.OK.value());
+            assertTrue(status2 == HttpStatus.PRECONDITION_FAILED.value() || status2 == HttpStatus.CONFLICT.value());
+        } else {
+            assertEquals(status2, HttpStatus.OK.value());
+            assertTrue(status1 == HttpStatus.PRECONDITION_FAILED.value() || status1 == HttpStatus.CONFLICT.value());
+        }
+    }
+
+    @Test
+    public void editLocal_dataNotValid_returnBadRequest() {
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .header("ETag");
+
+        EditLocalRequestAdmin editLocalRequest = new EditLocalRequestAdmin(
+                UUID.fromString("64d715a3-0dd5-4520-9716-965db9ce1ac6"),
+                "newLocal",
+                "newLocalDescription",
+                -100,
+                "INACTIVE"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", etag.substring(1, etag.length() - 1))
+                .body(editLocalRequest)
+                .when()
+                .put(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void addLocal_raceCondition_returnOkAndConflict() throws ExecutionException, InterruptedException, TimeoutException {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10.5),
+                BigDecimal.valueOf(100L));
+
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .auth().oauth2(userToken)
+                        .body(addLocalRequest),
+                2, Method.POST, LOCALS_URL);
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        log.info("Status1: %d Status2: %d".formatted(status1, status2));
+        if(status1 == HttpStatus.OK.value()) {
+            assertEquals(status1, HttpStatus.OK.value());
+            assertEquals(status2, HttpStatus.CONFLICT.value());
+        } else {
+            assertEquals(status2, HttpStatus.OK.value());
+            assertEquals(status1, HttpStatus.CONFLICT.value());
+        }
+    }
+
+    @Test
+    public void addLocal_dataNotValid_returnBadRequest() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                -100,
+                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10.5),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void addLocal_addressAssignedToOtherLocal_returnConflict() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new EditLocalAddressRequest("inactiveLocalCountry", "inactiveLocalCity", "inactiveLocalStreet", "1", "12-312"),
+                BigDecimal.valueOf(10.5),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CONFLICT.value());
     }
 }
