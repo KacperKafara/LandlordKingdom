@@ -104,11 +104,9 @@ const CurrentRentsPage: FC = () => {
                     <NavLink
                       to={`/tenant/rents/${rent.id}?referer=current-rents`}
                     >
-                      Details
+                      {t("tenantRents.details")}
                     </NavLink>
                   </Button>
-                  <Button className="flex-auto">Action 2</Button>
-                  <Button className="flex-auto">Action 3</Button>
                 </CardFooter>
               </Card>
             </li>
