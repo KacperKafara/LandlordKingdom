@@ -12,18 +12,18 @@ export type LocalReport = {
   shortestRentDays: number;
 };
 
-type VariableFee = {
+export type VariableFee = {
   date: string;
   amount: number;
 };
 
-type FixedFee = {
+export type FixedFee = {
   date: string;
   rentalFee: number;
   marginFee: number;
 };
 
-type Payment = {
+export type Payment = {
   date: string;
   amount: number;
 };

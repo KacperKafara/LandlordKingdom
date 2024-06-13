@@ -1,4 +1,5 @@
 import { LocalReport } from "@/data/local/useLocalReport";
+import { LocalsReport } from "@/data/local/useLocalsReport";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -11,7 +12,7 @@ import {
 } from "recharts";
 
 type ReportPieChartProps = {
-  report?: LocalReport;
+  report?: LocalReport | LocalsReport;
 };
 
 const ReportPieChartComponent: FC<ReportPieChartProps> = ({ report }) => {
