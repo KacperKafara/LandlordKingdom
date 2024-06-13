@@ -85,20 +85,40 @@ const OwnLocalDetailsPage: FC = () => {
                         />
                         <DataField
                           label={t("ownLocalDetails.rentalFee")}
-                          value={data.data.rentalFee.toString()}
+                          value={
+                            (data.data?.rentalFee ?? 0.0).toFixed(2) +
+                            " " +
+                            t("currency")
+                          }
                         />
                         <DataField
                           label={t("ownLocalDetails.marginFee")}
-                          value={data.data.marginFee.toString()}
+                          value={
+                            (data.data?.marginFee ?? 0.0).toFixed(2) +
+                            " " +
+                            t("currency")
+                          }
                         />
 
                         <DataField
                           label={t("ownLocalDetails.nextRentalFee")}
-                          value={data?.data.nextRentalFee?.toString() ?? "-"}
+                          value={
+                            data.data?.nextRentalFee != null
+                              ? data.data.nextRentalFee.toFixed(2) +
+                                " " +
+                                t("currency")
+                              : "-"
+                          }
                         />
                         <DataField
                           label={t("ownLocalDetails.nextMarginFee")}
-                          value={data?.data.nextMarginFee?.toString() ?? "-"}
+                          value={
+                            data.data?.nextMarginFee != null
+                              ? data.data.nextMarginFee.toFixed(2) +
+                                " " +
+                                t("currency")
+                              : "-"
+                          }
                         />
 
                         <p className="col-span-2 text-xl font-semibold">
@@ -141,7 +161,7 @@ const OwnLocalDetailsPage: FC = () => {
                   </Card>
                 </TabsContent>
                 <TabsContent value="updateData">
-                    <UpdateLocalDetailsForm/>
+                  <UpdateLocalDetailsForm />
                 </TabsContent>
                 <TabsContent value="changeFixedFee">
                   <Card>

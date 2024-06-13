@@ -78,7 +78,9 @@ const ActiveLocalDetailsPage: FC = () => {
                     />
                     <DataField
                       label={t("activeLocalDetails.price")}
-                      value={local.price}
+                      value={
+                        (local?.price ?? 0.0).toFixed(2) + " " + t("currency")
+                      }
                     />
 
                     <p className="col-span-3 text-xl font-semibold">
