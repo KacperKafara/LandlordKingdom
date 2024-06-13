@@ -10,7 +10,7 @@ type UpdateLocalData = {
     name: string;
     description: string;
     size: number;
-    state: "UNAPPROVED" | "ARCHIVED" | "ACTIVE" | "INACTIVE" | "WITHOUT_OWNER" | "RENTED";
+    state: "UNAPPROVED" | "ARCHIVED" | "ACTIVE" | "INACTIVE" | "WITHOUT_OWNER" | "RENTED" | "";
 }
 
 interface UpdateLocalRequest {

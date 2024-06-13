@@ -29,7 +29,7 @@ const updateLocalDetailsSchema = (t: TFunction) => z.object({
     description: z.string()
         .min(1, { message: t("updateLocalPage.wrong.description") })
         .max(5000, { message: t("updateLocalPage.wrong.description") }),
-    state: z.enum(["WITHOUT_OWNER", "UNAPPROVED", "ACTIVE", "ARCHIVED", "INACTIVE", "RENTED"], {
+    state: z.enum(["WITHOUT_OWNER", "UNAPPROVED", "ACTIVE", "ARCHIVED", "INACTIVE", "RENTED", ""], {
         errorMap: () => ({ message: t("updateLocalPage.wrong.state") })
     })
 });
@@ -43,11 +43,11 @@ const UpdateLocalDetailsForm: FC = () => {
     const mutateAsync  = useUpdateLocalData();
     const form = useForm<UpdateLocalFormData>({
         resolver: zodResolver(updateLocalDetailsSchema(t)),
-        defaultValues: {
-            id: id,
-            name: data?.data.name,
-            description: data?.data.description,
-            state: data?.data.state,
+        values: {
+            id: id || "",
+            name: data?.data.name || "",
+            description: data?.data.description || "",
+            state: data?.data.state || "",
         },
     });
 
