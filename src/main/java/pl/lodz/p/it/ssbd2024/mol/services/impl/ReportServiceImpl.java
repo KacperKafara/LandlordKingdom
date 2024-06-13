@@ -8,6 +8,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.*;
+import pl.lodz.p.it.ssbd2024.mol.dto.AllLocalsReport;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReport;
 import pl.lodz.p.it.ssbd2024.mol.repositories.*;
 import pl.lodz.p.it.ssbd2024.mol.services.ReportService;
@@ -44,5 +45,15 @@ public class ReportServiceImpl implements ReportService {
         int rentCount = rentRepository.countRentsByUserIdAndLocalId(localId, userId);
 
         return new LocalReport(local, payments, variableFees, fixedFees, rentCount, longestRentDays, shortestRentDays);
+    }
+
+    @Override
+    public AllLocalsReport getReport(UUID userId) {
+        List<Rent> rents = rentRepository.findAllByOwnerId(userId);
+        List<VariableFee> variableFees = variableFeeRepository.findAllByOwnerId(userId);
+        List<FixedFee> fixedFees = fixedFeeRepository.findAllByOwnerId(userId);
+        List<Payment> payments = paymentRepository.findAllByOwnerId(userId);
+
+        return new AllLocalsReport(rents, variableFees, fixedFees, payments);
     }
 }

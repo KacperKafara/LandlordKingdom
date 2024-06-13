@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
+import pl.lodz.p.it.ssbd2024.mol.dto.AllLocalsReport;
+import pl.lodz.p.it.ssbd2024.mol.dto.AllLocalsReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReport;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 
@@ -17,6 +19,14 @@ public class ReportMapper {
                 localReport.rentCount(),
                 localReport.longestRentDays(),
                 localReport.shortestRentDays()
+        );
+    }
+
+    public static AllLocalsReportResponse toAllLocalsReportResponse(AllLocalsReport report) {
+        return new AllLocalsReportResponse(
+                PaymentMapper.paymentResponseList(report.payments()),
+                VariableFeeMapper.variableFeeResponseList(report.variableFees()),
+                FixedFeeMapper.fixedFeeResponseList(report.fixedFees())
         );
     }
 }
