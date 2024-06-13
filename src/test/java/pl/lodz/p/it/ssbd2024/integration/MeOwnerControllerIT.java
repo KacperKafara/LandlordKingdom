@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.SetEndDateRequest;
 
 import java.time.LocalDate;
@@ -336,5 +337,27 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void editLocal_userIsNotOwner_returnForbidden() {
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0")
+                .then()
+                .extract()
+                .header("ETag");
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .header("If-Match", etag.substring(1, etag.length()-1))
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/edit" )
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
     }
 }
