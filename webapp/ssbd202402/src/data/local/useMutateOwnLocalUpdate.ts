@@ -9,7 +9,7 @@ type UpdateLocalData = {
     id: string;
     name: string;
     description: string;
-    size: number;
+    state: string;
 }
 
 interface UpdateOwnLocalRequest {

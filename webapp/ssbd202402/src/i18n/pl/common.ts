@@ -702,6 +702,7 @@ const updateLocalPage = {
   successTitle: "Sukces",
   successDescription: "Nieruchomość zaktualizowana",
   errorTitle: "Błąd",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić dane lokalu?",
 };
 
 const changeEndDate = {

@@ -11,12 +11,23 @@ import {TFunction} from "i18next";
 import {toast} from "@/components/ui/use-toast.ts";
 import {useGetOwnLocalDetails} from "@/data/local/useGetOwnLocalDetails.ts";
 import {useParams} from "react-router-dom";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu.tsx";
+import RefreshQueryButton from "@/components/RefreshQueryButton.tsx";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
+import ConfirmDialog from "@/components/ConfirmDialog.tsx";
 
 const updateLocalDetailsSchema = (t: TFunction) => z.object({
     id: z.string(),
     name: z.string().min(1, { message: t("updateLocalPage.wrong.name") }),
     description: z.string().min(1, { message: t("updateLocalPage.wrong.description") }),
-    size: z.number().min(1, { message: t("updateLocalPage.wrong.size") }),
+    state: z.enum(["WITHOUT_OWNER", "UNAPPROVED", "ACTIVE", "ARCHIVED", "INACTIVE", "RENTED"], {
+        errorMap: () => ({ message: t("updateLocalPage.wrong.state") })
+    })
 });
 
 type UpdateLocalFormData = z.infer<ReturnType<typeof updateLocalDetailsSchema>>;
@@ -32,7 +43,7 @@ const UpdateLocalDetailsForm: FC = () => {
             id: id,
             name: data?.data.name,
             description: data?.data.description,
-            size: data?.data.size,
+            state: data?.data.state,
         },
     });
 
@@ -50,63 +61,117 @@ const UpdateLocalDetailsForm: FC = () => {
         }
     );
 
+    const stateToTranslationKey = (state: string) => {
+        switch (state) {
+            case "WITHOUT_OWNER":
+                return "updateLocalPage.states.withoutOwner";
+            case "UNAPPROVED":
+                return "updateLocalPage.states.unapproved";
+            case "ACTIVE":
+                return "updateLocalPage.states.active";
+            case "INACTIVE":
+                return "updateLocalPage.states.inactive";
+            case "RENTED":
+                return "updateLocalPage.states.rented";
+            case "ARCHIVED":
+                return "updateLocalPage.states.archived";
+            default:
+                return "updateLocalPage.states.unknown";
+        }
+    };
+
     return (
-        <Form {...form}>
-            <form onSubmit={updateLocalData} className="flex flex-col gap-3">
-                <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t("updateLocalPage.name")}</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t("updateLocalPage.description")}</FormLabel>
-                            <FormControl>
-                                <Input {...field} />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <FormField
-                    control={form.control}
-                    name="size"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t("updateLocalPage.size")}</FormLabel>
-                            <FormControl>
-                                <Input
-                                    {...field}
-                                    type="number"
-                                    onChange={(event) => {
-                                        const value = parseFloat(event.target.value);
-                                        field.onChange(value);
-                                    }}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-                <div>
-                    <Button type="button" variant="outline" onClick={() => form.reset()}>
-                        {t("updateLocalPage.reset")}
-                    </Button>
-                    <Button type="submit">{t("updateLocalPage.submit")}</Button>
-                </div>
-            </form>
-        </Form>
+        <Card className="relative">
+            <CardHeader>
+                <CardTitle className="text-center">
+                    {t("ownLocalDetails.updateData")}
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="flex justify-center">
+                <Form {...form}>
+                    <form onSubmit={updateLocalData} className="flex w-3/4 flex-col gap-3">
+                        <FormField
+                            control={form.control}
+                            name="name"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>{t("updateLocalPage.name")}</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="description"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>{t("updateLocalPage.description")}</FormLabel>
+                                    <FormControl>
+                                        <Input {...field} />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                        <FormField
+                            control={form.control}
+                            name="state"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <div>
+                                        <FormLabel className="mr-4">{
+                                            data?.data.state
+                                                ? t("updateLocalPage.state") + ": " + t(stateToTranslationKey(data?.data.state))
+                                                : t("updateLocalPage.state") + ": " + t("updateLocalPage.states.unknown")
+                                        }</FormLabel>
+                                        {(data?.data.state === "ACTIVE" || data?.data.state === "INACTIVE") && (
+                                            <div>
+                                                <FormLabel className="mt-4">{t("updateLocalPage.changeState")}</FormLabel>
+                                                <FormControl>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger>
+                                                            <Button variant="outline" className="ml-2">
+                                                                {t(stateToTranslationKey(form.getValues('state')))}
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem onClick={() => field.onChange("ACTIVE")}>
+                                                                {t("updateLocalPage.states.active")}
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => field.onChange("INACTIVE")}>
+                                                                {t("updateLocalPage.states.inactive")}
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </FormControl>
+                                            </div>
+                                        )}
+                                    </div>
+                                </FormItem>
+                            )}
+                        />
+
+                        <Button type="button" variant="outline" onClick={() => form.reset()}>
+                            {t("updateLocalPage.reset")}
+                        </Button>
+                        <ConfirmDialog
+                            className="mt-5"
+                            buttonText={t("common.update")}
+                            dialogTitle={t("common.confirmDialogTitle")}
+                            dialogDescription={t("updateLocalPage.confirmDialogDescription")}
+                            confirmAction={() => updateLocalData()}
+                        />
+                    </form>
+                </Form>
+            </CardContent>
+            <RefreshQueryButton
+                className="absolute right-1 top-1"
+                queryKeys={["ownLocalDetails"]}
+            />
+        </Card>
     );
 };
 

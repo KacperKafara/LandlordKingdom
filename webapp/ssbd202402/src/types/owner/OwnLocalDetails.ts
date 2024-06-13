@@ -1,3 +1,5 @@
+import {LocalState} from "@/@types/localState.ts";
+
 export type OwnLocalDetails = {
   name: string;
   size: number;
@@ -13,5 +15,5 @@ export type OwnLocalDetails = {
   rentalFee: number;
   nextMarginFee: number;
   nextRentalFee: number;
-  state: string;
+  state: LocalState;
 };
