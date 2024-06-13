@@ -95,7 +95,7 @@ public class MeOwnerController {
 
     @PutMapping("/locals/{id}")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody EditLocalRequest editLocalRequest) {
+    public ResponseEntity<EditLocalResponse> editLocal(@PathVariable UUID id, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue, @RequestBody @Valid EditLocalRequest editLocalRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID userId = UUID.fromString(jwt.getSubject());

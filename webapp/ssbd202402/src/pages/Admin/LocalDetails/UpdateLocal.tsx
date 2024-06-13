@@ -15,12 +15,16 @@ import { Button } from "@/components/ui/button.tsx";
 import { toast } from "@/components/ui/use-toast.ts";
 import {TFunction} from "i18next";
 
-export const updateLocalDetailsSchema = (t: TFunction) => z.object({
+const updateLocalDetailsSchema = (t: TFunction) => z.object({
     id: z.string(),
-    name: z.string().min(1, { message: t("updateLocalPage.wrong.name") }),
-    description: z.string().min(1, { message: t("updateLocalPage.wrong.description") }),
+    name: z.string()
+        .min(1, { message: t("updateLocalPage.wrong.name") })
+        .max(200, { message: t("updateLocalPage.wrong.name") }),
+    description: z.string()
+        .min(1, { message: t("updateLocalPage.wrong.description") })
+        .max(5000, { message: t("updateLocalPage.wrong.description") }),
     size: z.number().min(1, { message: t("updateLocalPage.wrong.size") }),
-    state: z.enum(["WITHOUT_OWNER", "UNAPPROVED", "ACTIVE", "ARCHIVED", "INACTIVE", "RENTED"], {
+    state: z.enum(["WITHOUT_OWNER", "UNAPPROVED", "ACTIVE", "ARCHIVED", "INACTIVE", "RENTED", ""], {
         errorMap: () => ({ message: t("updateLocalPage.wrong.state") })
     })
 });
@@ -38,12 +42,12 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
 
     const form = useForm<UpdateLocalFormData>({
         resolver: zodResolver(updateLocalDetailsSchema(t)),
-        defaultValues: {
-            id: localId,
-            name: data?.data.name,
-            description: data?.data.description,
-            size: data?.data.size,
-            state: data?.data.state,
+        values: {
+            id: localId || "",
+            name: data?.data.name || "",
+            description: data?.data.description || "",
+            size: data?.data.size || 0,
+            state: data?.data.state || "",
         },
     });
 
@@ -139,33 +143,35 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
                             name="state"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t("updateLocalPage.state")}</FormLabel>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger>
-                                            <Button variant="outline" className="ml-2">{t(stateToTranslationKey(form.getValues('state')))}</Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem onClick={() => field.onChange("WITHOUT_OWNER")}>
-                                                {t("updateLocalPage.states.withoutOwner")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("UNAPPROVED")}>
-                                                {t("updateLocalPage.states.unapproved")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("ACTIVE")}>
-                                                {t("updateLocalPage.states.active")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("INACTIVE")}>
-                                                {t("updateLocalPage.states.inactive")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("RENTED")}>
-                                                {t("updateLocalPage.states.rented")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("ARCHIVED")}>
-                                                {t("updateLocalPage.states.archived")}
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                    <FormMessage />
+                                    <div>
+                                        <FormLabel className="mr-4">{
+                                            data?.data.state
+                                                ? t("updateLocalPage.state") + ": " + t(stateToTranslationKey(data?.data.state))
+                                                : t("updateLocalPage.state") + ": " + t("updateLocalPage.states.unknown")
+                                        }</FormLabel>
+                                        {(data?.data.state === "ACTIVE" || data?.data.state === "INACTIVE") && (
+                                            <div>
+                                                <FormLabel className="mt-4">{t("updateLocalPage.changeState")}</FormLabel>
+                                                <FormControl>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger>
+                                                            <Button variant="outline" className="ml-2">
+                                                                {t(stateToTranslationKey(form.getValues('state')))}
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem onClick={() => field.onChange("ACTIVE")}>
+                                                                {t("updateLocalPage.states.active")}
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => field.onChange("INACTIVE")}>
+                                                                {t("updateLocalPage.states.inactive")}
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </FormControl>
+                                            </div>
+                                        )}
+                                    </div>
                                 </FormItem>
                             )}
                         />
@@ -177,7 +183,7 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
                             className="mt-5"
                             buttonText={t("common.update")}
                             dialogTitle={t("common.confirmDialogTitle")}
-                            dialogDescription={t("changeAddressForm.confirmDialogDescription")}
+                            dialogDescription={t("updateLocalPage.confirmDialogDescription")}
                             confirmAction={() => updateLocalData()}
                         />
                     </form>

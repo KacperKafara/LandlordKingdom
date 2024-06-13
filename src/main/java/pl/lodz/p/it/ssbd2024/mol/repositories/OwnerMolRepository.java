@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public interface OwnerMolRepository extends JpaRepository<Owner, UUID> {
-    @PreAuthorize("hasAnyRole('TENANT')")
+    @PreAuthorize("hasAnyRole('TENANT', 'OWNER')")
     Optional<Owner> findByUserIdAndActiveIsTrue(UUID id);
 
     @NonNull

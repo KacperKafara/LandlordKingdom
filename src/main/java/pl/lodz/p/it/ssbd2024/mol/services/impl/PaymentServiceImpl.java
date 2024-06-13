@@ -65,7 +65,7 @@ public class PaymentServiceImpl implements PaymentService {
         }
 
         Payment payment = new Payment(amount, LocalDate.now(), rent);
-        rent.setBalance(rent.getBalance().subtract(amount));
+        rent.setBalance(rent.getBalance().add(amount));
         rentRepository.saveAndFlush(rent);
         return paymentRepository.saveAndFlush(payment);
     }

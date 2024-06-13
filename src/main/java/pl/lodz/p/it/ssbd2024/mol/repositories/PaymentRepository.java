@@ -35,4 +35,9 @@ public interface PaymentRepository extends JpaRepository<Payment, UUID> {
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT fee FROM Payment fee WHERE fee.rent.id = :rentId AND fee.rent.owner.user.id = :userId AND fee.date BETWEEN :startDate AND :endDate")
     Optional<Payment> findByRentIdBetween(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate);
+
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT payment FROM Payment payment WHERE payment.rent.local.id = :localId AND payment.rent.owner.user.id = :userId")
+    List<Payment> findByLocalIdAndUserId(UUID localId, UUID userId);
 }

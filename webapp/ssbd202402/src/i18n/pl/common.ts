@@ -343,7 +343,9 @@ const addLocalPage = {
     marginFee: "Niepoprawna opłata stała",
     rentalFee: "Niepoprawna cena wynajmu",
   },
-  error: "Failed to add local",
+  error: "Błąd podczas dodawania nieruchomości",
+  successTitle: "Nieruchomość dodana",
+  successDescription: "Nieruchomość została dodana",
 };
 
 const registerSuccessPage = {
@@ -675,6 +677,7 @@ const activeLocalDetails = {
 
 const updateLocalPage = {
   state: "Stan",
+  changeState: "Zmień stan na",
   states: {
     withoutOwner: "Bez własciciela",
     unapproved: "Nie zatwierdzony",
@@ -699,6 +702,7 @@ const updateLocalPage = {
   successTitle: "Sukces",
   successDescription: "Nieruchomość zaktualizowana",
   errorTitle: "Błąd",
+  confirmDialogDescription: "Czy na pewno chcesz zmienić dane lokalu?",
 };
 
 const changeEndDate = {
@@ -794,6 +798,7 @@ const breadcrumbs = {
   local: "Lokal",
   currentRents: "Aktualne wynajmy",
   archivalRents: "Archiwalne wynajmy",
+  report: "Raport",
 };
 
 const tenantApplications = {
@@ -843,7 +848,28 @@ const createPaymentDialog = {
     "Kwota musi mieć maksymalnie dwie cyfry po przecinku",
 };
 
+const localReport = {
+  marginFee: "Marża",
+  rentalFee: "Opłata za wynajem",
+  fixedFee: "Opłata stałe",
+  variableFee: "Opłata zmienna",
+  payment: "Płatność",
+  summary: "Razem",
+  totalPayments: "Suma płatności",
+  totalFixedFees: "Suma opłat stałych",
+  totalVariableFees: "Suma opłat zmiennych",
+  totalMarginFees: "Zysk z marży",
+  totalRentalFees: "Koszty wynajmu",
+  localSummary: "Podsumowanie",
+  longestRentDays: "Najdłuższy wynajem w dniach",
+  shortestRentDays: "Najkrótszy wynajem w dniach",
+  rentCount: "Liczba wynajmów",
+  summaryPieChart: "Podsumowanie wpłat/opłat",
+  summaryBarChart: "Wpłaty i opłaty podzielone na tygodnie",
+};
+
 export default {
+  localReport,
   rentDetailsPage,
   createPaymentDialog,
   createVariableFeeDialog,

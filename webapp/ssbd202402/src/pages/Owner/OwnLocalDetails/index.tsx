@@ -1,6 +1,6 @@
 import { useGetOwnLocalDetails } from "@/data/local/useGetOwnLocalDetails";
 import { FC } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -19,6 +19,7 @@ import UpdateLocalDetailsForm from "@/pages/Owner/OwnLocalDetails/UpdateOwnLocal
 import LeaveLocalCard from "./LeaveLocalCard";
 import { LocalState } from "@/@types/localState";
 import LocalApplications from "@/pages/Owner/OwnLocalDetails/ShowApplications.tsx";
+import { Button } from "@/components/ui/button";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -47,23 +48,28 @@ const OwnLocalDetailsPage: FC = () => {
           <div className="flex w-full justify-center">
             <div className="w-9/12 ">
               <Tabs defaultValue="basic">
-                <TabsList className="mt-1">
-                  <TabsTrigger value="basic">
-                    {t("ownLocalDetails.basicInformation")}
-                  </TabsTrigger>
-                  <TabsTrigger value="updateData">
-                    {t("ownLocalDetails.updateData")}
-                  </TabsTrigger>
-                  <TabsTrigger value="changeFixedFee">
-                    {t("ownLocalDetails.changeFixedFee")}
-                  </TabsTrigger>
-                  <TabsTrigger value="leaveLocal">
-                    {t("ownLocalDetails.leaveLocal")}
-                  </TabsTrigger>
-                  <TabsTrigger value="checkApplications">
-                    {t("ownLocalDetails.showApplications")}
-                  </TabsTrigger>
-                </TabsList>
+                <div className="mt-2 flex flex-row items-center justify-between">
+                  <TabsList className="mt-1">
+                    <TabsTrigger value="basic">
+                      {t("ownLocalDetails.basicInformation")}
+                    </TabsTrigger>
+                    <TabsTrigger value="updateData">
+                      {t("ownLocalDetails.updateData")}
+                    </TabsTrigger>
+                    <TabsTrigger value="changeFixedFee">
+                      {t("ownLocalDetails.changeFixedFee")}
+                    </TabsTrigger>
+                    <TabsTrigger value="leaveLocal">
+                      {t("ownLocalDetails.leaveLocal")}
+                    </TabsTrigger>
+                    <TabsTrigger value="checkApplications">
+                      {t("ownLocalDetails.showApplications")}
+                    </TabsTrigger>
+                  </TabsList>
+                  <Button asChild>
+                    <NavLink to="report">Report</NavLink>
+                  </Button>
+                </div>
                 <TabsContent value="basic">
                   <Card className="relative mb-2">
                     <CardHeader>
@@ -129,22 +135,13 @@ const OwnLocalDetailsPage: FC = () => {
                       </div>
                     </CardContent>
                     <RefreshQueryButton
-                        className="absolute right-1 top-1"
-                        queryKeys={["ownLocalDetails"]}
+                      className="absolute right-1 top-1"
+                      queryKeys={["ownLocalDetails"]}
                     />
                   </Card>
                 </TabsContent>
                 <TabsContent value="updateData">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-center">
-                        {t("ownLocalDetails.updateData")}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="pb-2">
-                      <UpdateLocalDetailsForm/>
-                    </CardContent>
-                  </Card>
+                    <UpdateLocalDetailsForm/>
                 </TabsContent>
                 <TabsContent value="changeFixedFee">
                   <Card>
@@ -172,7 +169,10 @@ const OwnLocalDetailsPage: FC = () => {
                   </Card>
                 </TabsContent>
                 <TabsContent value="leaveLocal">
-                  <LeaveLocalCard state={data.data.state as LocalState} id={id!} />
+                  <LeaveLocalCard
+                    state={data.data.state as LocalState}
+                    id={id!}
+                  />
                 </TabsContent>
                 <TabsContent value="checkApplications">
                   <LocalApplications />

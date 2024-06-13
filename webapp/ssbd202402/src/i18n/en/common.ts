@@ -339,6 +339,8 @@ const addLocalPage = {
     rentalFee: "Wrong rental fee",
   },
   error: "Failed to add local",
+  successTitle: "Local added",
+  successDescription: "Local successfully added",
 }
 
 const registerSuccessPage = {
@@ -698,6 +700,7 @@ const activeLocalDetails = {
 
 const updateLocalPage = {
   state: "State",
+  changeState: "Change state to",
   states: {
     withoutOwner: "Without owner",
     unapproved: "Unapproved",
@@ -722,6 +725,7 @@ const updateLocalPage = {
   successTitle: "Success",
   successDescription: "Local updated",
   errorTitle: "Error",
+  confirmDialogDescription: "Are you sure you want to change local?",
 };
 
 const updateOwnLocalFixedFeeForm = {
@@ -794,6 +798,7 @@ const breadcrumbs = {
   tenant: "Tenant",
   locals: "Locals",
   local: "Local",
+  report: "Report",
 };
 
 const createVariableFeeDialog = {
@@ -833,7 +838,28 @@ const rentDetailsPage = {
   variableFees: "Variable fees",
 };
 
+const localReport = {
+  marginFee: "Margin fee",
+  rentalFee: "Rental fee",
+  fixedFee: "Fixed fee",
+  variableFee: "Variable fee",
+  payment: "Payment",
+  summary: "Summary",
+  totalPayments: "Total payments",
+  totalVariableFees: "Total variable fees",
+  totalFixedFees: "Total fixed fees",
+  totalMarginFees: "Profit from margin fees",
+  totalRentalFees: "Rental fees",
+  localSummary: "Local summary",
+  longestRentDays: "Longest rent in days",
+  shortestRentDays: "Shortest rent in days",
+  rentCount: "Number of rents",
+  summaryPieChart: "Summary of fees and profits",
+  summaryBarChart: "Payments and fees weekly summary",
+};
+
 export default {
+  localReport,
   rentDetailsPage,
   createPaymentDialog,
   createVariableFeeDialog,

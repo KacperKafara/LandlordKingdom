@@ -16,6 +16,13 @@ export const useAddLocal = () => {
             const result = await api.post("/locals", data);
             return result.data;
         },
+        onSuccess: () => {
+            toast({
+                variant: "success",
+                title: t("addLocalPage.successTitle"),
+                description: t("addLocalPage.successDescription"),
+            });
+        },
         onError: (error: AxiosError) => {
             toast({
                 variant: "destructive",
