@@ -8,15 +8,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.AddressResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalAddressRequest;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Slf4j
@@ -287,5 +289,95 @@ public class LocalControllerIT extends BaseConfig {
             assertEquals(status2, HttpStatus.OK.value());
             assertEquals(status1, HttpStatus.CONFLICT.value());
         }
+    }
+
+    @Test
+    public void addLocal_localDataIsValid_returnOk() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new AddressResponse("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10L),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .body(addLocalRequest)
+                .param("page", 0)
+                .param("size", 200)
+                .param("state", "UNAPPROVED")
+                .param("ownerLogin", "")
+                .when()
+                .get(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("locals", hasSize(0));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .body(addLocalRequest)
+                .param("page", 0)
+                .param("size", 200)
+                .param("state", "UNAPPROVED")
+                .param("ownerLogin", "")
+                .when()
+                .get(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("locals", hasSize(1));
+    }
+
+    @Test
+    public void addLocal_userIsNotOwner_returnForbidden() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new AddressResponse("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10L),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void addLocal_addressAssignedToOtherLocal_returnConflict() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new AddressResponse("inactiveLocalCountry", "inactiveLocalCity", "inactiveLocalStreet", "1", "12-312"),
+                BigDecimal.valueOf(10L),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CONFLICT.value());
     }
 }

@@ -9,7 +9,7 @@ type UpdateLocalData = {
     id: string;
     name: string;
     description: string;
-    size: number;
+    state: string;
 }
 
 interface UpdateOwnLocalRequest {
@@ -44,6 +44,7 @@ export const useUpdateLocalData = () => {
                 });
             } else {
                 toast({
+                    variant: "success",
                     title: t("updateLocalPage.successTitle"),
                     description: t("updateLocalPage.successDescription"),
                 });
