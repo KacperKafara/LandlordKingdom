@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
-import pl.lodz.p.it.ssbd2024.mol.dto.AddressResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalAddressRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 
@@ -299,8 +298,8 @@ public class LocalControllerIT extends BaseConfig {
         AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
                 "newLocalDescription",
                 100,
-                new AddressResponse("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
-                BigDecimal.valueOf(10L),
+                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10.5),
                 BigDecimal.valueOf(100L));
 
         given()
@@ -349,7 +348,7 @@ public class LocalControllerIT extends BaseConfig {
         AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
                 "newLocalDescription",
                 100,
-                new AddressResponse("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
                 BigDecimal.valueOf(10L),
                 BigDecimal.valueOf(100L));
 
@@ -526,23 +525,36 @@ public class LocalControllerIT extends BaseConfig {
         }
     }
 
-//    @Test
-//    public void addLocal_addressAssignedToOtherLocal_returnConflict() {
-//        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
-//                "newLocalDescription",
-//                100,
-//                new AddressResponse("inactiveLocalCountry", "inactiveLocalCity", "inactiveLocalStreet", "1", "12-312"),
-//                BigDecimal.valueOf(10L),
-//                BigDecimal.valueOf(100L));
-//
-//        given()
-//                .contentType(ContentType.JSON)
-//                .header("Authorization", "Bearer " + userToken)
-//                .body(addLocalRequest)
-//                .when()
-//                .post(LOCALS_URL)
-//                .then()
-//                .assertThat()
-//                .statusCode(HttpStatus.CONFLICT.value());
-//    }
+    @Test
+    public void editLocal_dataNotValid_returnBadRequest() {
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .header("ETag");
+
+        EditLocalRequestAdmin editLocalRequest = new EditLocalRequestAdmin(
+                UUID.fromString("64d715a3-0dd5-4520-9716-965db9ce1ac6"),
+                "newLocal",
+                "newLocalDescription",
+                -100,
+                "INACTIVE"
+        );
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", etag.substring(1, etag.length() - 1))
+                .body(editLocalRequest)
+                .when()
+                .put(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
 }

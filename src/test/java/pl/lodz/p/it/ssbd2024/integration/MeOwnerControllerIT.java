@@ -17,11 +17,14 @@ import pl.lodz.p.it.ssbd2024.mol.dto.SetEndDateRequest;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Slf4j
 public class MeOwnerControllerIT extends BaseConfig{
@@ -146,11 +149,11 @@ public class MeOwnerControllerIT extends BaseConfig{
             int status2 = response.get(1).getStatusCode();
             log.info("Status1: %d Status2: %d".formatted(status1, status2));
             if (status1 == 200){
-                Assertions.assertEquals(status1, 200);
-                Assertions.assertEquals(status2, 404);
+                assertEquals(status1, 200);
+                assertEquals(status2, 404);
             } else {
-                Assertions.assertEquals(status1, 404);
-                Assertions.assertEquals(status2, 200);
+                assertEquals(status1, 404);
+                assertEquals(status2, 200);
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEach(log::error);
@@ -296,11 +299,11 @@ public class MeOwnerControllerIT extends BaseConfig{
             int status2 = response.get(1).getStatusCode();
             log.info("Status1: %d Status2: %d".formatted(status1, status2));
             if (status1 == 200){
-                Assertions.assertEquals(status1, 200);
-                Assertions.assertEquals(status2, 400);
+                assertEquals(status1, 200);
+                assertEquals(status2, 400);
             } else {
-                Assertions.assertEquals(status1, 400);
-                Assertions.assertEquals(status2, 200);
+                assertEquals(status1, 400);
+                assertEquals(status2, 200);
             }
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEach(log::error);
@@ -350,14 +353,125 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .extract()
                 .header("ETag");
 
+        EditLocalRequest editLocalRequest = new EditLocalRequest(UUID.fromString("3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0"), "newDescription", "nbl", "ACTIVE");
+
         given()
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .header("If-Match", etag.substring(1, etag.length()-1))
+                .body(editLocalRequest)
                 .when()
-                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/edit" )
+                .put(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0" )
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void editLocal_localDoesNotExist_returnNotFound() {
+        EditLocalRequest editLocalRequest = new EditLocalRequest(UUID.fromString("3db8f4a7-a268-41a8-84f8-5e1a1dc4b4f1"), "newDescription", "nbl", "ACTIVE");
+
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/a51f1e3e-e0e6-4a7d-80e5-16e245554c77")
+                .then()
+                .extract()
+                .header("ETag");
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .header("If-Match", etag.substring(1, etag.length()-1))
+                .body(editLocalRequest)
+                .when()
+                .put(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4f1" )
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void editLocal_etagIsNotCorrect_returnPreconditionFailed() {
+        EditLocalRequest editLocalRequest = new EditLocalRequest(UUID.fromString("3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0"), "newDescription", "nbl", "ACTIVE");
+
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/a51f1e3e-e0e6-4a7d-80e5-16e245554c77")
+                .then()
+                .extract()
+                .header("ETag");
+
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(editLocalRequest)
+                .header("If-Match", etag.substring(1, etag.length()-1))
+                .when()
+                .put(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0" )
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.PRECONDITION_FAILED.value());
+    }
+
+    @Test
+    public void editLocal_raceCondition_returnOkAndPreconditionFailedOrConflict() throws ExecutionException, InterruptedException, TimeoutException {
+        EditLocalRequest editLocalRequest = new EditLocalRequest(UUID.fromString("3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0"), "newDescription", "nbl", "ACTIVE");
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0")
+                .then()
+                .extract()
+                .header("ETag");
+
+
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .auth().oauth2(ownerToken)
+                        .body(editLocalRequest)
+                        .header("If-Match", etag.substring(1, etag.length()-1))
+                , 2, Method.PUT,  ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0");
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        log.info("Status1: %d Status2: %d".formatted(status1, status2));
+        if (status1 == 200){
+            assertEquals(status1, 200);
+            assertTrue(status2 == 412 || status2 == 409);
+        } else {
+            assertTrue(status1 == 412 || status1 == 409);
+            assertEquals(status2, 200);
+        }
+    }
+
+    @Test
+    public void editLocal_dataNotValid_returnBadRequest() {
+        EditLocalRequest editLocalRequest = new EditLocalRequest(UUID.fromString("3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0"), "afds", "nbl", "ARCHIVED");
+
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0")
+                .then()
+                .extract()
+                .header("ETag");
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(editLocalRequest)
+                .header("If-Match", etag.substring(1, etag.length()-1))
+                .when()
+                .put(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0" )
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
     }
 }
