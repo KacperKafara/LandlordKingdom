@@ -299,18 +299,143 @@ public class ApplicationControllerIT extends BaseConfig {
 
     @Test
     void rejectRequest_raceCondition_returnOkAndNotFound() throws ExecutionException, InterruptedException, TimeoutException {
-        LocalDate date = LocalDate.now().plusDays(1);
-        while (date.getDayOfWeek() != DayOfWeek.SUNDAY) {
-            date = date.plusDays(1);
-        }
-        String endDate = toEndDateString(date);
-
         List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
                 given()
                         .contentType(ContentType.JSON)
                         .header("X-Forwarded-For", "203.0.113.195")
                         .auth().oauth2(ownerToken),
                 2, Method.DELETE,BASE_URL + "/applications/6bc94516-c901-4ac1-8627-bffe4232c0d3");
+
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        if(status1 == HttpStatus.OK.value()) {
+            assertEquals(status1, HttpStatus.OK.value());
+            assertEquals(status2, HttpStatus.NOT_FOUND.value());
+        } else {
+            assertEquals(status2, HttpStatus.OK.value());
+            assertEquals(status1, HttpStatus.NOT_FOUND.value());
+        }
+    }
+
+    @Test
+    void applicationForLocal_returnOk() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(tenantToken)
+                .when()
+                .post(BASE_URL + "/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/applications")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void applicationForLocal_localDoesNotExists_returnNotFound() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(tenantToken)
+                .when()
+                .post(BASE_URL + "/3db8f4a7-a268-9999-84f8-5e1a1dc4b4d0/applications")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void applicationForLocal_localNotActive_returnConflict() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(tenantToken)
+                .when()
+                .post(BASE_URL + "/222a7a48-3370-4fde-93b7-b3191671cdb3/applications")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    void applicationForLocal_applicationExists_returnConflict() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(tenantToken)
+                .when()
+                .post(BASE_URL + "/a51f1e3e-e0e6-4a7d-80e5-16e245554c77/applications")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    void applicationForLocal_raceCondition_returnOkAndNotConflict() throws ExecutionException, InterruptedException, TimeoutException {
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .header("X-Forwarded-For", "203.0.113.195")
+                        .auth().oauth2(tenantToken),
+                2, Method.POST,BASE_URL + "/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/applications");
+
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        if(status1 == HttpStatus.OK.value()) {
+            assertEquals(status1, HttpStatus.OK.value());
+            assertEquals(status2, HttpStatus.CONFLICT.value());
+        } else {
+            assertEquals(status2, HttpStatus.OK.value());
+            assertEquals(status1, HttpStatus.CONFLICT.value());
+        }
+    }
+
+    @Test
+    void deleteApplicationForLocal_returnOk() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(tenantToken)
+                .when()
+                .delete(BASE_URL + "/a51f1e3e-e0e6-4a7d-80e5-16e245554c77/applications")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+    }
+
+    @Test
+    void deleteApplicationForLocal_localDoesNotExists_returnNotFound() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(tenantToken)
+                .when()
+                .delete(BASE_URL + "/a51f1e3e-e0e6-4a7d-80e5-16e245554c88/applications")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deleteApplicationForLocal_applicationDoesNotExists_returnNotFound() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(tenantToken)
+                .when()
+                .delete(BASE_URL + "/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/applications")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    void deleteApplicationForLocal_raceCondition_returnOkAndNotFound() throws ExecutionException, InterruptedException, TimeoutException {
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .header("X-Forwarded-For", "203.0.113.195")
+                        .auth().oauth2(tenantToken),
+                2, Method.DELETE,BASE_URL + "/a51f1e3e-e0e6-4a7d-80e5-16e245554c77/applications");
 
         int status1 = response.get(0).getStatusCode();
         int status2 = response.get(1).getStatusCode();

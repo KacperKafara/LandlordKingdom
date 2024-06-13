@@ -74,4 +74,26 @@
             version="1"
             created_at="2024-05-04 14:33:01.413581"
             modified_at="2024-05-04 14:33:01.413581" />
+
+    <addresses id="ce8bb9fb-e7dd-4516-91d1-ef7ab09b9e57"
+               number="1"
+               street="unapprovedLocalStreet"
+               city="unapprovedLocalCity"
+               zip="12-123"
+               country="unapprovedLocalCountry"
+               version="1"
+               created_at="2024-05-04 14:33:01.413581"
+               modified_at="2024-05-04 14:33:01.413581" />
+
+    <locals id="ec15320f-1dfc-495b-b2cf-2964c0b7ccd9"
+            name="unapprovedLocal"
+            description="unapprovedLocal"
+            size="2"
+            state="0"
+            address_id="ce8bb9fb-e7dd-4516-91d1-ef7ab09b9e57"
+            margin_fee="10"
+            rental_fee="14"
+            version="1"
+            created_at="2024-05-04 14:33:01.413581"
+            modified_at="2024-05-04 14:33:01.413581" />
 </dataset>
