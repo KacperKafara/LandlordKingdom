@@ -139,33 +139,35 @@ const UpdateLocalData: FC<LocalToUpdate> = ({ localId }) => {
                             name="state"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>{t("updateLocalPage.state")}</FormLabel>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger>
-                                            <Button variant="outline" className="ml-2">{t(stateToTranslationKey(form.getValues('state')))}</Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent>
-                                            <DropdownMenuItem onClick={() => field.onChange("WITHOUT_OWNER")}>
-                                                {t("updateLocalPage.states.withoutOwner")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("UNAPPROVED")}>
-                                                {t("updateLocalPage.states.unapproved")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("ACTIVE")}>
-                                                {t("updateLocalPage.states.active")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("INACTIVE")}>
-                                                {t("updateLocalPage.states.inactive")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("RENTED")}>
-                                                {t("updateLocalPage.states.rented")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onClick={() => field.onChange("ARCHIVED")}>
-                                                {t("updateLocalPage.states.archived")}
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
-                                    <FormMessage />
+                                    <div>
+                                        <FormLabel className="mr-4">{
+                                            data?.data.state
+                                                ? t("updateLocalPage.state") + ": " + t(stateToTranslationKey(data?.data.state))
+                                                : t("updateLocalPage.state") + ": " + t("updateLocalPage.states.unknown")
+                                        }</FormLabel>
+                                        {data?.data.state !== "RENTED" && (
+                                            <div>
+                                                <FormLabel className="mt-4">{t("updateLocalPage.changeState")}</FormLabel>
+                                                <FormControl>
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger>
+                                                            <Button variant="outline" className="ml-2">
+                                                                {t(stateToTranslationKey(form.getValues('state')))}
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent>
+                                                            <DropdownMenuItem onClick={() => field.onChange("ACTIVE")}>
+                                                                {t("updateLocalPage.states.active")}
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem onClick={() => field.onChange("INACTIVE")}>
+                                                                {t("updateLocalPage.states.inactive")}
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </FormControl>
+                                            </div>
+                                        )}
+                                    </div>
                                 </FormItem>
                             )}
                         />

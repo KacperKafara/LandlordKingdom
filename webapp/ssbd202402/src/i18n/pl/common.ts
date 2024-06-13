@@ -675,6 +675,7 @@ const activeLocalDetails = {
 
 const updateLocalPage = {
   state: "Stan",
+  changeState: "Zmień stan na",
   states: {
     withoutOwner: "Bez własciciela",
     unapproved: "Nie zatwierdzony",

@@ -213,7 +213,8 @@ public class LocalServiceImpl implements LocalService {
         local.setDescription(editLocalRequest.description());
         local.setSize(editLocalRequest.size());
         LocalState newState = LocalState.valueOf(editLocalRequest.state());
-        local.setState(newState);
+        if (local.getState() != LocalState.RENTED)
+            local.setState(newState);
         return localRepository.saveAndFlush(local);
     }
 
