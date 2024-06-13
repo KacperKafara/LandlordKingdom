@@ -28,8 +28,12 @@ const ResetPasswordForm = loadable(() => import("./pages/ResetPasswordForm"));
 const Callback = loadable(() => import("./pages/OauthCallback"));
 const HomePage = loadable(() => import("./pages/Home"));
 const CurrentRentsPage = loadable(() => import("./pages/Tenant/CurrentRents"));
-const CurrentOwnerRentsPage = loadable(() => import("./pages/Owner/CurrentRents"));
-const ArchivalOwnerRentsPage = loadable(() => import("./pages/Owner/ArchivalRents"));
+const CurrentOwnerRentsPage = loadable(
+  () => import("./pages/Owner/CurrentRents")
+);
+const ArchivalOwnerRentsPage = loadable(
+  () => import("./pages/Owner/ArchivalRents")
+);
 const ArchivalRentsPage = loadable(
   () => import("./pages/Tenant/ArchivalRents")
 );
@@ -51,6 +55,8 @@ const OwnerRentDetailsPage = loadable(
 const OwnApplicationPage = loadable(
   () => import("./pages/Tenant/Applications")
 );
+const LocalReportPage = loadable(() => import("./pages/Owner/LocalReport"));
+
 const AdminRoutes: RouteObject[] = [
   {
     path: "locals",
@@ -70,7 +76,16 @@ const OwnerRoutes: RouteObject[] = [
     path: "locals",
     children: [
       { index: true, Component: OwnLocalsPage },
-      { path: "local/:id", Component: OwnLocalDetailsPage },
+      {
+        path: "local/:id",
+        children: [
+          { index: true, Component: OwnLocalDetailsPage },
+          {
+            path: "report",
+            Component: LocalReportPage,
+          },
+        ],
+      },
     ],
   },
   { path: "addLocalForm", Component: addLocalForm },

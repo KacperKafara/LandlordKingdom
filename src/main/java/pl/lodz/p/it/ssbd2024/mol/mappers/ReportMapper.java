@@ -14,7 +14,9 @@ public class ReportMapper {
                 PaymentMapper.paymentResponseList(localReport.payments()),
                 VariableFeeMapper.variableFeeResponseList(localReport.variableFees()),
                 FixedFeeMapper.fixedFeeResponseList(localReport.fixedFees()),
-                localReport.rentCount()
+                localReport.rentCount(),
+                localReport.longestRentDays(),
+                localReport.shortestRentDays()
         );
     }
 }

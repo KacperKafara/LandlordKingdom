@@ -8,5 +8,7 @@ public record LocalReportResponse(UUID id,
                                   List<PaymentResponse> payments,
                                   List<VariableFeeResponse> variableFees,
                                   List<FixedFeeResponse> fixedFees,
-                                  int rentCount) {
+                                  int rentCount,
+                                  long longestRentDays,
+                                  long shortestRentDays) {
 }

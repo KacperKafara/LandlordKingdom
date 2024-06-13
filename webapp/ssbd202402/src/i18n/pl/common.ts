@@ -2,7 +2,6 @@ import { ExceptionCode } from "@/@types/errorCode";
 import { LocalState } from "@/@types/localState";
 import { Role } from "@/store/userStore";
 
-
 const error = {
   baseTitle: "Wystąpił błąd",
   baseDescription: "Coś poszło nie tak...",
@@ -645,7 +644,7 @@ const localApplications = {
   createdAt: "Utworzony",
   accept: "Zaakceptuj",
   reject: "Odrzuć",
-  noApplications: "Brak aplikacji"
+  noApplications: "Brak aplikacji",
 };
 
 const activeLocalDetails = {
@@ -834,7 +833,27 @@ const createPaymentDialog = {
     "Kwota musi mieć maksymalnie dwie cyfry po przecinku",
 };
 
+const localReport = {
+  marginFee: "Marża",
+  rentalFee: "Opłata za wynajem",
+  fixedFee: "Opłata stałe",
+  variableFee: "Opłata zmienna",
+  payment: "Płatność",
+  summary: "Razem",
+  totalPayments: "Suma płatności",
+  totalFixedFees: "Suma opłat stałych",
+  totalVariableFees: "Suma opłat zmiennych",
+  totalMarginFees: "Zysk z marży",
+  totalRentalFees: "Koszty wynajmu",
+  localSummary: "Podsumowanie",
+  longestRentDays: "Najdłuższy wynajem w dniach",
+  shortestRentDays: "Najkrótszy wynajem w dniach",
+  rentCount: "Liczba wynajmów",
+  summaryPieChart: "Podsumowanie wpłat/opłat",
+};
+
 export default {
+  localReport,
   rentDetailsPage,
   createPaymentDialog,
   createVariableFeeDialog,

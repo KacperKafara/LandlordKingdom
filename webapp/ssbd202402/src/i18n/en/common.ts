@@ -339,7 +339,7 @@ const addLocalPage = {
     rentalFee: "Wrong rental fee",
   },
   error: "Failed to add local",
-}
+};
 
 const registerSuccessPage = {
   title: "Thanks for creating an account",
@@ -667,8 +667,7 @@ const localApplications = {
   createdAt: "Created at",
   accept: "Accept",
   reject: "Reject",
-  noApplications: "No applications available"
-
+  noApplications: "No applications available",
 };
 
 const activeLocalDetails = {
@@ -824,7 +823,20 @@ const rentDetailsPage = {
   variableFees: "Variable fees",
 };
 
+const localReport = {
+  marginFee: "Margin fee",
+  rentalFee: "Rental fee",
+  fixedFee: "Fixed fee",
+  variableFee: "Variable fee",
+  payment: "Payment",
+  summary: "Summary",
+  totalPayments: "Total payments",
+  totalVariableFees: "Total variable fees",
+  totalFixedFees: "Total fixed fees",
+};
+
 export default {
+  localReport,
   rentDetailsPage,
   createPaymentDialog,
   createVariableFeeDialog,

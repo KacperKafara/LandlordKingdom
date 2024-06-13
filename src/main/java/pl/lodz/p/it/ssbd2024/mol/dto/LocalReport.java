@@ -11,6 +11,7 @@ public record LocalReport(Local local,
                           List<Payment> payments,
                           List<VariableFee> variableFees,
                           List<FixedFee> fixedFees,
-                          int rentCount) {
+                          int rentCount,
+                          long longestRentDays, long shortestRentDays) {
 
 }
