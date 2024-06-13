@@ -24,9 +24,10 @@ export const useCreatePayment = () => {
         title: t("createPaymentDialog.success"),
         variant: "success",
       });
-      return await queryClient.invalidateQueries({
-        queryKey: ["rentDetailsForOwner", "rentDetailsForOwner"],
+      await queryClient.invalidateQueries({
+        queryKey: ["rentDetailsForOwner"],
       });
+      await queryClient.invalidateQueries({ queryKey: ["rentPayments"] });
     },
     onError: (error: AxiosError<ErrorCode>) => {
       const { data } = error.response!;

@@ -24,7 +24,10 @@ export const useCreateVariableFee = () => {
         title: t("createVariableFeeDialog.success"),
         variant: "success",
       });
-      return await queryClient.invalidateQueries({ queryKey: ["tenantRent"] });
+      await queryClient.invalidateQueries({
+        queryKey: ["tenantRent"],
+      });
+      await queryClient.invalidateQueries({ queryKey: ["rentVariableFees"] });
     },
     onError: (error: AxiosError<ErrorCode>) => {
       const { data } = error.response!;
