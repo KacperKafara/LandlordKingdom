@@ -45,6 +45,7 @@ export const useUpdateLocalData = () => {
                 });
             } else {
                 toast({
+                    variant: "success",
                     title: t("updateLocalPage.successTitle"),
                     description: t("updateLocalPage.successDescription"),
                 });

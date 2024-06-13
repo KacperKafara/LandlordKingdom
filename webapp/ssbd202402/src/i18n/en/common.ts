@@ -339,6 +339,8 @@ const addLocalPage = {
     rentalFee: "Wrong rental fee",
   },
   error: "Failed to add local",
+  successTitle: "Local added",
+  successDescription: "Local successfully added",
 }
 
 const registerSuccessPage = {
