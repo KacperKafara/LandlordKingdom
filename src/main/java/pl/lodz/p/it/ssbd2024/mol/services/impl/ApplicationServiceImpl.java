@@ -5,10 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.exceptions.CreationException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.ApplicationExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
@@ -66,10 +63,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     @PreAuthorize("hasRole('OWNER')")
     public Rent acceptApplication(UUID applicationId, UUID ownerUserId, LocalDate endDate) throws NotFoundException, InvalidLocalState, WrongEndDateException {
         LocalDate currentDate = LocalDate.now();
-
-        LocalDate nearestSunday = currentDate.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
-
-        if (endDate.isBefore(currentDate) || endDate.isBefore(nearestSunday)) {
+        if (endDate.isBefore(currentDate)
+                || !endDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
             throw new WrongEndDateException(RentExceptionMessages.WRONG_END_DATE, ErrorCodes.WRONG_END_DATE);
         }
 
