@@ -130,7 +130,7 @@ public class MeOwnerController {
         try {
             Payment payment = paymentService.create(userId, id, newPaymentRequest.amount());
             return ResponseEntity.ok(PaymentMapper.toPaymentResponse(payment));
-        } catch (PaymentAlreadyExistsException e) {
+        } catch (PaymentAlreadyExistsException | RentAlreadyEndedException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }

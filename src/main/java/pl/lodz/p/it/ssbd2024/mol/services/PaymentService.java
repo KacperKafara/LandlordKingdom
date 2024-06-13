@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.PaymentAlreadyExistsException;
+import pl.lodz.p.it.ssbd2024.exceptions.RentAlreadyEndedException;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 
 import java.math.BigDecimal;
@@ -16,5 +17,5 @@ public interface PaymentService {
 
     Page<Payment> getRentPayments(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable);
 
-    Payment create(UUID userId, UUID rentID, BigDecimal amount) throws NotFoundException, PaymentAlreadyExistsException;
+    Payment create(UUID userId, UUID rentID, BigDecimal amount) throws NotFoundException, PaymentAlreadyExistsException, RentAlreadyEndedException;
 }
