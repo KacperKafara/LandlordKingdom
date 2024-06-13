@@ -798,6 +798,7 @@ const breadcrumbs = {
   tenant: "Tenant",
   locals: "Locals",
   local: "Local",
+  report: "Report",
 };
 
 const createVariableFeeDialog = {
@@ -837,7 +838,28 @@ const rentDetailsPage = {
   variableFees: "Variable fees",
 };
 
+const localReport = {
+  marginFee: "Margin fee",
+  rentalFee: "Rental fee",
+  fixedFee: "Fixed fee",
+  variableFee: "Variable fee",
+  payment: "Payment",
+  summary: "Summary",
+  totalPayments: "Total payments",
+  totalVariableFees: "Total variable fees",
+  totalFixedFees: "Total fixed fees",
+  totalMarginFees: "Profit from margin fees",
+  totalRentalFees: "Rental fees",
+  localSummary: "Local summary",
+  longestRentDays: "Longest rent in days",
+  shortestRentDays: "Shortest rent in days",
+  rentCount: "Number of rents",
+  summaryPieChart: "Summary of fees and profits",
+  summaryBarChart: "Payments and fees weekly summary",
+};
+
 export default {
+  localReport,
   rentDetailsPage,
   createPaymentDialog,
   createVariableFeeDialog,

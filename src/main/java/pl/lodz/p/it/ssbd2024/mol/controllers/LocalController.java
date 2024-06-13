@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -25,9 +26,12 @@ import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.AddressMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
+import pl.lodz.p.it.ssbd2024.mol.mappers.ReportMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.util.Signer;
+import pl.lodz.p.it.ssbd2024.mol.services.ReportService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -38,6 +42,7 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.NEVER)
 public class LocalController {
     private final LocalService localService;
+    private final ReportService reportService;
     private final Signer signer;
 
     @GetMapping("/active")
@@ -92,7 +97,7 @@ public class LocalController {
         try {
             localService.approveLocal(id);
             return ResponseEntity.ok().build();
-        } catch (NotFoundException  e) {
+        } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (InvalidLocalState e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
@@ -173,7 +178,7 @@ public class LocalController {
                     .eTag(signer.generateSignature(local.getId(), local.getVersion()))
                     .body(LocalMapper.toLocalDetailsForAdminResponse(local));
         } catch (NotFoundException e) {
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
@@ -186,5 +191,17 @@ public class LocalController {
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
+    }
+
+    @GetMapping("/{id}/report")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<LocalReportResponse> getLocalReport(
+            @PathVariable UUID id,
+            @RequestParam LocalDate startDate,
+            @RequestParam LocalDate endDate) throws NotFoundException {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok(
+                ReportMapper.toLocalReportResponse(reportService.getLocalReport(id, userId, startDate, endDate))
+        );
     }
 }
