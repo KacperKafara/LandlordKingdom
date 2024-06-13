@@ -5,10 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.exceptions.CreationException;
-import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
-import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
-import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
+import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.ApplicationExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
@@ -24,11 +21,10 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
+import pl.lodz.p.it.ssbd2024.mol.services.MolEmailService;
 
 import java.time.DayOfWeek;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.temporal.TemporalAdjuster;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.UUID;
@@ -42,6 +38,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final LocalRepository localRepository;
     private final FixedFeeRepository fixedFeeRepository;
     private final TenantMolRepository tenantRepository;
+    private final MolEmailService emailServiceImpl;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
@@ -66,10 +63,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     @PreAuthorize("hasRole('OWNER')")
     public Rent acceptApplication(UUID applicationId, UUID ownerUserId, LocalDate endDate) throws NotFoundException, InvalidLocalState, WrongEndDateException {
         LocalDate currentDate = LocalDate.now();
-
-        LocalDate nearestSunday = currentDate.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
-
-        if (endDate.isBefore(currentDate) || endDate.isBefore(nearestSunday)) {
+        if (endDate.isBefore(currentDate)
+                || !endDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
             throw new WrongEndDateException(RentExceptionMessages.WRONG_END_DATE, ErrorCodes.WRONG_END_DATE);
         }
 
@@ -78,6 +73,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         Tenant tenant = application.getTenant();
         Owner owner = application.getLocal().getOwner();
         Local local = application.getLocal();
+        User  user = tenant.getUser();
 
         if (local.getState() != LocalState.ACTIVE) {
             throw new InvalidLocalState(LocalExceptionMessages.LOCAL_NOT_ACTIVE, ErrorCodes.LOCAL_NOT_ACTIVE, LocalState.ACTIVE, local.getState());
@@ -96,6 +92,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             applicationRepository.delete(appl);
         }
 
+        emailServiceImpl.sendApplicationAcceptedEmail(user.getEmail(), user.getFirstName(), local.getName(), user.getLanguage());
         return rent;
     }
 
@@ -103,8 +100,12 @@ public class ApplicationServiceImpl implements ApplicationService {
     @PreAuthorize("hasRole('OWNER')")
     public void rejectApplication(UUID applicationId, UUID ownerUserId) throws NotFoundException {
         Application application = applicationRepository.findApplicationForOwner(applicationId, ownerUserId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.NOT_FOUND));
+        User user = application.getTenant().getUser();
+        Local local = application.getLocal();
 
         applicationRepository.delete(application);
+
+        emailServiceImpl.sendApplicationRejectedEmail(user.getEmail(), user.getFirstName(), local.getName(), user.getLanguage());
     }
 
     @Override

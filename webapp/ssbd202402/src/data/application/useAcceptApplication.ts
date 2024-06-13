@@ -11,7 +11,7 @@ interface AcceptApplicationData {
 
 export const useAcceptApplication = () => {
   const { api } = useAxiosPrivate();
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({
       id,
       data,
@@ -36,5 +36,5 @@ export const useAcceptApplication = () => {
     },
   });
 
-  return { acceptApplication: mutateAsync };
+  return { acceptApplication: mutateAsync, isPending };
 };

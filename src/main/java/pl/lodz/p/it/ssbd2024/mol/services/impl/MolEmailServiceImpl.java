@@ -40,8 +40,25 @@ public class MolEmailServiceImpl implements MolEmailService {
     }
 
     @Override
-    public void sendApplicationRejectedEmail(String to, String name, String property, String lang) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    @PreAuthorize("hasRole('OWNER')")
+    public void sendApplicationRejectedEmail(String to, String name, String localName, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name,
+                "localName", localName);
+        String subject = mailMessageSource.getMessage("localApplication.subjectRejected", null, Locale.of(lang));
+
+        htmlEmailService.createHtmlEmail(to, subject, "localApplicationRejected", templateModel, lang);
+    }
+
+    @Override
+    @PreAuthorize("hasRole('OWNER')")
+    public void sendApplicationAcceptedEmail(String to, String name, String localName, String lang) {
+        Map<String, Object> templateModel = Map.of(
+                "name", name,
+                "localName", localName);
+        String subject = mailMessageSource.getMessage("localApplication.subjectAccepted", null, Locale.of(lang));
+
+        htmlEmailService.createHtmlEmail(to, subject, "localApplicationAccepted", templateModel, lang);
     }
 
 
