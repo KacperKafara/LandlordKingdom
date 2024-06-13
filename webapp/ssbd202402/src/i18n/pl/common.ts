@@ -538,6 +538,7 @@ const tenantRents = {
   email: "Email",
   login: "Login",
   noData: "Aktualnie nie wynajmujesz żadnych lokali",
+  details: "Szczegóły",
 };
 
 const currentOwnerRents = {

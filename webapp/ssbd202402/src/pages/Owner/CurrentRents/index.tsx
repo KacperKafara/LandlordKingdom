@@ -105,7 +105,6 @@ const CurrentOwnerRentsPage: FC = () => {
                   >
                     {t("currentOwnerRents.rentDetails")}
                   </Button>
-                  <Button className="flex-1">Action 3</Button>
                 </CardFooter>
               </Card>
             </li>

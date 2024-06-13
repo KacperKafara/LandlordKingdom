@@ -42,6 +42,7 @@ const OwnerRentDetailsPage: FC = () => {
   if (isLoading) {
     return <LoadingData />;
   }
+  const isFutureEndDate = data?.endDate && new Date(data.endDate) > new Date();
   return (
     <div className="flex justify-center">
       <div className="flex w-10/12 flex-col pt-10">
@@ -62,7 +63,7 @@ const OwnerRentDetailsPage: FC = () => {
                 {t("ownerRentDetails.variableFees")}
               </TabsTrigger>
             </TabsList>
-            {data && <CreatePaymentDialog rentId={data?.id} />}
+            {isFutureEndDate && <CreatePaymentDialog rentId={data?.id} />}
           </div>
           <TabsContent value="rentInformation">
             <RentInformation rent={data} />
