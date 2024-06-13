@@ -74,7 +74,7 @@ const ActiveLocalDetailsPage: FC = () => {
                     />
                     <DataField
                       label={t("activeLocalDetails.size")}
-                      value={local.size}
+                      value={local.size + " m²"}
                     />
                     <DataField
                       label={t("activeLocalDetails.price")}
