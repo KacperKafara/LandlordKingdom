@@ -1,4 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.dto;
 
-public record AcceptApplicationRequest() {
+import pl.lodz.p.it.ssbd2024.util.ValidDate;
+
+public record AcceptApplicationRequest(
+       @ValidDate String endDate) {
 }
