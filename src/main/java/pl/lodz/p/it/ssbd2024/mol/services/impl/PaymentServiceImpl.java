@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.PaymentAlreadyExistsException;
+import pl.lodz.p.it.ssbd2024.exceptions.RentAlreadyEndedException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.LocalExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
@@ -43,10 +44,16 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('OWNER')")
-    public Payment create(UUID userId, UUID rentId, BigDecimal amount) throws NotFoundException, PaymentAlreadyExistsException {
+    public Payment create(UUID userId, UUID rentId, BigDecimal amount) throws NotFoundException, PaymentAlreadyExistsException, RentAlreadyEndedException {
         Owner owner = ownerMolRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
         Rent rent = rentRepository.findByOwnerIdAndId(owner.getId(), rentId)
                 .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
+
+        if (rent.getEndDate().isBefore(LocalDate.now())) {
+            throw new RentAlreadyEndedException(
+                    RentExceptionMessages.RENT_ENDED,
+                    ErrorCodes.RENT_ENDED);
+        }
 
         Optional<Payment> existingPayment = paymentRepository
                 .findByRentIdBetween(rentId, userId, DateUtils.getFirstDayOfCurrentWeek(), DateUtils.getLastDayOfCurrentWeek());
