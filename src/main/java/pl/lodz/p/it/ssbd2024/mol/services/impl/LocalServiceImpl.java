@@ -67,7 +67,7 @@ public class LocalServiceImpl implements LocalService {
                 local.getAddress().getZip()
         );
         if (existingAddress.isPresent()) {
-            Local existingLocal = localRepository.findByAddressAndStateNotContaining(local.getAddress(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+            Local existingLocal = localRepository.findByAddressAndStateNotContaining(existingAddress.get(), LocalState.ARCHIVED).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
             if (existingLocal.getState() != LocalState.WITHOUT_OWNER) {
                 throw new GivenAddressAssignedToOtherLocalException(LocalMessages.ADDRESS_ASSIGNED,
                         ErrorCodes.ADDRESS_ALREADY_ASSIGNED);

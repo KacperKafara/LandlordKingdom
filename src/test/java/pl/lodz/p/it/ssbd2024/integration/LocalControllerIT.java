@@ -298,11 +298,11 @@ public class LocalControllerIT extends BaseConfig {
         AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
                 "newLocalDescription",
                 100,
-                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                new EditLocalAddressRequest("nie", "wiem", "dlaczego", "1", "90-000"),
                 BigDecimal.valueOf(10.5),
                 BigDecimal.valueOf(100L));
 
-        given()
+        int numberOfLocals = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + adminToken)
                 .body(addLocalRequest)
@@ -315,7 +315,8 @@ public class LocalControllerIT extends BaseConfig {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
-                .body("locals", hasSize(0));
+                .extract()
+                .path("locals.size()");
 
         given()
                 .contentType(ContentType.JSON)
@@ -340,7 +341,7 @@ public class LocalControllerIT extends BaseConfig {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
-                .body("locals", hasSize(1));
+                .body("locals", hasSize(numberOfLocals + 1));
     }
 
     @Test
@@ -556,5 +557,72 @@ public class LocalControllerIT extends BaseConfig {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void addLocal_raceCondition_returnOkAndConflict() throws ExecutionException, InterruptedException, TimeoutException {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10.5),
+                BigDecimal.valueOf(100L));
+
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .auth().oauth2(userToken)
+                        .body(addLocalRequest),
+                2, Method.POST, LOCALS_URL);
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        log.info("Status1: %d Status2: %d".formatted(status1, status2));
+        if(status1 == HttpStatus.OK.value()) {
+            assertEquals(status1, HttpStatus.OK.value());
+            assertEquals(status2, HttpStatus.CONFLICT.value());
+        } else {
+            assertEquals(status2, HttpStatus.OK.value());
+            assertEquals(status1, HttpStatus.CONFLICT.value());
+        }
+    }
+
+    @Test
+    public void addLocal_dataNotValid_returnBadRequest() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                -100,
+                new EditLocalAddressRequest("nowyLokal", "nowyLokal", "nowyLokal", "1", "90-000"),
+                BigDecimal.valueOf(10.5),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void addLocal_addressAssignedToOtherLocal_returnConflict() {
+        AddLocalRequest addLocalRequest = new AddLocalRequest("newLocal",
+                "newLocalDescription",
+                100,
+                new EditLocalAddressRequest("inactiveLocalCountry", "inactiveLocalCity", "inactiveLocalStreet", "1", "12-312"),
+                BigDecimal.valueOf(10.5),
+                BigDecimal.valueOf(100L));
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + userToken)
+                .body(addLocalRequest)
+                .when()
+                .post(LOCALS_URL)
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CONFLICT.value());
     }
 }
