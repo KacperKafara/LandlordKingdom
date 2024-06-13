@@ -1,83 +1,150 @@
-import { FC, useState } from "react";
+import { FC } from "react";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { LocalApplications as ApplicationType } from "@/types/local/LocalApplications";
 import { useQueryClient } from "@tanstack/react-query";
-import DateSelector from "../../RentDetails/DateSelector";
 import { useAcceptApplication } from "@/data/application/useAcceptApplication";
 import { format } from "date-fns";
-import { toast } from "@/components/ui/use-toast";
+import { Calendar } from "@/components/ui/calendar";
+import { useLanguageStore } from "@/i18n/languageStore";
+import { pl, enUS } from "date-fns/locale";
+import { TFunction } from "i18next";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
+
+const FormSchema = (t: TFunction) =>
+  z.object({
+    endDate: z.date({
+      required_error: t("localApplications.endDateNeeded"),
+    }),
+  });
+
+type FormSchemaType = z.infer<ReturnType<typeof FormSchema>>;
 
 interface Props {
   application: ApplicationType;
 }
 
 const AcceptApplicationDialog: FC<Props> = ({ application }) => {
+  const { language } = useLanguageStore();
   const { t } = useTranslation();
-  const { acceptApplication } = useAcceptApplication();
-  const [endDate, setEndDate] = useState<Date | undefined>(
-    new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)
-  );
+  const { acceptApplication, isPending } = useAcceptApplication();
   const queryClient = useQueryClient();
 
-  const handleAcceptApplication = async (id: string) => {
-    if (endDate === undefined) {
-      toast({
-        variant: "destructive",
-        title: t("error.baseTitle"),
-        description: t(`localApplications.endDateNeeded`),
-      });
-    }
+  const form = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema(t)),
+  });
 
+  const handleAcceptApplication = async (data: FormSchemaType) => {
     await acceptApplication({
-      id,
-      data: { endDate: format(endDate!.toString(), "yyyy-MM-dd") },
+      id: application.id,
+      data: { endDate: format(data.endDate, "yyyy-MM-dd") },
     });
     queryClient.invalidateQueries({ queryKey: ["localApplications"] });
   };
 
   return (
     <>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
+      <Dialog>
+        <DialogTrigger asChild>
           <Button>{t("localApplications.accept")}</Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {t("localApplications.acceptTitle")}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t("localApplications.acceptTitle")}</DialogTitle>
+            <DialogDescription>
               {t("localApplications.acceptDescription")}
-              <div className="mt-2">
-                <DateSelector date={endDate!} setDate={setEndDate} />
-              </div>
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-            <AlertDialogAction asChild>
-              <Button onClick={() => handleAcceptApplication(application.id)}>
-                {t("confirm")}
-              </Button>
-            </AlertDialogAction>
-          </AlertDialogFooter>
-          <div className="text-justify">
-            {t("localApplications.acceptFooter")}
-          </div>
-        </AlertDialogContent>
-      </AlertDialog>
+            </DialogDescription>
+          </DialogHeader>
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(handleAcceptApplication)}
+              className="space-y-8"
+            >
+              <FormField
+                control={form.control}
+                name="endDate"
+                render={({ field }) => (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>{t("changeEndDate.formLabel")}</FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <FormControl>
+                          <Button
+                            variant={"outline"}
+                            className={cn(
+                              "pl-3 text-left font-normal",
+                              !field.value && "text-muted-foreground"
+                            )}
+                          >
+                            {field.value ? (
+                              format(field.value, "PPP", {
+                                locale: language === "pl" ? pl : enUS,
+                              })
+                            ) : (
+                              <span>{t("changeEndDate.spanText")}</span>
+                            )}
+                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                          </Button>
+                        </FormControl>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="end">
+                        <Calendar
+                          locale={language === "pl" ? pl : enUS}
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          disabled={(date) =>
+                            date.getDay() !== 0 || date < new Date()
+                          }
+                          initialFocus
+                          weekStartsOn={1}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormDescription>
+                      <p>{t("changeEndDate.formDescription")}</p>
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <DialogFooter>
+                <Button disabled={isPending} type="submit">
+                  {t("confirm")}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
