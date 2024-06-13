@@ -343,7 +343,9 @@ const addLocalPage = {
     marginFee: "Niepoprawna opłata stała",
     rentalFee: "Niepoprawna cena wynajmu",
   },
-  error: "Failed to add local",
+  error: "Błąd podczas dodawania nieruchomości",
+  successTitle: "Nieruchomość dodana",
+  successDescription: "Nieruchomość została dodana",
 };
 
 const registerSuccessPage = {
@@ -675,6 +677,7 @@ const activeLocalDetails = {
 
 const updateLocalPage = {
   state: "Stan",
+  changeState: "Zmień stan na",
   states: {
     withoutOwner: "Bez własciciela",
     unapproved: "Nie zatwierdzony",
