@@ -70,7 +70,7 @@ const LocalAcceptList: FC = () => {
                     )}
                   />
                   <Button asChild>
-                    <NavLink to={`/admin/locals/${local.id}`}>
+                    <NavLink to={`/admin/locals/local/${local.id}`}>
                       {t("notApprovedActionsPage.unapprovedLocals.details")}
                     </NavLink>
                   </Button>

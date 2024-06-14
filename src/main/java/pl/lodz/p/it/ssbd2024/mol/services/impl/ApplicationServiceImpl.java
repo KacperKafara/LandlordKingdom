@@ -23,6 +23,8 @@ import pl.lodz.p.it.ssbd2024.model.Tenant;
 import pl.lodz.p.it.ssbd2024.mol.services.ApplicationService;
 import pl.lodz.p.it.ssbd2024.mol.services.MolEmailService;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.temporal.TemporalAdjusters;
@@ -64,7 +66,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     public Rent acceptApplication(UUID applicationId, UUID ownerUserId, LocalDate endDate) throws NotFoundException, InvalidLocalState, WrongEndDateException {
         LocalDate currentDate = LocalDate.now();
         if (endDate.isBefore(currentDate)
-                || !endDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)) {
+                || !endDate.getDayOfWeek().equals(DayOfWeek.SUNDAY) || endDate.equals(currentDate)) {
             throw new WrongEndDateException(RentExceptionMessages.WRONG_END_DATE, ErrorCodes.WRONG_END_DATE);
         }
 
@@ -82,7 +84,14 @@ public class ApplicationServiceImpl implements ApplicationService {
         local.setState(LocalState.RENTED);
         localRepository.saveAndFlush(local);
 
-        Rent rent = new Rent(local, tenant, owner, currentDate, endDate, local.getRentalFee().subtract(local.getMarginFee()));
+        LocalDate nearestSunday = currentDate.with(TemporalAdjusters.next(DayOfWeek.SUNDAY));
+
+        BigDecimal rentalFee = local.getRentalFee();
+        BigDecimal marginFee = local.getMarginFee();
+        rentalFee = rentalFee.divide(BigDecimal.valueOf(7), 2, RoundingMode.UP).multiply(BigDecimal.valueOf(nearestSunday.toEpochDay() - currentDate.toEpochDay()));
+        marginFee = marginFee.divide(BigDecimal.valueOf(7), 2, RoundingMode.UP).multiply(BigDecimal.valueOf(nearestSunday.toEpochDay() - currentDate.toEpochDay()));
+
+        Rent rent = new Rent(local, tenant, owner, currentDate, endDate, BigDecimal.ZERO.subtract(rentalFee.add(marginFee)));
         rent = rentRepository.saveAndFlush(rent);
 
         FixedFee fixedFee = new FixedFee(local.getRentalFee(), local.getMarginFee(), currentDate, rent);

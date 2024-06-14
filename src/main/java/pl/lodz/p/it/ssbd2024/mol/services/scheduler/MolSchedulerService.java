@@ -46,18 +46,8 @@ public class MolSchedulerService {
         LocalDate today = LocalDate.now();
 
         for (Rent rent : rents) {
-            long daysPassed = ChronoUnit.DAYS.between(rent.getStartDate(), today);
             BigDecimal rentalFee = rent.getLocal().getRentalFee();
             BigDecimal marginFee = rent.getLocal().getMarginFee();
-
-            if (daysPassed == 0) {
-                continue;
-            }
-
-            if (daysPassed < 7) {
-                rentalFee = rentalFee.divide(BigDecimal.valueOf(7), 2, RoundingMode.UP).multiply(BigDecimal.valueOf(daysPassed));
-                marginFee = marginFee.divide(BigDecimal.valueOf(7), 2, RoundingMode.UP).multiply(BigDecimal.valueOf(daysPassed));
-            }
 
             FixedFee fixedFee = new FixedFee(rentalFee, marginFee, today, rent);
             fixedFeeService.createFixedFeeForEndOfBillingPeriod(fixedFee);
