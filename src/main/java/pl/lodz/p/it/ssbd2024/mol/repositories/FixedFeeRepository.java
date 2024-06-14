@@ -31,4 +31,8 @@ public interface FixedFeeRepository extends JpaRepository<FixedFee, UUID> {
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT fee FROM FixedFee fee WHERE fee.rent.local.id = :localId AND fee.rent.owner.user.id = :userId")
     List<FixedFee> findByLocalIdAndUserId(UUID localId, UUID userId);
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT fee FROM FixedFee fee WHERE fee.rent.owner.user.id = :ownerId")
+    List<FixedFee> findAllByOwnerId(UUID ownerId);
 }

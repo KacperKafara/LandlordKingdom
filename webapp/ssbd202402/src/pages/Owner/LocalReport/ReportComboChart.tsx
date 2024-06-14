@@ -1,4 +1,5 @@
 import { LocalReport } from "@/data/local/useLocalReport";
+import { LocalsReport } from "@/data/local/useLocalsReport";
 import moment from "moment";
 import React, { FC } from "react";
 import { useTranslation } from "react-i18next";
@@ -16,7 +17,7 @@ import {
 } from "recharts";
 
 type ReportComboChartProps = {
-  report?: LocalReport;
+  report?: LocalReport | LocalsReport;
 };
 
 const ReportComboChartComponent: FC<ReportComboChartProps> = ({ report }) => {

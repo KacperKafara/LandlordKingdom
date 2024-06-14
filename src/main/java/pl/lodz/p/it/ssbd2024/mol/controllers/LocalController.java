@@ -204,4 +204,11 @@ public class LocalController {
                 ReportMapper.toLocalReportResponse(reportService.getLocalReport(id, userId, startDate, endDate))
         );
     }
+
+    @GetMapping("/report")
+    @PreAuthorize("hasRole('OWNER')")
+    public ResponseEntity<AllLocalsReportResponse> getReport() {
+        UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
+        return ResponseEntity.ok(ReportMapper.toAllLocalsReportResponse(reportService.getReport(userId)));
+    }
 }

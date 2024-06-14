@@ -56,6 +56,9 @@ const OwnApplicationPage = loadable(
   () => import("./pages/Tenant/Applications")
 );
 const LocalReportPage = loadable(() => import("./pages/Owner/LocalReport"));
+const AllLocalsReportPage = loadable(
+  () => import("./pages/Owner/AllLocalsReport")
+);
 
 const AdminRoutes: RouteObject[] = [
   { index: true, Component: AdminPage },
@@ -76,6 +79,7 @@ const OwnerRoutes: RouteObject[] = [
     path: "locals",
     children: [
       { index: true, Component: OwnLocalsPage },
+      { path: "report", Component: AllLocalsReportPage },
       {
         path: "local/:id",
         children: [

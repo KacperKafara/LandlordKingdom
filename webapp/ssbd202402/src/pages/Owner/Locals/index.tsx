@@ -13,7 +13,7 @@ import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
 import { FC, useState } from "react";
 import { LoadingData } from "@/components/LoadingData";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { PageChangerComponent } from "@/pages/Components/PageChangerComponent";
 import { getAddressString } from "@/utils/address";
 import {
@@ -83,6 +83,9 @@ const Locals: FC = () => {
       {breadCrumbs}
       <div className="flex h-full justify-center">
         <div className="flex h-full w-11/12 flex-col justify-center">
+          <Button asChild className="self-end">
+            <NavLink to="report">Report</NavLink>
+          </Button>
           <ul className="flex flex-1 flex-wrap gap-2 py-4">
             {locals?.length === 0 && (
               <div className="flex flex-col">

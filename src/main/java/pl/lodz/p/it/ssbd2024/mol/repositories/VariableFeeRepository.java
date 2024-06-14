@@ -35,4 +35,8 @@ public interface VariableFeeRepository extends JpaRepository<VariableFee, UUID> 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT fee FROM VariableFee fee WHERE fee.rent.local.id = :localId AND fee.rent.owner.user.id = :userId")
     List<VariableFee> findByLocalIdAndUserId(UUID localId, UUID userId);
+
+    @PreAuthorize("hasRole('OWNER')")
+    @Query("SELECT fee FROM VariableFee fee WHERE fee.rent.owner.user.id = :ownerId")
+    List<VariableFee> findAllByOwnerId(UUID ownerId);
 }
