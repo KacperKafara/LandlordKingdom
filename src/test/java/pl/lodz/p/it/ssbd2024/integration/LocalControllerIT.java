@@ -625,4 +625,169 @@ public class LocalControllerIT extends BaseConfig {
                 .assertThat()
                 .statusCode(HttpStatus.CONFLICT.value());
     }
+
+    @Test
+    public void approveLocal_returnOk() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(adminToken)
+                .when()
+                .patch(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/approve")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .get(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("state", equalTo("INACTIVE"));
+    }
+
+    @Test
+    public void approveLocal_localDoesNotExists_returnNotFound() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(adminToken)
+                .when()
+                .patch(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7c111/approve")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void approveLocal_invalidLocalState_returnConflict() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(adminToken)
+                .when()
+                .patch(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6/approve")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void approveLocal_userIsNotAdmin_returnForbidden() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(userToken)
+                .when()
+                .patch(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/approve")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    void approveLocal_raceCondition_returnOkAndConflict() throws ExecutionException, InterruptedException, TimeoutException {
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .header("X-Forwarded-For", "203.0.113.195")
+                        .auth().oauth2(adminToken),
+                2, Method.PATCH,LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/approve");
+
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        if(status1 == HttpStatus.OK.value()) {
+            assertEquals(status1, HttpStatus.OK.value());
+            assertEquals(status2, HttpStatus.CONFLICT.value());
+        } else {
+            assertEquals(status2, HttpStatus.OK.value());
+            assertEquals(status1, HttpStatus.CONFLICT.value());
+        }
+    }
+
+    @Test
+    public void rejectLocal_returnOk() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(adminToken)
+                .when()
+                .patch(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/reject")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .when()
+                .get(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .body("state", equalTo("WITHOUT_OWNER"))
+                .body("owner", equalTo(null));
+    }
+
+    @Test
+    public void rejectLocal_localDoesNotExists_returnNotFound() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(adminToken)
+                .when()
+                .patch(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7c111/reject")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void rejectLocal_invalidLocalState_returnConflict() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(adminToken)
+                .when()
+                .patch(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6/reject")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.CONFLICT.value());
+    }
+
+    @Test
+    public void rejectLocal_userIsNotAdmin_returnForbidden() {
+        given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .auth().oauth2(userToken)
+                .when()
+                .patch(LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/reject")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    void rejectLocal_raceCondition_returnOkAndConflict() throws ExecutionException, InterruptedException, TimeoutException {
+        List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                given()
+                        .contentType(ContentType.JSON)
+                        .header("X-Forwarded-For", "203.0.113.195")
+                        .auth().oauth2(adminToken),
+                2, Method.PATCH,LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/reject");
+
+        int status1 = response.get(0).getStatusCode();
+        int status2 = response.get(1).getStatusCode();
+        if(status1 == HttpStatus.OK.value()) {
+            assertEquals(status1, HttpStatus.OK.value());
+            assertEquals(status2, HttpStatus.CONFLICT.value());
+        } else {
+            assertEquals(status2, HttpStatus.OK.value());
+            assertEquals(status1, HttpStatus.CONFLICT.value());
+        }
+    }
 }
