@@ -4,16 +4,14 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Method;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import pl.lodz.p.it.ssbd2024.mok.dto.Verify2FATokenRequest;
-import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
-import pl.lodz.p.it.ssbd2024.mol.dto.SetEndDateRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -33,6 +31,8 @@ public class MeOwnerControllerIT extends BaseConfig{
     private static String LOCALS_URL;
     private String ownerToken;
     private String adminToken;
+    private String tenantToken;
+
     @BeforeEach
     public void setUp() {
         ME_URL = baseUrl + "/me";
@@ -43,6 +43,7 @@ public class MeOwnerControllerIT extends BaseConfig{
 
         Verify2FATokenRequest verifyRequest = new Verify2FATokenRequest("mol8owner", "20099995");
         Verify2FATokenRequest verifyAdminRequest = new Verify2FATokenRequest("mol8admin", "20099997");
+        Verify2FATokenRequest verifyTenantRequest = new Verify2FATokenRequest("mol8tenant", "30099997");
 
         Response response = given()
                 .contentType(ContentType.JSON)
@@ -70,6 +71,19 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .extract()
                 .response();
         adminToken = responseAdmin.path("token");
+
+        Response responseTenant = given()
+                .contentType(ContentType.JSON)
+                .header("X-Forwarded-For", "203.0.113.195")
+                .when()
+                .body(verifyTenantRequest)
+                .post(AUTH_URL + "/verify-2fa")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .response();
+        tenantToken = responseTenant.path("token");
 
     }
 
@@ -473,5 +487,319 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+
+    @Test
+    public void setFixedFee_rentedLocal_setNextFixedFee() {
+        BigDecimal newRentalFee = BigDecimal.valueOf(500.12);
+        BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
+        SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/a51f1e3e-e0e6-4a7d-80e5-16e245554c77/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .response();
+
+        GetOwnLocalsResponse localsResponse = response.getBody().as(GetOwnLocalsResponse.class);
+
+        assertEquals(localsResponse.nextMarginFee(), newMarginFee);
+        assertEquals(localsResponse.nextRentFee(), newRentalFee);
+    }
+
+    @Test
+    public void setFixedFee_notRentedLocal_setFixedFee() {
+        BigDecimal newRentalFee = BigDecimal.valueOf(500.12);
+        BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
+        SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .response();
+
+        GetOwnLocalsResponse localsResponse = response.getBody().as(GetOwnLocalsResponse.class);
+
+        assertEquals(localsResponse.marginFee(), newMarginFee);
+        assertEquals(localsResponse.rentFee(), newRentalFee);
+    }
+
+    @Test
+    public void setFixedFee_NotOwnerUser_returnForbidden() {
+        BigDecimal newRentalFee = BigDecimal.valueOf(500.12);
+        BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
+        SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void setFixedFee_LocalDoesNotExist_ReturnNotFund() {
+        BigDecimal newRentalFee = BigDecimal.valueOf(500.12);
+        BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
+        SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4f1/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void setFixedFee_InvalidData_ReturnBadRequest() {
+        BigDecimal newRentalFee = BigDecimal.valueOf(500000000);
+        BigDecimal newMarginFee = BigDecimal.valueOf(500000000);
+        SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        newRentalFee = BigDecimal.valueOf(0);
+        newMarginFee = BigDecimal.valueOf(0);
+        setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        newRentalFee = BigDecimal.valueOf(-10);
+        newMarginFee = BigDecimal.valueOf(-10);
+        setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        newRentalFee = BigDecimal.valueOf(10.123123);
+        newMarginFee = BigDecimal.valueOf(10.123123);
+        setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .body(setFixedFeeRequest)
+                .when()
+                .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void createPayment_userNotAuthorized_returnUnauthorized() {
+        BigDecimal newPayment = BigDecimal.valueOf(500.10);
+        NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(adminToken)
+                .body(newPaymentRequest)
+                .when()
+                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payments")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.FORBIDDEN.value());
+    }
+
+    @Test
+    public void createPayment_rentDoesNotExist_returnNotFound() {
+        BigDecimal newPayment = BigDecimal.valueOf(500.10);
+        NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(newPaymentRequest)
+                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa36/payments")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.NOT_FOUND.value());
+    }
+
+    @Test
+    public void createPayment_rentAlreadyEnded_returnBadRequest() {
+        BigDecimal newPayment = BigDecimal.valueOf(500.10);
+        NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(newPaymentRequest)
+                .post(ME_URL + "/rents/31658859-f2dc-425a-bb98-8f444960bb35/payment")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void createPayment_InvalidPayment_ReturnBadRequest() {
+        BigDecimal newPayment = BigDecimal.valueOf(1000000000);
+        NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(newPaymentRequest)
+                .post(ME_URL + "/rents/31658859-f2dc-425a-bb98-8f444960bb35/payment")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        newPayment = BigDecimal.valueOf(0);
+        newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(newPaymentRequest)
+                .post(ME_URL + "/rents/31658859-f2dc-425a-bb98-8f444960bb35/payment")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        newPayment = BigDecimal.valueOf(10.123123);
+        newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(newPaymentRequest)
+                .post(ME_URL + "/rents/31658859-f2dc-425a-bb98-8f444960bb35/payment")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+
+        newPayment = BigDecimal.valueOf(-10);
+        newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(newPaymentRequest)
+                .post(ME_URL + "/rents/31658859-f2dc-425a-bb98-8f444960bb35/payment")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    public void createPayment_raceCondition_returnOkAndConflict() {
+        BigDecimal newPayment = BigDecimal.valueOf(500.10);
+        NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        try {
+            List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+                    given()
+                            .contentType(ContentType.JSON)
+                            .auth().oauth2(ownerToken)
+                            .body(newPaymentRequest)
+                    , 2, Method.POST,  ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payment");
+            int status1 = response.get(0).getStatusCode();
+            int status2 = response.get(1).getStatusCode();
+            log.info("Status1: %d Status2: %d".formatted(status1, status2));
+            if (status1 == 200){
+                assertEquals(status1, 200);
+                assertEquals(status2, 400);
+            } else {
+                assertEquals(status1, 400);
+                assertEquals(status2, 200);
+            }
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+            Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEach(log::error);
+        }
+    }
+
+    @Test
+    public void createPayment_ValidPayment_ReturnOk() {
+        BigDecimal newPayment = BigDecimal.valueOf(500.10);
+        NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
+
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/owner/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35")
+                .then()
+                .extract()
+                .response();
+
+        RentForOwnerResponse ownerRentResponse = response.getBody().as(RentForOwnerResponse.class);
+        BigDecimal oldBalance = ownerRentResponse.balance();
+
+        given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .body(newPaymentRequest)
+                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payment")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value());
+
+        response = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/owner/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35")
+                .then()
+                .extract()
+                .response();
+
+        ownerRentResponse = response.getBody().as(RentForOwnerResponse.class);
+        BigDecimal newBalance = ownerRentResponse.balance();
+
+        assertEquals(newBalance, oldBalance.add(newPayment));
     }
 }
