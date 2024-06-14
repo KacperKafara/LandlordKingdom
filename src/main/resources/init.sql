@@ -64,7 +64,7 @@ VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', 'tenant',
         '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null,
         null, true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
-VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', 'tenant@test.com', null, 'Tenant', 'Tenant');
+VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', '242352@edu.p.lodz.pl', null, 'Tenant', 'Tenant');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES ('4b329d71-2a92-4e90-8f0b-f673e4f79529', '05854132-8b7c-440e-9ef2-8fe46a7962dc', 'TENANT', true, 0, NOW(), NOW(),
         null, null);
@@ -76,7 +76,7 @@ INSERT INTO public.users (id, login, password, blocked, verified, login_attempts
 VALUES ('2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9', 'test', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
         false, true, 0, 1, 'EN', NOW(), NOW(), null, null, true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
-VALUES ('2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9', 'test@test.com', null, 'test', 'test');
+VALUES ('2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9', '242374@edu.p.lodz.pl', null, 'test', 'test');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES ('6bcef94d-16f5-401b-a0d0-9461257572f6', '2d56f6d5-2dfd-4003-89d9-9e9ac6c145c9', 'TENANT', true, 0, NOW(), NOW(),
         null, null);
