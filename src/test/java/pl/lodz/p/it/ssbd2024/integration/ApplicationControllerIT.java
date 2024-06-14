@@ -325,7 +325,7 @@ public class ApplicationControllerIT extends BaseConfig {
                 .header("X-Forwarded-For", "203.0.113.195")
                 .auth().oauth2(tenantToken)
                 .when()
-                .post(BASE_URL + "/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/applications")
+                .post(BASE_URL + "/7436607c-5928-489e-adba-511541df1b8d/applications")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
@@ -423,7 +423,7 @@ public class ApplicationControllerIT extends BaseConfig {
                 .header("X-Forwarded-For", "203.0.113.195")
                 .auth().oauth2(tenantToken)
                 .when()
-                .delete(BASE_URL + "/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/applications")
+                .delete(BASE_URL + "/9954b5ef-e38a-4138-9a97-7b7d7b097d6e/applications")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND.value());
