@@ -632,7 +632,7 @@ public class MeOwnerControllerIT extends BaseConfig{
     }
 
     @Test
-    public void createPayment_userNotAuthorized_returnUnauthorized() {
+    public void createPayment_userNotAuthorized_returnForbidden() {
         BigDecimal newPayment = BigDecimal.valueOf(500.10);
         NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
 
@@ -641,7 +641,7 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .auth().oauth2(adminToken)
                 .body(newPaymentRequest)
                 .when()
-                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payments")
+                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payment")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.FORBIDDEN.value());
@@ -657,7 +657,7 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .auth().oauth2(ownerToken)
                 .when()
                 .body(newPaymentRequest)
-                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa36/payments")
+                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa36/payment")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.NOT_FOUND.value());
@@ -735,27 +735,55 @@ public class MeOwnerControllerIT extends BaseConfig{
     }
 
     @Test
-    public void createPayment_raceCondition_returnOkAndConflict() {
+    public void createPayment_raceCondition_returnOkAndBadRequest() {
         BigDecimal newPayment = BigDecimal.valueOf(500.10);
         NewPaymentRequest newPaymentRequest = new NewPaymentRequest(newPayment);
 
+        Response response = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/owner/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35")
+                .then()
+                .extract()
+                .response();
+
+        RentForOwnerResponse ownerRentResponse = response.getBody().as(RentForOwnerResponse.class);
+        BigDecimal initialBalance = ownerRentResponse.balance();
+
         try {
-            List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
+            List<Response> responses = ConcurrentRequestUtil.runConcurrentRequests(
                     given()
                             .contentType(ContentType.JSON)
                             .auth().oauth2(ownerToken)
-                            .body(newPaymentRequest)
-                    , 2, Method.POST,  ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payment");
-            int status1 = response.get(0).getStatusCode();
-            int status2 = response.get(1).getStatusCode();
+                            .body(newPaymentRequest),
+                    2, Method.POST, ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payment");
+
+            int status1 = responses.get(0).getStatusCode();
+            int status2 = responses.get(1).getStatusCode();
             log.info("Status1: %d Status2: %d".formatted(status1, status2));
-            if (status1 == 200){
-                assertEquals(status1, 200);
-                assertEquals(status2, 400);
+
+            if (status1 == 200) {
+                assertEquals(200, status1);
+                assertEquals(400, status2);
             } else {
-                assertEquals(status1, 400);
-                assertEquals(status2, 200);
+                assertEquals(400, status1);
+                assertEquals(200, status2);
             }
+
+            response = given()
+                    .contentType(ContentType.JSON)
+                    .auth().oauth2(ownerToken)
+                    .when()
+                    .get(ME_URL + "/owner/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35")
+                    .then()
+                    .extract()
+                    .response();
+
+            ownerRentResponse = response.getBody().as(RentForOwnerResponse.class);
+            BigDecimal finalBalance = ownerRentResponse.balance();
+
+            assertEquals(initialBalance.add(newPayment), finalBalance);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
             Arrays.stream(e.getStackTrace()).map(StackTraceElement::toString).forEach(log::error);
         }
