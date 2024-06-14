@@ -42,7 +42,6 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     @PreAuthorize("hasRole('OWNER')")
     public Payment create(UUID userId, UUID rentId, BigDecimal amount) throws NotFoundException, PaymentAlreadyExistsException, RentAlreadyEndedException {
         Owner owner = ownerMolRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));

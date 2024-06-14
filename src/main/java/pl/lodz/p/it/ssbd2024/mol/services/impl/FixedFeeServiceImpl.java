@@ -31,7 +31,6 @@ public class FixedFeeServiceImpl implements FixedFeeService {
 
     @Override
     @PreAuthorize("permitAll()")
-    @Retryable(maxAttempts = 3, retryFor = {OptimisticLockException.class})
     public FixedFee createFixedFeeForEndOfBillingPeriod(FixedFee fixedFee) {
         Rent rent = fixedFee.getRent();
         Local local = rent.getLocal();

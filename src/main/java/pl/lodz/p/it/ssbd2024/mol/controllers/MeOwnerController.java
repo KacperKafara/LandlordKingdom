@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -125,6 +126,7 @@ public class MeOwnerController {
 
     @PostMapping("/rents/{id}/payment")
     @PreAuthorize("hasRole('OWNER')")
+    @Retryable(retryFor = {RuntimeException.class})
     public ResponseEntity<PaymentResponse> payRent(@PathVariable UUID id, @RequestBody @Valid NewPaymentRequest newPaymentRequest) throws NotFoundException {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
         try {

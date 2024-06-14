@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -93,6 +94,7 @@ public class MeTenantController {
 
     @PostMapping("/rents/{id}/variable-fee")
     @PreAuthorize("hasRole('TENANT')")
+    @Retryable(retryFor = {RuntimeException.class})
     public ResponseEntity<VariableFeeResponse> enterVariableFee(@PathVariable UUID id, @RequestBody VariableFeeRequest variableFeeRequest)
             throws NotFoundException {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
