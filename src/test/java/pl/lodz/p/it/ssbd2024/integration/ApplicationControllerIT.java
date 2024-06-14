@@ -11,6 +11,7 @@ import pl.lodz.p.it.ssbd2024.mol.dto.AcceptApplicationRequest;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -135,7 +136,7 @@ public class ApplicationControllerIT extends BaseConfig {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.CREATED.value())
-                .body("startDate", equalTo(toEndDateString(LocalDate.now())))
+                .body("startDate", equalTo(toEndDateString(LocalDate.now(ZoneId.of("UTC")))))
                 .body("endDate", equalTo(endDate))
                 .body("tenant.login", equalTo("testTenant"))
                 .body("local.id", equalTo("a51f1e3e-e0e6-4a7d-80e5-16e245554c77"));
