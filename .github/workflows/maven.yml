@@ -21,6 +21,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Pass private keys
+      run: |
+        echo "${{ secrets.PRIVATE_JWT_KEY }}" > ./docker-ssbd02/privateJwt-key.pem
+        echo "${{ secrets.PRIVATE_REFRESH_KEY }}" > ./docker-ssbd02/privateRefresh-key.pem
+        echo "${{ secrets.PRIVATE_JWT_KEY }}" > ./src/test/resources/privateJwt-key.pem
+        echo "${{ secrets.PRIVATE_REFRESH_KEY }}" > ./src/test/resources/privateRefresh-key.pem
+    
     - name: Set up JDK 21
       uses: actions/setup-java@v3
       with:
