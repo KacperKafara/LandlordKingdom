@@ -13,14 +13,14 @@ jobs:
 
     defaults:
       run:
-        working-directory: ./webapp/ssbd202402
+        working-directory: webapp/ssbd202402
 
     steps:
-      - name: Set up Node.js 20
+      - name: Set up Node.js 16
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-          cache-dependency-path: './webapp/ssbd202402/yarn.lock'
+          node-version: '16'
+          cache-dependency-path: 'webapp/ssbd202402/yarn.lock'
           cache: 'yarn'
           
       - name: Setup node dependencies
