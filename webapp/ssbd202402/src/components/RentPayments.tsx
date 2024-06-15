@@ -15,6 +15,7 @@ import PaymentsPageChanger from "../pages/Owner/RentDetails/PaymentsPageChanger"
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTranslation } from "react-i18next";
 import { LoadingData } from "@/components/LoadingData";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 type RentPaymentProps = {
   id: string;
@@ -91,7 +92,7 @@ export const RentPayments: FC<RentPaymentProps> = ({
                     <TableCell>{index + 1 + pageSize * pageNumber}</TableCell>
                     <TableCell>{payment.date}</TableCell>
                     <TableCell className="text-right">
-                      {payment.amount.toFixed(2) + t("currency")}
+                      {toLocaleFixed(payment.amount) + t("currency")}
                     </TableCell>
                   </TableRow>
                 ))}

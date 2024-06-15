@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { LoadingData } from "@/components/LoadingData";
 import { NavLink } from "react-router-dom";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 const CurrentRentsPage: FC = () => {
   const { data, isLoading } = useGetTenantOwnRents();
@@ -66,18 +67,16 @@ const CurrentRentsPage: FC = () => {
                   <DataField
                     label={t("tenantRents.fixedFee")}
                     value={
-                      (rent.local.rentalFee + rent.local.marginFee)
-                        .toFixed(2)
-                        .toString() +
+                      toLocaleFixed(
+                        rent.local.rentalFee + rent.local.marginFee
+                      ) +
                       " " +
                       t("currency")
                     }
                   />
                   <DataField
                     label={t("tenantRents.balance")}
-                    value={
-                      rent.balance.toFixed(2).toString() + " " + t("currency")
-                    }
+                    value={toLocaleFixed(rent.balance) + " " + t("currency")}
                   />
                   <DataField
                     label={t("tenantRents.localSize")}

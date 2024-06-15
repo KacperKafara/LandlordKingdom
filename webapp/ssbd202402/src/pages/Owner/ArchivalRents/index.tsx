@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useGetOwnerArchivalRents } from "@/data/mol/useGetOwnerArchivalRents";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 import { t } from "i18next";
 import { RefreshCw } from "lucide-react";
 import { FC } from "react";
@@ -80,7 +81,7 @@ const ArchivalOwnerRentsPage: FC = () => {
                   />
                   <DataField
                     label={t("currentOwnerRents.balance")}
-                    value={rent.balance.toString()}
+                    value={toLocaleFixed(rent.balance) + " " + t("currency")}
                   />
                   <p className="col-span-2 my-3 text-xl font-bold">
                     {t("currentOwnerRents.tenant")}
