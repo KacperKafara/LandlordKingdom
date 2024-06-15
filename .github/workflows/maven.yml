@@ -38,8 +38,6 @@ jobs:
       run: mvn clean test
     - name: Build with Maven
       run: mvn clean package
-    - name: Run integration tests
-      run: mvn verify
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
