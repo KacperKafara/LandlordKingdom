@@ -34,21 +34,8 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
-    - name: Set up Node.js 20
-      uses: actions/setup-node@v3
-      with:
-        node-version: '20'
-        cache-dependency-path: 'webapp/ssbd202402'
-        cache: 'yarn'
         
     - name: Run unit tests
       run: mvn clean test
     - name: Build with Maven
       run: mvn clean package
-    - name: Setup node dependencies
-      working-directory: webapp/ssbd202402
-      run: yarn
-    - name: Build React App
-      working-directory: webapp/ssbd202402
-      run: yarn build
-    
