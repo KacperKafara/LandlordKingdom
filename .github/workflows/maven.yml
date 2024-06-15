@@ -38,6 +38,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: '20'
+        cashe-dependecy-file: 'webapp/ssbd202402'
         cache: 'yarn'
         
     - name: Run unit tests
