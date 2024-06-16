@@ -52,4 +52,5 @@ export type ExceptionCode =
   | "variableFeeAlreadyExists"
   | "wrongEndDate"
   | "rentEnded"
-  | "paymentAlreadyExists";
+  | "paymentAlreadyExists"
+  | "imageNotFound"  ;

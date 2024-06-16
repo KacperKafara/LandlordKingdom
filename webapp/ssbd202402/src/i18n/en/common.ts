@@ -457,6 +457,7 @@ const errors = {
   unexpectedRollback: "Unexpected rollback",
   userAlreadyHasRole: "User already has this role",
   applicationExists: "Application for this local already exists",
+  imageNotFound: "Image not found",
 } satisfies {
   [key in ExceptionCode]: string;
 };
