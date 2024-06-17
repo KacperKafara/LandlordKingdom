@@ -15,6 +15,7 @@ import DataField from "@/components/DataField";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { LoadingData } from "@/components/LoadingData";
 import { NavLink } from "react-router-dom";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 const ArchivalRentsPage: FC = () => {
   const { t } = useTranslation();
@@ -67,18 +68,16 @@ const ArchivalRentsPage: FC = () => {
                   <DataField
                     label={t("tenantRents.fixedFee")}
                     value={
-                      (rent.local.rentalFee + rent.local.marginFee)
-                        .toFixed(2)
-                        .toString() +
+                      toLocaleFixed(
+                        rent.local.rentalFee + rent.local.marginFee
+                      ) +
                       " " +
                       t("currency")
                     }
                   />
                   <DataField
                     label={t("tenantRents.balance")}
-                    value={
-                      rent.balance.toFixed(2).toString() + " " + t("currency")
-                    }
+                    value={toLocaleFixed(rent.balance) + " " + t("currency")}
                   />
                   <DataField
                     label={t("tenantRents.localSize")}

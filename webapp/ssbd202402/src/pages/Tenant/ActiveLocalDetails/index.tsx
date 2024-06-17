@@ -22,6 +22,7 @@ import LoadingButton from "@/components/LoadingButton";
 import { useGetUserApplication } from "@/data/application/useGetUserApplication";
 import { useCreateApplication } from "@/data/application/useCreateApplication";
 import { useQueryClient } from "@tanstack/react-query";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 const ActiveLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -79,7 +80,7 @@ const ActiveLocalDetailsPage: FC = () => {
                     <DataField
                       label={t("activeLocalDetails.price")}
                       value={
-                        (local?.price ?? 0.0).toFixed(2) + " " + t("currency")
+                        toLocaleFixed(local?.price ?? 0.0) + " " + t("currency")
                       }
                     />
 

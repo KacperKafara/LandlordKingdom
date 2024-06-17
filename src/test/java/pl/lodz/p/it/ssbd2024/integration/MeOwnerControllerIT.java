@@ -798,7 +798,7 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .contentType(ContentType.JSON)
                 .auth().oauth2(ownerToken)
                 .when()
-                .get(ME_URL + "/owner/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35")
+                .get(ME_URL + "/owner/rents/e00621aa-06e4-439c-a906-9ca256ff7a8e")
                 .then()
                 .extract()
                 .response();
@@ -811,7 +811,7 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .auth().oauth2(ownerToken)
                 .when()
                 .body(newPaymentRequest)
-                .post(ME_URL + "/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35/payment")
+                .post(ME_URL + "/rents/e00621aa-06e4-439c-a906-9ca256ff7a8e/payment")
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value());
@@ -820,7 +820,7 @@ public class MeOwnerControllerIT extends BaseConfig{
                 .contentType(ContentType.JSON)
                 .auth().oauth2(ownerToken)
                 .when()
-                .get(ME_URL + "/owner/rents/5571842e-ec61-4a03-8715-36ccf3c5aa35")
+                .get(ME_URL + "/owner/rents/e00621aa-06e4-439c-a906-9ca256ff7a8e")
                 .then()
                 .extract()
                 .response();
