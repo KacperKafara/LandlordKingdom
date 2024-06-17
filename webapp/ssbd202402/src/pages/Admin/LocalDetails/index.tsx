@@ -54,17 +54,19 @@ const LocalDetailsPage: FC = () => {
           <div className="flex w-full justify-center">
             <div className="w-9/12 ">
               <Tabs defaultValue="basic">
-                <TabsList className="mt-1">
-                  <TabsTrigger value="basic">
-                    {t("localDetails.basicInformation")}
-                  </TabsTrigger>
-                  <TabsTrigger value="updateData">
-                    {t("localDetails.updateData")}
-                  </TabsTrigger>
-                  <TabsTrigger value="changeAddress">
-                    {t("localDetails.changeAddress")}
-                  </TabsTrigger>
-                </TabsList>
+                {data.data.state !== "ARCHIVED" && (
+                  <TabsList className="mt-1">
+                    <TabsTrigger value="basic">
+                      {t("localDetails.basicInformation")}
+                    </TabsTrigger>
+                    <TabsTrigger value="updateData">
+                      {t("localDetails.updateData")}
+                    </TabsTrigger>
+                    <TabsTrigger value="changeAddress">
+                      {t("localDetails.changeAddress")}
+                    </TabsTrigger>
+                  </TabsList>
+                )}
                 <TabsContent value="basic">
                   <Card className="relative mb-2">
                     <CardHeader>
