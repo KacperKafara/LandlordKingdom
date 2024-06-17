@@ -9,6 +9,7 @@ import { ErrorCode } from "@/@types/errorCode";
 interface EditLocalAddress {
   id: string;
   address: Address;
+  ifMatch: string;
 }
 
 export const useEditLocalAddress = () => {
@@ -17,7 +18,11 @@ export const useEditLocalAddress = () => {
 
   const { mutateAsync } = useMutation({
     mutationFn: async (data: EditLocalAddress) => {
-      await api.patch(`/locals/${data.id}/address`, data.address);
+      await api.patch(`/locals/${data.id}/address`, data.address, {
+        headers: {
+          "If-Match": data.ifMatch,
+        },
+      });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["localDetailsForAdmin"] });
