@@ -66,8 +66,10 @@ const Locals: FC = () => {
           <div className="mt-5 flex flex-col items-center">
             <p className="text-xl">{t("ownerLocals.noLocalsFound")}</p>
             <div className="flex gap-3">
-              <Button className="mt-3 w-fit">
-                {/* TODO: Add a link to the create local page */}
+              <Button
+                className="mt-3 w-fit"
+                onClick={() => navigate("/owner/addLocalForm")}
+              >
                 {t("ownerLocals.addFirstLocal")}
               </Button>
               <RefreshQueryButton className="mt-3" queryKeys={["ownLocals"]} />
