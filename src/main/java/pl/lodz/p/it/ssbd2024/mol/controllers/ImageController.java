@@ -1,15 +1,19 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
-
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
+import pl.lodz.p.it.ssbd2024.exceptions.ImageFormatNotSupported;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Image;
 import pl.lodz.p.it.ssbd2024.mol.dto.ImageResponse;
@@ -26,22 +30,27 @@ import java.util.UUID;
 @Scope("prototype")
 @Transactional(propagation = Propagation.NEVER)
 public class ImageController {
-
-
     private final ImageService imageService;
 
     @PostMapping(path = "/upload/{localId}", consumes = "multipart/form-data")
     @PreAuthorize("hasRole('OWNER')")
     public ResponseEntity<Void> handleFileUpload(@RequestParam("file") MultipartFile file, @PathVariable UUID localId) throws NotFoundException {
-        imageService.store(file, localId);
-        return ResponseEntity.ok().build();
+        try {
+            imageService.store(file, localId);
+            return ResponseEntity.ok().build();
+        } catch (ImageFormatNotSupported e) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, e.getMessage(), e);
+        }
     }
 
     @GetMapping(path = "/{id}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<byte[]> getImage(@PathVariable UUID id) throws NotFoundException {
         Image image = imageService.getImage(id);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, " inline" ).header(HttpHeaders.CONTENT_TYPE, "image/jpeg").body(Base64.getEncoder().encode(image.getImage()));
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, " inline" )
+                .header(HttpHeaders.CONTENT_TYPE, image.getType())
+                .body(Base64.getEncoder().encode(image.getImage()));
     }
 
 

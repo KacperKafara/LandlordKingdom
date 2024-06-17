@@ -199,4 +199,9 @@ public class MockConfig {
     UserFilterRepository userFilterRepository() {
         return Mockito.mock(UserFilterRepository.class);
     }
+
+    @Bean
+    ImageRepository imageRepository() {
+        return Mockito.mock(ImageRepository.class);
+    }
 }

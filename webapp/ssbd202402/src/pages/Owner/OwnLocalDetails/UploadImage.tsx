@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 // import { useLanguageStore } from "@/i18n/languageStore";
 import { Button } from "@/components/ui/button";
 import { useGetLocalImages, useUploadImage } from "@/data/local/useImage";
+import { toast } from "@/components/ui/use-toast";
 
 type UploadImageCardProps = {
   id: string;
@@ -17,31 +18,36 @@ const UploadImageCard: FC<UploadImageCardProps> = ({ id }) => {
   const [file, setFile] = useState<File | null>(null);
   const { mutate } = useUploadImage();
   const { data, isLoading } = useGetLocalImages(
-    "70d0a449-5534-4945-afbf-ab0d96ce05d8"
+    "ba63f424-ad8e-4d31-9347-c8f9931c57a5"
   );
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null) {
+      const file = event.target.files[0];
+      if (file.type !== "image/png" && file.type !== "image/jpeg") {
+        toast({
+          variant: "destructive",
+          description: "Only .png and .jpeg files are allowed",
+        });
+        return;
+      }
       setFile(event.target.files[0]);
     }
   };
 
   const handleUpload = () => {
+    const formData = new FormData();
     if (file != null) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const arrayBuffer = await file.arrayBuffer();
-        const array = new Int8Array(arrayBuffer);
-        mutate({ id, image: array });
-      };
-      reader.readAsArrayBuffer(file);
+      formData.append("file", file);
+      mutate({ id, image: formData });
     }
   };
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="text-center">Upload Image</CardTitle>
       </CardHeader>
-      <CardContent className="flex flex-col justify-center">
+      <CardContent className="flex w-full flex-col justify-center">
         <div className="flex w-4/5 flex-col">
           <p className="text-lg font-semibold">
             Upload an image of your local to attract more customers.

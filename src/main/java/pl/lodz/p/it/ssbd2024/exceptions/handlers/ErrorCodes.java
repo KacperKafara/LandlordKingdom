@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 public class ErrorCodes {
 
 
+    public static final String IMAGE_FORMAT_NOT_SUPPORTED = "imageFormatNotSupported";
+
     private ErrorCodes() {
     }
 

@@ -7,7 +7,7 @@ import { ErrorCode } from "@/@types/errorCode";
 
 type UploadImageRequest = {
   id: string;
-  image: Int8Array;
+  image: FormData;
 };
 
 export const useUploadImage = () => {
@@ -17,13 +17,17 @@ export const useUploadImage = () => {
 
   return useMutation({
     mutationFn: async (data: UploadImageRequest) => {
-      await api.post(`/images/upload/${data.id}`, {
-        file: data.image,
-      }, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      await api.post(
+        `/images/upload/${data.id}`,
+        {
+          file: data.image.get("file"),
         },
-      });
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
     },
     onSuccess: () => {
       toast({
@@ -49,30 +53,27 @@ export const useUploadImage = () => {
 // };
 
 export const useGetLocalImages = (id: string) => {
-    const { api } = useAxiosPrivate();
-    const { t } = useTranslation();
-    const { toast } = useToast();
+  const { api } = useAxiosPrivate();
+  const { t } = useTranslation();
+  const { toast } = useToast();
 
-    return useQuery({
-        queryKey: ["localImages", id],
-        queryFn: async () => {
-            try {
-                const response = await api.get(`/images/${id}`);    
-                return response.data;
-            } catch (error) {
-                const axiosError = error as AxiosError;
-                toast({
-                  variant: "destructive",
-                  title: t("ownerRentDetails.error"),
-                  description: t(
-                      `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
-                  ),
-                });
-                return Promise.reject(error);
-            }
-            
-           
-        },
-    });
-
-}
+  return useQuery({
+    queryKey: ["localImages", id],
+    queryFn: async () => {
+      // try {
+      const response = await api.get(`/images/${id}`);
+      return response.data;
+      // } catch (error) {
+      //     const axiosError = error as AxiosError;
+      //     toast({
+      //       variant: "destructive",
+      //       title: t("ownerRentDetails.error"),
+      //       description: t(
+      //           `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
+      //       ),
+      //     });
+      //     return Promise.reject(error);
+      // }
+    },
+  });
+};
