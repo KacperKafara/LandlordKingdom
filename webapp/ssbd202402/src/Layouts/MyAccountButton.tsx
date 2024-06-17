@@ -66,11 +66,7 @@ const MyAccountButton: FC<MyAccountButtonProps> = ({
                 <NavLink
                   to={link.path}
                   //  className={cn("block h-full w-full")}
-                  className={({ isActive }) =>
-                    isActive
-                      ? cn("block h-full w-full text-red-700")
-                      : cn("block h-full w-full", hover)
-                  }
+                  className={cn("block h-full w-full", hover)}
                 >
                   {i18n.exists(`navLinks.${link.label}`)
                     ? //  @ts-expect-error error handled
