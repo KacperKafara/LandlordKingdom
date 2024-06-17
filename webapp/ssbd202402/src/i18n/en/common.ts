@@ -868,6 +868,12 @@ const uploadImage = {
   uploadedFileNotImage: "Only .png and .jpeg files are allowed",
   chooseFile: "Choose file",
   upload: "Upload",
+  delete: "Delete",
+  deleteSuccessTitle: "Image deleted",
+  deleteSuccessDescription: "Image has been deleted successfully",
+  deleteErrorTitle: "Error. Image not deleted",
+  uploadImageSuccess: "Image has been uploaded successfully",
+  uploadImageError: "Error while uploading image",
 };
 
 export default {

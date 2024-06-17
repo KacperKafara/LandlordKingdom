@@ -5,36 +5,64 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChangeEvent, FC, useState } from "react";
+import { ChangeEvent, FC, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useGetLocalImages, useUploadImage } from "@/data/local/useImage";
+import { useUploadImage } from "@/data/local/useImage";
 import { toast } from "@/components/ui/use-toast";
 import { t } from "i18next";
+import useAxiosPrivate from "@/data/useAxiosPrivate";
+import { ImageComponent } from "./ImageComponent";
 
 type UploadImageCardProps = {
   id: string;
+  images: string[];
 };
 
-const UploadImageCard: FC<UploadImageCardProps> = ({ id }) => {
+interface Images {
+  id: string;
+  src: string;
+}
+
+const UploadImageCard: FC<UploadImageCardProps> = ({ id, images }) => {
   const [file, setFile] = useState<File | null>(null);
   const { mutate } = useUploadImage();
-  const { data } = useGetLocalImages(id);
+  const [loadedImages, setLoadedImages] = useState<Images[]>([]);
+  const { api } = useAxiosPrivate();
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      for (const image of images) {
+        const response = await api.get(`/images/${image}`);
+        setLoadedImages((prev) => [
+          ...prev,
+          {
+            id: image,
+            src: `data:${response.headers["content-type"]};base64,${response.data}`,
+          },
+        ]);
+      }
+    };
+
+    fetchImages();
+  }, [images, api]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null) {
       const file = event.target.files[0];
       if (file.size >= 256 * 1024) {
+        setFile(null);
         toast({
           variant: "destructive",
-          description: "Uploaded file is too large. Max size is 256KB",
+          description: t("uploadImage.uploadedFileTooLarge"),
         });
         return;
       }
       if (file.type !== "image/png" && file.type !== "image/jpeg") {
+        setFile(null);
         toast({
           variant: "destructive",
-          description: "Only .png and .jpeg files are allowed",
+          description: t("uploadImage.uploadedFileNotImage"),
         });
         return;
       }
@@ -44,6 +72,7 @@ const UploadImageCard: FC<UploadImageCardProps> = ({ id }) => {
 
   const handleUpload = () => {
     const formData = new FormData();
+    setFile(null);
     if (file != null) {
       formData.append("file", file);
       mutate({ id, image: formData });
@@ -51,35 +80,39 @@ const UploadImageCard: FC<UploadImageCardProps> = ({ id }) => {
   };
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader>
-        <CardTitle className="text-center">
-          {t("uploadImage.uploadImage")}
-        </CardTitle>
-        <CardDescription className="text-center">
-          {t("uploadImage.uploadImageDescription")}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex w-full flex-col items-center justify-center gap-2">
-        <Input
-          id="picture"
-          type="file"
-          className="w-1/3 hover:cursor-pointer"
-          accept="image/png, image/jpeg"
-          onChange={handleChange}
-        />
-        <Button
-          className="mt-2 w-1/3"
-          type="submit"
-          onClick={() => handleUpload()}
-        >
-          {t("uploadImage.upload")}
-        </Button>
-        <div>
-          {/* {data && <img src={`data:image;base64,` + data} alt="local" />} */}
-        </div>
-      </CardContent>
-    </Card>
+    <>
+      <Card className="flex flex-col">
+        <CardHeader>
+          <CardTitle className="text-center">
+            {t("uploadImage.uploadImage")}
+          </CardTitle>
+          <CardDescription className="text-center">
+            {t("uploadImage.uploadImageDescription")}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex w-full flex-col items-center justify-center gap-2">
+          <Input
+            id="picture"
+            type="file"
+            className="w-1/3 hover:cursor-pointer"
+            accept="image/png, image/jpeg"
+            onChange={handleChange}
+          />
+          <Button
+            className="mt-2 w-1/3"
+            type="submit"
+            onClick={() => handleUpload()}
+          >
+            {t("uploadImage.upload")}
+          </Button>
+          <div className="flex flex-wrap gap-1">
+            {loadedImages.map((image) => (
+              <ImageComponent key={image.id} id={image.id} src={image.src} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

@@ -877,6 +877,12 @@ const uploadImage = {
   uploadedFileNotImage: "Twój plik nie jest w formacie jpg lub png",
   chooseFile: "Wybierz plik",
   upload: "Prześlij",
+  delete: "Usuń",
+  deleteSuccessTitle: "Sukces.",
+  deleteSuccessDescription: "Zdjęcie zostało usunięte pomyślnie",
+  deleteErrorTitle: "Błąd.",
+  uploadImageSuccess: "Zdjęcie zostało dodane pomyślnie",
+  uploadImageError: "Błąd podczas dodawania zdjęcia",
 };
 
 export default {

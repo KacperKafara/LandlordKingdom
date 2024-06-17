@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosPrivate from "../useAxiosPrivate";
 import { useTranslation } from "react-i18next";
 import { useToast } from "@/components/ui/use-toast";
@@ -14,6 +14,7 @@ export const useUploadImage = () => {
   const { toast } = useToast();
   const { t } = useTranslation();
   const { api } = useAxiosPrivate();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (data: UploadImageRequest) => {
@@ -30,15 +31,15 @@ export const useUploadImage = () => {
       );
     },
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["localImages"] });
       toast({
-        title: t("changeFixedFee.successTitle"),
-        description: t("changeFixedFee.successDescription"),
+        title: t("uploadImage.uploadImageSuccess"),
       });
     },
     onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
-        title: t("changeFixedFee.errorTitle"),
+        title: t("uploadImage.uploadImageError"),
         description: t(
           `errors.${(error.response?.data as ErrorCode).exceptionCode}`
         ),
@@ -46,11 +47,6 @@ export const useUploadImage = () => {
     },
   });
 };
-
-// type LocalImageResponse = {
-//     extension: string;
-//     image: string;
-// };
 
 export const useGetLocalImages = (id: string) => {
   const { api } = useAxiosPrivate();
@@ -74,6 +70,35 @@ export const useGetLocalImages = (id: string) => {
         });
         return Promise.reject(error);
       }
+    },
+  });
+};
+
+export const useDeleteImage = () => {
+  const { api } = useAxiosPrivate();
+  const { t } = useTranslation();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (id: string) => {
+      await api.delete(`/images/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["localImages"] });
+      toast({
+        title: t("uploadImage.deleteSuccessTitle"),
+        description: t("uploadImage.deleteSuccessDescription"),
+      });
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        variant: "destructive",
+        title: t("uploadImage.deleteErrorTitle"),
+        description: t(
+          `errors.${(error.response?.data as ErrorCode).exceptionCode}`
+        ),
+      });
     },
   });
 };
