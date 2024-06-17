@@ -60,20 +60,20 @@ export const useGetLocalImages = (id: string) => {
   return useQuery({
     queryKey: ["localImages", id],
     queryFn: async () => {
-      // try {
-      const response = await api.get(`/images/${id}`);
-      return response.data;
-      // } catch (error) {
-      //     const axiosError = error as AxiosError;
-      //     toast({
-      //       variant: "destructive",
-      //       title: t("ownerRentDetails.error"),
-      //       description: t(
-      //           `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
-      //       ),
-      //     });
-      //     return Promise.reject(error);
-      // }
+      try {
+        const response = await api.get(`/images/local/${id}`);
+        return response.data;
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        toast({
+          variant: "destructive",
+          title: t("ownerRentDetails.error"),
+          description: t(
+            `errors.${(axiosError.response!.data as ErrorCode).exceptionCode}`
+          ),
+        });
+        return Promise.reject(error);
+      }
     },
   });
 };

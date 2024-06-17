@@ -14,7 +14,7 @@ public interface ImageService {
 
     Image getImage(UUID id) throws NotFoundException;
 
-    List<UUID> getImagesByLocalId(UUID id);
+    List<UUID> getImagesByLocalId(UUID id) throws NotFoundException;
 
     void deleteImage(UUID id) throws NotFoundException;
 }

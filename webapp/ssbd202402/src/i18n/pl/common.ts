@@ -870,7 +870,17 @@ const localReport = {
   summaryBarChart: "Wpłaty i opłaty podzielone na tygodnie",
 };
 
+const uploadImage = {
+  uploadImage: "Dodaj zdjęcie",
+  uploadImageDescription: "Dodaj zdjęcie aby uatrakcyjnić swoje ogłoszenie",
+  uploadedFileTooLarge: "Plik jest za duży, maksymalny rozmiar to 256KB",
+  uploadedFileNotImage: "Twój plik nie jest w formacie jpg lub png",
+  chooseFile: "Wybierz plik",
+  upload: "Prześlij",
+};
+
 export default {
+  uploadImage,
   localReport,
   rentDetailsPage,
   createPaymentDialog,

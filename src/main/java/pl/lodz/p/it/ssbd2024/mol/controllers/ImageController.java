@@ -22,6 +22,7 @@ import pl.lodz.p.it.ssbd2024.mol.mappers.ImagesMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ImageService;
 
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -56,8 +57,8 @@ public class ImageController {
 
     @GetMapping(path = "/local/{id}")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<LocalImagesResponse> getLocalImagesIds(@PathVariable UUID id) throws NotFoundException {
-        return ResponseEntity.ok(ImagesMapper.toLocalImagesResponse(imageService.getImagesByLocalId(id)));
+    public ResponseEntity<List<UUID>> getLocalImagesIds(@PathVariable UUID id) throws NotFoundException {
+        return ResponseEntity.ok(imageService.getImagesByLocalId(id));
     }
 
     @DeleteMapping(path = "/{id}")

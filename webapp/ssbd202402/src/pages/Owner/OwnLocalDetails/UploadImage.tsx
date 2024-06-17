@@ -1,28 +1,36 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ChangeEvent, FC, useState } from "react";
-// import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-// import { useLanguageStore } from "@/i18n/languageStore";
 import { Button } from "@/components/ui/button";
 import { useGetLocalImages, useUploadImage } from "@/data/local/useImage";
 import { toast } from "@/components/ui/use-toast";
+import { t } from "i18next";
 
 type UploadImageCardProps = {
   id: string;
 };
 
 const UploadImageCard: FC<UploadImageCardProps> = ({ id }) => {
-  //   const { t } = useTranslation();
-  //   const { language } = useLanguageStore();
   const [file, setFile] = useState<File | null>(null);
   const { mutate } = useUploadImage();
-  const { data, isLoading } = useGetLocalImages(
-    "ba63f424-ad8e-4d31-9347-c8f9931c57a5"
-  );
+  const { data } = useGetLocalImages(id);
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null) {
       const file = event.target.files[0];
+      if (file.size >= 256 * 1024) {
+        toast({
+          variant: "destructive",
+          description: "Uploaded file is too large. Max size is 256KB",
+        });
+        return;
+      }
       if (file.type !== "image/png" && file.type !== "image/jpeg") {
         toast({
           variant: "destructive",
@@ -43,35 +51,32 @@ const UploadImageCard: FC<UploadImageCardProps> = ({ id }) => {
   };
 
   return (
-    <Card>
+    <Card className="flex flex-col">
       <CardHeader>
-        <CardTitle className="text-center">Upload Image</CardTitle>
+        <CardTitle className="text-center">
+          {t("uploadImage.uploadImage")}
+        </CardTitle>
+        <CardDescription className="text-center">
+          {t("uploadImage.uploadImageDescription")}
+        </CardDescription>
       </CardHeader>
-      <CardContent className="flex w-full flex-col justify-center">
-        <div className="flex w-4/5 flex-col">
-          <p className="text-lg font-semibold">
-            Upload an image of your local to attract more customers.
-          </p>
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5" lang="en-US">
-          <Label htmlFor="picture">Choose file</Label>
-          <Input
-            id="picture"
-            type="file"
-            accept="image/png, image/jpeg"
-            onChange={handleChange}
-          />
-        </div>
+      <CardContent className="flex w-full flex-col items-center justify-center gap-2">
+        <Input
+          id="picture"
+          type="file"
+          className="w-1/3 hover:cursor-pointer"
+          accept="image/png, image/jpeg"
+          onChange={handleChange}
+        />
         <Button
-          className="mt-2 w-1/2"
+          className="mt-2 w-1/3"
           type="submit"
           onClick={() => handleUpload()}
         >
-          Upload
+          {t("uploadImage.upload")}
         </Button>
         <div>
-          {isLoading && <p>loading...</p>}
-          {data && <img src={`data:image;base64,` + data} alt="local" />}
+          {/* {data && <img src={`data:image;base64,` + data} alt="local" />} */}
         </div>
       </CardContent>
     </Card>

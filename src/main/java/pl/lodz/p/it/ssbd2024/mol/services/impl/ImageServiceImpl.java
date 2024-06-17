@@ -50,7 +50,8 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<UUID> getImagesByLocalId(UUID id) {
+    public List<UUID> getImagesByLocalId(UUID id) throws NotFoundException {
+        localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
         return imageRepository.findImageIdsByLocalId(id);
     }
 
