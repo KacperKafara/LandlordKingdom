@@ -3,6 +3,8 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useMeQuery } from "@/data/meQueries";
@@ -11,14 +13,22 @@ import { useUserStore } from "@/store/userStore";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { VscAccount } from "react-icons/vsc";
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
+import { NavigationLink, LayoutType } from "./BaseLayout";
+import i18n from "@/i18n";
 
 type MyAccountButtonProps = {
   hover: string;
+  links?: NavigationLink[];
+  type: LayoutType;
 };
 
-const MyAccountButton: FC<MyAccountButtonProps> = ({ hover }) => {
+const MyAccountButton: FC<MyAccountButtonProps> = ({
+  hover,
+  links = [],
+  type,
+}) => {
   const { t } = useTranslation();
   const userStore = useUserStore();
   const navigate = useNavigate();
@@ -40,11 +50,38 @@ const MyAccountButton: FC<MyAccountButtonProps> = ({ hover }) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem
-          onClick={() => navigate(`/account?origin=${pathname}`)}
-        >
-          {t("navLinks.account")}
-        </DropdownMenuItem>
+        <DropdownMenuLabel asChild>
+          <DropdownMenuItem
+            onClick={() => navigate(`/account?origin=${pathname}`)}
+          >
+            {t("navLinks.account")}
+          </DropdownMenuItem>
+        </DropdownMenuLabel>
+
+        {type !== "me" && (
+          <>
+            <DropdownMenuSeparator />
+            {links.map((link, idx) => (
+              <DropdownMenuItem key={link.path + idx} asChild>
+                <NavLink
+                  to={link.path}
+                  //  className={cn("block h-full w-full")}
+                  className={({ isActive }) =>
+                    isActive
+                      ? cn("block h-full w-full text-red-700")
+                      : cn("block h-full w-full", hover)
+                  }
+                >
+                  {i18n.exists(`navLinks.${link.label}`)
+                    ? //  @ts-expect-error error handled
+                      t(`navLinks.${link.label}`)
+                    : link.label}
+                </NavLink>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+          </>
+        )}
         <DropdownMenuItem onClick={handleLoginButtonClick}>
           {t("navLinks.signOut")}
         </DropdownMenuItem>
