@@ -202,10 +202,11 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @PreAuthorize("permitAll()")
-    public void sendAdminLoginEmail(String to, String name, String ip, String lang) {
+    public void sendAdminLoginEmail(String to, String name, String ip, String lang, String location) {
         Map<String, Object> templateModel = Map.of(
                 "name", name,
-                "ip", ip);
+                "ip", ip,
+                "location", location);
         String subject = mailMessageSource.getMessage("adminLogin.subject", null, Locale.of(lang));
 
         htmlEmailService.createHtmlEmail(to, subject, "adminLogin", templateModel, lang);

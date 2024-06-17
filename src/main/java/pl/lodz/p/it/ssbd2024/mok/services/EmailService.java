@@ -29,7 +29,7 @@ public interface EmailService {
 
     void sendAccountDeletedEmail(String to, String name, String lang);
 
-    void sendAdminLoginEmail(String to, String name, String ip, String lang);
+    void sendAdminLoginEmail(String to, String name, String ip, String lang, String location);
 
     void sendOTPEmail(String to, String name, String otp, String lang);
 

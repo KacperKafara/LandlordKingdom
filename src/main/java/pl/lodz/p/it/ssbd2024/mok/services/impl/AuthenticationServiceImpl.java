@@ -9,6 +9,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestClient;
+import org.springframework.web.client.UnknownHttpStatusCodeException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
@@ -26,6 +29,7 @@ import pl.lodz.p.it.ssbd2024.mok.services.UserService;
 import pl.lodz.p.it.ssbd2024.mok.services.VerificationTokenService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
 import pl.lodz.p.it.ssbd2024.util.DateUtils;
+import pl.lodz.p.it.ssbd2024.util.IpGeolocation;
 
 import java.security.InvalidKeyException;
 import java.time.Duration;
@@ -130,7 +134,24 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         List<String> roles = getUserRoles(user);
 
         if (roles.contains("ADMINISTRATOR")) {
-            emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage());
+            RestClient defaultClient = RestClient.create();
+
+            IpGeolocation geolocation = null;
+            try {
+                geolocation = defaultClient.get().uri("https://ipinfo.io/" + ip + "?token=84dbd02f50d309").retrieve().body(IpGeolocation.class);
+            } catch (HttpServerErrorException | UnknownHttpStatusCodeException e) {
+                log.debug("Failed to get geolocation for IP: {}, caused by: {}", ip, e.getMessage());
+            }
+            if(geolocation != null) {
+                String location =
+                        (geolocation.getCity() != null ? geolocation.getCity() + ", " : " ")
+                        + (geolocation.getRegion() != null ? geolocation.getRegion()+ ", " : " ")
+                        + (geolocation.getCountry() != null ? geolocation.getCountry() : " ");
+                emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage(), location);
+            } else {
+                emailService.sendAdminLoginEmail(user.getEmail(), user.getFirstName(), ip, user.getLanguage(), "");
+            }
+
         }
 
         String jwt = jwtService.generateToken(verificationToken.getUser().getId(), verificationToken.getUser().getLogin(), getUserRoles(verificationToken.getUser()));
