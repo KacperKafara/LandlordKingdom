@@ -462,6 +462,7 @@ const errors = {
   roleRequestAlreadyExists: "Wniosek o rolę już istnieje",
   userAlreadyHasRole: "Użytkownik już ma tę rolę",
   applicationExists: "Aplikacja do tego lokalu już istnieje",
+  imageNotFound: "Nie znaleziono obrazka",
 } satisfies {
   [key in ExceptionCode]: string;
 };

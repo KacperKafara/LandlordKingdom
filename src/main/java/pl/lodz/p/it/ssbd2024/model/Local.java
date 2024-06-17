@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +63,10 @@ public class Local extends AbstractEntity {
     @Column(name = "next_rental_fee", precision = 10, scale = 2)
     private BigDecimal nextRentalFee;
 
+    @Setter
+    @Column(name = "images")
+    @OneToMany(mappedBy = "local")
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "local")
     private List<Rent> rents = new ArrayList<>();

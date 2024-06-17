@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 
 public class ErrorCodes {
+
+
     private ErrorCodes() {
     }
 
@@ -53,4 +55,5 @@ public class ErrorCodes {
     public static final String RENT_ENDED = "rentEnded";
     public static final String PAYMENT_ALREADY_EXISTS = "paymentAlreadyExists";
     public static final String LOCAL_CREATION_ERROR = "localCreationFailed";
+    public static final String IMAGE_NOT_FOUND = "imageNotFound";
 }
