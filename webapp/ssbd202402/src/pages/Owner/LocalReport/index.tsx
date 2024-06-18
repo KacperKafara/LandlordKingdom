@@ -40,72 +40,68 @@ const LocalReportPage: FC = () => {
       0
     ) ?? 0;
 
-  console.log(marginFeeSum);
-
   return (
-    <div className="flex justify-center">
-      <div className="flex w-10/12 flex-col gap-4">
-        <div className="mt-10 flex flex-row items-center justify-between">
-          {breadcrumbs}
-          <RefreshQueryButton queryKeys={["localReport"]} />
-        </div>
-        <div className="flex flex-row gap-4">
-          <Card className="w-2/3">
-            <CardHeader className="mb-4">
-              <CardTitle>{t("localReport.localSummary")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-10 text-2xl">
-                <DataField
-                  label={t("localReport.totalMarginFees")}
-                  value={
-                    toLocaleFixed(marginFeeSum ? marginFeeSum : 0) +
-                    " " +
-                    t("currency")
-                  }
-                />
-                <DataField
-                  label={t("localReport.rentCount")}
-                  value={report?.rentCount ?? 0}
-                />
-                <DataField
-                  className="col-span-2"
-                  label={t("localReport.totalRentalFees")}
-                  value={
-                    toLocaleFixed(variableFeeSum + rentalFeeSum) +
-                    " " +
-                    t("currency")
-                  }
-                />
-                <DataField
-                  label={t("localReport.longestRentDays")}
-                  value={report?.longestRentDays ?? 0}
-                />
-                <DataField
-                  label={t("localReport.shortestRentDays")}
-                  value={report?.shortestRentDays ?? 0}
-                />
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="w-1/3">
-            <CardHeader>
-              <CardTitle>{t("localReport.summaryPieChart")}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ReportPieChart report={report} />
-            </CardContent>
-          </Card>
-        </div>
-        <Card className="mb-10">
-          <CardHeader>
-            <CardTitle>{t("localReport.summaryBarChart")}</CardTitle>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-row items-center justify-between">
+        {breadcrumbs}
+        <RefreshQueryButton queryKeys={["localReport"]} />
+      </div>
+      <div className="flex flex-row gap-4">
+        <Card className="w-2/3">
+          <CardHeader className="mb-4">
+            <CardTitle>{t("localReport.localSummary")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <ReportComboChart report={report} />
+            <div className="grid grid-cols-2 gap-10 text-2xl">
+              <DataField
+                label={t("localReport.totalMarginFees")}
+                value={
+                  toLocaleFixed(marginFeeSum ? marginFeeSum : 0) +
+                  " " +
+                  t("currency")
+                }
+              />
+              <DataField
+                label={t("localReport.rentCount")}
+                value={report?.rentCount ?? 0}
+              />
+              <DataField
+                className="col-span-2"
+                label={t("localReport.totalRentalFees")}
+                value={
+                  toLocaleFixed(variableFeeSum + rentalFeeSum) +
+                  " " +
+                  t("currency")
+                }
+              />
+              <DataField
+                label={t("localReport.longestRentDays")}
+                value={report?.longestRentDays ?? 0}
+              />
+              <DataField
+                label={t("localReport.shortestRentDays")}
+                value={report?.shortestRentDays ?? 0}
+              />
+            </div>
+          </CardContent>
+        </Card>
+        <Card className="w-1/3">
+          <CardHeader>
+            <CardTitle>{t("localReport.summaryPieChart")}</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ReportPieChart report={report} />
           </CardContent>
         </Card>
       </div>
+      <Card className="mb-10">
+        <CardHeader>
+          <CardTitle>{t("localReport.summaryBarChart")}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ReportComboChart report={report} />
+        </CardContent>
+      </Card>
     </div>
   );
 };
