@@ -58,6 +58,7 @@ export const useUserStore = create<UserStore>((set) => ({
   clearToken: () =>
     set(() => {
       localStorage.removeItem("token");
+      localStorage.removeItem("activeRole");
       return {
         token: undefined,
         id: undefined,

@@ -464,6 +464,8 @@ const errors = {
 const notFoundPage = {
   title: "Not Found",
   description: "The page you are looking for does not exist.",
+  login: "Login",
+  home: "Home",
 };
 
 const ownerLocals = {
