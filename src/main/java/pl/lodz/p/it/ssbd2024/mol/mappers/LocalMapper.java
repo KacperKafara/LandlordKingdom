@@ -160,4 +160,11 @@ public class LocalMapper {
                 AddressMapper.toAddressResponse(local.getAddress())
         );
     }
+
+    public static GetUnapprovedLocalPageResponse toGetUnapprovedLocalPageResponse(Page<Local> page) {
+        return new GetUnapprovedLocalPageResponse(
+                page.getTotalPages(),
+                page.map(LocalMapper::toGetAllLocalsResponse).toList()
+        );
+    }
 }

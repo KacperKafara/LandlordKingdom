@@ -88,8 +88,8 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public List<Local> getUnapprovedLocals() {
-        return localRepository.findAllByState(LocalState.UNAPPROVED);
+    public Page<Local> getUnapprovedLocals(Pageable pageable) {
+        return localRepository.findAllByState(pageable, LocalState.UNAPPROVED);
     }
 
     @Override

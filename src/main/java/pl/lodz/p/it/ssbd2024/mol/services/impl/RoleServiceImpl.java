@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,8 +42,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public List<RoleRequest> getAll() {
-        return roleRequestRepository.findAll();
+    public Page<RoleRequest> getAll(Pageable pageable) {
+        return roleRequestRepository.findAll(pageable);
     }
 
     @Override

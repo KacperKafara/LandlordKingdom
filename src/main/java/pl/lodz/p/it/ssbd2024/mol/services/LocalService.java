@@ -23,7 +23,7 @@ public interface LocalService {
 
     List<Local> getActiveLocals();
 
-    List<Local> getUnapprovedLocals();
+    Page<Local> getUnapprovedLocals(Pageable pageable);
 
     Page<Local> getOwnLocals(UUID id, Pageable pageable, String state);
 

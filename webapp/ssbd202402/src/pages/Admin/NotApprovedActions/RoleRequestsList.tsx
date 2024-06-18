@@ -1,3 +1,4 @@
+import { LoadingData } from "@/components/LoadingData";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -12,12 +13,18 @@ import {
   useGetRoleRequests,
   useRejectRoleRequest,
 } from "@/data/useRolesRequset";
+import { PageChangerComponent } from "@/pages/Components/PageChangerComponent";
 import { t } from "i18next";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RoleRequestsList: FC = () => {
-  const { roleRequests } = useGetRoleRequests();
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState(8);
+  const { roleRequestsPage, isLoading } = useGetRoleRequests({
+    pageNumber,
+    pageSize,
+  });
   const { acceptRoleRequest } = useAcceptRoleRequest();
   const { rejectRoleRequest } = useRejectRoleRequest();
   const navigate = useNavigate();
@@ -30,6 +37,12 @@ const RoleRequestsList: FC = () => {
     await rejectRoleRequest(id);
   };
 
+  if (!roleRequestsPage || isLoading) {
+    return <LoadingData />;
+  }
+
+  const roleRequests = roleRequestsPage?.requests;
+
   return (
     <>
       <Table>
@@ -39,8 +52,6 @@ const RoleRequestsList: FC = () => {
             <TableHead>{t("userListPage.email")}</TableHead>
             <TableHead>{t("userListPage.firstName")}</TableHead>
             <TableHead>{t("userListPage.lastName")}</TableHead>
-            <TableHead className="w-1"></TableHead>
-            <TableHead className="w-1"></TableHead>
             <TableHead className="w-1"></TableHead>
           </TableRow>
         </TableHeader>
@@ -52,23 +63,21 @@ const RoleRequestsList: FC = () => {
                 <TableCell>{request.email}</TableCell>
                 <TableCell>{request.firstName}</TableCell>
                 <TableCell>{request.lastName}</TableCell>
-                <TableCell>
+                <TableCell className="flex justify-end gap-2">
                   <Button
                     onClick={() => navigate(`/admin/users/${request.userId}`)}
                     variant="secondary"
                   >
                     {t("notApprovedActionsPage.show")}
                   </Button>
-                </TableCell>
-                <TableCell>
+
                   <Button
                     onClick={() => approveRole(request.id)}
                     variant="default"
                   >
                     {t("notApprovedActionsPage.approve")}
                   </Button>
-                </TableCell>
-                <TableCell>
+
                   <Button
                     onClick={() => rejectRole(request.id)}
                     variant="destructive"
@@ -87,6 +96,14 @@ const RoleRequestsList: FC = () => {
           )}
         </TableBody>
       </Table>
+      <PageChangerComponent
+        totalPages={roleRequestsPage.totalPages}
+        pageNumber={pageNumber}
+        pageSize={pageSize}
+        setPageNumber={setPageNumber}
+        setNumberOfElements={setPageSize}
+        className="m-3 flex justify-between"
+      />
     </>
   );
 };
