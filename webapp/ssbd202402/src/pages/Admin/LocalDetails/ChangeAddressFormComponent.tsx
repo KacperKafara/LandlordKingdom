@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 import { useEditLocalAddress } from "@/data/local/useEditLocalAddress";
 import { useGetLocalDetailsForAdmin } from "@/data/local/useGetLocalDetailsForAdmin";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,7 +56,7 @@ const ChangeAddressFormComponent: FC<ChangeAddressFormComponentProps> = ({
 
   const form = useForm<AddressSchema>({
     resolver: zodResolver(getAddressSchema(t)),
-    defaultValues: {
+    values: {
       country: data?.data.address.country || "",
       city: data?.data.address.city || "",
       street: data?.data.address.street || "",
@@ -64,8 +65,17 @@ const ChangeAddressFormComponent: FC<ChangeAddressFormComponentProps> = ({
     },
   });
 
-  const handleFormSubmit = form.handleSubmit((data) => {
-    editLocalAddress({ id: localId, address: data });
+  const handleFormSubmit = form.handleSubmit((address) => {
+    let etag = data?.headers.etag;
+    if (!etag) {
+      toast({
+        variant: "destructive",
+        title: t("updateLocalPage.errorTitle"),
+      });
+      return;
+    }
+    etag = etag.substring(1, etag.length - 1);
+    editLocalAddress({ id: localId, address: address, ifMatch: etag });
   });
 
   return (
