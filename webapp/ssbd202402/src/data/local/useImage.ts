@@ -57,7 +57,7 @@ export const useGetLocalImages = (id: string) => {
     queryKey: ["localImages", id],
     queryFn: async () => {
       try {
-        const response = await api.get(`/images/local/${id}`);
+        const response = await api.get<Array<string>>(`/images/local/${id}`);
         return response.data;
       } catch (error) {
         const axiosError = error as AxiosError;

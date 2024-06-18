@@ -205,7 +205,7 @@ const OwnLocalDetailsPage: FC = () => {
                   <LocalApplications />
                 </TabsContent>
                 <TabsContent value="uploadImage">
-                  <UploadImageCard id={id!} images={imagesIds} />
+                  <UploadImageCard id={id!} images={imagesIds ?? []} />
                 </TabsContent>
               </Tabs>
             </div>
