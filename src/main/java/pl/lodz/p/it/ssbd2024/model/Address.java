@@ -1,6 +1,9 @@
 package pl.lodz.p.it.ssbd2024.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,14 +21,23 @@ import java.util.List;
 @Table(name = "addresses", uniqueConstraints = {@UniqueConstraint(columnNames = {"number", "street", "city", "zip", "country"})})
 public class Address extends AbstractEntity {
     @Column(name = "country", nullable = false, length = 100)
+    @NotNull
+    @Size(min = 2, max = 100)
     private String country;
     @Column(name = "number", nullable = false, length = 10)
+    @NotNull
+    @Size(min = 1, max = 20)
     private String number;
     @Column(name = "street", nullable = false, length = 100)
+    @NotNull
+    @Size(min = 2, max = 100)
     private String street;
     @Column(name = "city", nullable = false, length = 100)
+    @NotNull
+    @Size(min = 2, max = 50)
     private String city;
     @Column(name = "zip", nullable = false, length = 10)
+    @Pattern(regexp = "\\d{2}-\\d{5}")
     private String zip;
 
     @OneToMany(mappedBy = "address")
