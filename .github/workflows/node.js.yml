@@ -25,13 +25,11 @@ jobs:
       - name: Setup node dependencies
         run: yarn
       - name: Build React App
-        run: |
-          yarn build
-          ls -la
+        run: yarn build
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          path: dist
+          path: webapp/ssbd202402/dist
           name: react-app
 
   build-spring-app:
@@ -64,7 +62,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: react-app
-          path: dist
+          path: webapp/ssbd202402/dist
 
       - name: Deploy to AWS
         run: |
