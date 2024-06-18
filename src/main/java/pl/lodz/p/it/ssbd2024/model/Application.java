@@ -1,6 +1,7 @@
 package pl.lodz.p.it.ssbd2024.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,10 +20,12 @@ import lombok.NoArgsConstructor;
 public class Application extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = "tenant_id", nullable = false, updatable = false)
+    @NotNull
     private Tenant tenant;
 
     @ManyToOne
     @JoinColumn(name = "local_id", nullable = false, updatable = false)
+    @NotNull
     private Local local;
 
     public Application(Tenant tenant, Local local) {

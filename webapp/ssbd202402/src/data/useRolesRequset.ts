@@ -1,20 +1,34 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import useAxiosPrivate from "./useAxiosPrivate";
 import { AxiosError } from "axios";
-import { useToast } from "@/components/ui/use-toast";
+import { toast, useToast } from "@/components/ui/use-toast";
 import { t } from "i18next";
 import { RoleRequest } from "@/types/roleRequest/RoleRequest";
 import { ErrorCode } from "@/@types/errorCode";
 
-const useGetRoleRequests = () => {
+interface RoleRequestsRequest {
+  pageNumber: number;
+  pageSize: number;
+}
+
+interface RoleRequestsResponse {
+  requests: RoleRequest[];
+  totalPages: number;
+}
+
+const useGetRoleRequests = (request: RoleRequestsRequest) => {
   const { api } = useAxiosPrivate();
-  const { toast } = useToast();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["roleRequests"],
+    queryKey: ["roleRequests", request.pageNumber, request.pageSize],
     queryFn: async () => {
       try {
-        const result = await api.get("/roles");
+        const result = await api.get<RoleRequestsResponse>("/roles", {
+          params: {
+            page: request.pageNumber,
+            size: request.pageSize,
+          },
+        });
         return result.data;
       } catch (error) {
         const axiosError = error as AxiosError;
@@ -30,7 +44,7 @@ const useGetRoleRequests = () => {
     },
   });
 
-  return { roleRequests: data as RoleRequest[], isLoading };
+  return { roleRequestsPage: data, isLoading };
 };
 
 const useAcceptRoleRequest = () => {

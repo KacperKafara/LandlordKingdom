@@ -81,14 +81,14 @@ const Locals: FC = () => {
   }
 
   return (
-    <div className="relative mt-1 flex h-full flex-col justify-center">
-      {breadCrumbs}
-      <div className="flex h-full justify-center">
+    <div className="relative mt-1 flex h-full flex-col items-center justify-center">
+      <div className="self-start">{breadCrumbs}</div>
+      <div className="flex h-full max-w-[1920px] justify-center">
         <div className="flex h-full w-11/12 flex-col justify-center">
           <Button asChild className="self-end">
             <NavLink to="report">Report</NavLink>
           </Button>
-          <ul className="flex flex-1 flex-wrap gap-2 py-4">
+          <ul className="flex flex-1 flex-wrap justify-center gap-2 py-4">
             {locals?.length === 0 && (
               <div className="flex flex-col">
                 <p className="text-2xl">
@@ -98,7 +98,10 @@ const Locals: FC = () => {
             )}
             {locals?.length != 0 &&
               locals?.map((local) => (
-                <li key={local.id} className="w-full min-w-[35rem] flex-1">
+                <li
+                  key={local.id}
+                  className="min-w-[35rem] max-w-[35rem] flex-1 "
+                >
                   <Card className="relative">
                     <Button
                       onClick={() => navigate(`local/${local.id}`)}

@@ -3,6 +3,8 @@ package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 import com.atomikos.icatch.RollbackException;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceException;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
@@ -34,6 +36,15 @@ public class GlobalExceptionsHandler {
         StringBuilder sb = new StringBuilder();
         for (FieldError error : e.getFieldErrors()) {
             sb.append(error.getDefaultMessage()).append(", ");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ExceptionMessages.VALIDATION_ERROR + sb, ErrorCodes.VALIDATION_ERROR));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    ResponseEntity<ExceptionResponse> handleJakartaConstraintViolationException(ConstraintViolationException e) {
+        StringBuilder sb = new StringBuilder();
+        for (ConstraintViolation<?> error : e.getConstraintViolations()) {
+            sb.append(error.getMessage()).append(", ");
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ExceptionMessages.VALIDATION_ERROR + sb, ErrorCodes.VALIDATION_ERROR));
     }

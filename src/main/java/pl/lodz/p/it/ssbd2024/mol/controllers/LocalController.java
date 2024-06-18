@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -57,9 +58,11 @@ public class LocalController {
 
     @GetMapping("/unapproved")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<List<GetAllLocalsResponse>> getUnapprovedLocals() {
-        List<Local> unapprovedLocals = localService.getUnapprovedLocals();
-        return ResponseEntity.ok(unapprovedLocals.stream().map(LocalMapper::toGetAllLocalsResponse).toList());
+    public ResponseEntity<GetUnapprovedLocalPageResponse> getUnapprovedLocals(@RequestParam(defaultValue = "0") int page,
+                                                                          @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Local> unapprovedLocals = localService.getUnapprovedLocals(pageable);
+        return ResponseEntity.ok(LocalMapper.toGetUnapprovedLocalPageResponse(unapprovedLocals));
     }
 
     @PostMapping
