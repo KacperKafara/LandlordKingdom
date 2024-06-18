@@ -633,6 +633,7 @@ const ownLocalDetails = {
   leaveLocalDescription:
     "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
   showApplications: "Przeglądaj aplikacje",
+  state: "Stan lokalu",
 };
 
 const activeLocals = {
