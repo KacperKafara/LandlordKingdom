@@ -37,7 +37,7 @@ public class Address extends AbstractEntity {
     @Size(min = 2, max = 50)
     private String city;
     @Column(name = "zip", nullable = false, length = 10)
-    @Pattern(regexp = "\\d{2}-\\d{5}")
+    @Pattern(regexp = "\\d{2}-\\d{3}")
     private String zip;
 
     @OneToMany(mappedBy = "address")
