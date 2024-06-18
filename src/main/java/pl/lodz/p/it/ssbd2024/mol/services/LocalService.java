@@ -23,7 +23,7 @@ public interface LocalService {
 
     List<Local> getActiveLocals();
 
-    List<Local> getUnapprovedLocals();
+    Page<Local> getUnapprovedLocals(Pageable pageable);
 
     Page<Local> getOwnLocals(UUID id, Pageable pageable, String state);
 
@@ -33,7 +33,7 @@ public interface LocalService {
 
     Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException;
 
-    Local setFixedFee(UUID localId, UUID ownerId, BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException;
+    Local setFixedFee(UUID localId, UUID ownerId, BigDecimal marginFee, BigDecimal rentalFee, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
     Page<Local> getAllLocals(Pageable pageable, String state, String ownerLogin);
 
