@@ -62,8 +62,16 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: react-app
-          path: webapp/ssbd202402/dist
+          path: build
 
       - name: Deploy to AWS
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
         run: |
           ls -la
+          echo "$SSH_PRIVATE_KEY" > ssh_key.pem
+          chmod 600 ssh_key.pem
+          ssh -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "rm -rf /usr/share/nginx/html/*"
+          scp -i ssh_key.pem -r build/* $SSH_USERNAME@$SSH_HOST:/usr/share/nginx/html/
