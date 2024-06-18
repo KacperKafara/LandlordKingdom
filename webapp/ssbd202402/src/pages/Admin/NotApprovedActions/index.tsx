@@ -48,7 +48,7 @@ const NotApprovedActionsPage: FC = () => {
             />
           </div>
 
-          <Card className="mt-2 w-full">
+          <Card className="my-2 w-full">
             <TabsContent value="locals">
               <LocalAcceptList />
             </TabsContent>

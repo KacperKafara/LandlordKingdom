@@ -1,10 +1,15 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
+import org.springframework.data.domain.Page;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.model.Timezone;
 import pl.lodz.p.it.ssbd2024.mol.dto.GetRoleRequestResponse;
+import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestPageResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestResponse;
 import pl.lodz.p.it.ssbd2024.util.DateUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class RoleRequestMapper {
 
@@ -22,5 +27,12 @@ public class RoleRequestMapper {
                 roleRequest.getTenant().getUser().getFirstName(),
                 roleRequest.getTenant().getUser().getLastName(),
                 roleRequest.getTenant().getUser().getId());
+    }
+
+    public static RoleRequestPageResponse toRoleRequestPageResponse(Page<RoleRequest> page) {
+       return new RoleRequestPageResponse(
+               page.getTotalPages(),
+               page.map(RoleRequestMapper::toRoleRequestResponse).toList()
+       );
     }
 }

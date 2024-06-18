@@ -2,6 +2,9 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
+import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestPageResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestResponse;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
@@ -30,9 +34,11 @@ public class RoleController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<List<RoleRequestResponse>> getRoleRequests() {
-        List<RoleRequest> requests = roleService.getAll();
-        return ResponseEntity.status(HttpStatus.OK).body(requests.stream().map(RoleRequestMapper::toRoleRequestResponse).toList());
+    public ResponseEntity<RoleRequestPageResponse> getRoleRequests(@RequestParam(defaultValue = "0") int page,
+                                                                   @RequestParam(defaultValue = "8") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<RoleRequest> requests = roleService.getAll(pageable);
+        return ResponseEntity.status(HttpStatus.OK).body(RoleRequestMapper.toRoleRequestPageResponse(requests));
     }
 
     @PostMapping("/{id}")
