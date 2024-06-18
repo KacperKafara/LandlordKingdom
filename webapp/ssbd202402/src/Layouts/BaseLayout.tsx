@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { FC } from "react";
+import { FC, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink } from "react-router-dom";
 import { Role, useUserStore } from "@/store/userStore";
@@ -19,6 +19,13 @@ import { ModeToggle } from "@/components/ui/toggle-theme";
 import { useChangeRoleView } from "@/data/useChangeRoleView";
 import RoleRequestDialog from "./RoleRequestDialog";
 import { useDialogStore } from "@/store/dialogStore";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 export type NavigationLink = {
   path: string;
@@ -73,7 +80,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
   const { roles, activeRole, setActiveRole } = useUserStore();
   const { roleChanged } = useChangeRoleView();
   const { openDialog } = useDialogStore();
-
+  const [open, setOpen] = useState(false);
   const role_mapping: { [key: string]: string } = {
     ADMINISTRATOR: "admin",
     TENANT: "tenant",
@@ -95,12 +102,65 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
           config[type].nav
         )}
       >
-        <div className="text-2xl font-bold">
+        <div className="block text-xl xl:hidden">
+          <Drawer direction="left" onOpenChange={setOpen} open={open}>
+            <DrawerTrigger onClick={() => setOpen(true)}>
+              <GiHamburgerMenu />
+            </DrawerTrigger>
+            <DrawerContent className="h-screen w-2/5 min-w-48 rounded-none pl-5">
+              <div className="flex flex-col gap-2">
+                <DrawerClose className="self-end">
+                  <Button
+                    onClick={() => setOpen(false)}
+                    variant="ghost"
+                    className="h-4 w-2 hover:bg-inherit"
+                  >
+                    X
+                  </Button>
+                </DrawerClose>
+                {links.map((link, idx) => (
+                  <NavLink
+                    key={idx}
+                    to={link.path}
+                    className={cn("block w-full hover:bg-accent")}
+                    onClick={() => setOpen(false)}
+                  >
+                    {i18n.exists(`navLinks.${link.label}`)
+                      ? //  @ts-expect-error error handled
+                        t(`navLinks.${link.label}`)
+                      : link.label}
+                  </NavLink>
+                ))}
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
+        <div className="hidden text-2xl font-bold xl:block">
           <p onClick={() => onLogoClick()} className="hover:cursor-pointer">
             {t("logoPlaceholder")}
           </p>
         </div>
         <div className="flex flex-row items-center gap-3">
+          <div className="hidden gap-3 xl:flex">
+            {links.map((link, idx) => (
+              <NavLink
+                key={link.path + idx}
+                to={link.path}
+                className={({ isActive }) =>
+                  cn(
+                    "rounded-md px-2 py-1",
+                    colors.hover,
+                    isActive && colors.accentColor
+                  )
+                }
+              >
+                {i18n.exists(`navLinks.${link.label}`)
+                  ? //  @ts-expect-error error handled
+                    t(`navLinks.${link.label}`)
+                  : link.label}
+              </NavLink>
+            ))}
+          </div>
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -143,7 +203,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          <MyAccountButton links={links} hover={colors.hover} type={type} />
+          <MyAccountButton hover={colors.hover} />
         </div>
       </nav>
       <main className="flex-1 px-10">{children}</main>
