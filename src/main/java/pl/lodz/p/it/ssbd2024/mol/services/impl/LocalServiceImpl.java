@@ -140,8 +140,12 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local setFixedFee(UUID localId, UUID ownerId,  BigDecimal marginFee, BigDecimal rentalFee) throws NotFoundException {
+    public Local setFixedFee(UUID localId, UUID ownerId,  BigDecimal marginFee, BigDecimal rentalFee, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         Local local = localRepository.findByOwner_User_IdAndId(ownerId, localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+
+        if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.LOCAL_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
+        }
 
         if (local.getState() == LocalState.RENTED) {
             local.setNextMarginFee(marginFee);

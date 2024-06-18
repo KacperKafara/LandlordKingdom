@@ -181,6 +181,7 @@ const OwnLocalDetailsPage: FC = () => {
                           initialMarginFee={
                             data.data.nextMarginFee ?? data.data.marginFee
                           }
+                          etag={data.headers.etag! ?? ""}
                         />
                       </div>
                     </CardContent>
