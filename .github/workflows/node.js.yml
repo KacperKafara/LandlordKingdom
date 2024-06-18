@@ -25,9 +25,11 @@ jobs:
       - name: Setup node dependencies
         run: yarn
       - name: Build React App
-        run: yarn build
+        run: |
+          yarn build
+          ls -la
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           path: dist
           name: react-app
@@ -59,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: build-react-app
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: react-app
           path: dist
