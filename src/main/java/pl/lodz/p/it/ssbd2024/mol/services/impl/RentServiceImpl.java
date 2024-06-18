@@ -47,7 +47,7 @@ public class RentServiceImpl implements RentService {
     public Rent getTenantRent(UUID rentId, UUID userId) throws NotFoundException {
         Tenant tenant = tenantRepository.findByUserId(userId).get();
         return rentRepository.findByIdAndTenantId(rentId, tenant.getId())
-                .orElseThrow(() -> new NotFoundException(RentMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(RentMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
     }
 
     @Override
