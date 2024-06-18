@@ -87,29 +87,37 @@ const AddLocalForm: FC = () => {
                                         <FormItem>
                                             <FormLabel>{t("addLocalPage.name")}</FormLabel>
                                             <FormControl>
-                                                <Input {...field} />
+                                                <textarea
+                                                    {...field}
+                                                    rows={4}
+                                                    className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
                                 <FormField
                                     control={form.control}
                                     name="description"
-                                    render={({ field }) => (
+                                    render={({field}) => (
                                         <FormItem>
                                             <FormLabel>{t("addLocalPage.description")}</FormLabel>
                                             <FormControl>
-                                                <Input {...field} />
+                                                <textarea
+                                                    {...field}
+                                                    rows={4}
+                                                    className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                                                />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormMessage/>
                                         </FormItem>
                                     )}
                                 />
                                 <FormField
                                     control={form.control}
                                     name="size"
-                                    render={({ field }) => (
+                                    render={({field}) => (
                                         <FormItem>
                                             <FormLabel>{t("addLocalPage.size")}</FormLabel>
                                             <FormControl>
