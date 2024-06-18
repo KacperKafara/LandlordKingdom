@@ -38,13 +38,13 @@ const OwnApplicationsPage: FC = () => {
   return (
     <div className="relative pt-2">
       {breadcrumbs}
-      <div className="relative flex h-full justify-center pt-2">
+      <div className="relative flex h-full pt-2">
         {isLoading && <RefreshCw className="animate-spin" />}
         {!isLoading && (!applications || applications.length === 0) && (
           <div>{t("tenantApplications.applicationsNotFund")}</div>
         )}
         {!isLoading && applications && applications.length > 0 && (
-          <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
+          <div className="my-3 grid grid-cols-1 gap-2 md:grid-cols-2">
             {applications.map((application) => (
               <Card className="relative" key={application.id}>
                 <Button

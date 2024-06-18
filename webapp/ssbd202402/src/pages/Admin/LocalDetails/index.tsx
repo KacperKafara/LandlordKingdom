@@ -81,15 +81,11 @@ const LocalDetailsPage: FC = () => {
                     />
                     <DataField
                       label={t("localDetails.rentalFee")}
-                      value={
-                        toLocaleFixed(data.data.rentalFee) + " " + t("currency")
-                      }
+                      value={toLocaleFixed(data.data.rentalFee)}
                     />
                     <DataField
                       label={t("localDetails.marginFee")}
-                      value={
-                        toLocaleFixed(data.data.marginFee) + " " + t("currency")
-                      }
+                      value={toLocaleFixed(data.data.marginFee)}
                     />
                     <DataField
                       label={t("localDetails.state")}

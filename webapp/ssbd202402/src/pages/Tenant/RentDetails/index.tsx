@@ -36,59 +36,57 @@ const RentDetailsPage: FC = () => {
     },
   ]);
   return (
-    <div className="flex justify-center">
-      <div className="flex w-10/12 flex-col pt-10">
-        {breadcrumbs}
-        <Tabs defaultValue="details" className="mt-2">
-          <div className="flex flex-row justify-between">
-            <TabsList>
-              <TabsTrigger value="details">
-                {t("rentDetailsPage.details")}
-              </TabsTrigger>
-              <TabsTrigger value="payments">
-                {t("rentDetailsPage.payments")}
-              </TabsTrigger>
-              <TabsTrigger value="fixedFees">
-                {t("rentDetailsPage.fixedFees")}
-              </TabsTrigger>
-              <TabsTrigger value="variableFees">
-                {t("rentDetailsPage.variableFees")}
-              </TabsTrigger>
-            </TabsList>
-            {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
-          </div>
-          <TabsContent value="details">
-            <RentInformationCard rent={rent} />
-          </TabsContent>
-          <TabsContent value="payments">
-            {rent && (
-              <RentPayments
-                id={id!}
-                startDate={rent.startDate}
-                endDate={rent.endDate}
-              />
-            )}
-          </TabsContent>
-          <TabsContent value="fixedFees">
-            {rent && (
-              <RentFixedFees
-                id={id!}
-                startDate={rent.startDate}
-                endDate={rent.endDate}
-              />
-            )}
-          </TabsContent>
-          <TabsContent value="variableFees">
-            {rent && (
-              <RentVariableFees
-                id={id!}
-                startDate={rent.startDate}
-                endDate={rent.endDate}
-              />
-            )}
-          </TabsContent>
-        </Tabs>
-      </div>
+    <div className="flex flex-col">
+      {breadcrumbs}
+      <Tabs defaultValue="details" className="mt-2">
+        <div className="flex flex-row justify-between">
+          <TabsList>
+            <TabsTrigger value="details">
+              {t("rentDetailsPage.details")}
+            </TabsTrigger>
+            <TabsTrigger value="payments">
+              {t("rentDetailsPage.payments")}
+            </TabsTrigger>
+            <TabsTrigger value="fixedFees">
+              {t("rentDetailsPage.fixedFees")}
+            </TabsTrigger>
+            <TabsTrigger value="variableFees">
+              {t("rentDetailsPage.variableFees")}
+            </TabsTrigger>
+          </TabsList>
+          {rent && <CreateVariableFeeDialog rentId={rent?.id} />}
+        </div>
+        <TabsContent value="details">
+          <RentInformationCard rent={rent} />
+        </TabsContent>
+        <TabsContent value="payments">
+          {rent && (
+            <RentPayments
+              id={id!}
+              startDate={rent.startDate}
+              endDate={rent.endDate}
+            />
+          )}
+        </TabsContent>
+        <TabsContent value="fixedFees">
+          {rent && (
+            <RentFixedFees
+              id={id!}
+              startDate={rent.startDate}
+              endDate={rent.endDate}
+            />
+          )}
+        </TabsContent>
+        <TabsContent value="variableFees">
+          {rent && (
+            <RentVariableFees
+              id={id!}
+              startDate={rent.startDate}
+              endDate={rent.endDate}
+            />
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

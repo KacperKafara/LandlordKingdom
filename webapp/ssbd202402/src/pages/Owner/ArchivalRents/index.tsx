@@ -83,7 +83,7 @@ const ArchivalOwnerRentsPage: FC = () => {
                 />
                 <DataField
                   label={t("currentOwnerRents.balance")}
-                  value={toLocaleFixed(rent.balance) + " " + t("currency")}
+                  value={toLocaleFixed(rent.balance)}
                 />
                 <p className="col-span-2 my-3 text-xl font-bold">
                   {t("currentOwnerRents.tenant")}

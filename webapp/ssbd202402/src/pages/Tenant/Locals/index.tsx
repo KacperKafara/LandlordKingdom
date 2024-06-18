@@ -12,19 +12,30 @@ import { RefreshCw } from "lucide-react";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import DataField from "@/components/DataField.tsx";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import RefreshQueryButton from "@/components/RefreshQueryButton";
 
 const ActiveLocals: FC = () => {
   const { data: locals, isLoading } = useGetActiveLocals();
   const navigate = useNavigate();
 
+  const breadcrumbs = useBreadcrumbs([
+    { title: t("breadcrumbs.tenant"), path: "/tenant" },
+    { title: t("breadcrumbs.locals"), path: "/tenant/locals" },
+  ]);
+
   return (
-    <div className="flex h-full justify-center">
+    <div>
+      <div className="flex flex-row items-center justify-between">
+        {breadcrumbs}
+        <RefreshQueryButton queryKeys={["tenantOwnRents"]} />
+      </div>
       {isLoading && <RefreshCw className="animate-spin" />}
       {!isLoading && locals && locals.length === 0 && (
         <div>{t("activeLocals.error")}</div>
       )}
       {!isLoading && locals && locals.length > 0 && (
-        <div className="my-3 grid w-11/12 grid-cols-1 gap-2 md:grid-cols-2">
+        <div className="my-3 grid grid-cols-1 gap-2 md:grid-cols-2">
           {locals.map((local) => (
             <Card className="relative" key={local.id}>
               <Button

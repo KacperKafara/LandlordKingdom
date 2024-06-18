@@ -84,28 +84,18 @@ const OwnLocalDetailsPage: FC = () => {
                     />
                     <DataField
                       label={t("ownLocalDetails.rentalFee")}
-                      value={
-                        toLocaleFixed(data.data?.rentalFee ?? 0.0) +
-                        " " +
-                        t("currency")
-                      }
+                      value={toLocaleFixed(data.data?.rentalFee ?? 0.0)}
                     />
                     <DataField
                       label={t("ownLocalDetails.marginFee")}
-                      value={
-                        toLocaleFixed(data.data?.marginFee ?? 0.0) +
-                        " " +
-                        t("currency")
-                      }
+                      value={toLocaleFixed(data.data?.marginFee ?? 0.0)}
                     />
 
                     <DataField
                       label={t("ownLocalDetails.nextRentalFee")}
                       value={
                         data.data?.nextRentalFee != null
-                          ? toLocaleFixed(data.data.nextRentalFee) +
-                            " " +
-                            t("currency")
+                          ? toLocaleFixed(data.data.nextRentalFee)
                           : "-"
                       }
                     />
@@ -113,9 +103,7 @@ const OwnLocalDetailsPage: FC = () => {
                       label={t("ownLocalDetails.nextMarginFee")}
                       value={
                         data.data?.nextMarginFee != null
-                          ? toLocaleFixed(data.data.nextMarginFee) +
-                            " " +
-                            t("currency")
+                          ? toLocaleFixed(data.data.nextMarginFee)
                           : "-"
                       }
                     />

@@ -54,20 +54,12 @@ const AllLocalsReportPage: FC = () => {
             <div className="grid grid-cols-2 gap-10 text-2xl">
               <DataField
                 label={t("localReport.totalMarginFees")}
-                value={
-                  toLocaleFixed(marginFeeSum ? marginFeeSum : 0) +
-                  " " +
-                  t("currency")
-                }
+                value={toLocaleFixed(marginFeeSum ? marginFeeSum : 0)}
               />
               <DataField
                 className="col-span-2"
                 label={t("localReport.totalRentalFees")}
-                value={
-                  toLocaleFixed(variableFeeSum + rentalFeeSum) +
-                  " " +
-                  t("currency")
-                }
+                value={toLocaleFixed(variableFeeSum + rentalFeeSum)}
               />
             </div>
           </CardContent>

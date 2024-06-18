@@ -92,7 +92,7 @@ export const RentPayments: FC<RentPaymentProps> = ({
                     <TableCell>{index + 1 + pageSize * pageNumber}</TableCell>
                     <TableCell>{payment.date}</TableCell>
                     <TableCell className="text-right">
-                      {toLocaleFixed(payment.amount) + t("currency")}
+                      {toLocaleFixed(payment.amount)}
                     </TableCell>
                   </TableRow>
                 ))}
