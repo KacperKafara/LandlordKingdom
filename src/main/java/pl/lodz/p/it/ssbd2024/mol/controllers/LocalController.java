@@ -47,8 +47,12 @@ public class LocalController {
 
     @GetMapping("/active")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<GetActiveLocalsResponse>> getActiveLocals() {
-        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocals()));
+    public ResponseEntity<GetActiveLocalsResponsePage> getActiveLocals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocals(pageable)));
     }
 
     @GetMapping("/unapproved")

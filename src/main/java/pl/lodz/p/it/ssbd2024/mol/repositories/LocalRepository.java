@@ -48,6 +48,9 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     @PreAuthorize("isAuthenticated()")
     List<Local> findAllByState(LocalState localState);
 
+    @PreAuthorize("isAuthenticated()")
+    Page<Local> findAllByState(LocalState localState, Pageable pageable);
+
     @PreAuthorize("hasRole('OWNER')")
     Optional<Local> findByOwner_User_IdAndId(UUID userId, UUID id);
 

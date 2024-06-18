@@ -21,7 +21,7 @@ public interface LocalService {
 
     Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException;
 
-    List<Local> getActiveLocals();
+    Page<Local> getActiveLocals(Pageable pageable);
 
     List<Local> getUnapprovedLocals();
 
