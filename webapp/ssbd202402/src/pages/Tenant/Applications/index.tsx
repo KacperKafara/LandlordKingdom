@@ -11,7 +11,7 @@ import { useGetOwnApplications } from "@/data/tenant/useGetOwnApplications";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { RefreshCw } from "lucide-react";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 import DataField from "@/components/DataField";
@@ -25,10 +25,9 @@ const OwnApplicationsPage: FC = () => {
   const queryClient = useQueryClient();
   const { deleteApplication } = useDeleteApplication();
   const breadcrumbs = useBreadcrumbs([
-    { title: "Tenant", path: "/tenant" },
+    { title: t("breadcrumbs.tenant"), path: "/tenant" },
     { title: t("navLinks.applications"), path: "/tenant/applications" },
   ]);
-  const navigate = useNavigate();
 
   const handleRemoveApplication = async (id: string) => {
     await deleteApplication(id);
@@ -36,62 +35,55 @@ const OwnApplicationsPage: FC = () => {
   };
 
   return (
-    <div className="relative pt-2">
-      {breadcrumbs}
-      <div className="relative flex h-full pt-2">
-        {isLoading && <RefreshCw className="animate-spin" />}
-        {!isLoading && (!applications || applications.length === 0) && (
-          <div>{t("tenantApplications.applicationsNotFund")}</div>
-        )}
-        {!isLoading && applications && applications.length > 0 && (
-          <div className="my-3 grid grid-cols-1 gap-2 md:grid-cols-2">
-            {applications.map((application) => (
-              <Card className="relative" key={application.id}>
-                <Button
-                  className="absolute right-1 top-1"
-                  variant="ghost"
-                  onClick={() =>
-                    navigate(`/tenant/locals/${application.localId}`)
-                  }
-                >
-                  {t("tenantApplications.linkToLocal")}
-                </Button>
-                <CardHeader>
-                  <CardTitle className="text-2xl">
-                    {application.localName}
-                  </CardTitle>
-                  <CardDescription>
-                    {application.country} {application.city}{" "}
-                    {application.street}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2">
-                  <DataField
-                    label={t("tenantApplications.createdAt")}
-                    value={application.createdAt}
-                  />
-                </CardContent>
-                <CardFooter className="flex w-full justify-end gap-3">
-                  <ConfirmDialog
-                    dialogTitle={t("tenantApplications.deleteApplication")}
-                    dialogDescription={t(
-                      "tenantApplications.deleteApplicationDescription"
-                    )}
-                    buttonText={t("tenantApplications.deleteApplication")}
-                    confirmAction={async () =>
-                      await handleRemoveApplication(application.localId)
-                    }
-                    variant="destructive"
-                  />
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        )}
-      </div>
-      <div className="absolute -right-10 top-0">
+    <div>
+      <div className="flex flex-row items-center justify-between">
+        {breadcrumbs}
         <RefreshQueryButton queryKeys={["tenantOwnApplications"]} />
       </div>
+      {isLoading && <RefreshCw className="animate-spin" />}
+      {!isLoading && (!applications || applications.length === 0) && (
+        <div>{t("tenantApplications.applicationsNotFund")}</div>
+      )}
+      {!isLoading && applications && applications.length > 0 && (
+        <div className="grid grid-cols-3 gap-4">
+          {applications.map((application) => (
+            <Card className="relative" key={application.id}>
+              <CardHeader>
+                <CardTitle className="text-2xl">
+                  {application.localName}
+                </CardTitle>
+                <CardDescription>
+                  {application.country} {application.city} {application.street}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <DataField
+                  label={t("tenantApplications.createdAt")}
+                  value={application.createdAt}
+                />
+              </CardContent>
+              <CardFooter className="flex w-full justify-end gap-3">
+                <Button variant="secondary" asChild>
+                  <NavLink to={`/tenant/locals/${application.localId}`}>
+                    {t("tenantApplications.linkToLocal")}
+                  </NavLink>
+                </Button>
+                <ConfirmDialog
+                  dialogTitle={t("tenantApplications.deleteApplication")}
+                  dialogDescription={t(
+                    "tenantApplications.deleteApplicationDescription"
+                  )}
+                  buttonText={t("tenantApplications.deleteApplication")}
+                  confirmAction={async () =>
+                    await handleRemoveApplication(application.localId)
+                  }
+                  variant="destructive"
+                />
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
