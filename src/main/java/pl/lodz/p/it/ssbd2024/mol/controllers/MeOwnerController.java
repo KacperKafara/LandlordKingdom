@@ -153,12 +153,16 @@ public class MeOwnerController {
 
     @PatchMapping("/locals/{id}/fixed-fee")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<GetOwnLocalsResponse> setFixedFee(@PathVariable UUID id, @RequestBody @Valid SetFixedFeeRequest setFixedFeeRequest) throws NotFoundException {
+    public ResponseEntity<GetOwnLocalsResponse> setFixedFee(@PathVariable UUID id, @RequestBody @Valid SetFixedFeeRequest setFixedFeeRequest, @RequestHeader(HttpHeaders.IF_MATCH) String tagValue) throws NotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Jwt jwt = (Jwt) authentication.getPrincipal();
         UUID ownerId = UUID.fromString(jwt.getSubject());
-        Local local = localService.setFixedFee(id, ownerId, setFixedFeeRequest.marginFee(), setFixedFeeRequest.rentalFee());
-        return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponse(local));
+        try {
+            Local local = localService.setFixedFee(id, ownerId, setFixedFeeRequest.marginFee(), setFixedFeeRequest.rentalFee(), tagValue);
+            return ResponseEntity.ok(LocalMapper.toGetOwnLocalsResponse(local));
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
+        }
     }
 
     @PatchMapping("/rents/{id}/end-date")

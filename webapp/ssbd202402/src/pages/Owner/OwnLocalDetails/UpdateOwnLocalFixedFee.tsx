@@ -26,6 +26,7 @@ import {
   Form,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/use-toast";
 
 const UpdateFixedFeeSchema = (t: TFunction) =>
   z.object({
@@ -56,12 +57,14 @@ interface Props {
   id: string;
   initialRentalFee: number;
   initialMarginFee: number;
+  etag: string;
 }
 
 const UpdateOwnLocalFixedFee: FC<Props> = ({
   id,
   initialRentalFee,
   initialMarginFee,
+  etag,
 }) => {
   const { t } = useTranslation();
   const { mutateAsync } = useMutateOwnLocalFixedFee();
@@ -76,10 +79,21 @@ const UpdateOwnLocalFixedFee: FC<Props> = ({
 
   const updateFixedFeeClick = form.handleSubmit(
     async (data: UpdateOwnLocalFixedFee) => {
+      let etagValue = etag;
+      if (!etag) {
+        toast({
+          variant: "destructive",
+          title: t("updateLocalPage.errorTitle"),
+        });
+        return;
+      }
+      etagValue = etagValue.substring(1, etagValue.length - 1);
+
       const formattedData = {
         id,
         rentalFee: parseFloat(data.rentalFee),
         marginFee: parseFloat(data.marginFee),
+        ifMatch: etagValue,
       };
       await mutateAsync(formattedData);
     }

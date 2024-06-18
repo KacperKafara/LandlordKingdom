@@ -9,6 +9,7 @@ type MutateOwnLocalFixedFeeRequest = {
   id: string;
   rentalFee: number;
   marginFee: number;
+  ifMatch: string;
 };
 
 export const useMutateOwnLocalFixedFee = () => {
@@ -19,10 +20,18 @@ export const useMutateOwnLocalFixedFee = () => {
 
   return useMutation({
     mutationFn: async (data: MutateOwnLocalFixedFeeRequest) => {
-      await api.patch(`/me/locals/${data.id}/fixed-fee`, {
-        rentalFee: data.rentalFee,
-        marginFee: data.marginFee,
-      });
+      await api.patch(
+        `/me/locals/${data.id}/fixed-fee`,
+        {
+          rentalFee: data.rentalFee,
+          marginFee: data.marginFee,
+        },
+        {
+          headers: {
+            "If-Match": data.ifMatch,
+          },
+        }
+      );
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ownLocalDetails"] });
