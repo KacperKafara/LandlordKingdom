@@ -17,13 +17,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Add production url
-        run: |
-          echo "${{ secrets.BACKEND_URL }}" > .env.production.local
       - name: Setup node dependencies
         run: yarn
       - name: Build React App
-        run: yarn build
+        run: |
+          echo "${{ secrets.BACKEND_URL }}" > .env.production.local
+          yarn build
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -106,6 +105,7 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ssh_key.pem
           chmod 600 ssh_key.pem
+          ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "mkdir -p /home/$SSH_USERNAME/deploy_files"
           scp -o StrictHostKeyChecking=no -i ssh_key.pem -r target/* $SSH_USERNAME@$SSH_HOST:/home/$SSH_USERNAME/deploy_files
           ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo docker-compose -f deploy_files/prod.docker-compose.yml down"
           ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo docker-compose -f deploy_files/prod.docker-compose.yml up -d"
