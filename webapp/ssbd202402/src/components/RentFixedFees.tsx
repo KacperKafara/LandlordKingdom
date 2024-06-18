@@ -15,6 +15,7 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { useTranslation } from "react-i18next";
 import { useRentFixedFees } from "@/data/rent/useRentFixedFees";
 import { LoadingData } from "@/components/LoadingData";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 type RentFixedFeesProps = {
   id: string;
@@ -100,10 +101,10 @@ export const RentFixedFees: FC<RentFixedFeesProps> = ({
                       {fee.marginFee.toFixed(2) + t("currency")}
                     </TableCell>
                     <TableCell className="text-right">
-                      {fee.rentalFee.toFixed(2) + t("currency")}
+                      {toLocaleFixed(fee.rentalFee) + t("currency")}
                     </TableCell>
                     <TableCell className="text-right">
-                      {(fee.rentalFee + fee.marginFee).toFixed(2) +
+                      {toLocaleFixed(fee.rentalFee + fee.marginFee) +
                         t("currency")}
                     </TableCell>
                   </TableRow>

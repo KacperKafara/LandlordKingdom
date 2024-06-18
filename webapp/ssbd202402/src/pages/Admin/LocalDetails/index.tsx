@@ -19,6 +19,7 @@ import {
 import { useArchiveLocal } from "@/data/local/useArchiveLocal";
 import ChangeAddressFormComponent from "./ChangeAddressFormComponent";
 import UpdateLocal from "@/pages/Admin/LocalDetails/UpdateLocal.tsx";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 const LocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -76,12 +77,12 @@ const LocalDetailsPage: FC = () => {
                       <div className="grid w-2/3 grid-cols-2 gap-2">
                         <DataField
                           label={t("localDetails.size")}
-                          value={data.data.size.toString()}
+                          value={data.data.size.toString() + " m²"}
                         />
                         <DataField
                           label={t("localDetails.rentalFee")}
                           value={
-                            data.data.rentalFee.toFixed(2).toString() +
+                            toLocaleFixed(data.data.rentalFee) +
                             " " +
                             t("currency")
                           }
@@ -89,7 +90,7 @@ const LocalDetailsPage: FC = () => {
                         <DataField
                           label={t("localDetails.marginFee")}
                           value={
-                            data.data.marginFee.toFixed(2).toString() +
+                            toLocaleFixed(data.data.marginFee) +
                             " " +
                             t("currency")
                           }

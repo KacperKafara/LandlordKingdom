@@ -46,7 +46,7 @@ const ActiveLocals: FC = () => {
                   />
                   <DataField
                     label={t("activeLocals.size")}
-                    value={local.size}
+                    value={local.size + " m²"}
                   />
                 </div>
               </CardContent>

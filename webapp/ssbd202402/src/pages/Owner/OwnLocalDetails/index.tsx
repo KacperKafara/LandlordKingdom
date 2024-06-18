@@ -20,6 +20,7 @@ import LeaveLocalCard from "./LeaveLocalCard";
 import { LocalState } from "@/@types/localState";
 import LocalApplications from "@/pages/Owner/OwnLocalDetails/ShowApplications.tsx";
 import { Button } from "@/components/ui/button";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -86,7 +87,7 @@ const OwnLocalDetailsPage: FC = () => {
                         <DataField
                           label={t("ownLocalDetails.rentalFee")}
                           value={
-                            (data.data?.rentalFee ?? 0.0).toFixed(2) +
+                            toLocaleFixed(data.data?.rentalFee ?? 0.0) +
                             " " +
                             t("currency")
                           }
@@ -94,7 +95,7 @@ const OwnLocalDetailsPage: FC = () => {
                         <DataField
                           label={t("ownLocalDetails.marginFee")}
                           value={
-                            (data.data?.marginFee ?? 0.0).toFixed(2) +
+                            toLocaleFixed(data.data?.marginFee ?? 0.0) +
                             " " +
                             t("currency")
                           }
@@ -104,7 +105,7 @@ const OwnLocalDetailsPage: FC = () => {
                           label={t("ownLocalDetails.nextRentalFee")}
                           value={
                             data.data?.nextRentalFee != null
-                              ? data.data.nextRentalFee.toFixed(2) +
+                              ? toLocaleFixed(data.data.nextRentalFee) +
                                 " " +
                                 t("currency")
                               : "-"
@@ -114,7 +115,7 @@ const OwnLocalDetailsPage: FC = () => {
                           label={t("ownLocalDetails.nextMarginFee")}
                           value={
                             data.data?.nextMarginFee != null
-                              ? data.data.nextMarginFee.toFixed(2) +
+                              ? toLocaleFixed(data.data.nextMarginFee) +
                                 " " +
                                 t("currency")
                               : "-"
