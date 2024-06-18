@@ -51,7 +51,7 @@ const ActiveLocals: FC = () => {
                       <CardDescription>{local.description}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <div className="grid w-2/3 grid-cols-4">
+                      <div className="grid grid-cols-2">
                         <DataField
                             label={t("activeLocals.city")}
                             value={local.city}
