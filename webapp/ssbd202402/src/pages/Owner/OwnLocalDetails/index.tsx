@@ -122,6 +122,11 @@ const OwnLocalDetailsPage: FC = () => {
                           }
                         />
 
+                        <DataField
+                          label={t("ownLocalDetails.state")}
+                          value={t(`localState.${data.data.state}`)}
+                        />
+
                         <p className="col-span-2 text-xl font-semibold">
                           {t("ownLocalDetails.addressInformation")}{" "}
                         </p>

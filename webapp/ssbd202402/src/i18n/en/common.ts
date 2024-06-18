@@ -341,7 +341,7 @@ const addLocalPage = {
   error: "Failed to add local",
   successTitle: "Local added",
   successDescription: "Local successfully added",
-}
+};
 
 const registerSuccessPage = {
   title: "Thanks for creating an account",
@@ -654,6 +654,7 @@ const ownLocalDetails = {
   leaveLocalDescription:
     "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
   showApplications: "Show applications",
+  state: "Local state",
 };
 
 const activeLocals = {
