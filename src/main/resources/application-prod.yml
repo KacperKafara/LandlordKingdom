@@ -1,5 +1,5 @@
 app:
-  url: https://team-2.proj-sum.it.p.lodz.pl
+  url: http://ec2-16-171-159-104.eu-north-1.compute.amazonaws.com
 
 otp:
   secret: 26Etz0ZMoBmiX7F9lHvb
@@ -16,7 +16,7 @@ oauth2:
   token:
     url: https://oauth2.googleapis.com/token
   redirect:
-    url: https://team-2.proj-sum.it.p.lodz.pl/auth/google/callback
+    url: http://ec2-16-171-159-104.eu-north-1.compute.amazonaws.com/auth/google/callback
 
 jwt:
   privateKeyFilePath: /etc/ssbd02/privateJwt-key.pem
