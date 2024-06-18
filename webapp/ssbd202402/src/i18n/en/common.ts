@@ -341,7 +341,7 @@ const addLocalPage = {
   error: "Failed to add local",
   successTitle: "Local added",
   successDescription: "Local successfully added",
-}
+};
 
 const registerSuccessPage = {
   title: "Thanks for creating an account",
@@ -457,6 +457,7 @@ const errors = {
   unexpectedRollback: "Unexpected rollback",
   userAlreadyHasRole: "User already has this role",
   applicationExists: "Application for this local already exists",
+  imageNotFound: "Image not found",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -859,7 +860,24 @@ const localReport = {
   summaryBarChart: "Payments and fees weekly summary",
 };
 
+const uploadImage = {
+  uploadImage: "Upload image",
+  uploadImageDescription:
+    "Upload an image of your local to attract more customers.",
+  uploadedFileTooLarge: "Uploaded file is too large. Max size is 256KB",
+  uploadedFileNotImage: "Only .png and .jpeg files are allowed",
+  chooseFile: "Choose file",
+  upload: "Upload",
+  delete: "Delete",
+  deleteSuccessTitle: "Image deleted",
+  deleteSuccessDescription: "Image has been deleted successfully",
+  deleteErrorTitle: "Error. Image not deleted",
+  uploadImageSuccess: "Image has been uploaded successfully",
+  uploadImageError: "Error while uploading image",
+};
+
 export default {
+  uploadImage,
   localReport,
   rentDetailsPage,
   createPaymentDialog,
