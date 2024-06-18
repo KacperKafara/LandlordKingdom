@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.RentAlreadyEndedException;
@@ -17,7 +19,7 @@ public interface RentService {
 
     Rent getTenantRent(UUID rentId, UUID userId) throws NotFoundException;
 
-    List<Rent> getCurrentOwnerRents(UUID ownerId);
+    Page<Rent> getCurrentOwnerRents(UUID ownerId, Pageable pageable);
 
     Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException;
 

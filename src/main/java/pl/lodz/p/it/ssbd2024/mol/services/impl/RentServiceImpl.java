@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -12,6 +14,7 @@ import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentMessages;
 import pl.lodz.p.it.ssbd2024.messages.RentMessages;
+import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
@@ -52,8 +55,8 @@ public class RentServiceImpl implements RentService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public List<Rent> getCurrentOwnerRents(UUID userId) {
-        return rentRepository.findCurrentRentsByOwnerId(userId);
+    public Page<Rent> getCurrentOwnerRents(UUID userId, Pageable pageable) {
+        return rentRepository.findCurrentRentsByOwnerId(userId, pageable);
     }
 
     @Override

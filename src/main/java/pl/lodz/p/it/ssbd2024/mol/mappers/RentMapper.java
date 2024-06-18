@@ -1,9 +1,8 @@
 package pl.lodz.p.it.ssbd2024.mol.mappers;
 
+import org.springframework.data.domain.Page;
 import pl.lodz.p.it.ssbd2024.model.Rent;
-import pl.lodz.p.it.ssbd2024.mol.dto.RentDetailedTenantResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.RentForOwnerResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.RentForTenantResponse;
+import pl.lodz.p.it.ssbd2024.mol.dto.*;
 
 import java.util.List;
 
@@ -35,6 +34,13 @@ public class RentMapper {
 
     public static List<RentForOwnerResponse> rentForOwnerResponseList(List<Rent> rentList) {
         return rentList.stream().map(RentMapper::rentForOwnerResponse).toList();
+    }
+
+    public static RentForOwnerResponsePage rentForOwnerResponsePage(Page<Rent> rentList) {
+        return new RentForOwnerResponsePage(
+                rentList.map(RentMapper::rentForOwnerResponse).toList(),
+                rentList.getTotalPages()
+        );
     }
 
     public static RentDetailedTenantResponse rentDetailedTenantResponse(Rent rent) {
