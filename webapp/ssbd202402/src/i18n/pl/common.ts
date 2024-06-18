@@ -469,6 +469,8 @@ const errors = {
 const notFoundPage = {
   title: "Nie znaleziono strony",
   description: "Strona, której szukasz, nie istnieje",
+  login: "Zaloguj się",
+  home: "Strona główna",
 };
 
 const ownerLocals = {
