@@ -83,7 +83,7 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("isAuthenticated()")
     public Page<Local> getActiveLocals(Pageable pageable) {
-        return localRepository.findAllByState(LocalState.ACTIVE, pageable);
+        return localRepository.findAllByState(pageable, LocalState.ACTIVE);
     }
 
     @Override
