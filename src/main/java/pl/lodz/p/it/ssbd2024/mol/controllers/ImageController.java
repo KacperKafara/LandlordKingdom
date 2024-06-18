@@ -45,13 +45,12 @@ public class ImageController {
     }
 
     @GetMapping(path = "/{id}")
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<byte[]> getImage(@PathVariable UUID id) throws NotFoundException {
         Image image = imageService.getImage(id);
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, " inline" )
                 .header(HttpHeaders.CONTENT_TYPE, image.getType())
-                .body(Base64.getEncoder().encode(image.getImage()));
+                .body(image.getImage());
     }
 
 

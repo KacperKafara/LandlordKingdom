@@ -1,19 +1,21 @@
 import { useDeleteImage } from "@/data/local/useImage";
 import { t } from "i18next";
+import React from "react";
 import { FC, useState } from "react";
 
 interface ImageComponentProps {
   id: string;
-  src: string;
 }
 
-export const ImageComponent: FC<ImageComponentProps> = ({ id, src }) => {
+const ImageDisplayComponent: FC<ImageComponentProps> = ({ id }) => {
   const [isHovered, setIsHovered] = useState(false);
   const { mutate: deleteImage } = useDeleteImage();
 
   const handleDelete = (id: string) => {
     deleteImage(id);
   };
+
+  const src = `${import.meta.env.VITE_BACKEND_URL}/images/${id}`;
 
   return (
     <div
@@ -34,3 +36,7 @@ export const ImageComponent: FC<ImageComponentProps> = ({ id, src }) => {
     </div>
   );
 };
+
+const ImageDisplay = React.memo(ImageDisplayComponent);
+
+export default ImageDisplay;

@@ -5,47 +5,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChangeEvent, FC, useEffect, useState } from "react";
+import { ChangeEvent, FC, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useUploadImage } from "@/data/local/useImage";
 import { toast } from "@/components/ui/use-toast";
 import { t } from "i18next";
-import useAxiosPrivate from "@/data/useAxiosPrivate";
-import { ImageComponent } from "./ImageComponent";
+import ImageDisplay from "./ImageComponent";
 
 type UploadImageCardProps = {
   id: string;
   images: string[];
 };
 
-interface Images {
-  id: string;
-  src: string;
-}
-
 const UploadImageCard: FC<UploadImageCardProps> = ({ id, images }) => {
   const [file, setFile] = useState<File | null>(null);
   const { mutate } = useUploadImage();
-  const [loadedImages, setLoadedImages] = useState<Images[]>([]);
-  const { api } = useAxiosPrivate();
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      for (const image of images) {
-        const response = await api.get(`/images/${image}`);
-        setLoadedImages((prev) => [
-          ...prev,
-          {
-            id: image,
-            src: `data:${response.headers["content-type"]};base64,${response.data}`,
-          },
-        ]);
-      }
-    };
-
-    fetchImages();
-  }, [images, api]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null) {
@@ -106,8 +81,8 @@ const UploadImageCard: FC<UploadImageCardProps> = ({ id, images }) => {
             {t("uploadImage.upload")}
           </Button>
           <div className="flex flex-wrap gap-1">
-            {loadedImages.map((image) => (
-              <ImageComponent key={image.id} id={image.id} src={image.src} />
+            {images.map((imageId) => (
+              <ImageDisplay key={imageId} id={imageId} />
             ))}
           </div>
         </CardContent>
