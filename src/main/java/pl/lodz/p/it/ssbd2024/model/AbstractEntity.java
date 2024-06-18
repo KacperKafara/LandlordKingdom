@@ -1,10 +1,7 @@
 package pl.lodz.p.it.ssbd2024.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -31,6 +28,7 @@ public abstract class AbstractEntity {
     private LocalDateTime createdAt;
 
     @Column(name = "modified_at", nullable = false)
+    @Setter
     @ToString.Exclude
     private LocalDateTime modifiedAt;
 
@@ -39,6 +37,7 @@ public abstract class AbstractEntity {
     private UUID createdBy;
 
     @Column(name = "modified_by")
+    @Setter
     @ToString.Exclude
     private UUID modifiedBy;
 

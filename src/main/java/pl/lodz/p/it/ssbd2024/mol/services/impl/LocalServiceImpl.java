@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,7 +22,6 @@ import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
-import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
@@ -32,12 +30,13 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
+import pl.lodz.p.it.ssbd2024.util.UserFromContext;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -177,9 +176,15 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {GivenAddressAssignedToOtherLocalException.class, NotFoundException.class})
-    public Local changeLocalAddress(UUID id, Address address) throws GivenAddressAssignedToOtherLocalException, NotFoundException {
-        Optional<Address> addressOptional = addressRepository.findByAddress(address.getCountry(), address.getCity(), address.getStreet(), address.getNumber(), address.getZip());
+    public Local changeLocalAddress(UUID id, Address address, String tagValue) throws GivenAddressAssignedToOtherLocalException, NotFoundException, ApplicationOptimisticLockException, InvalidLocalState {
         Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if(local.getState() == LocalState.ARCHIVED) {
+            throw new InvalidLocalState(LocalExceptionMessages.LOCAL_ARCHIVED, ErrorCodes.UPDATE_LOCAL_ARCHIVED);
+        }
+        if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
+            throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.LOCAL_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
+        }
+        Optional<Address> addressOptional = addressRepository.findByAddress(address.getCountry(), address.getCity(), address.getStreet(), address.getNumber(), address.getZip());
         if (addressOptional.isPresent()) {
             Address foundAddress = addressOptional.get();
             for (Local l : foundAddress.getLocals()) {
@@ -199,12 +204,14 @@ public class LocalServiceImpl implements LocalService {
             throw new GivenAddressAssignedToOtherLocalException(LocalExceptionMessages.ADDRESS_ALREADY_ASSIGNED, ErrorCodes.ADDRESS_ALREADY_ASSIGNED);
         }
 
-        return local;
+        local.setModifiedAt(LocalDateTime.now());
+        local.setModifiedBy(UserFromContext.getCurrentUserId());
+        return localRepository.saveAndFlush(local);
     }
 
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public Local editLocalByAdmin(UUID localId, EditLocalRequestAdmin editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException{
+    public Local editLocalByAdmin(UUID localId, EditLocalRequestAdmin editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         Local local = localRepository.findById(localId).orElseThrow(() ->
                 new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
         if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {

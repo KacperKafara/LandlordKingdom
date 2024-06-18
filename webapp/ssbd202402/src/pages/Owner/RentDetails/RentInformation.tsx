@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RentDetailsForOwner } from "@/types/owner/RentDetailsForOwner";
 import { getAddressString } from "@/utils/address";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -36,7 +37,7 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
           />
           <DataField
             label={t("ownerRentDetails.balance")}
-            value={(rent?.balance ?? 0.0).toFixed(2) + " " + t("currency")}
+            value={toLocaleFixed(rent?.balance ?? 0.0) + " " + t("currency")}
           />
           <h2 className="col-span-2 pt-4 text-xl font-semibold">
             {t("ownerRentDetails.localInfo")}
@@ -52,13 +53,13 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
           <DataField
             label="Margin Fee"
             value={
-              (rent?.local?.marginFee ?? 0.0).toFixed(2) + " " + t("currency")
+              toLocaleFixed(rent?.local?.marginFee ?? 0.0) + " " + t("currency")
             }
           />
           <DataField
             label="Rental Fee"
             value={
-              (rent?.local?.rentFee ?? 0.0).toFixed(2) + " " + t("currency")
+              toLocaleFixed(rent?.local?.rentFee ?? 0.0) + " " + t("currency")
             }
           />
           <h2 className="col-span-2 pt-4 text-xl font-semibold">

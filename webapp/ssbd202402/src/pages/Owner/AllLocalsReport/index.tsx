@@ -7,6 +7,7 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import DataField from "@/components/DataField";
 import { useTranslation } from "react-i18next";
 import { useLocalsReport } from "@/data/local/useLocalsReport";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 
 const AllLocalsReportPage: FC = () => {
   const { t } = useTranslation();
@@ -54,13 +55,17 @@ const AllLocalsReportPage: FC = () => {
               <div className="grid grid-cols-2 gap-10 text-2xl">
                 <DataField
                   label={t("localReport.totalMarginFees")}
-                  value={marginFeeSum?.toFixed(2) + " " + t("currency")}
+                  value={
+                    toLocaleFixed(marginFeeSum ? marginFeeSum : 0) +
+                    " " +
+                    t("currency")
+                  }
                 />
                 <DataField
                   className="col-span-2"
                   label={t("localReport.totalRentalFees")}
                   value={
-                    (variableFeeSum + rentalFeeSum).toFixed(2) +
+                    toLocaleFixed(variableFeeSum + rentalFeeSum) +
                     " " +
                     t("currency")
                   }

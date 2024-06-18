@@ -248,7 +248,7 @@ const navLinks = {
   account: "My account",
   signOut: "Sign out",
   users: "Users",
-  notApprovedActions: "Not approved actions",
+  notApprovedActions: "Unapproved actions",
   roles: "Change access level",
   locals: "Locals",
   currentRents: "Current rents",

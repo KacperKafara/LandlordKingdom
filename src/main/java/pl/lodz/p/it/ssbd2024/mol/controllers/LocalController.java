@@ -131,15 +131,21 @@ public class LocalController {
 
     @PatchMapping("/{id}/address")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
-    public ResponseEntity<LocalForAdministratorResponse> changeLocalAddress(@PathVariable UUID id, @Valid @RequestBody EditLocalAddressRequest request) {
+    public ResponseEntity<LocalForAdministratorResponse> changeLocalAddress(@PathVariable UUID id,
+                                                                            @Valid @RequestBody EditLocalAddressRequest request,
+                                                                            @RequestHeader(HttpHeaders.IF_MATCH) String tagValue){
         Address address = AddressMapper.editAddressRequestToAddress(request);
         try {
-            Local local = localService.changeLocalAddress(id, address);
+            Local local = localService.changeLocalAddress(id, address, tagValue);
             return ResponseEntity.ok(LocalMapper.toLocalForAdministratorResponse(local));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         } catch (GivenAddressAssignedToOtherLocalException e) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, e.getMessage(), e);
+        } catch (ApplicationOptimisticLockException e) {
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED, e.getMessage(), e);
+        } catch (InvalidLocalState e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);
         }
     }
 

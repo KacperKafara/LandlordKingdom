@@ -24,7 +24,7 @@ export type NavigationLink = {
   path: string;
   label: string;
 };
-type LayoutType = "admin" | "tenant" | "owner" | "me";
+export type LayoutType = "admin" | "tenant" | "owner" | "me";
 
 type BaseLayoutProps = {
   type: LayoutType;
@@ -101,24 +101,6 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
           </p>
         </div>
         <div className="flex flex-row items-center gap-3">
-          {links.map((link, idx) => (
-            <NavLink
-              key={link.path + idx}
-              to={link.path}
-              className={({ isActive }) =>
-                cn(
-                  "rounded-md px-2 py-1",
-                  colors.hover,
-                  isActive && colors.accentColor
-                )
-              }
-            >
-              {i18n.exists(`navLinks.${link.label}`)
-                ? //  @ts-expect-error error handled
-                  t(`navLinks.${link.label}`)
-                : link.label}
-            </NavLink>
-          ))}
           <ModeToggle />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -161,7 +143,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
               )}
             </DropdownMenuContent>
           </DropdownMenu>
-          <MyAccountButton hover={colors.hover} />
+          <MyAccountButton links={links} hover={colors.hover} type={type} />
         </div>
       </nav>
       <main className="flex-1 px-10">{children}</main>
