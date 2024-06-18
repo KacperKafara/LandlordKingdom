@@ -73,6 +73,6 @@ jobs:
           ls -la
           echo "$SSH_PRIVATE_KEY" | tr -d '\r' > ssh_key.pem
           chmod 600 ssh_key.pem
-          ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "rm -rf /usr/share/nginx/html/*"
+          ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo rm -rf /usr/share/nginx/html/*"
           scp -o StrictHostKeyChecking=no -i ssh_key.pem -r build/* $SSH_USERNAME@$SSH_HOST:/usr/share/nginx/html/
           ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo systemctl restart nginx"
