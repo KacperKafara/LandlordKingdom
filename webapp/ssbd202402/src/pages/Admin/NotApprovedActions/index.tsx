@@ -22,42 +22,38 @@ const NotApprovedActionsPage: FC = () => {
   ]);
 
   return (
-    <div className="flex justify-center">
-      <div className="flex w-10/12 flex-col justify-center pt-10">
-        {breadcrumbs}
-        <Tabs
-          className="mt-5 w-full"
-          value={currentTab}
-          onValueChange={setCurrentTab}
-        >
-          <div className="flex justify-between">
-            <TabsList>
-              <TabsTrigger value="locals">
-                {t("notApprovedActionsPage.locals")}
-              </TabsTrigger>
-              <TabsTrigger value="roles">
-                {t("notApprovedActionsPage.roleRequests")}
-              </TabsTrigger>
-            </TabsList>
-            <RefreshQueryButton
-              queryKeys={
-                currentTab === "locals"
-                  ? ["unapprovedLocals"]
-                  : ["roleRequests"]
-              }
-            />
-          </div>
+    <div className="flex flex-col justify-center">
+      {breadcrumbs}
+      <Tabs
+        className="mt-5 w-full"
+        value={currentTab}
+        onValueChange={setCurrentTab}
+      >
+        <div className="flex justify-between">
+          <TabsList>
+            <TabsTrigger value="locals">
+              {t("notApprovedActionsPage.locals")}
+            </TabsTrigger>
+            <TabsTrigger value="roles">
+              {t("notApprovedActionsPage.roleRequests")}
+            </TabsTrigger>
+          </TabsList>
+          <RefreshQueryButton
+            queryKeys={
+              currentTab === "locals" ? ["unapprovedLocals"] : ["roleRequests"]
+            }
+          />
+        </div>
 
-          <Card className="my-2 w-full">
-            <TabsContent value="locals">
-              <LocalAcceptList />
-            </TabsContent>
-            <TabsContent value="roles">
-              <RoleRequestsList />
-            </TabsContent>
-          </Card>
-        </Tabs>
-      </div>
+        <Card className="mt-2 w-full">
+          <TabsContent value="locals">
+            <LocalAcceptList />
+          </TabsContent>
+          <TabsContent value="roles">
+            <RoleRequestsList />
+          </TabsContent>
+        </Card>
+      </Tabs>
     </div>
   );
 };

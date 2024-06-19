@@ -98,14 +98,13 @@ export const RentFixedFees: FC<RentFixedFeesProps> = ({
                     <TableCell>{index + 1 + pageSize * pageNumber}</TableCell>
                     <TableCell>{fee.date}</TableCell>
                     <TableCell className="text-right">
-                      {fee.marginFee.toFixed(2) + t("currency")}
+                      {toLocaleFixed(fee.marginFee)}
                     </TableCell>
                     <TableCell className="text-right">
-                      {toLocaleFixed(fee.rentalFee) + t("currency")}
+                      {toLocaleFixed(fee.rentalFee)}
                     </TableCell>
                     <TableCell className="text-right">
-                      {toLocaleFixed(fee.rentalFee + fee.marginFee) +
-                        t("currency")}
+                      {toLocaleFixed(fee.rentalFee + fee.marginFee)}
                     </TableCell>
                   </TableRow>
                 ))}

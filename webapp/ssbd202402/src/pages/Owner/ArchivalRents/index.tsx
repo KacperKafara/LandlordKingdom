@@ -53,69 +53,66 @@ const ArchivalOwnerRentsPage: FC = () => {
   }
 
   return (
-    <div className="relative pt-2">
-      {breadCrumbs}
-      <div className="flex w-full justify-center">
-        <ul className="flex w-4/5 flex-wrap gap-2 py-4">
-          {rents?.map((rent) => (
-            <li key={rent.id} className="w-full min-w-[31rem] flex-1">
-              <Card>
-                <CardHeader>
-                  <CardTitle>{rent.local.name}</CardTitle>
-                  <CardDescription>
-                    {rent.local.address.country}, {rent.local.address.street}{" "}
-                    {rent.local.address.number},{" "}
-                    {rent.local.address.zipCode.substring(0, 2)}-
-                    {rent.local.address.zipCode.substring(2)}{" "}
-                    {rent.local.address.city}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="grid grid-cols-2">
-                  <DataField
-                    label={t("currentOwnerRents.startDate")}
-                    value={rent.startDate}
-                  />
-                  <DataField
-                    label={t("currentOwnerRents.endDate")}
-                    value={rent.endDate}
-                  />
-                  <DataField
-                    label={t("currentOwnerRents.balance")}
-                    value={toLocaleFixed(rent.balance) + " " + t("currency")}
-                  />
-                  <p className="col-span-2 my-3 text-xl font-bold">
-                    {t("currentOwnerRents.tenant")}
-                  </p>
-                  <DataField
-                    label={t("currentOwnerRents.name")}
-                    value={rent.tenant.firstName + " " + rent.tenant.lastName}
-                  />
-                  <DataField
-                    label={t("currentOwnerRents.email")}
-                    value={rent.tenant.email}
-                  />
-                </CardContent>
-                <CardFooter className="w-full justify-center gap-3">
-                  <Button
-                    className="flex-auto"
-                    onClick={() =>
-                      navigate(`rent/${rent.id}`, {
-                        state: { prevPath: "/owner/archival-rents" },
-                      })
-                    }
-                  >
-                    {t("currentOwnerRents.rentDetails")}
-                  </Button>
-                </CardFooter>
-              </Card>
-            </li>
-          ))}
-        </ul>
+    <div className="flex flex-col justify-center">
+      <div className="flex flex-row items-center justify-between">
+        {breadCrumbs}
+        <RefreshQueryButton queryKeys={["ownerArchivalRents"]} />
       </div>
-      <RefreshQueryButton
-        className="absolute -right-9 top-1"
-        queryKeys={["ownerArchivalRents"]}
-      />
+      <ul className="flex flex-wrap gap-2 py-4">
+        {rents?.map((rent) => (
+          <li key={rent.id} className="w-full min-w-[31rem] flex-1">
+            <Card>
+              <CardHeader>
+                <CardTitle>{rent.local.name}</CardTitle>
+                <CardDescription>
+                  {rent.local.address.country}, {rent.local.address.street}{" "}
+                  {rent.local.address.number},{" "}
+                  {rent.local.address.zipCode.substring(0, 2)}-
+                  {rent.local.address.zipCode.substring(2)}{" "}
+                  {rent.local.address.city}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-2">
+                <DataField
+                  label={t("currentOwnerRents.startDate")}
+                  value={rent.startDate}
+                />
+                <DataField
+                  label={t("currentOwnerRents.endDate")}
+                  value={rent.endDate}
+                />
+                <DataField
+                  label={t("currentOwnerRents.balance")}
+                  value={toLocaleFixed(rent.balance)}
+                />
+                <p className="col-span-2 my-3 text-xl font-bold">
+                  {t("currentOwnerRents.tenant")}
+                </p>
+                <DataField
+                  label={t("currentOwnerRents.name")}
+                  value={rent.tenant.firstName + " " + rent.tenant.lastName}
+                />
+                <DataField
+                  label={t("currentOwnerRents.email")}
+                  value={rent.tenant.email}
+                />
+              </CardContent>
+              <CardFooter className="w-full justify-center gap-3">
+                <Button
+                  className="flex-auto"
+                  onClick={() =>
+                    navigate(`rent/${rent.id}`, {
+                      state: { prevPath: "/owner/archival-rents" },
+                    })
+                  }
+                >
+                  {t("currentOwnerRents.rentDetails")}
+                </Button>
+              </CardFooter>
+            </Card>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };

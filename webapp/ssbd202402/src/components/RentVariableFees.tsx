@@ -92,7 +92,7 @@ export const RentVariableFees: FC<RentVariableFeesProps> = ({
                     <TableCell>{index + 1 + pageSize * pageNumber}</TableCell>
                     <TableCell>{fee.date}</TableCell>
                     <TableCell className="text-right">
-                      {toLocaleFixed(fee.amount) + t("currency")}
+                      {toLocaleFixed(fee.amount)}
                     </TableCell>
                   </TableRow>
                 ))}
