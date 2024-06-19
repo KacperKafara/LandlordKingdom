@@ -10,7 +10,7 @@ import org.springframework.web.client.RestClient;
 public class TranslateClient {
     public String translate(TranslateRequest request) {
 
-        RestClient webClient = RestClient.create("http://libretranslate:5000/translate");
+        RestClient webClient = RestClient.create("http://51.20.12.73:5555/translate");
 
         TranslateResponse res = webClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
