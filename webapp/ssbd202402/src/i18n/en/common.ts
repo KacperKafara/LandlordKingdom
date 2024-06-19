@@ -190,6 +190,7 @@ const userListPage = {
   resetUserEmailDescription:
     "A link to change the email address will be sent to the user's email address",
   updateEmailAddress: "Update email address",
+  breadcrumbsUserListPage: "Users",
 };
 
 const block = {
@@ -801,6 +802,7 @@ const tenantApplications = {
 };
 
 const breadcrumbs = {
+  admin: "Administrator",
   tenant: "Tenant",
   locals: "Locals",
   local: "Local",

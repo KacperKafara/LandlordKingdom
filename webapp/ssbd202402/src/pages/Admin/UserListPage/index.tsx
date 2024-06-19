@@ -51,9 +51,9 @@ const UserListPage: FC = () => {
   const { blockUser } = useBlockUser();
   const { unblockUser } = useUnblockUser();
   const [userData, setUserData] = useState<UserData>();
-  const test = useBreadcrumbs([
-    { title: "Admin", path: "/admin" },
-    { title: "Users", path: "/admin/users" },
+  const breadcrumbs = useBreadcrumbs([
+    { title: t("breadcrumbs.admin"), path: "/admin" },
+    { title: t("userListPage.breadcrumbsUserListPage"), path: "/admin/users" },
   ]);
 
   const handlePasswordResetClick = (data: UserData) => {
@@ -71,7 +71,7 @@ const UserListPage: FC = () => {
 
   return (
     <div className="flex flex-col justify-center">
-      {test}
+      {breadcrumbs}
       <div className="m-5 flex justify-center">
         <UserFilter />
       </div>
