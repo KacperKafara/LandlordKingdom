@@ -25,8 +25,8 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { InputWithText } from "@/components/InputWithText";
 
 const UpdateFixedFeeSchema = (t: TFunction) =>
   z.object({
@@ -111,10 +111,10 @@ const UpdateOwnLocalFixedFee: FC<Props> = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>
-                {t("updateOwnLocalFixedFeeForm.rentalFeeInput")}{" "}
+                {t("updateOwnLocalFixedFeeForm.rentalFeeInput")}
               </FormLabel>
               <FormControl>
-                <Input {...field} />
+                <InputWithText {...field} rightText={t("currency")} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -129,7 +129,7 @@ const UpdateOwnLocalFixedFee: FC<Props> = ({
                 {t("updateOwnLocalFixedFeeForm.marginFeeInput")}{" "}
               </FormLabel>
               <FormControl>
-                <Input {...field} />
+                <InputWithText {...field} rightText={t("currency")} />
               </FormControl>
               <FormMessage />
             </FormItem>

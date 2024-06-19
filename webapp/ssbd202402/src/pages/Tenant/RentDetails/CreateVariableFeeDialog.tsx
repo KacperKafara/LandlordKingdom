@@ -1,3 +1,4 @@
+import { InputWithText } from "@/components/InputWithText";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -14,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { useCreateVariableFee } from "@/data/rent/useCreateVariableFee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFunction } from "i18next";
@@ -74,10 +74,11 @@ const CreateVariableFeeDialogComponent: FC<CreateVariableFeeDialogProps> = ({
                 <FormItem>
                   <FormLabel>{t("createVariableFeeDialog.amount")}</FormLabel>
                   <FormControl>
-                    <Input
+                    <InputWithText
                       {...field}
                       type="number"
                       onChange={(e) => field.onChange(+e.target.value)}
+                      rightText={t("currency")}
                     />
                   </FormControl>
                   <FormMessage />
