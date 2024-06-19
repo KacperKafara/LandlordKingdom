@@ -81,7 +81,11 @@ const ReportComboChartComponent: FC<ReportComboChartProps> = ({ report }) => {
       ...Object.keys(fixedFeesGroups ?? {}),
     ]),
   ]
-    .sort()
+    .sort((a, b) => {
+      const [aYear, aWeek] = a.split("-").map((x) => parseInt(x));
+      const [bYear, bWeek] = b.split("-").map((x) => parseInt(x));
+      return aYear - bYear || aWeek - bWeek;
+    })
     .map((key) => {
       const obj = {
         name: key,
