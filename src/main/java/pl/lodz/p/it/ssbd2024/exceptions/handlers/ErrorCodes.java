@@ -56,4 +56,5 @@ public class ErrorCodes {
     public static final String PAYMENT_ALREADY_EXISTS = "paymentAlreadyExists";
     public static final String LOCAL_CREATION_ERROR = "localCreationFailed";
     public static final String UPDATE_LOCAL_ARCHIVED = "updateLocalArchived";
+    public static final String IMAGE_NOT_FOUND = "imageNotFound";
 }

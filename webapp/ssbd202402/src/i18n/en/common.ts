@@ -459,6 +459,7 @@ const errors = {
   applicationExists: "Application for this local already exists",
   applicationNotFound: "Application not found",
   roleRequestNotFound: "Role request not found",
+  imageNotFound: "Image not found",
 } satisfies {
   [key in ExceptionCode]: string;
 };
