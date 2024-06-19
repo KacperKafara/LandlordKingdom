@@ -543,6 +543,7 @@ const tenantRents = {
   login: "Login",
   noData: "Aktualnie nie wynajmujesz żadnych lokali",
   details: "Szczegóły",
+  rentsNotFund: "Nie znaleziono wynajmów",
 };
 
 const currentOwnerRents = {
@@ -557,6 +558,7 @@ const currentOwnerRents = {
   noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
   rentDetails: "Szczegóły wynajmu",
   archivalRents: "Archiwalne wynajmy",
+  rentsNotFound: "Nie znaleziono wynajmów",
 };
 
 const currentTenantRents = {

@@ -517,6 +517,7 @@ const tenantRents = {
   login: "Login",
   noData: "Currently you have no rents",
   details: "Details",
+  rentsNotFund: "No rents found",
 };
 
 const currentOwnerRents = {
@@ -531,6 +532,7 @@ const currentOwnerRents = {
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
   archivalRents: "Archival rents",
+  rentsNotFound: "No rents found",
 };
 
 const leaveLocal = {
