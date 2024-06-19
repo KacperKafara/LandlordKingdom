@@ -862,6 +862,7 @@ const localReport = {
   rentCount: "Number of rents",
   summaryPieChart: "Summary of fees and profits",
   summaryBarChart: "Payments and fees weekly summary",
+  numberOfWeeks: "Number of weeks",
 };
 
 export default {
