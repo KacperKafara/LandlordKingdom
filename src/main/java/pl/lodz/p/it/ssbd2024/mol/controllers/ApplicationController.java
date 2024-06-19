@@ -19,7 +19,6 @@ import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 import pl.lodz.p.it.ssbd2024.model.Application;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.mol.dto.AcceptApplicationRequest;
-import pl.lodz.p.it.ssbd2024.mol.dto.AcceptApplicationResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.OwnApplicationResponse;
 import pl.lodz.p.it.ssbd2024.mol.dto.RentForOwnerResponse;
 import pl.lodz.p.it.ssbd2024.mol.mappers.ApplicationMapper;
