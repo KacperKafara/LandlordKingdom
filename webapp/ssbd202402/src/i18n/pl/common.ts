@@ -462,6 +462,7 @@ const errors = {
   roleRequestAlreadyExists: "Wniosek o rolę już istnieje",
   userAlreadyHasRole: "Użytkownik już ma tę rolę",
   applicationExists: "Aplikacja do tego lokalu już istnieje",
+  imageNotFound: "Nie znaleziono obrazka",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -869,7 +870,23 @@ const localReport = {
   summaryBarChart: "Wpłaty i opłaty podzielone na tygodnie",
 };
 
+const uploadImage = {
+  uploadImage: "Dodaj zdjęcie",
+  uploadImageDescription: "Dodaj zdjęcie aby uatrakcyjnić swoje ogłoszenie",
+  uploadedFileTooLarge: "Plik jest za duży, maksymalny rozmiar to 256KB",
+  uploadedFileNotImage: "Twój plik nie jest w formacie jpg lub png",
+  chooseFile: "Wybierz plik",
+  upload: "Prześlij",
+  delete: "Usuń",
+  deleteSuccessTitle: "Sukces.",
+  deleteSuccessDescription: "Zdjęcie zostało usunięte pomyślnie",
+  deleteErrorTitle: "Błąd.",
+  uploadImageSuccess: "Zdjęcie zostało dodane pomyślnie",
+  uploadImageError: "Błąd podczas dodawania zdjęcia",
+};
+
 export default {
+  uploadImage,
   localReport,
   rentDetailsPage,
   createPaymentDialog,
