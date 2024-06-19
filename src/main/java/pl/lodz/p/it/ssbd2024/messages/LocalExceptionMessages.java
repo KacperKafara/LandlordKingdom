@@ -9,4 +9,6 @@ public class LocalExceptionMessages {
     public static final String ADDRESS_ALREADY_ASSIGNED = "Address is already assigned to another local";
     public static final String CREATION_FAILED = "Failed to create local";
     public static final String LOCAL_ARCHIVED = "Local is archived";
+    public static final String IMAGE_NOT_FOUND = "Image not found";
+    public static final String IMAGE_FORMAT_NOT_SUPPORTED = "Image format not supported";
 }

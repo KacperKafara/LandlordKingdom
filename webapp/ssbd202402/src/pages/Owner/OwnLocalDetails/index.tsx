@@ -21,6 +21,8 @@ import { LocalState } from "@/@types/localState";
 import LocalApplications from "@/pages/Owner/OwnLocalDetails/ShowApplications.tsx";
 import { Button } from "@/components/ui/button";
 import { toLocaleFixed } from "@/utils/currencyFormat";
+import UploadImageCard from "./UploadImage";
+import { useGetLocalImages } from "@/data/local/useImage";
 
 const OwnLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,6 +33,7 @@ const OwnLocalDetailsPage: FC = () => {
     { title: t("ownerLocals.locals"), path: "/owner/locals" },
     { title: data?.data.name ?? "", path: `/owner/locals/local/${id}` },
   ]);
+  const { data: imagesIds } = useGetLocalImages(id!);
 
   if (isLoading) {
     return <LoadingData />;
@@ -63,6 +66,9 @@ const OwnLocalDetailsPage: FC = () => {
                 </TabsTrigger>
                 <TabsTrigger value="checkApplications">
                   {t("ownLocalDetails.showApplications")}
+                </TabsTrigger>
+                <TabsTrigger value="uploadImage">
+                  {t("ownLocalDetails.uploadImage")}
                 </TabsTrigger>
               </TabsList>
               <Button asChild>
@@ -186,6 +192,9 @@ const OwnLocalDetailsPage: FC = () => {
             </TabsContent>
             <TabsContent value="checkApplications">
               <LocalApplications />
+            </TabsContent>
+            <TabsContent value="uploadImage">
+              <UploadImageCard id={id!} images={imagesIds ?? []} />
             </TabsContent>
           </Tabs>
         </>

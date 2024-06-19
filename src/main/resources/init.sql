@@ -45,6 +45,7 @@ GRANT SELECT ON TABLE public.timezones TO ssbd02mol;
 GRANT SELECT ON TABLE public.google_auth TO ssbd02mol;
 GRANT SELECT, INSERT ON TABLE public.owners TO ssbd02mol;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.access_levels TO ssbd02mol;
+GRANT SELECT, INSERT, DELETE ON TABLE public.images TO ssbd02mol;
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
                           modified_at, created_by, modified_by, active)
@@ -319,3 +320,17 @@ VALUES
     ('a3d33333-e29b-41d4-a716-446655440000', '4b329d71-2a92-4e90-8f0b-f673e4f79529', '550e8400-e29b-41d4-a716-446655440034', '2024-01-03 12:00:00', '2024-01-03 12:00:00', 1, '397cf3c5-f369-4783-9892-6fc781fd2b0d', '397cf3c5-f369-4783-9892-6fc781fd2b0d'),
     ('a4d44444-e29b-41d4-a716-446655440000', '4b329d71-2a92-4e90-8f0b-f673e4f79529', '550e8400-e29b-41d4-a716-446655440035', '2024-01-04 13:00:00', '2024-01-04 13:00:00', 1, '397cf3c5-f369-4783-9892-6fc781fd2b0d', '397cf3c5-f369-4783-9892-6fc781fd2b0d'),
     ('a4d44446-e29b-41d4-a716-446655440000', '4b329d71-2a92-4e90-8f0b-f673e4f79529', '550e8400-e29b-41d4-a716-446655440036', '2024-01-04 13:00:00', '2024-01-04 13:00:00', 1, '397cf3c5-f369-4783-9892-6fc781fd2b0d', '397cf3c5-f369-4783-9892-6fc781fd2b0d');
+
+
+INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
+                          modified_at, created_by, modified_by, active)
+VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'admin2', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
+        false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true);
+INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
+VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'kozakonrad72@gmail.com', null, 'Admin', 'Admin');
+INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
+VALUES ('2dbe6d57-54ca-4662-96b4-149d72a8ab44', 'e872ce90-734b-49a9-8949-dde4753b8864', 'ADMINISTRATOR', true, 0, NOW(),
+        NOW(), null, null);
+INSERT INTO public.administrators (id)
+VALUES ('2dbe6d57-54ca-4662-96b4-149d72a8ab44');
+

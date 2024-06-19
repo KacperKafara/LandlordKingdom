@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,6 +81,10 @@ public class Local extends AbstractEntity {
     @Digits(integer = 10, fraction = 2, message = "Next rental fee must be a valid monetary amount with up to 10 integer digits and 2 fractional digits")
     private BigDecimal nextRentalFee;
 
+    @Setter
+    @Column(name = "images")
+    @OneToMany(mappedBy = "local")
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "local")
     private List<Rent> rents = new ArrayList<>();
