@@ -44,25 +44,25 @@ const config = {
     footer: "bg-red-500",
     nav: "border-b-4 border-red-500",
     hover: "hover:bg-red-500 hover:text-black",
-    accentColor: "bg-red-500 text-black",
+    accentColor: "border-b-red-500 border-b-2 rounded-none hover:rounded-sm",
   },
   tenant: {
     footer: "bg-green-500",
     nav: "border-b-4 border-green-500",
     hover: "hover:bg-green-500 hover:text-black",
-    accentColor: "bg-green-500",
+    accentColor: "border-b-green-500 border-b-2 rounded-none hover:rounded-sm",
   },
   owner: {
     footer: "bg-blue-500",
     nav: "border-b-4 border-blue-500",
     hover: "hover:bg-blue-500 hover:text-black",
-    accentColor: "bg-blue-500",
+    accentColor: "border-b-blue-500 border-b-2 rounded-none hover:rounded-sm",
   },
   me: {
     footer: "bg-purple-500",
     nav: "border-b-4 border-purple-500",
     hover: "hover:bg-purple-500 hover:text-black",
-    accentColor: "bg-purple-500",
+    accentColor: "border-b-purple-500 border-b-2 rounded-none hover:rounded-sm",
   },
 } satisfies {
   [key in LayoutType]: {
@@ -118,9 +118,9 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                     X
                   </Button>
                 </DrawerClose>
-                {links.map((link, idx) => (
+                {links.map((link) => (
                   <NavLink
-                    key={idx}
+                    key={link.path}
                     to={link.path}
                     className={cn("block w-full hover:bg-accent")}
                     onClick={() => setOpen(false)}
@@ -148,7 +148,7 @@ const BaseLayout: FC<BaseLayoutProps> = ({ children, type, links = [] }) => {
                 to={link.path}
                 className={({ isActive }) =>
                   cn(
-                    "rounded-md px-2 py-1",
+                    "rounded-sm px-2 py-1",
                     colors.hover,
                     isActive && colors.accentColor
                   )

@@ -197,6 +197,7 @@ const userListPage = {
   updateEmailAddressDescription:
     "Na adres email użytkownika zostanie wysłany link do zmiany adresu email",
   updateEmailAddress: "Zaktualizuj adres email",
+  breadcrumbsUserListPage: "Użytkownicy",
 };
 
 const block = {
@@ -799,6 +800,7 @@ const ownerRentDetails = {
 };
 
 const breadcrumbs = {
+  admin: "Administrator",
   tenant: "Najemca",
   locals: "Lokale",
   local: "Lokal",

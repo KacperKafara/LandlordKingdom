@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 import { TFunction } from "i18next";
 
 const links = (t: TFunction): NavigationLink[] => [
-  { label: t("navLinks.users"), path: "/admin/users" },
   { label: t("navLinks.locals"), path: "/admin/locals" },
+  { label: t("navLinks.users"), path: "/admin/users" },
   { label: t("navLinks.notApprovedActions"), path: "/admin/not-approved" },
 ];
 
