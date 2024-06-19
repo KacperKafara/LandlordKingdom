@@ -57,27 +57,6 @@ const MyAccountButton: FC<MyAccountButtonProps> = ({
             {t("navLinks.account")}
           </DropdownMenuItem>
         </DropdownMenuLabel>
-
-        {type !== "me" && (
-          <>
-            <DropdownMenuSeparator />
-            {links.map((link, idx) => (
-              <DropdownMenuItem key={link.path + idx} asChild>
-                <NavLink
-                  to={link.path}
-                  //  className={cn("block h-full w-full")}
-                  className={cn("block h-full w-full", hover)}
-                >
-                  {i18n.exists(`navLinks.${link.label}`)
-                    ? //  @ts-expect-error error handled
-                      t(`navLinks.${link.label}`)
-                    : link.label}
-                </NavLink>
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-          </>
-        )}
         <DropdownMenuItem onClick={handleLoginButtonClick}>
           {t("navLinks.signOut")}
         </DropdownMenuItem>
