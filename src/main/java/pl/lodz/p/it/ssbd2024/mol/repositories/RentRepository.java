@@ -83,11 +83,11 @@ public interface RentRepository extends JpaRepository<Rent, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT r FROM Rent r WHERE r.owner.user.id = :userId AND r.local.id = :localId ORDER BY r.endDate - r.startDate DESC LIMIT 1")
-    Rent getLongestRentByLocalId(UUID localId, UUID userId);
+    Optional<Rent> getLongestRentByLocalId(UUID localId, UUID userId);
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT r FROM Rent r WHERE r.owner.user.id = :userId AND r.local.id = :localId ORDER BY r.endDate - r.startDate ASC LIMIT 1")
-    Rent getShortestRentByLocalId(UUID localId, UUID userId);
+    Optional<Rent> getShortestRentByLocalId(UUID localId, UUID userId);
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT r FROM Rent r WHERE r.owner.user.id = :userId")
