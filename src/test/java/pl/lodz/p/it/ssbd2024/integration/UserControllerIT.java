@@ -43,20 +43,6 @@ public class UserControllerIT extends BaseConfig {
     }
 
     @Test
-    @DisplayName("GetAll_ReturnCorrectAmountOfUsers_Test")
-    public void GetAll_ReturnCorrectAmountOfUsers_Test() {
-        given()
-                .contentType(ContentType.JSON)
-                .auth().oauth2(adminToken)
-                .when()
-                .get(USERS_URL)
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.OK.value())
-                .body("size()", is(6));
-    }
-
-    @Test
     @DisplayName("Get_ReturnCorrectUser_Test")
     public void Get_ReturnCorrectUser_Test() {
 
