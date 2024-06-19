@@ -457,6 +457,8 @@ const errors = {
   unexpectedRollback: "Unexpected rollback",
   userAlreadyHasRole: "User already has this role",
   applicationExists: "Application for this local already exists",
+  applicationNotFound: "Application not found",
+  roleRequestNotFound: "Role request not found",
 } satisfies {
   [key in ExceptionCode]: string;
 };

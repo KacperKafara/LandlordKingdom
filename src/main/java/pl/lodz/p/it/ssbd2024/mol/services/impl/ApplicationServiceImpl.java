@@ -58,7 +58,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @PreAuthorize("hasRole('TENANT')")
     public Application getUserApplication(UUID userId, UUID localId) throws NotFoundException {
-        return applicationRepository.findByTenantUserIdAndLocalId(userId, localId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.NOT_FOUND));
+        return applicationRepository.findByTenantUserIdAndLocalId(userId, localId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.APPLICATION_NOT_FOUND));
     }
 
     @Override
@@ -70,7 +70,7 @@ public class ApplicationServiceImpl implements ApplicationService {
             throw new WrongEndDateException(RentExceptionMessages.WRONG_END_DATE, ErrorCodes.WRONG_END_DATE);
         }
 
-        Application application = applicationRepository.findApplicationForOwner(applicationId, ownerUserId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.NOT_FOUND));
+        Application application = applicationRepository.findApplicationForOwner(applicationId, ownerUserId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.APPLICATION_NOT_FOUND));
         List<Application> restApplications = applicationRepository.findByLocalId(application.getLocal().getId());
         Tenant tenant = application.getTenant();
         Owner owner = application.getLocal().getOwner();
@@ -108,7 +108,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public void rejectApplication(UUID applicationId, UUID ownerUserId) throws NotFoundException {
-        Application application = applicationRepository.findApplicationForOwner(applicationId, ownerUserId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.NOT_FOUND));
+        Application application = applicationRepository.findApplicationForOwner(applicationId, ownerUserId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.APPLICATION_NOT_FOUND));
         User user = application.getTenant().getUser();
         Local local = application.getLocal();
 
@@ -138,7 +138,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     @Override
     @PreAuthorize("hasRole('TENANT')")
     public void removeApplication(UUID localId, UUID userId) throws NotFoundException {
-        Application application = applicationRepository.findByTenantUserIdAndLocalId(userId, localId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.NOT_FOUND));
+        Application application = applicationRepository.findByTenantUserIdAndLocalId(userId, localId).orElseThrow(() -> new NotFoundException(ApplicationExceptionMessages.NOT_FOUND, ErrorCodes.APPLICATION_NOT_FOUND));
 
         applicationRepository.delete(application);
     }

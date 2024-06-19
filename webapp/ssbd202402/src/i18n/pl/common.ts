@@ -462,6 +462,8 @@ const errors = {
   roleRequestAlreadyExists: "Wniosek o rolę już istnieje",
   userAlreadyHasRole: "Użytkownik już ma tę rolę",
   applicationExists: "Aplikacja do tego lokalu już istnieje",
+  applicationNotFound: "Nie znaleziono aplikacji",
+  roleRequestNotFound: "Nie znaleziono wniosku o rolę",
 } satisfies {
   [key in ExceptionCode]: string;
 };
