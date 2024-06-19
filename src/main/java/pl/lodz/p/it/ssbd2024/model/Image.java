@@ -21,5 +21,6 @@ public class Image extends AbstractEntity {
     @Column(name = "image", nullable = false, length = (256*1024))
     private byte[]  image;
 
-
+    @Column(name = "type", nullable = false)
+    private String type;
 }

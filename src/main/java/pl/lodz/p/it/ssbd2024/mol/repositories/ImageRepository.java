@@ -11,20 +11,24 @@ import pl.lodz.p.it.ssbd2024.model.Image;
 import pl.lodz.p.it.ssbd2024.model.Local;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 @Transactional(propagation = Propagation.MANDATORY)
 public interface ImageRepository extends JpaRepository<Image, UUID> {
-
-
     @NonNull
     @PreAuthorize("hasRole('OWNER')")
     Image saveAndFlush(@NonNull Local local);
 
-    @PreAuthorize("hasRole('OWNER')")
+    @PreAuthorize("isAuthenticated()")
     @Query("SELECT image.id FROM Image image WHERE image.local.id = :localId")
     List<UUID> findImageIdsByLocalId(UUID localId);
 
+    @NonNull
+    @PreAuthorize("permitAll()")
+    Optional<Image> findById(@NonNull UUID id);
 
+    @PreAuthorize("hasRole('OWNER')")
+    void deleteById(@NonNull UUID id);
 }

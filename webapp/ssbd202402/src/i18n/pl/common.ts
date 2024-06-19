@@ -637,6 +637,7 @@ const ownLocalDetails = {
     "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
   showApplications: "Przeglądaj aplikacje",
   state: "Stan lokalu",
+  uploadImage: "Dodaj zdjęcie",
 };
 
 const activeLocals = {
@@ -875,7 +876,23 @@ const localReport = {
   summaryBarChart: "Wpłaty i opłaty podzielone na tygodnie",
 };
 
+const uploadImage = {
+  uploadImage: "Dodaj zdjęcie",
+  uploadImageDescription: "Dodaj zdjęcie aby uatrakcyjnić swoje ogłoszenie",
+  uploadedFileTooLarge: "Plik jest za duży, maksymalny rozmiar to 256KB",
+  uploadedFileNotImage: "Twój plik nie jest w formacie jpg lub png",
+  chooseFile: "Wybierz plik",
+  upload: "Prześlij",
+  delete: "Usuń",
+  deleteSuccessTitle: "Sukces.",
+  deleteSuccessDescription: "Zdjęcie zostało usunięte pomyślnie",
+  deleteErrorTitle: "Błąd.",
+  uploadImageSuccess: "Zdjęcie zostało dodane pomyślnie",
+  uploadImageError: "Błąd podczas dodawania zdjęcia",
+};
+
 export default {
+  uploadImage,
   localReport,
   rentDetailsPage,
   createPaymentDialog,

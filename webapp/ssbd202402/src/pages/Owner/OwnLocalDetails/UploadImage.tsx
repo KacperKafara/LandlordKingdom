@@ -1,74 +1,93 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { ChangeEvent, FC, useState } from "react";
-// import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-// import { useLanguageStore } from "@/i18n/languageStore";
 import { Button } from "@/components/ui/button";
-import { useGetLocalImages, useUploadImage } from "@/data/local/useImage";
+import { useUploadImage } from "@/data/local/useImage";
+import { toast } from "@/components/ui/use-toast";
+import { t } from "i18next";
+import ImageDisplay from "./ImageComponent";
 
 type UploadImageCardProps = {
   id: string;
+  images: string[];
 };
 
-const UploadImageCard: FC<UploadImageCardProps> = ({ id }) => {
-  //   const { t } = useTranslation();
-  //   const { language } = useLanguageStore();
+const UploadImageCard: FC<UploadImageCardProps> = ({ id, images }) => {
   const [file, setFile] = useState<File | null>(null);
   const { mutate } = useUploadImage();
-  const { data, isLoading } = useGetLocalImages(
-    "d5f21389-16a0-4c3e-8710-00d1ed79592a"
-  );
+
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files != null) {
+      const file = event.target.files[0];
+      if (file.size >= 256 * 1024) {
+        setFile(null);
+        toast({
+          variant: "destructive",
+          description: t("uploadImage.uploadedFileTooLarge"),
+        });
+        return;
+      }
+      if (file.type !== "image/png" && file.type !== "image/jpeg") {
+        setFile(null);
+        toast({
+          variant: "destructive",
+          description: t("uploadImage.uploadedFileNotImage"),
+        });
+        return;
+      }
       setFile(event.target.files[0]);
     }
   };
 
   const handleUpload = () => {
+    const formData = new FormData();
+    setFile(null);
     if (file != null) {
-      const reader = new FileReader();
-      reader.onload = async () => {
-        const arrayBuffer = await file.arrayBuffer();
-        const array = new Int8Array(arrayBuffer);
-        mutate({ id, image: array });
-      };
-      reader.readAsArrayBuffer(file);
+      formData.append("file", file);
+      mutate({ id, image: formData });
     }
   };
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-center">Upload Image</CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col justify-center">
-        <div className="flex w-4/5 flex-col">
-          <p className="text-lg font-semibold">
-            Upload an image of your local to attract more customers.
-          </p>
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5" lang="en-US">
-          <Label htmlFor="picture">Choose file</Label>
+    <>
+      <Card className="flex flex-col">
+        <CardHeader>
+          <CardTitle className="text-center">
+            {t("uploadImage.uploadImage")}
+          </CardTitle>
+          <CardDescription className="text-center">
+            {t("uploadImage.uploadImageDescription")}
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex w-full flex-col items-center justify-center gap-2">
           <Input
             id="picture"
             type="file"
+            className="w-1/3 hover:cursor-pointer"
             accept="image/png, image/jpeg"
             onChange={handleChange}
           />
-        </div>
-        <Button
-          className="mt-2 w-1/2"
-          type="submit"
-          onClick={() => handleUpload()}
-        >
-          Upload
-        </Button>
-        <div>
-          {isLoading && <p>loading...</p>}
-          {data && <img src={`data:image;base64,` + data} alt="local" />}
-        </div>
-      </CardContent>
-    </Card>
+          <Button
+            className="mt-2 w-1/3"
+            type="submit"
+            onClick={() => handleUpload()}
+          >
+            {t("uploadImage.upload")}
+          </Button>
+          <div className="flex flex-wrap gap-1">
+            {images.map((imageId) => (
+              <ImageDisplay key={imageId} id={imageId} />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 

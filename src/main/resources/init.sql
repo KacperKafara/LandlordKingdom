@@ -45,7 +45,7 @@ GRANT SELECT ON TABLE public.timezones TO ssbd02mol;
 GRANT SELECT ON TABLE public.google_auth TO ssbd02mol;
 GRANT SELECT, INSERT ON TABLE public.owners TO ssbd02mol;
 GRANT SELECT, INSERT, UPDATE ON TABLE public.access_levels TO ssbd02mol;
-GRANT SELECT, INSERT, UPDATE ON TABLE public.images TO ssbd02mol;
+GRANT SELECT, INSERT, DELETE ON TABLE public.images TO ssbd02mol;
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
                           modified_at, created_by, modified_by, active)

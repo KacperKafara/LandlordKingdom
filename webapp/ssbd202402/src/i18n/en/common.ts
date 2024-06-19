@@ -660,6 +660,7 @@ const ownLocalDetails = {
     "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
   showApplications: "Show applications",
   state: "Local state",
+  uploadImage: "Upload image",
 };
 
 const activeLocals = {
@@ -865,7 +866,24 @@ const localReport = {
   summaryBarChart: "Payments and fees weekly summary",
 };
 
+const uploadImage = {
+  uploadImage: "Upload image",
+  uploadImageDescription:
+    "Upload an image of your local to attract more customers.",
+  uploadedFileTooLarge: "Uploaded file is too large. Max size is 256KB",
+  uploadedFileNotImage: "Only .png and .jpeg files are allowed",
+  chooseFile: "Choose file",
+  upload: "Upload",
+  delete: "Delete",
+  deleteSuccessTitle: "Image deleted",
+  deleteSuccessDescription: "Image has been deleted successfully",
+  deleteErrorTitle: "Error. Image not deleted",
+  uploadImageSuccess: "Image has been uploaded successfully",
+  uploadImageError: "Error while uploading image",
+};
+
 export default {
+  uploadImage,
   localReport,
   rentDetailsPage,
   createPaymentDialog,

@@ -57,4 +57,5 @@ public class ErrorCodes {
     public static final String LOCAL_CREATION_ERROR = "localCreationFailed";
     public static final String UPDATE_LOCAL_ARCHIVED = "updateLocalArchived";
     public static final String IMAGE_NOT_FOUND = "imageNotFound";
+    public static final String IMAGE_FORMAT_NOT_SUPPORTED = "imageFormatNotSupported";
 }

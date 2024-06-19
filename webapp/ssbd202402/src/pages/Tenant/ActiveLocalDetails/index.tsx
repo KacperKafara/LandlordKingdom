@@ -23,6 +23,7 @@ import { useGetUserApplication } from "@/data/application/useGetUserApplication"
 import { useCreateApplication } from "@/data/application/useCreateApplication";
 import { useQueryClient } from "@tanstack/react-query";
 import { toLocaleFixed } from "@/utils/currencyFormat";
+import LocalImages from "./LocalImages";
 
 const ActiveLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -93,6 +94,8 @@ const ActiveLocalDetailsPage: FC = () => {
                 {t("localDetails.description")}
               </p>
               <div>{local.description}</div>
+
+              <LocalImages id={id!} />
 
               <AlertDialog>
                 <AlertDialogTrigger asChild>
