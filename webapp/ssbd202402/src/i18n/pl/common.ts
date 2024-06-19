@@ -642,7 +642,7 @@ const activeLocals = {
   error: "Błąd podczas pobierania danych aktywnych nieruchomości",
   size: "Powierzchnia",
   city: "Miasto",
-  show: "Wyświetl szczegóły",
+  show: "Szczegóły",
 };
 
 const localApplications = {

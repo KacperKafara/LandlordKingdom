@@ -665,7 +665,7 @@ const activeLocals = {
   error: "Error while fetching active locals",
   size: "Size",
   city: "City",
-  show: "Show details",
+  show: "Details",
 };
 
 const localApplications = {

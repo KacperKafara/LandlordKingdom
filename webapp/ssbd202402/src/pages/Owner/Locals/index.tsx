@@ -91,8 +91,8 @@ const Locals: FC = () => {
           <RefreshQueryButton queryKeys={["ownLocals"]} />
         </div>
       </div>
-      <div className="flex h-full max-w-[1920px] flex-col justify-center">
-        <ul className="flex flex-1 flex-wrap justify-center gap-2 py-4">
+      <div className="flex h-full max-w-[1920px] flex-col">
+        <ul className="flex flex-wrap justify-center gap-2 py-4">
           {locals?.length === 0 && (
             <div className="flex flex-col">
               <p className="text-2xl">
