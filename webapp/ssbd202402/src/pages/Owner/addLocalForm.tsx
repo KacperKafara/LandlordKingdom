@@ -17,6 +17,7 @@ import {
 import { useAddLocal } from "@/data/mol/useAddLocal.ts";
 import { TFunction } from "i18next";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { InputWithText } from "@/components/InputWithText";
 
 const addLocalSchema = (t: TFunction) =>
   z.object({
@@ -115,19 +116,7 @@ const AddLocalForm: FC = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="description"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("addLocalPage.description")}</FormLabel>
-                    <FormControl>
-                      <textarea {...field} rows={4} className="form-textarea mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"/>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+
               <FormField
                 control={form.control}
                 name="size"
@@ -135,13 +124,14 @@ const AddLocalForm: FC = () => {
                   <FormItem>
                     <FormLabel>{t("addLocalPage.size")}</FormLabel>
                     <FormControl>
-                      <Input
+                      <InputWithText
                         {...field}
                         type="number"
                         onChange={(event) => {
                           const value = parseFloat(event.target.value);
                           field.onChange(value);
                         }}
+                        rightText="m²"
                       />
                     </FormControl>
                     <FormMessage />
@@ -213,47 +203,71 @@ const AddLocalForm: FC = () => {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="marginFee"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("addLocalPage.marginFee")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        onChange={(event) => {
-                          const value = parseFloat(event.target.value);
-                          field.onChange(value);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="rentalFee"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{t("addLocalPage.rentalFee")}</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...field}
-                        type="number"
-                        onChange={(event) => {
-                          const value = parseFloat(event.target.value);
-                          field.onChange(value);
-                        }}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <div className="col-span-2">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="marginFee"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("addLocalPage.marginFee")}</FormLabel>
+                      <FormControl>
+                        <InputWithText
+                          {...field}
+                          type="number"
+                          onChange={(event) => {
+                            const value = parseFloat(event.target.value);
+                            field.onChange(value);
+                          }}
+                          rightText={t("currency")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="rentalFee"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("addLocalPage.rentalFee")}</FormLabel>
+                      <FormControl>
+                        <InputWithText
+                          {...field}
+                          type="number"
+                          onChange={(event) => {
+                            const value = parseFloat(event.target.value);
+                            field.onChange(value);
+                          }}
+                          rightText={t("currency")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="col-span-1 md:col-span-2">
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("addLocalPage.description")}</FormLabel>
+                      <FormControl>
+                        <textarea
+                          {...field}
+                          rows={20}
+                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="col-span-1 md:col-span-2">
                 <Button type="submit" className="w-full">
                   {t("addLocalPage.formSubmit")}
                 </Button>

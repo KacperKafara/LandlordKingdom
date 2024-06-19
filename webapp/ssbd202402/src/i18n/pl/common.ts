@@ -874,6 +874,7 @@ const localReport = {
   rentCount: "Liczba wynajmów",
   summaryPieChart: "Podsumowanie wpłat/opłat",
   summaryBarChart: "Wpłaty i opłaty podzielone na tygodnie",
+  numberOfWeeks: "Liczba tygodni",
 };
 
 const uploadImage = {

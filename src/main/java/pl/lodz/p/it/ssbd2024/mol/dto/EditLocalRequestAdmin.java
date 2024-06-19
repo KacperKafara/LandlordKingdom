@@ -13,7 +13,7 @@ public record EditLocalRequestAdmin(
         @Size(min = 1, max = 200, message = "Name length has to be between 1 and 200")
         String name,
         @NotBlank(message = "Description cannot be blank")
-        @Size(min = 1, max = 500, message = "Description length has to be between 1 and 5000")
+        @Size(min = 1, max = 1500, message = "Description length has to be between 1 and 1500")
         String description,
         @Min(value = 1, message = "Size has to be greater than 0")
         int size,
