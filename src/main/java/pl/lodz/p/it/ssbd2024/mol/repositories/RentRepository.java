@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.repositories;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -38,7 +40,7 @@ public interface RentRepository extends JpaRepository<Rent, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT r FROM Rent r WHERE r.owner.user.id = :ownerId AND r.endDate >= CURRENT_DATE")
-    List<Rent> findCurrentRentsByOwnerId(UUID ownerId);
+    Page<Rent> findCurrentRentsByOwnerId(UUID ownerId, Pageable pageable);
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT r FROM Rent r WHERE r.owner.user.id = :userId AND r.endDate < CURRENT_DATE")

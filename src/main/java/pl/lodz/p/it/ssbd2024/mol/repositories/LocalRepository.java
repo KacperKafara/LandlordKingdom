@@ -48,6 +48,9 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     @PreAuthorize("isAuthenticated()")
     List<Local> findAllByState(LocalState localState);
 
+    @PreAuthorize("hasAnyRole('TENANT', 'OWNER', 'ADMINISTRATOR')")
+    Page<Local> findAllByState(Pageable pageable, LocalState state);
+
     @PreAuthorize("hasRole('OWNER')")
     Optional<Local> findByOwner_User_IdAndId(UUID userId, UUID id);
 
@@ -63,9 +66,6 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     @NonNull
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     Page<Local> findAll(@NonNull Pageable pageable);
-
-    @PreAuthorize("hasRole('ADMINISTRATOR')")
-    Page<Local> findAllByState(Pageable pageable, LocalState state);
 
     @PreAuthorize("hasRole('TENANT')")
     Optional<Local> findByIdAndState(UUID id, LocalState state);
