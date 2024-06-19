@@ -107,7 +107,6 @@ jobs:
           chmod 600 ssh_key.pem
           ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "mkdir -p /home/$SSH_USERNAME/deploy_files"
           scp -o StrictHostKeyChecking=no -i ssh_key.pem -r target/* $SSH_USERNAME@$SSH_HOST:/home/$SSH_USERNAME/deploy_files
-          ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo docker network disconnect docker-ssbd02_my_network libretranslate"
           ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo docker-compose -f deploy_files/prod.docker-compose.yml down"
           ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo docker-compose -f deploy_files/prod.docker-compose.yml up -d"
           ssh -o StrictHostKeyChecking=no -i ssh_key.pem $SSH_USERNAME@$SSH_HOST "sudo rm -rf /home/$SSH_USERNAME/deploy_files"
