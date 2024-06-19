@@ -12,44 +12,36 @@ import {
 import { useGetOwnerCurrentRents } from "@/data/mol/useGetOwnerCurrentRents";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { t } from "i18next";
-import { RefreshCw } from "lucide-react";
-import { FC } from "react";
+import {FC, useState} from "react";
 import { ChangeEndDate } from "./ChangeEndDate";
 import { useNavigate } from "react-router-dom";
 import { getAddressString } from "@/utils/address";
+import {PageChangerComponent} from "@/pages/Components/PageChangerComponent.tsx";
+import {LoadingData} from "@/components/LoadingData.tsx";
 
 const CurrentOwnerRentsPage: FC = () => {
   const breadCrumbs = useBreadcrumbs([
     { title: t("currentOwnerRents.title"), path: "/owner" },
     { title: t("currentOwnerRents.rents"), path: "/owner/current-rents" },
   ]);
-  const { data: rents, isLoading } = useGetOwnerCurrentRents();
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState(6);
+  const { data: rentsPage, isLoading } = useGetOwnerCurrentRents({
+    pageNumber: pageNumber,
+    pageSize: pageSize,
+  });
+  const rents = rentsPage?.rents;
   const navigate = useNavigate();
+
+  if (!rentsPage || !rents) {
+    return <LoadingData />;
+  }
+
   if (isLoading) {
-    return (
-      <div className="flex justify-center">
-        <div className="mt-10 h-full">
-          <RefreshCw className="size-14 animate-spin" />
-        </div>
-      </div>
-    );
+    return <LoadingData />;
   }
 
-  if (!isLoading && rents?.length === 0) {
-    return (
-      <div className="relative w-full pt-2">
-        {breadCrumbs}
-        <div className="mt-5 flex flex-col items-center">
-          <p className="text-xl">{t("currentOwnerRents.noRentsFound")}</p>
-          <RefreshQueryButton
-            className="absolute -right-9 top-1"
-            queryKeys={["ownerCurrentRents"]}
-          />
-        </div>
-      </div>
-    );
-  }
-
+  if (rents.length !== 0 && rentsPage.pages) {
   return (
     <div className="flex flex-col justify-center">
       <div className="flex flex-row items-center justify-between">
@@ -114,6 +106,7 @@ const CurrentOwnerRentsPage: FC = () => {
       </ul>
     </div>
   );
+  }
 };
 
 export default CurrentOwnerRentsPage;

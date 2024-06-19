@@ -51,8 +51,8 @@ public class RoleServiceImpl implements RoleService {
     public RoleRequest get() {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
         try {
-            Tenant tenant = tenantRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
-            return roleRequestRepository.findByTenantId(tenant.getId()).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+            Tenant tenant = tenantRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.ROLE_REQUEST_NOT_FOUND));
+            return roleRequestRepository.findByTenantId(tenant.getId()).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.ROLE_REQUEST_NOT_FOUND));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -62,7 +62,7 @@ public class RoleServiceImpl implements RoleService {
     @PreAuthorize("hasRole('TENANT')")
     public RoleRequest requestRole() throws RoleRequestAlreadyExistsException, UserAlreadyHasRoleException, NotFoundException {
         UUID userId = UUID.fromString(SecurityContextHolder.getContext().getAuthentication().getName());
-        Tenant tenant = tenantRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        Tenant tenant = tenantRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.ROLE_REQUEST_NOT_FOUND));
 
         if (roleRequestRepository.findByTenantId(tenant.getId()).isPresent()) {
             throw new RoleRequestAlreadyExistsException(RoleRequestMessages.ROLE_REQUEST_ALREADY_EXISTS, ErrorCodes.ROLE_REQUEST_ALREADY_EXISTS);
@@ -79,7 +79,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void accept(UUID id) throws NotFoundException {
-        RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.ROLE_REQUEST_NOT_FOUND));
         User user = roleRequest.getTenant().getUser();
         Owner owner = new Owner();
         owner.setUser(user);
@@ -92,7 +92,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public void reject(UUID id) throws NotFoundException {
-        RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.NOT_FOUND));
+        RoleRequest roleRequest = roleRequestRepository.findById(id).orElseThrow(() -> new NotFoundException(RoleRequestMessages.ROLE_REQUEST_NOT_FOUND, ErrorCodes.ROLE_REQUEST_NOT_FOUND));
         User user = roleRequest.getTenant().getUser();
         roleRequestRepository.delete(roleRequest);
         molEmailService.sendRoleRequestRejectedEmail(user.getEmail(), user.getFirstName(), user.getLanguage());

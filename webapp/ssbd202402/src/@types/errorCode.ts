@@ -52,4 +52,6 @@ export type ExceptionCode =
   | "variableFeeAlreadyExists"
   | "wrongEndDate"
   | "rentEnded"
-  | "paymentAlreadyExists";
+  | "paymentAlreadyExists"
+  | "applicationNotFound"
+  | "roleRequestNotFound";

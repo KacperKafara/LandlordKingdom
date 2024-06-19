@@ -8,16 +8,23 @@ import {
 } from "@/components/ui/card";
 import { useGetActiveLocals } from "@/data/mol/useGetActiveLocals.ts";
 import { t } from "i18next";
-import { RefreshCw } from "lucide-react";
-import { FC } from "react";
+import {FC, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import DataField from "@/components/DataField.tsx";
+import {LoadingData} from "@/components/LoadingData.tsx";
+import {PageChangerComponent} from "@/pages/Components/PageChangerComponent.tsx";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import RefreshQueryButton from "@/components/RefreshQueryButton";
 
 const ActiveLocals: FC = () => {
-  const { data: locals, isLoading } = useGetActiveLocals();
+  const [pageNumber, setPageNumber] = useState(0);
+  const [pageSize, setPageSize] = useState(6);
+  const { data: localsPage, isLoading } = useGetActiveLocals({
+    pageNumber: pageNumber,
+    pageSize: pageSize,
+  });
   const navigate = useNavigate();
+  const locals = localsPage?.locals;
 
   const breadcrumbs = useBreadcrumbs([
     { title: t("breadcrumbs.tenant"), path: "/tenant" },
@@ -64,9 +71,8 @@ const ActiveLocals: FC = () => {
             </Card>
           ))}
         </div>
-      )}
-    </div>
-  );
+    );
+  }
 };
 
 export default ActiveLocals;

@@ -46,7 +46,7 @@ public class PaymentServiceImpl implements PaymentService {
     public Payment create(UUID userId, UUID rentId, BigDecimal amount) throws NotFoundException, PaymentAlreadyExistsException, RentAlreadyEndedException {
         Owner owner = ownerMolRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
         Rent rent = rentRepository.findByOwnerIdAndId(owner.getId(), rentId)
-                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
 
         if (rent.getEndDate().isBefore(LocalDate.now())) {
             throw new RentAlreadyEndedException(

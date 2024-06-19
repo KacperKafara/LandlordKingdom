@@ -31,7 +31,7 @@ public class ReportServiceImpl implements ReportService {
     public LocalReport getLocalReport(UUID localId, UUID userId, LocalDate startDate, LocalDate endDate)
             throws NotFoundException {
         Local local = localRepository.findByOwner_User_IdAndId(userId, localId)
-                .orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
 
         List<Payment> payments = paymentRepository.findByLocalIdAndUserId(localId, userId);
         List<VariableFee> variableFees = variableFeeRepository.findByLocalIdAndUserId(localId, userId);
