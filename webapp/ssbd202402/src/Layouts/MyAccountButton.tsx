@@ -4,7 +4,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useMeQuery } from "@/data/meQueries";
@@ -13,22 +12,14 @@ import { useUserStore } from "@/store/userStore";
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
 import { VscAccount } from "react-icons/vsc";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
-import { NavigationLink, LayoutType } from "./BaseLayout";
-import i18n from "@/i18n";
 
 type MyAccountButtonProps = {
   hover: string;
-  links?: NavigationLink[];
-  type: LayoutType;
 };
 
-const MyAccountButton: FC<MyAccountButtonProps> = ({
-  hover,
-  links = [],
-  type,
-}) => {
+const MyAccountButton: FC<MyAccountButtonProps> = ({ hover }) => {
   const { t } = useTranslation();
   const userStore = useUserStore();
   const navigate = useNavigate();
