@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,22 +22,22 @@ import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
-import pl.lodz.p.it.ssbd2024.mol.dto.AddLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
+import pl.lodz.p.it.ssbd2024.mol.repositories.UserMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
+import pl.lodz.p.it.ssbd2024.util.translate.LocalsLanguage;
+import pl.lodz.p.it.ssbd2024.util.translate.TranslateRequest;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+
+import static pl.lodz.p.it.ssbd2024.util.UserFromContext.getCurrentUserId;
 
 @Service
 @RequiredArgsConstructor
@@ -49,6 +48,7 @@ public class LocalServiceImpl implements LocalService {
     private final AddressRepository addressRepository;
     private final SignVerifier signVerifier;
     private final OwnerMolRepository ownerRepository;
+    private final UserMolRepository userRepository;
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
@@ -83,8 +83,14 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("isAuthenticated()")
-    public List<Local> getActiveLocals() {
-        return localRepository.findAllByState(LocalState.ACTIVE);
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public LocalsLanguage getActiveLocals() {
+        UUID clientId = getCurrentUserId();
+        User user = userRepository.findById(clientId).orElse(null);
+        if (user == null) {
+            return new LocalsLanguage(localRepository.findAllByState(LocalState.ACTIVE), null);
+        }
+        return new LocalsLanguage(localRepository.findAllByState(LocalState.ACTIVE), user.getLanguage());
     }
 
     @Override
@@ -273,7 +279,13 @@ public class LocalServiceImpl implements LocalService {
     }
 
     @Override
-    public Local getActiveLocal(UUID id) throws NotFoundException {
-        return localRepository.findByIdAndState(id, LocalState.ACTIVE).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+    public LocalsLanguage getActiveLocal(UUID id) throws NotFoundException {
+        UUID clientId = getCurrentUserId();
+        User user = userRepository.findById(clientId).orElse(null);
+        Local local = localRepository.findByIdAndState(id, LocalState.ACTIVE).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
+        if (user == null) {
+            return new LocalsLanguage(List.of(local), null);
+        }
+        return new LocalsLanguage(List.of(local), user.getLanguage());
     }
 }
