@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +27,11 @@ import pl.lodz.p.it.ssbd2024.mol.mappers.AddressMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.ReportMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.LocalService;
+import pl.lodz.p.it.ssbd2024.util.translate.LocalsLanguage;
+import pl.lodz.p.it.ssbd2024.util.translate.TranslateClient;
 import pl.lodz.p.it.ssbd2024.util.Signer;
 import pl.lodz.p.it.ssbd2024.mol.services.ReportService;
+import pl.lodz.p.it.ssbd2024.util.translate.TranslateRequest;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -44,11 +46,21 @@ public class LocalController {
     private final LocalService localService;
     private final ReportService reportService;
     private final Signer signer;
+    private final TranslateClient translateClient;
 
     @GetMapping("/active")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<GetActiveLocalsResponse>> getActiveLocals() {
-        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocals()));
+        LocalsLanguage locals = localService.getActiveLocals();
+        if (locals.getLanguage() == null) {
+            return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(locals.getLocals()));
+        }
+        List<Local> localsList = locals.getLocals();
+        for (Local local : localsList) {
+            local.setDescription(translateClient.translate(new TranslateRequest(local.getDescription(), "auto", locals.getLanguage(), "text")));
+        }
+
+        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localsList));
     }
 
     @GetMapping("/unapproved")
@@ -186,7 +198,12 @@ public class LocalController {
     @PreAuthorize("hasRole('TENANT')")
     public ResponseEntity<ActiveLocalResponse> getActiveLocal(@PathVariable UUID id) {
         try {
-            Local local = localService.getActiveLocal(id);
+            LocalsLanguage locals = localService.getActiveLocal(id);
+            Local local = locals.getLocals().getFirst();
+            if(locals.getLanguage() == null) {
+                return ResponseEntity.ok(LocalMapper.toLocalPublicResponse(local));
+            }
+            local.setDescription(translateClient.translate(new TranslateRequest(local.getDescription(), "auto", locals.getLanguage(), "text")));
             return ResponseEntity.ok(LocalMapper.toLocalPublicResponse(local));
         } catch (NotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);

@@ -12,6 +12,7 @@ import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.exceptions.GivenAddressAssignedToOtherLocalException;
 import pl.lodz.p.it.ssbd2024.exceptions.InvalidLocalState;
+import pl.lodz.p.it.ssbd2024.util.translate.LocalsLanguage;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,7 +22,7 @@ public interface LocalService {
 
     Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException;
 
-    List<Local> getActiveLocals();
+    LocalsLanguage getActiveLocals();
 
     List<Local> getUnapprovedLocals();
 
@@ -53,5 +54,5 @@ public interface LocalService {
 
     Local getOwnLocal(UUID id, UUID ownerId) throws NotFoundException;
 
-    Local getActiveLocal(UUID id) throws NotFoundException;
+    LocalsLanguage getActiveLocal(UUID id) throws NotFoundException;
 }
