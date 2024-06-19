@@ -121,7 +121,7 @@ const Locals: FC = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    {local.description}
+                    {local.description.substring(0, 80) + "..."}
                   </CardContent>
                   <CardFooter>{t(`localState.${local.state}`)}</CardFooter>
                 </Card>
