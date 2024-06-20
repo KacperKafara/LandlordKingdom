@@ -1,6 +1,8 @@
 package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 
 public class ErrorCodes {
+
+
     private ErrorCodes() {
     }
 
@@ -58,4 +60,5 @@ public class ErrorCodes {
     public static final String UPDATE_LOCAL_ARCHIVED = "updateLocalArchived";
     public static final String IMAGE_NOT_FOUND = "imageNotFound";
     public static final String IMAGE_FORMAT_NOT_SUPPORTED = "imageFormatNotSupported";
+    public static final String IMAGE_CREATION_FAILED = "imageCreationFailed";
 }

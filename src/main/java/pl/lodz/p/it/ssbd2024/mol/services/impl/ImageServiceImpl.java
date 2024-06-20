@@ -1,11 +1,13 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import pl.lodz.p.it.ssbd2024.exceptions.CreationException;
 import pl.lodz.p.it.ssbd2024.exceptions.ImageFormatNotSupported;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
@@ -30,17 +32,19 @@ public class ImageServiceImpl implements ImageService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public void store(MultipartFile file, UUID localId) throws NotFoundException, ImageFormatNotSupported {
+    public void store(MultipartFile file, UUID localId) throws NotFoundException, ImageFormatNotSupported, CreationException {
         Local local = localRepository.findById(localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
-        if(!Objects.equals(file.getContentType(), "image/jpeg") && !Objects.equals(file.getContentType(), "image/png")) {
+        if (!Objects.equals(file.getContentType(), "image/jpeg") && !Objects.equals(file.getContentType(), "image/png")) {
             throw new ImageFormatNotSupported(LocalExceptionMessages.IMAGE_FORMAT_NOT_SUPPORTED, ErrorCodes.IMAGE_FORMAT_NOT_SUPPORTED);
         }
+
 
         try {
             imageRepository.saveAndFlush(new Image(local, file.getBytes(), file.getContentType()));
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new CreationException(LocalExceptionMessages.IMAGE_CREATION_FAILED, ErrorCodes.IMAGE_CREATION_FAILED);
         }
+
     }
 
     @Override
