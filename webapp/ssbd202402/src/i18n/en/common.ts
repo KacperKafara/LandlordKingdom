@@ -444,7 +444,7 @@ const errors = {
   localNotInactive: "Local must be inactive for this operation",
   localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
-    "End date must be in the future Sunday, after start date and different from current end date",
+    "End date must be in the future, Sunday, after start date and different from the current end date",
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
   addressAlreadyAssigned: "Address asigned to another local",

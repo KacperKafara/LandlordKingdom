@@ -25,14 +25,14 @@ export const useMutateEndDate = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["ownerCurrentRents"] });
       toast({
-        title: t("changeFixedFee.successTitle"),
-        description: t("changeFixedFee.successDescription"),
+        title: t("changeEndDate.successTitle"),
+        description: t("changeEndDate.successDescription"),
       });
     },
     onError: (error: AxiosError) => {
       toast({
         variant: "destructive",
-        title: t("changeFixedFee.errorTitle"),
+        title: t("changeEndDate.errorTitle"),
         description: t(
           `errors.${(error.response?.data as ErrorCode).exceptionCode}`
         ),
