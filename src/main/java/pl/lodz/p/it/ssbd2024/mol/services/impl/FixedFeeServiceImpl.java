@@ -1,7 +1,7 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
-import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.retry.annotation.Retryable;
@@ -21,9 +21,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class FixedFeeServiceImpl implements FixedFeeService {
     private final FixedFeeRepository fixedFeeRepository;
     private final RentRepository rentRepository;
@@ -31,9 +31,19 @@ public class FixedFeeServiceImpl implements FixedFeeService {
 
     @Override
     @PreAuthorize("permitAll()")
-    public FixedFee createFixedFeeForEndOfBillingPeriod(FixedFee fixedFee) {
-        Rent rent = fixedFee.getRent();
+    @Transactional(propagation = Propagation.NESTED)
+    @Retryable(retryFor = {RuntimeException.class},
+            maxAttempts = 5)
+    public FixedFee createFixedFeeForEndOfBillingPeriod(UUID rentId) {
+        Rent rent = rentRepository.findById(rentId).orElseThrow();
+
         Local local = rent.getLocal();
+        LocalDate today = LocalDate.now();
+
+        BigDecimal rentalFee = rent.getLocal().getRentalFee();
+        BigDecimal marginFee = rent.getLocal().getMarginFee();
+
+        FixedFee fixedFee = new FixedFee(rentalFee, marginFee, today, rent);
         rent.setBalance(rent.getBalance().subtract(fixedFee.getRentalFee()).subtract(fixedFee.getMarginFee()));
 
         fixedFeeRepository.saveAndFlush(fixedFee);
@@ -58,6 +68,7 @@ public class FixedFeeServiceImpl implements FixedFeeService {
 
     @Override
     @PreAuthorize("hasAnyRole('OWNER', 'TENANT')")
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Page<FixedFee> getRentFixedFees(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         return fixedFeeRepository.findRentVariableFeesBetween(rentId, userId, startDate, endDate, pageable);
     }

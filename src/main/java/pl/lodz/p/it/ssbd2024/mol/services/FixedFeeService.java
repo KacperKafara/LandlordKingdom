@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public interface FixedFeeService {
 
-    FixedFee createFixedFeeForEndOfBillingPeriod(FixedFee fee);
+    FixedFee createFixedFeeForEndOfBillingPeriod(UUID rentId);
 
     Page<FixedFee> getRentFixedFees(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable);
 }
