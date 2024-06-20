@@ -37,7 +37,7 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
           />
           <DataField
             label={t("ownerRentDetails.balance")}
-            value={toLocaleFixed(rent?.balance ?? 0.0) + " " + t("currency")}
+            value={toLocaleFixed(rent?.balance ?? 0.0)}
           />
           <h2 className="col-span-2 pt-4 text-xl font-semibold">
             {t("ownerRentDetails.localInfo")}
@@ -52,15 +52,11 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
           />
           <DataField
             label="Margin Fee"
-            value={
-              toLocaleFixed(rent?.local?.marginFee ?? 0.0) + " " + t("currency")
-            }
+            value={toLocaleFixed(rent?.local?.marginFee ?? 0.0)}
           />
           <DataField
             label="Rental Fee"
-            value={
-              toLocaleFixed(rent?.local?.rentFee ?? 0.0) + " " + t("currency")
-            }
+            value={toLocaleFixed(rent?.local?.rentFee ?? 0.0)}
           />
           <h2 className="col-span-2 pt-4 text-xl font-semibold">
             {t("ownerRentDetails.tenantInfo")}

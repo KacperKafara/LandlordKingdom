@@ -81,136 +81,135 @@ const Locals: FC = () => {
   }
 
   return (
-    <div className="relative mt-1 flex h-full flex-col items-center justify-center">
-      <div className="self-start">{breadCrumbs}</div>
-      <div className="flex h-full max-w-[1920px] justify-center">
-        <div className="flex h-full w-11/12 flex-col justify-center">
+    <div className="flex h-full flex-col">
+      <div className="flex flex-row items-center justify-between">
+        {breadCrumbs}
+        <div className="flex flex-row gap-4">
           <Button asChild className="self-end">
             <NavLink to="report">Report</NavLink>
           </Button>
-          <ul className="flex flex-1 flex-wrap justify-center gap-2 py-4">
-            {locals?.length === 0 && (
-              <div className="flex flex-col">
-                <p className="text-2xl">
-                  {t("ownerLocals.noLocalsFoundForThisState")} 🤷‍♀️
-                </p>
-              </div>
-            )}
-            {locals?.length != 0 &&
-              locals?.map((local) => (
-                <li
-                  key={local.id}
-                  className="min-w-[35rem] max-w-[35rem] flex-1 "
-                >
-                  <Card className="relative">
-                    <Button
-                      onClick={() => navigate(`local/${local.id}`)}
-                      className="absolute right-1 top-1"
-                      variant="ghost"
-                    >
-                      {t("ownerLocals.show")}
-                    </Button>
-                    <CardHeader>
-                      <CardTitle>{local.name}</CardTitle>
-                      <CardDescription>
-                        {getAddressString(local.address)}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex-grow">
-                      {local.description}
-                    </CardContent>
-                    <CardFooter>{t(`localState.${local.state}`)}</CardFooter>
-                  </Card>
-                </li>
-              ))}
-          </ul>
-          <PageChangerComponent
-            totalPages={localsPage.totalPages}
-            pageNumber={pageNumber}
-            pageSize={pageSize}
-            setPageNumber={setPageNumber}
-            setNumberOfElements={setPageSize}
-            className="mb-3 flex justify-between"
-          >
-            <div className="flex items-center gap-2">
-              <p>{t("ownerLocals.localState")}</p>
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button
-                    className="flex h-8 items-center px-2"
-                    variant="outline"
-                    role="combobox"
-                  >
-                    {localState.shownValue}
-                    <RiExpandUpDownLine className="ml-3 text-sm" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem
-                    onSelect={() =>
-                      setLocalState({
-                        shownValue: t("ownerLocals.all"),
-                        sendedValue: "ALL",
-                      })
-                    }
-                    className="h-8 px-2"
-                  >
-                    {t("ownerLocals.all")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() =>
-                      setLocalState({
-                        shownValue: t("localState.ACTIVE"),
-                        sendedValue: "ACTIVE",
-                      })
-                    }
-                    className="h-8 px-2"
-                  >
-                    {t("localState.ACTIVE")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() =>
-                      setLocalState({
-                        shownValue: t("localState.INACTIVE"),
-                        sendedValue: "INACTIVE",
-                      })
-                    }
-                    className="h-8 px-2"
-                  >
-                    {t("localState.INACTIVE")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() =>
-                      setLocalState({
-                        shownValue: t("localState.RENTED"),
-                        sendedValue: "RENTED",
-                      })
-                    }
-                    className="h-8 px-2"
-                  >
-                    {t("localState.RENTED")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onSelect={() =>
-                      setLocalState({
-                        shownValue: t("localState.UNAPPROVED"),
-                        sendedValue: "UNAPPROVED",
-                      })
-                    }
-                    className="h-8 px-2"
-                  >
-                    {t("localState.UNAPPROVED")}
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </PageChangerComponent>
+          <RefreshQueryButton queryKeys={["ownLocals"]} />
         </div>
       </div>
-      <RefreshQueryButton
-        className="absolute -right-9 top-0"
-        queryKeys={["ownLocals"]}
-      />
+      <div className="flex h-full max-w-[1920px] flex-col">
+        <ul className="flex flex-wrap justify-center gap-2 py-4">
+          {locals?.length === 0 && (
+            <div className="flex flex-col">
+              <p className="text-2xl">
+                {t("ownerLocals.noLocalsFoundForThisState")} 🤷‍♀️
+              </p>
+            </div>
+          )}
+          {locals?.length != 0 &&
+            locals?.map((local) => (
+              <li
+                key={local.id}
+                className="min-w-[35rem] max-w-[35rem] flex-1 "
+              >
+                <Card className="relative">
+                  <Button
+                    onClick={() => navigate(`local/${local.id}`)}
+                    className="absolute right-1 top-1"
+                    variant="ghost"
+                  >
+                    {t("ownerLocals.show")}
+                  </Button>
+                  <CardHeader>
+                    <CardTitle>{local.name}</CardTitle>
+                    <CardDescription>
+                      {getAddressString(local.address)}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-grow">
+                    {local.description.substring(0, 80) + "..."}
+                  </CardContent>
+                  <CardFooter>{t(`localState.${local.state}`)}</CardFooter>
+                </Card>
+              </li>
+            ))}
+        </ul>
+        <PageChangerComponent
+          totalPages={localsPage.totalPages}
+          pageNumber={pageNumber}
+          pageSize={pageSize}
+          setPageNumber={setPageNumber}
+          setNumberOfElements={setPageSize}
+          className="mb-3 flex justify-between"
+        >
+          <div className="flex items-center gap-2">
+            <p>{t("ownerLocals.localState")}</p>
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <Button
+                  className="flex h-8 items-center px-2"
+                  variant="outline"
+                  role="combobox"
+                >
+                  {localState.shownValue}
+                  <RiExpandUpDownLine className="ml-3 text-sm" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem
+                  onSelect={() =>
+                    setLocalState({
+                      shownValue: t("ownerLocals.all"),
+                      sendedValue: "ALL",
+                    })
+                  }
+                  className="h-8 px-2"
+                >
+                  {t("ownerLocals.all")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() =>
+                    setLocalState({
+                      shownValue: t("localState.ACTIVE"),
+                      sendedValue: "ACTIVE",
+                    })
+                  }
+                  className="h-8 px-2"
+                >
+                  {t("localState.ACTIVE")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() =>
+                    setLocalState({
+                      shownValue: t("localState.INACTIVE"),
+                      sendedValue: "INACTIVE",
+                    })
+                  }
+                  className="h-8 px-2"
+                >
+                  {t("localState.INACTIVE")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() =>
+                    setLocalState({
+                      shownValue: t("localState.RENTED"),
+                      sendedValue: "RENTED",
+                    })
+                  }
+                  className="h-8 px-2"
+                >
+                  {t("localState.RENTED")}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() =>
+                    setLocalState({
+                      shownValue: t("localState.UNAPPROVED"),
+                      sendedValue: "UNAPPROVED",
+                    })
+                  }
+                  className="h-8 px-2"
+                >
+                  {t("localState.UNAPPROVED")}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        </PageChangerComponent>
+      </div>
     </div>
   );
 };

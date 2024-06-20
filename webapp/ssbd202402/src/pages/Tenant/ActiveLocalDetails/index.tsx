@@ -23,6 +23,7 @@ import { useGetUserApplication } from "@/data/application/useGetUserApplication"
 import { useCreateApplication } from "@/data/application/useCreateApplication";
 import { useQueryClient } from "@tanstack/react-query";
 import { toLocaleFixed } from "@/utils/currencyFormat";
+import LocalImages from "./LocalImages";
 
 const ActiveLocalDetailsPage: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,94 +54,87 @@ const ActiveLocalDetailsPage: FC = () => {
 
   return (
     <>
-      <div className="my-2">{breadcrumbs}</div>
+      {breadcrumbs}
       {local && (
-        <div className="flex flex-col gap-4">
+        <div className="mt-2 flex flex-col gap-4">
           <Card>
             <CardHeader>
               <CardTitle className="text-center">{local.name}</CardTitle>
             </CardHeader>
           </Card>
-          <div className="flex justify-center">
-            <div className="w-9/12">
-              <Card className="relative pt-6">
-                <CardContent>
-                  <div className="grid w-2/3 grid-cols-3 gap-2">
-                    <p className="col-span-3 text-xl font-semibold">
-                      {t("activeLocalDetails.localInformation")}
-                    </p>
-                    <DataField
-                      label={t("activeLocalDetails.city")}
-                      value={local.city}
-                    />
-                    <DataField
-                      label={t("activeLocalDetails.size")}
-                      value={local.size + " m²"}
-                    />
-                    <DataField
-                      label={t("activeLocalDetails.price")}
-                      value={
-                        toLocaleFixed(local?.price ?? 0.0) + " " + t("currency")
-                      }
-                    />
+          <Card className="relative pt-6">
+            <CardContent>
+              <div className="grid w-2/3 grid-cols-3 gap-2">
+                <p className="col-span-3 text-xl font-semibold">
+                  {t("activeLocalDetails.localInformation")}
+                </p>
+                <DataField
+                  label={t("activeLocalDetails.city")}
+                  value={local.city}
+                />
+                <DataField
+                  label={t("activeLocalDetails.size")}
+                  value={local.size + " m²"}
+                />
+                <DataField
+                  label={t("activeLocalDetails.price")}
+                  value={toLocaleFixed(local?.price ?? 0.0)}
+                />
 
-                    <p className="col-span-3 text-xl font-semibold">
-                      {t("activeLocalDetails.ownerInformation")}
-                    </p>
-                    <DataField
-                      label={t("activeLocalDetails.firstName")}
-                      value={local.ownerName}
-                    />
-                  </div>
+                <p className="col-span-3 text-xl font-semibold">
+                  {t("activeLocalDetails.ownerInformation")}
+                </p>
+                <DataField
+                  label={t("activeLocalDetails.firstName")}
+                  value={local.ownerName}
+                />
+              </div>
 
-                  <p className="col-span-2 mt-2 text-xl font-semibold">
-                    {t("localDetails.description")}
-                  </p>
-                  <div>{local.description}</div>
+              <p className="col-span-2 mt-2 text-xl font-semibold">
+                {t("localDetails.description")}
+              </p>
+              <div>{local.description}</div>
 
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button className="mt-4">
-                        {t("activeLocalDetails.apply")}
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          {t("activeLocalDetails.applicationTitle")}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          {application
-                            ? t(
-                                "activeLocalDetails.applicationExistsDescription"
-                              ) + application.createdAt
-                            : t("activeLocalDetails.applicationDescription")}
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
-                        <AlertDialogAction asChild>
-                          <LoadingButton
-                            text={t("confirm")}
-                            isLoading={!isError && !application}
-                            disableButton={application != undefined}
-                            onClick={async () =>
-                              await handleCreateApplication()
-                            }
-                          />
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
+              <LocalImages id={id!} />
 
-                  <RefreshQueryButton
-                    className="absolute right-1 top-1"
-                    queryKeys={["activeLocalDetails"]}
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button className="mt-4">
+                    {t("activeLocalDetails.apply")}
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {t("activeLocalDetails.applicationTitle")}
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      {application
+                        ? t("activeLocalDetails.applicationExistsDescription") +
+                          application.createdAt
+                        : t("activeLocalDetails.applicationDescription")}
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+                    <AlertDialogAction asChild>
+                      <LoadingButton
+                        text={t("confirm")}
+                        isLoading={!isError && !application}
+                        disableButton={application != undefined}
+                        onClick={async () => await handleCreateApplication()}
+                      />
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <RefreshQueryButton
+                className="absolute right-1 top-1"
+                queryKeys={["activeLocalDetails"]}
+              />
+            </CardContent>
+          </Card>
         </div>
       )}
     </>

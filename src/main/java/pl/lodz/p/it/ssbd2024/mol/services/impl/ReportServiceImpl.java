@@ -31,16 +31,18 @@ public class ReportServiceImpl implements ReportService {
     public LocalReport getLocalReport(UUID localId, UUID userId, LocalDate startDate, LocalDate endDate)
             throws NotFoundException {
         Local local = localRepository.findByOwner_User_IdAndId(userId, localId)
-                .orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
 
         List<Payment> payments = paymentRepository.findByLocalIdAndUserId(localId, userId);
         List<VariableFee> variableFees = variableFeeRepository.findByLocalIdAndUserId(localId, userId);
         List<FixedFee> fixedFees = fixedFeeRepository.findByLocalIdAndUserId(localId, userId);
-        Rent longestRent = rentRepository.getLongestRentByLocalId(localId, userId);
-        long longestRentDays = (longestRent.getEndDate().toEpochDay() - longestRent.getStartDate().toEpochDay());
+        long longestRentDays = rentRepository.getLongestRentByLocalId(localId, userId)
+                .map(longestRent -> (longestRent.getEndDate().toEpochDay() - longestRent.getStartDate().toEpochDay()))
+                .orElse(0L);
 
-        Rent shortestRent = rentRepository.getShortestRentByLocalId(localId, userId);
-        long shortestRentDays = (shortestRent.getEndDate().toEpochDay() - shortestRent.getStartDate().toEpochDay());
+        long shortestRentDays = rentRepository.getShortestRentByLocalId(localId, userId)
+                .map(shortestRent -> (shortestRent.getEndDate().toEpochDay() - shortestRent.getStartDate().toEpochDay()))
+                .orElse(0L);
 
         int rentCount = rentRepository.countRentsByUserIdAndLocalId(localId, userId);
 

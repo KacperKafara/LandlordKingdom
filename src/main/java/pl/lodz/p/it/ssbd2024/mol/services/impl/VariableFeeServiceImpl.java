@@ -38,9 +38,9 @@ public class VariableFeeServiceImpl implements VariableFeeService {
     public VariableFee create(UUID userId, UUID rentId, BigDecimal amount)
             throws NotFoundException, VariableFeeAlreadyExistsException {
         Tenant tenant = tenantRepository.findByUserId(userId)
-                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
         Rent rent = rentRepository.findByIdAndTenantId(rentId, tenant.getId())
-                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(RentExceptionMessages.RENT_NOT_FOUND, ErrorCodes.RENT_NOT_FOUND));
 
         Optional<VariableFee> existingVariableFee = variableFeeRepository
                 .findByRentIdBetween(rentId, userId, DateUtils.getFirstDayOfCurrentWeek(), DateUtils.getLastDayOfCurrentWeek());

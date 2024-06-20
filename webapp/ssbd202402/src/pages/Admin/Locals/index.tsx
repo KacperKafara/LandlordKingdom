@@ -79,9 +79,12 @@ const AllLocals: FC = () => {
 
   return (
     <div className="relative mt-1 flex flex-col justify-center">
-      {breadCrumbs}
+      <div className="flex flex-row items-center justify-between">
+        {breadCrumbs}
+        <RefreshQueryButton queryKeys={["allLocals"]} />
+      </div>
       <div className="flex justify-center">
-        <div className="flex h-full w-11/12 flex-col justify-center">
+        <div className="flex h-full flex-col justify-center">
           <ul className="flex flex-wrap gap-2 py-4">
             {locals.length === 0 && (
               <div className="flex flex-col">
@@ -114,7 +117,7 @@ const AllLocals: FC = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="flex-grow">
-                    {local.description}
+                    {local.description.substring(0, 80) + "..."}
                   </CardContent>
                   <CardFooter>{t(`localState.${local.state}`)}</CardFooter>
                 </Card>
@@ -237,10 +240,6 @@ const AllLocals: FC = () => {
           </PageChangerComponent>
         </div>
       </div>
-      <RefreshQueryButton
-        className="absolute -right-9 top-0"
-        queryKeys={["allLocals"]}
-      />
     </div>
   );
 };

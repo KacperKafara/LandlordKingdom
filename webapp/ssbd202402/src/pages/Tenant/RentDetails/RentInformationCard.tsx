@@ -3,6 +3,7 @@ import RefreshQueryButton from "@/components/RefreshQueryButton";
 import { Card, CardContent } from "@/components/ui/card";
 import { TenantOwnRents } from "@/types/tenant/rentForTenant";
 import { getAddressString } from "@/utils/address";
+import { toLocaleFixed } from "@/utils/currencyFormat";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -33,7 +34,7 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
           />
           <DataField
             label={t("rentDetailsPage.labels.balance")}
-            value={(rent?.balance.toFixed(2) ?? 0) + " " + t("currency")}
+            value={toLocaleFixed(rent?.balance ?? 0)}
           />
           <h2 className="col-span-2 pt-4 text-xl font-semibold">
             {t("rentDetailsPage.localDetails")}
@@ -48,13 +49,9 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
           />
           <DataField
             label={t("rentDetailsPage.labels.fixedFee")}
-            value={
-              (
-                (rent?.local?.marginFee ?? 0) + (rent?.local?.rentalFee ?? 0)
-              ).toFixed(2) +
-              " " +
-              t("currency")
-            }
+            value={toLocaleFixed(
+              (rent?.local?.marginFee ?? 0) + (rent?.local?.rentalFee ?? 0)
+            )}
           />
           <h2 className="col-span-2 pt-4 text-xl font-semibold">
             {t("rentDetailsPage.ownerDetails")}

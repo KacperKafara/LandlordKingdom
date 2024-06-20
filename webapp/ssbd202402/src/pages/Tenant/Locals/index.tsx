@@ -10,6 +10,7 @@ import DataField from "@/components/DataField";
 import { LoadingData } from "@/components/LoadingData";
 import { PageChangerComponent } from "@/pages/Components/PageChangerComponent";
 import { useGetActiveLocals } from "@/data/mol/useGetActiveLocals";
+import RefreshQueryButton from "@/components/RefreshQueryButton.tsx";
 
 interface FilterLocals {
     city: string | null;
@@ -51,6 +52,11 @@ const ActiveLocalsComponent = () => {
         setPageNumber(0);
     });
 
+    const breadcrumbs = useBreadcrumbs([
+        { title: t("breadcrumbs.tenant"), path: "/tenant" },
+        { title: t("breadcrumbs.locals"), path: "/tenant/locals" },
+    ]);
+
     const handleClearFilters = () => {
         const defaultValues = {
             city: null,
@@ -64,6 +70,10 @@ const ActiveLocalsComponent = () => {
 
     return (
         <div className="justify-center">
+            <div className="flex flex-row items-center justify-between">
+                {breadcrumbs}
+                <RefreshQueryButton queryKeys={["tenantOwnRents"]} />
+            </div>
             <Form {...filterData}>
                 <form onSubmit={handleFilterSubmit}>
                     <div className="flex flex-wrap justify-center gap-3">
@@ -161,12 +171,12 @@ const ActiveLocalsComponent = () => {
                                     </Button>
                                     <CardHeader>
                                         <CardTitle>{local.name}</CardTitle>
-                                        <CardDescription>{local.description}</CardDescription>
+                                        <CardDescription>{local.description.substring(0, 80) + "..."}</CardDescription>
                                     </CardHeader>
                                     <CardContent>
                                         <div className="grid grid-cols-2">
                                             <DataField label={t("activeLocals.city")} value={local.city} />
-                                            <DataField label={t("activeLocals.size")} value={`${local.size} m²`} />
+                                            <DataField label={t("activeLocals.size")} value={local.size + " m²"} />
                                         </div>
                                     </CardContent>
                                 </Card>

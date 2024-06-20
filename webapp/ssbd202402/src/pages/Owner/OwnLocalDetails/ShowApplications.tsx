@@ -5,6 +5,7 @@ import { useGetLocalApplications } from "@/data/local/useGetLocalApplications.ts
 import { useParams } from "react-router-dom";
 import AcceptApplicationDialog from "./ApplicationDecision/AcceptApplicationDialog";
 import RejectApplicationDialog from "./ApplicationDecision/RejectApplicationDialog";
+import RefreshQueryButton from "@/components/RefreshQueryButton";
 
 const LocalApplications: FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,14 +13,14 @@ const LocalApplications: FC = () => {
   const { applications } = useGetLocalApplications(id!);
 
   return (
-    <Card>
+    <Card className="relative">
       <CardHeader>
         <CardTitle className="text-center">
           {t("ownLocalDetails.showApplications")}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {applications != undefined ? (
+        {applications && applications.length != 0 ? (
           applications.sort().map((application) => (
             <Card key={application.id} className="p-4">
               <div className="flex items-center justify-between">
@@ -47,9 +48,15 @@ const LocalApplications: FC = () => {
             </Card>
           ))
         ) : (
-          <p>{t("localApplications.noApplications")}</p>
+          <div className="text-center text-xl">
+            {t("localApplications.noApplications")}
+          </div>
         )}
       </CardContent>
+      <RefreshQueryButton
+        className="absolute right-1 top-1"
+        queryKeys={["localApplications"]}
+      />
     </Card>
   );
 };

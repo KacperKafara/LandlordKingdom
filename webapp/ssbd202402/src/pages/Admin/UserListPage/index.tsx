@@ -51,9 +51,9 @@ const UserListPage: FC = () => {
   const { blockUser } = useBlockUser();
   const { unblockUser } = useUnblockUser();
   const [userData, setUserData] = useState<UserData>();
-  const test = useBreadcrumbs([
-    { title: "Admin", path: "/admin" },
-    { title: "Users", path: "/admin/users" },
+  const breadcrumbs = useBreadcrumbs([
+    { title: t("breadcrumbs.admin"), path: "/admin" },
+    { title: t("userListPage.breadcrumbsUserListPage"), path: "/admin/users" },
   ]);
 
   const handlePasswordResetClick = (data: UserData) => {
@@ -70,109 +70,105 @@ const UserListPage: FC = () => {
   };
 
   return (
-    <>
-      <div className="flex justify-center">
-        <div className="w-10/12 pt-10">
-          {test}
-          <div className="m-5 flex justify-center">
-            <UserFilter />
-          </div>
-          <AlertDialog open={openPaswordResetDialog}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>
-                  {t("userListPage.resetUserPasswordTitle")}
-                </AlertDialogTitle>
-                <AlertDialogDescription>
-                  {t("userListPage.resetUserPasswordDescription")}
-                  <span className="font-bold">{userData?.login}</span>?
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel
-                  onClick={() => setOpenPasswordResetDialog(false)}
-                >
-                  {t("cancel")}
-                </AlertDialogCancel>
-                <AlertDialogAction onClick={() => handlePasswordReset()}>
-                  {t("confirm")}
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("userListPage.firstName")}</TableHead>
-                <TableHead>{t("userListPage.lastName")}</TableHead>
-                <TableHead>{t("userListPage.login")}</TableHead>
-                <TableHead>{t("userListPage.email")}</TableHead>
-                <TableHead className="w-1"></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users &&
-                users.map((user) => (
-                  <TableRow key={user.login}>
-                    <TableCell>{user.firstName}</TableCell>
-                    <TableCell>{user.lastName}</TableCell>
-                    <TableCell>{user.login}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell className="w-1">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost">...</Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                          <DropdownMenuLabel>
-                            {t("userListPage.actions")}
-                          </DropdownMenuLabel>
-                          <DropdownMenuItem
-                            onClick={() =>
-                              handlePasswordResetClick({
-                                login: user.login,
-                                email: user.email,
-                              })
-                            }
-                          >
-                            {t("userListPage.resetUserPasswordAction")}
-                          </DropdownMenuItem>
-                          {user.blocked ? (
-                            <DropdownMenuItem
-                              onClick={async () => {
-                                await unblockUser(user.id);
-                              }}
-                            >
-                              {t("block.unblockUserAction")}
-                            </DropdownMenuItem>
-                          ) : (
-                            <DropdownMenuItem
-                              onClick={async () => {
-                                await blockUser(user.id);
-                              }}
-                            >
-                              {t("block.blockUserAction")}
-                            </DropdownMenuItem>
-                          )}
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            onClick={() => navigate(`/admin/users/${user.id}`)}
-                          >
-                            {t("userListPage.viewDetails")}
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-          <div className="flex justify-end">
-            <PageChanger />
-          </div>
-        </div>
+    <div className="flex flex-col justify-center">
+      {breadcrumbs}
+      <div className="m-5 flex justify-center">
+        <UserFilter />
       </div>
-    </>
+      <AlertDialog open={openPaswordResetDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t("userListPage.resetUserPasswordTitle")}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("userListPage.resetUserPasswordDescription")}
+              <span className="font-bold">{userData?.login}</span>?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel
+              onClick={() => setOpenPasswordResetDialog(false)}
+            >
+              {t("cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={() => handlePasswordReset()}>
+              {t("confirm")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>{t("userListPage.firstName")}</TableHead>
+            <TableHead>{t("userListPage.lastName")}</TableHead>
+            <TableHead>{t("userListPage.login")}</TableHead>
+            <TableHead>{t("userListPage.email")}</TableHead>
+            <TableHead className="w-1"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {users &&
+            users.map((user) => (
+              <TableRow key={user.login}>
+                <TableCell>{user.firstName}</TableCell>
+                <TableCell>{user.lastName}</TableCell>
+                <TableCell>{user.login}</TableCell>
+                <TableCell>{user.email}</TableCell>
+                <TableCell className="w-1">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost">...</Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>
+                        {t("userListPage.actions")}
+                      </DropdownMenuLabel>
+                      <DropdownMenuItem
+                        onClick={() =>
+                          handlePasswordResetClick({
+                            login: user.login,
+                            email: user.email,
+                          })
+                        }
+                      >
+                        {t("userListPage.resetUserPasswordAction")}
+                      </DropdownMenuItem>
+                      {user.blocked ? (
+                        <DropdownMenuItem
+                          onClick={async () => {
+                            await unblockUser(user.id);
+                          }}
+                        >
+                          {t("block.unblockUserAction")}
+                        </DropdownMenuItem>
+                      ) : (
+                        <DropdownMenuItem
+                          onClick={async () => {
+                            await blockUser(user.id);
+                          }}
+                        >
+                          {t("block.blockUserAction")}
+                        </DropdownMenuItem>
+                      )}
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => navigate(`/admin/users/${user.id}`)}
+                      >
+                        {t("userListPage.viewDetails")}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </TableCell>
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
+      <div className="flex justify-end">
+        <PageChanger />
+      </div>
+    </div>
   );
 };
 
