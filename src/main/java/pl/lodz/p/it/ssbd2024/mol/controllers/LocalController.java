@@ -24,6 +24,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.mok.dto.GetActiveLocalsFilterRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.*;
 import pl.lodz.p.it.ssbd2024.mol.mappers.AddressMapper;
 import pl.lodz.p.it.ssbd2024.mol.mappers.LocalMapper;
@@ -54,6 +55,17 @@ public class LocalController {
     ) {
         Pageable pageable = PageRequest.of(page, size);
         return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocals(pageable)));
+    }
+
+    @PostMapping("/active/filters")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<GetActiveLocalsResponsePage> getActiveLocals(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size,
+            @RequestBody @Valid GetActiveLocalsFilterRequest getActiveLocalsFilterRequest
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocalsFilter(getActiveLocalsFilterRequest, pageable)));
     }
 
     @GetMapping("/unapproved")

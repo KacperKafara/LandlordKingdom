@@ -22,6 +22,7 @@ import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
+import pl.lodz.p.it.ssbd2024.mok.dto.GetActiveLocalsFilterRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
@@ -84,6 +85,18 @@ public class LocalServiceImpl implements LocalService {
     @PreAuthorize("isAuthenticated()")
     public Page<Local> getActiveLocals(Pageable pageable) {
         return localRepository.findAllByState(pageable, LocalState.ACTIVE);
+    }
+
+    @Override
+    @PreAuthorize("isAuthenticated()")
+    public Page<Local> getActiveLocalsFilter(GetActiveLocalsFilterRequest request, Pageable pageable){
+        return localRepository.findAllByStateCityAndSize(
+                pageable,
+                LocalState.ACTIVE,
+                request.city(),
+                request.minSize(),
+                request.maxSize()
+        );
     }
 
     @Override
