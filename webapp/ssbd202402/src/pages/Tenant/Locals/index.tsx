@@ -99,7 +99,7 @@ const ActiveLocalsComponent = () => {
                         <FormField
                             control={filterData.control}
                             name="minSize"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>{t("localFilter.minSize")}</FormLabel>
                                     <FormControl>
@@ -108,9 +108,12 @@ const ActiveLocalsComponent = () => {
                                             type="number"
                                             placeholder={t("localFilter.minSizePlaceholder") || ""}
                                             value={field.value === null ? "" : field.value}
-                                            onChange={(e) =>
-                                                field.onChange(e.target.value === "" ? null : Number(e.target.value))
-                                            }
+                                            onChange={(e) => {
+                                                const value = e.target.value === "" ? null : Number(e.target.value);
+                                                if (value === null || value >= 0) {
+                                                    field.onChange(value);
+                                                }
+                                            }}
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -119,7 +122,7 @@ const ActiveLocalsComponent = () => {
                         <FormField
                             control={filterData.control}
                             name="maxSize"
-                            render={({field}) => (
+                            render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>{t("localFilter.maxSize")}</FormLabel>
                                     <FormControl>
@@ -127,8 +130,13 @@ const ActiveLocalsComponent = () => {
                                             {...field}
                                             type="number"
                                             placeholder={t("localFilter.maxSizePlaceholder") || ""}
-                                            value={field.value ?? ""}
-                                            onChange={(e) => field.onChange(e.target.value === "" ? null : Number(e.target.value))}
+                                            value={field.value === null ? "" : field.value}
+                                            onChange={(e) => {
+                                                const value = e.target.value === "" ? null : Number(e.target.value);
+                                                if (value === null || value >= 1) {
+                                                    field.onChange(value);
+                                                }
+                                            }}
                                         />
                                     </FormControl>
                                 </FormItem>
