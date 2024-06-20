@@ -51,6 +51,21 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     @PreAuthorize("hasAnyRole('TENANT', 'OWNER', 'ADMINISTRATOR')")
     Page<Local> findAllByState(Pageable pageable, LocalState state);
 
+    @PreAuthorize("isAuthenticated()")
+    @Query("SELECT l FROM Local l " +
+            "WHERE l.state = :localState " +
+            "AND (LOWER(l.address.city) LIKE LOWER(CONCAT('%', :city, '%')) OR :city IS NULL) " +
+            "AND (:minSize IS NULL OR l.size >= :minSize) " +
+            "AND (:maxSize IS NULL OR l.size <= :maxSize)")
+    Page<Local> findAllByStateCityAndSize(
+            Pageable pageable,
+            @Param("localState") LocalState localState,
+            @Param("city") String city,
+            @Param("minSize") Double minSize,
+            @Param("maxSize") Double maxSize);
+
+
+
     @PreAuthorize("hasRole('OWNER')")
     Optional<Local> findByOwner_User_IdAndId(UUID userId, UUID id);
 

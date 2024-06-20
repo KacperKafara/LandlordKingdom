@@ -545,6 +545,7 @@ const tenantRents = {
   login: "Login",
   noData: "Aktualnie nie wynajmujesz żadnych lokali",
   details: "Szczegóły",
+  rentsNotFund: "Nie znaleziono wynajmów",
 };
 
 const currentOwnerRents = {
@@ -559,6 +560,7 @@ const currentOwnerRents = {
   noRentsFound: "Aktualnie nie wynajmujesz żadnych lokali",
   rentDetails: "Szczegóły wynajmu",
   archivalRents: "Archiwalne wynajmy",
+  rentsNotFound: "Nie znaleziono wynajmów",
 };
 
 const currentTenantRents = {
@@ -646,6 +648,18 @@ const activeLocals = {
   size: "Powierzchnia",
   city: "Miasto",
   show: "Szczegóły",
+  noLocalsFound: "Brak lokali do wyswietlenia",
+};
+
+const localFilter = {
+  city: "Nazwa miasta",
+  cityPlaceholder: "Wpisz nazwę",
+  minSize: "Minimalna powierzchnia",
+  minSizePlaceholder: "0.0",
+  maxSize: "Maksymalna powierzchnia",
+  maxSizePlaceholder: "0.0",
+  submit: "Filtruj",
+  clear: "Wyczyść filtry",
 };
 
 const localApplications = {
@@ -945,6 +959,7 @@ export default {
   localApplications,
   updateEmailPage,
   validation,
+  localFilter,
   pageChanger,
   notApprovedActionsPage,
   light: "Jasny",

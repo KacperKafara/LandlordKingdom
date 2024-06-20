@@ -42,7 +42,9 @@ const OwnApplicationsPage: FC = () => {
       </div>
       {isLoading && <RefreshCw className="animate-spin" />}
       {!isLoading && (!applications || applications.length === 0) && (
-        <div>{t("tenantApplications.applicationsNotFund")}</div>
+        <div className="flex justify-center text-2xl">
+          {t("tenantApplications.applicationsNotFund")}
+        </div>
       )}
       {!isLoading && applications && applications.length > 0 && (
         <div className="grid grid-cols-3 gap-4">

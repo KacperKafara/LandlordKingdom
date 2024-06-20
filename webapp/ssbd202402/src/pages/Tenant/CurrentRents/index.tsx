@@ -21,7 +21,7 @@ const CurrentRentsPage: FC = () => {
   const { data, isLoading } = useGetTenantOwnRents();
   const { t } = useTranslation();
   const breadcrumbs = useBreadcrumbs([
-    { title: "Tenant", path: "/tenant" },
+    { title: t("breadcrumbs.tenant"), path: "/tenant" },
     { title: t("navLinks.currentRents"), path: "/tenant/current-rents" },
   ]);
   if (isLoading) {
@@ -37,6 +37,11 @@ const CurrentRentsPage: FC = () => {
         {breadcrumbs}
         <RefreshQueryButton queryKeys={["tenantOwnRents"]} />
       </div>
+      {!isLoading && (!data || data.length === 0) && (
+        <div className="flex justify-center text-2xl">
+          {t("tenantRents.rentsNotFund")}
+        </div>
+      )}
       <ul className="flex flex-wrap gap-2 py-4">
         {data?.map((rent) => (
           <li key={rent.id} className="min-w-80 flex-1">

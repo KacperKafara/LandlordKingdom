@@ -444,7 +444,7 @@ const errors = {
   localNotInactive: "Local must be inactive for this operation",
   localNotUnapproved: "Local must be unapproved for this operation",
   wrongEndDate:
-    "End date must be in the future Sunday, after start date and different from current end date",
+    "End date must be in the future, Sunday, after start date and different from the current end date",
   rentNotFound: "Rent not found",
   invalidLocalStateArchive: "Local must be in Without owner state to archive",
   addressAlreadyAssigned: "Address asigned to another local",
@@ -519,6 +519,7 @@ const tenantRents = {
   login: "Login",
   noData: "Currently you have no rents",
   details: "Details",
+  rentsNotFund: "No rents found",
 };
 
 const currentOwnerRents = {
@@ -533,6 +534,7 @@ const currentOwnerRents = {
   noRentsFound: "Currently your local has no tenants",
   rentDetails: "Rent details",
   archivalRents: "Archival rents",
+  rentsNotFound: "No rents found",
 };
 
 const leaveLocal = {
@@ -669,6 +671,18 @@ const activeLocals = {
   size: "Size",
   city: "City",
   show: "Details",
+  noLocalsFound: "No locals to show",
+};
+
+const localFilter = {
+  city: "City name",
+  cityPlaceholder: "Input name",
+  minSize: "Minimal size",
+  minSizePlaceholder: "0.0",
+  maxSize: "Maximal size",
+  maxSizePlaceholder: "0.0",
+  submit: "Filter",
+  clear: "Clear filters",
 };
 
 const localApplications = {
@@ -937,6 +951,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  localFilter,
   notApprovedActionsPage,
   light: "Light",
   dark: "Dark",
