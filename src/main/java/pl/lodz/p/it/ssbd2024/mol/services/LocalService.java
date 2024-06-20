@@ -7,6 +7,7 @@ import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
+import pl.lodz.p.it.ssbd2024.mok.dto.GetActiveLocalsFilterRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
@@ -22,6 +23,8 @@ public interface LocalService {
     Local addLocal(Local local, UUID ownerId) throws GivenAddressAssignedToOtherLocalException, NotFoundException, CreationException;
 
     Page<Local> getActiveLocals(Pageable pageable);
+
+    Page<Local> getActiveLocalsFilter(String city, Double minSize, Double maxSize, Pageable pageable);
 
     Page<Local> getUnapprovedLocals(Pageable pageable);
 

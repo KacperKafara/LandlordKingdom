@@ -671,6 +671,18 @@ const activeLocals = {
   size: "Size",
   city: "City",
   show: "Details",
+  noLocalsFound: "No locals to show",
+};
+
+const localFilter = {
+  city: "City name",
+  cityPlaceholder: "Input name",
+  minSize: "Minimal size",
+  minSizePlaceholder: "0.0",
+  maxSize: "Maximal size",
+  maxSizePlaceholder: "0.0",
+  submit: "Filter",
+  clear: "Clear filters",
 };
 
 const localApplications = {
@@ -939,6 +951,7 @@ export default {
   updateEmailPage,
   validation,
   pageChanger,
+  localFilter,
   notApprovedActionsPage,
   light: "Light",
   dark: "Dark",
