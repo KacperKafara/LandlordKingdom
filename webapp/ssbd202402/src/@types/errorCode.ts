@@ -54,4 +54,5 @@ export type ExceptionCode =
   | "rentEnded"
   | "paymentAlreadyExists"
   | "applicationNotFound"
-  | "roleRequestNotFound";
+  | "roleRequestNotFound"
+  | "imageNotFound"  ;

@@ -5,12 +5,12 @@ import { useUserStore } from "@/store/userStore";
 
 const links: NavigationLink[] = [
   {
-    label: "currentRents",
-    path: "./current-rents",
-  },
-  {
     label: "locals",
     path: "./locals",
+  },
+  {
+    label: "currentRents",
+    path: "./current-rents",
   },
   {
     label: "archivalRents",

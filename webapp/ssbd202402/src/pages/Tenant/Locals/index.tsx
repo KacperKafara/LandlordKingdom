@@ -59,7 +59,9 @@ const ActiveLocals: FC = () => {
                 </Button>
                 <CardHeader>
                   <CardTitle>{local.name}</CardTitle>
-                  <CardDescription>{local.description}</CardDescription>
+                  <CardDescription>
+                    {local.description.substring(0, 80) + "..."}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2">

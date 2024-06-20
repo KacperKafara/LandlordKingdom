@@ -197,6 +197,7 @@ const userListPage = {
   updateEmailAddressDescription:
     "Na adres email użytkownika zostanie wysłany link do zmiany adresu email",
   updateEmailAddress: "Zaktualizuj adres email",
+  breadcrumbsUserListPage: "Użytkownicy",
 };
 
 const block = {
@@ -464,6 +465,7 @@ const errors = {
   applicationExists: "Aplikacja do tego lokalu już istnieje",
   applicationNotFound: "Nie znaleziono aplikacji",
   roleRequestNotFound: "Nie znaleziono wniosku o rolę",
+  imageNotFound: "Nie znaleziono obrazka",
 } satisfies {
   [key in ExceptionCode]: string;
 };
@@ -636,6 +638,7 @@ const ownLocalDetails = {
     "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
   showApplications: "Przeglądaj aplikacje",
   state: "Stan lokalu",
+  uploadImage: "Dodaj zdjęcie",
 };
 
 const activeLocals = {
@@ -799,6 +802,7 @@ const ownerRentDetails = {
 };
 
 const breadcrumbs = {
+  admin: "Administrator",
   tenant: "Najemca",
   locals: "Lokale",
   local: "Lokal",
@@ -875,7 +879,23 @@ const localReport = {
   numberOfWeeks: "Liczba tygodni",
 };
 
+const uploadImage = {
+  uploadImage: "Dodaj zdjęcie",
+  uploadImageDescription: "Dodaj zdjęcie aby uatrakcyjnić swoje ogłoszenie",
+  uploadedFileTooLarge: "Plik jest za duży, maksymalny rozmiar to 256KB",
+  uploadedFileNotImage: "Twój plik nie jest w formacie jpg lub png",
+  chooseFile: "Wybierz plik",
+  upload: "Prześlij",
+  delete: "Usuń",
+  deleteSuccessTitle: "Sukces.",
+  deleteSuccessDescription: "Zdjęcie zostało usunięte pomyślnie",
+  deleteErrorTitle: "Błąd.",
+  uploadImageSuccess: "Zdjęcie zostało dodane pomyślnie",
+  uploadImageError: "Błąd podczas dodawania zdjęcia",
+};
+
 export default {
+  uploadImage,
   localReport,
   rentDetailsPage,
   createPaymentDialog,
