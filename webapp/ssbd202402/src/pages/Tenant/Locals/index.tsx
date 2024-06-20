@@ -110,7 +110,7 @@ const ActiveLocalsComponent = () => {
                                             value={field.value === null ? "" : field.value}
                                             onChange={(e) => {
                                                 const value = e.target.value === "" ? null : Number(e.target.value);
-                                                if (value === null || value >= 0) {
+                                                if (value === null || (value >= 0 && value <= 1000000)) {
                                                     field.onChange(value);
                                                 }
                                             }}
@@ -133,7 +133,7 @@ const ActiveLocalsComponent = () => {
                                             value={field.value === null ? "" : field.value}
                                             onChange={(e) => {
                                                 const value = e.target.value === "" ? null : Number(e.target.value);
-                                                if (value === null || value >= 1) {
+                                                if (value === null || (value >= 1 && value <= 1000000)) {
                                                     field.onChange(value);
                                                 }
                                             }}

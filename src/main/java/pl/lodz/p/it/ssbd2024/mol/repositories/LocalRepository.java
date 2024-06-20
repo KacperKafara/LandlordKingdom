@@ -54,7 +54,7 @@ public interface LocalRepository extends JpaRepository<Local, UUID> {
     @PreAuthorize("isAuthenticated()")
     @Query("SELECT l FROM Local l " +
             "WHERE l.state = :localState " +
-            "AND (:city IS NULL OR LOWER(l.address.city) LIKE LOWER(CONCAT('%', :city, '%'))) " +
+            "AND (LOWER(l.address.city) LIKE LOWER(CONCAT('%', :city, '%')) OR :city IS NULL) " +
             "AND (:minSize IS NULL OR l.size >= :minSize) " +
             "AND (:maxSize IS NULL OR l.size <= :maxSize)")
     Page<Local> findAllByStateCityAndSize(
