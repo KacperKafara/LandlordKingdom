@@ -75,7 +75,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         Tenant tenant = application.getTenant();
         Owner owner = application.getLocal().getOwner();
         Local local = application.getLocal();
-        User  user = tenant.getUser();
+        User user = tenant.getUser();
 
         if (local.getState() != LocalState.ACTIVE) {
             throw new InvalidLocalState(LocalExceptionMessages.LOCAL_NOT_ACTIVE, ErrorCodes.LOCAL_NOT_ACTIVE, LocalState.ACTIVE, local.getState());

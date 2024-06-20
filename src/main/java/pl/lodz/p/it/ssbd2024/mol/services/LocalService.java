@@ -30,8 +30,6 @@ public interface LocalService {
 
     Page<Local> getOwnLocals(UUID id, Pageable pageable, String state);
 
-    LocalReportResponse getLocalReport(UUID id) throws NotFoundException;
-
     Local editLocal(UUID userId, UUID localId, EditLocalRequest editLocalRequest, String tagValue) throws NotFoundException, ApplicationOptimisticLockException;
 
     Local leaveLocal(UUID userId, UUID localId) throws InvalidLocalState, NotFoundException;
@@ -47,8 +45,6 @@ public interface LocalService {
     Local approveLocal(UUID id) throws NotFoundException, InvalidLocalState;
 
     Local rejectLocal(UUID id) throws NotFoundException, InvalidLocalState;
-
-    List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException;
 
     Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState;
 

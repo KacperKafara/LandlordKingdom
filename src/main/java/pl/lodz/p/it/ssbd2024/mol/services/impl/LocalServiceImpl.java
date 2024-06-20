@@ -24,7 +24,6 @@ import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
-import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.LocalRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
@@ -34,7 +33,6 @@ import pl.lodz.p.it.ssbd2024.util.UserFromContext;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
 import java.util.UUID;
@@ -88,7 +86,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("isAuthenticated()")
-    public Page<Local> getActiveLocalsFilter(String city, Double minSize, Double maxSize, Pageable pageable){
+    public Page<Local> getActiveLocalsFilter(String city, Double minSize, Double maxSize, Pageable pageable) {
         return localRepository.findAllByStateCityAndSize(
                 pageable,
                 LocalState.ACTIVE,
@@ -107,18 +105,12 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('OWNER')")
     public Page<Local> getOwnLocals(UUID id, Pageable pageable, String state) {
-        if(Objects.equals(state, "ALL")) {
+        if (Objects.equals(state, "ALL")) {
             return localRepository.findAllByOwnerId(id, pageable);
         }
 
         LocalState localState = LocalState.valueOf(state);
         return localRepository.findAllByOwnerIdAndState(id, pageable, localState);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('OWNER')")
-    public LocalReportResponse getLocalReport(UUID id) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -152,7 +144,7 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("hasRole('OWNER')")
-    public Local setFixedFee(UUID localId, UUID ownerId,  BigDecimal marginFee, BigDecimal rentalFee, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
+    public Local setFixedFee(UUID localId, UUID ownerId, BigDecimal marginFee, BigDecimal rentalFee, String tagValue) throws NotFoundException, ApplicationOptimisticLockException {
         Local local = localRepository.findByOwner_User_IdAndId(ownerId, localId).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
 
         if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
@@ -173,13 +165,13 @@ public class LocalServiceImpl implements LocalService {
     @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Page<Local> getAllLocals(Pageable pageable, String state, String ownerLogin) {
-        if(state.equals(LocalState.ARCHIVED.name()) || state.equals(LocalState.WITHOUT_OWNER.name()))
+        if (state.equals(LocalState.ARCHIVED.name()) || state.equals(LocalState.WITHOUT_OWNER.name()))
             return localRepository.findAllByState(pageable, LocalState.valueOf(state));
 
-        if(state.equals("ALL") && ownerLogin.isEmpty())
+        if (state.equals("ALL") && ownerLogin.isEmpty())
             return localRepository.findAll(pageable);
 
-        if(state.equals("ALL"))
+        if (state.equals("ALL"))
             return localRepository.findAll(pageable, ownerLogin);
 
         return localRepository.findAllByStateAndOwnerLogin(pageable, LocalState.valueOf(state), ownerLogin);
@@ -190,7 +182,7 @@ public class LocalServiceImpl implements LocalService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = {GivenAddressAssignedToOtherLocalException.class, NotFoundException.class})
     public Local changeLocalAddress(UUID id, Address address, String tagValue) throws GivenAddressAssignedToOtherLocalException, NotFoundException, ApplicationOptimisticLockException, InvalidLocalState {
         Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
-        if(local.getState() == LocalState.ARCHIVED) {
+        if (local.getState() == LocalState.ARCHIVED) {
             throw new InvalidLocalState(LocalExceptionMessages.LOCAL_ARCHIVED, ErrorCodes.UPDATE_LOCAL_ARCHIVED);
         }
         if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
@@ -229,7 +221,6 @@ public class LocalServiceImpl implements LocalService {
         if (!signVerifier.verifySignature(local.getId(), local.getVersion(), tagValue)) {
             throw new ApplicationOptimisticLockException(OptimisticLockExceptionMessages.LOCAL_ALREADY_MODIFIED_DATA, ErrorCodes.OPTIMISTIC_LOCK);
         }
-        System.out.println(editLocalRequest);
         local.setName(editLocalRequest.name());
         local.setDescription(editLocalRequest.description());
         local.setSize(editLocalRequest.size());
@@ -267,12 +258,6 @@ public class LocalServiceImpl implements LocalService {
     }
 
     @Override
-    @PreAuthorize("hasRole('OWNER')")
-    public List<LocalReportResponse> getAllReports(UUID ownerId) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public Local archiveLocal(UUID id) throws NotFoundException, InvalidLocalState {
         Local local = localRepository.findById(id).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
@@ -296,6 +281,7 @@ public class LocalServiceImpl implements LocalService {
     }
 
     @Override
+    @PreAuthorize("hasRole('TENANT')")
     public Local getActiveLocal(UUID id) throws NotFoundException {
         return localRepository.findByIdAndState(id, LocalState.ACTIVE).orElseThrow(() -> new NotFoundException(LocalExceptionMessages.LOCAL_NOT_FOUND, ErrorCodes.LOCAL_NOT_FOUND));
     }

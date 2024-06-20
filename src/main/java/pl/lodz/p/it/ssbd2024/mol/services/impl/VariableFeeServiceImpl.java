@@ -62,5 +62,4 @@ public class VariableFeeServiceImpl implements VariableFeeService {
     public Page<VariableFee> getRentVariableFees(UUID rentId, UUID userId, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         return variableFeeRepository.findRentVariableFeesBetween(rentId, userId, startDate, endDate, pageable);
     }
-
 }

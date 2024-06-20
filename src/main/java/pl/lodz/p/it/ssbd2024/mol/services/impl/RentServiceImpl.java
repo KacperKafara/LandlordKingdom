@@ -81,6 +81,7 @@ public class RentServiceImpl implements RentService {
     }
 
     @Override
+    @PreAuthorize("hasRole('OWNER')")
     public List<Rent> getArchivalOwnerRents(UUID userId) {
         return rentRepository.findArchivalRentsByOwnerUserId(userId);
     }
