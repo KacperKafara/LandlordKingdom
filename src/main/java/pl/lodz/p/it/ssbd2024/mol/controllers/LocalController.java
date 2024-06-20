@@ -65,7 +65,12 @@ public class LocalController {
             @RequestBody @Valid GetActiveLocalsFilterRequest getActiveLocalsFilterRequest
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(localService.getActiveLocalsFilter(getActiveLocalsFilterRequest, pageable)));
+        return ResponseEntity.ok(LocalMapper.toGetAllActiveLocalsResponseList(
+                localService.getActiveLocalsFilter(
+                        getActiveLocalsFilterRequest.city(),
+                        getActiveLocalsFilterRequest.minSize(),
+                        getActiveLocalsFilterRequest.maxSize(),
+                        pageable)));
     }
 
     @GetMapping("/unapproved")

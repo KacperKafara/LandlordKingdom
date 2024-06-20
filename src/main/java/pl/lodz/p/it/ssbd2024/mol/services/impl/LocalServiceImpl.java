@@ -89,13 +89,13 @@ public class LocalServiceImpl implements LocalService {
 
     @Override
     @PreAuthorize("isAuthenticated()")
-    public Page<Local> getActiveLocalsFilter(GetActiveLocalsFilterRequest request, Pageable pageable){
+    public Page<Local> getActiveLocalsFilter(String city, Double minSize, Double maxSize, Pageable pageable){
         return localRepository.findAllByStateCityAndSize(
                 pageable,
                 LocalState.ACTIVE,
-                request.city(),
-                request.minSize(),
-                request.maxSize()
+                city,
+                minSize,
+                maxSize
         );
     }
 

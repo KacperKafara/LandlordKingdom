@@ -24,7 +24,7 @@ public interface LocalService {
 
     Page<Local> getActiveLocals(Pageable pageable);
 
-    Page<Local> getActiveLocalsFilter(GetActiveLocalsFilterRequest getActiveLocalsFilterRequest, Pageable pageable);
+    Page<Local> getActiveLocalsFilter(String city, Double minSize, Double maxSize, Pageable pageable);
 
     Page<Local> getUnapprovedLocals(Pageable pageable);
 
