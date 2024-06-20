@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
-import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
