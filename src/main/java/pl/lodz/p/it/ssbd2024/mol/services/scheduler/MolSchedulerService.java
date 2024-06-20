@@ -41,16 +41,11 @@ public class MolSchedulerService {
     }
 
     @PreAuthorize("permitAll()")
-    public void createFixedFee() {
+    public void createFixedFee(){
         List<Rent> rents = rentRepository.findAllByEndDateGreaterThanEqual(LocalDate.now());
-        LocalDate today = LocalDate.now();
 
         for (Rent rent : rents) {
-            BigDecimal rentalFee = rent.getLocal().getRentalFee();
-            BigDecimal marginFee = rent.getLocal().getMarginFee();
-
-            FixedFee fixedFee = new FixedFee(rentalFee, marginFee, today, rent);
-            fixedFeeService.createFixedFeeForEndOfBillingPeriod(fixedFee);
+            fixedFeeService.createFixedFeeForEndOfBillingPeriod(rent.getId());
         }
     }
 }

@@ -27,7 +27,6 @@ public class LocalScheduler {
 
     @Scheduled(cron = "0 0 0 * * MON", zone = "UTC")
     @PreAuthorize("permitAll()")
-    @Retryable(retryFor = {RuntimeException.class})
     public void createFixedFeeAfterEndOfWeek() {
         log.info("Applying fixed fee for all current rents");
         molSchedulerService.createFixedFee();
