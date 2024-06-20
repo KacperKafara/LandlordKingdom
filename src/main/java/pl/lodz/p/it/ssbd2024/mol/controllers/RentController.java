@@ -14,8 +14,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import pl.lodz.p.it.ssbd2024.exceptions.DateParsingException;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
 import pl.lodz.p.it.ssbd2024.mol.dto.PaymentsAndFeesRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.RentFixedFeesResponse;

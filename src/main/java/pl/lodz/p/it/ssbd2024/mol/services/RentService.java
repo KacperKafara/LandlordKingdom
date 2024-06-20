@@ -14,14 +14,9 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RentService {
-
-    Rent getRent(UUID id) throws NotFoundException;
-
     Rent getTenantRent(UUID rentId, UUID userId) throws NotFoundException;
 
     Page<Rent> getCurrentOwnerRents(UUID ownerId, Pageable pageable);
-
-    Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException;
 
     Rent editEndDate(UUID rentId, UUID userId, LocalDate newEndDate) throws WrongEndDateException, NotFoundException, RentAlreadyEndedException;
 

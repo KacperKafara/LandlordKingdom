@@ -47,8 +47,6 @@ public class MeOwnerController {
     private final ApplicationService applicationService;
     private final RentService rentService;
     private final PaymentService paymentService;
-    private final VariableFeeService variableFeeService;
-    private final FixedFeeService fixedFeeService;
     private final Signer signer;
 
 

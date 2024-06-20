@@ -22,7 +22,6 @@ import pl.lodz.p.it.ssbd2024.messages.OptimisticLockExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.Address;
 import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
-import pl.lodz.p.it.ssbd2024.mok.dto.GetActiveLocalsFilterRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.EditLocalRequestAdmin;
 import pl.lodz.p.it.ssbd2024.mol.dto.LocalReportResponse;

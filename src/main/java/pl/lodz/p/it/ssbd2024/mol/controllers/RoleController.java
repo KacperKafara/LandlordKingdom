@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,11 +16,9 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestPageResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.RoleRequestResponse;
 import pl.lodz.p.it.ssbd2024.mol.mappers.RoleRequestMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
-import java.util.List;
 import java.util.UUID;
 
 @RestController

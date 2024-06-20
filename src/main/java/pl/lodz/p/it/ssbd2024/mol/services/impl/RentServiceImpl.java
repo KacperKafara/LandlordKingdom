@@ -11,18 +11,12 @@ import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.exceptions.RentAlreadyEndedException;
 import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
 import pl.lodz.p.it.ssbd2024.messages.RentMessages;
-import pl.lodz.p.it.ssbd2024.messages.RentMessages;
-import pl.lodz.p.it.ssbd2024.model.Local;
-import pl.lodz.p.it.ssbd2024.model.Payment;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 import pl.lodz.p.it.ssbd2024.exceptions.WrongEndDateException;
 import pl.lodz.p.it.ssbd2024.model.Tenant;
-import pl.lodz.p.it.ssbd2024.mol.repositories.PaymentRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RentRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
-import pl.lodz.p.it.ssbd2024.mol.repositories.VariableFeeRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 
 import java.time.DayOfWeek;
@@ -35,15 +29,7 @@ import java.util.UUID;
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class RentServiceImpl implements RentService {
     private final RentRepository rentRepository;
-    private final PaymentRepository paymentRepository;
-    private final VariableFeeRepository variableFeeRepository;
     private final TenantMolRepository tenantRepository;
-
-    @Override
-    @PreAuthorize("hasAnyRole('TENANT', 'OWNER')")
-    public Rent getRent(UUID id) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     @Override
     @PreAuthorize("hasRole('TENANT')")
@@ -57,12 +43,6 @@ public class RentServiceImpl implements RentService {
     @PreAuthorize("hasRole('OWNER')")
     public Page<Rent> getCurrentOwnerRents(UUID userId, Pageable pageable) {
         return rentRepository.findCurrentRentsByOwnerId(userId, pageable);
-    }
-
-    @Override
-    @PreAuthorize("hasRole('OWNER')")
-    public Rent payRent(UUID rentId, UUID ownerId, Payment payment) throws NotFoundException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override

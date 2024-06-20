@@ -1,6 +1,5 @@
 package pl.lodz.p.it.ssbd2024.mol.services.impl;
 
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,18 +22,15 @@ import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mol.repositories.OwnerMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.RoleRequestRepository;
 import pl.lodz.p.it.ssbd2024.mol.repositories.TenantMolRepository;
-import pl.lodz.p.it.ssbd2024.mol.repositories.UserMolRepository;
 import pl.lodz.p.it.ssbd2024.mol.services.MolEmailService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class RoleServiceImpl implements RoleService {
-    private final UserMolRepository userRepository;
     private final TenantMolRepository tenantRepository;
     private final RoleRequestRepository roleRequestRepository;
     private final OwnerMolRepository ownerRepository;

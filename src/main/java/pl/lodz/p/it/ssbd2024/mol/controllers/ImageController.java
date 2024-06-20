@@ -15,12 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.ImageFormatNotSupported;
 import pl.lodz.p.it.ssbd2024.exceptions.NotFoundException;
 import pl.lodz.p.it.ssbd2024.model.Image;
-import pl.lodz.p.it.ssbd2024.mol.dto.ImageResponse;
-import pl.lodz.p.it.ssbd2024.mol.dto.LocalImagesResponse;
-import pl.lodz.p.it.ssbd2024.mol.mappers.ImagesMapper;
 import pl.lodz.p.it.ssbd2024.mol.services.ImageService;
 
-import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 

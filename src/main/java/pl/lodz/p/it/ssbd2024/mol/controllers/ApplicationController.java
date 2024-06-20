@@ -1,7 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

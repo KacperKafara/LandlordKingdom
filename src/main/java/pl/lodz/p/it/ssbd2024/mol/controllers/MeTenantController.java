@@ -2,9 +2,6 @@ package pl.lodz.p.it.ssbd2024.mol.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Retryable;
@@ -16,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
-import pl.lodz.p.it.ssbd2024.messages.RentExceptionMessages;
 import pl.lodz.p.it.ssbd2024.model.RoleRequest;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.model.VariableFee;
@@ -28,8 +23,6 @@ import pl.lodz.p.it.ssbd2024.mol.services.RentService;
 import pl.lodz.p.it.ssbd2024.mol.services.RoleService;
 import pl.lodz.p.it.ssbd2024.mol.services.VariableFeeService;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.UUID;
 
