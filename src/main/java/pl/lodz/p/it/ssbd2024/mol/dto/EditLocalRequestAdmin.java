@@ -17,7 +17,6 @@ public record EditLocalRequestAdmin(
         String description,
         @Min(value = 1, message = "Size has to be greater than 0")
         int size,
-        @Pattern(regexp = "ACTIVE|INACTIVE")
         String state
 ) {
 }

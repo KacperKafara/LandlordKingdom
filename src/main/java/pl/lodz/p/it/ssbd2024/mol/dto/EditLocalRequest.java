@@ -14,7 +14,6 @@ public record EditLocalRequest(
         @NotBlank(message = "Description cannot be blank")
         @Size(min = 1, max = 1500, message = "Description length has to be between 1 and 1500")
         String description,
-        @Pattern(regexp = "ACTIVE|INACTIVE")
         String state
 ) {
 }
