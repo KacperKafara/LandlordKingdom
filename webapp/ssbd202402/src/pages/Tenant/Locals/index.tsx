@@ -11,6 +11,7 @@ import { LoadingData } from "@/components/LoadingData";
 import { PageChangerComponent } from "@/pages/Components/PageChangerComponent";
 import { useGetActiveLocals } from "@/data/mol/useGetActiveLocals";
 import RefreshQueryButton from "@/components/RefreshQueryButton.tsx";
+import {useBreadcrumbs} from "@/hooks/useBreadcrumbs.tsx";
 
 interface FilterLocals {
     city: string | null;
@@ -72,7 +73,7 @@ const ActiveLocalsComponent = () => {
         <div className="justify-center">
             <div className="flex flex-row items-center justify-between">
                 {breadcrumbs}
-                <RefreshQueryButton queryKeys={["tenantOwnRents"]} />
+                <RefreshQueryButton queryKeys={["tenantOwnRents"]}/>
             </div>
             <Form {...filterData}>
                 <form onSubmit={handleFilterSubmit}>
@@ -80,7 +81,7 @@ const ActiveLocalsComponent = () => {
                         <FormField
                             control={filterData.control}
                             name="city"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>{t("localFilter.city")}</FormLabel>
                                     <FormControl>
@@ -98,7 +99,7 @@ const ActiveLocalsComponent = () => {
                         <FormField
                             control={filterData.control}
                             name="minSize"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>{t("localFilter.minSize")}</FormLabel>
                                     <FormControl>
@@ -118,7 +119,7 @@ const ActiveLocalsComponent = () => {
                         <FormField
                             control={filterData.control}
                             name="maxSize"
-                            render={({ field }) => (
+                            render={({field}) => (
                                 <FormItem>
                                     <FormLabel>{t("localFilter.maxSize")}</FormLabel>
                                     <FormControl>
@@ -148,7 +149,7 @@ const ActiveLocalsComponent = () => {
                 </form>
             </Form>
 
-            {isLoading && <LoadingData />}
+            {isLoading && <LoadingData/>}
 
             {!isLoading && (!locals || locals.length === 0) && (
                 <div className="text-center text-gray-500 mb-5 my-5">
@@ -175,8 +176,8 @@ const ActiveLocalsComponent = () => {
                                     </CardHeader>
                                     <CardContent>
                                         <div className="grid grid-cols-2">
-                                            <DataField label={t("activeLocals.city")} value={local.city} />
-                                            <DataField label={t("activeLocals.size")} value={local.size + " m²"} />
+                                            <DataField label={t("activeLocals.city")} value={local.city}/>
+                                            <DataField label={t("activeLocals.size")} value={local.size + " m²"}/>
                                         </div>
                                     </CardContent>
                                 </Card>
