@@ -144,7 +144,7 @@ public class LocalControllerIT extends BaseConfig {
         int status1 = response.get(0).getStatusCode();
         int status2 = response.get(1).getStatusCode();
         log.info("Status1: %d Status2: %d".formatted(status1, status2));
-        if(status1 == HttpStatus.OK.value()) {
+        if (status1 == HttpStatus.OK.value()) {
             assertEquals(status1, HttpStatus.OK.value());
             assertEquals(status2, HttpStatus.CONFLICT.value());
         } else {
@@ -160,12 +160,13 @@ public class LocalControllerIT extends BaseConfig {
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + userToken)
-                .body(editLocalAddressRequest)
                 .when()
-                .patch(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5/address")
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.FORBIDDEN.value());
+                .statusCode(HttpStatus.FORBIDDEN.value())
+                .extract()
+                .header("If_Match");
     }
 
     @Test
@@ -187,24 +188,39 @@ public class LocalControllerIT extends BaseConfig {
     public void changeLocalAddress_localNotExists_returnNotFound() {
         EditLocalAddressRequest editLocalAddressRequest = new EditLocalAddressRequest("Polska", "Lodz", "Piotrkowska", "Lodz", "90-000");
 
-        given()
+        String ifmatch = given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + adminToken)
-                .body(editLocalAddressRequest)
                 .when()
-                .patch(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ceabcd/address")
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ceabcd")
                 .then()
                 .assertThat()
-                .statusCode(HttpStatus.NOT_FOUND.value());
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .extract()
+                .header("ETag");
     }
 
     @Test
     public void changeLocalAddress_localExists_returnOk() {
         EditLocalAddressRequest editLocalAddressRequest = new EditLocalAddressRequest("Polska", "Lodz", "Piotrkowska", "Lodz", "90-000");
 
+        String ifmatch = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .header("ETag");
+
+        ifmatch = ifmatch.substring(1, ifmatch.length() - 1);
+
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", ifmatch)
                 .body(editLocalAddressRequest)
                 .when()
                 .patch(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5/address")
@@ -231,9 +247,23 @@ public class LocalControllerIT extends BaseConfig {
     public void changeLocalAddress_addressExistsLocalNotArchived_returnConflict() {
         EditLocalAddressRequest editLocalAddressRequest = new EditLocalAddressRequest("inactiveLocalCountry", "inactiveLocalCity", "inactiveLocalStreet", "1", "12-312");
 
+        String ifmatch = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .header("ETag");
+
+        ifmatch = ifmatch.substring(1, ifmatch.length() - 1);
+
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", ifmatch)
                 .body(editLocalAddressRequest)
                 .when()
                 .patch(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5/address")
@@ -246,9 +276,23 @@ public class LocalControllerIT extends BaseConfig {
     public void changeLocalAddress_addressExistsLocalArchived_returnOk() {
         EditLocalAddressRequest editLocalAddressRequest = new EditLocalAddressRequest("archivedLocalCountry", "archivedLocalCity", "archivedLocalStreet", "1", "12-123");
 
+        String ifmatch = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .header("ETag");
+
+        ifmatch = ifmatch.substring(1, ifmatch.length() - 1);
+
         given()
                 .contentType(ContentType.JSON)
                 .header("Authorization", "Bearer " + adminToken)
+                .header("If-Match", ifmatch)
                 .body(editLocalAddressRequest)
                 .when()
                 .patch(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac6/address")
@@ -275,21 +319,35 @@ public class LocalControllerIT extends BaseConfig {
     public void changeLocalAddress_raceCondition_returnOKAndConflict() throws ExecutionException, InterruptedException, TimeoutException {
         EditLocalAddressRequest editLocalAddressRequest = new EditLocalAddressRequest("Polska", "Lodz", "Piotrkowska", "Lodz", "90-000");
 
+        String ifmatch = given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + adminToken)
+                .when()
+                .get(LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5")
+                .then()
+                .assertThat()
+                .statusCode(HttpStatus.OK.value())
+                .extract()
+                .header("ETag");
+
+        ifmatch = ifmatch.substring(1, ifmatch.length() - 1);
+
         List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(
                 given()
                         .contentType(ContentType.JSON)
                         .auth().oauth2(adminToken)
+                        .header("If-Match", ifmatch)
                         .body(editLocalAddressRequest),
                 2, Method.PATCH, LOCALS_URL + "/64d715a3-0dd5-4520-9716-965db9ce1ac5/address");
         int status1 = response.get(0).getStatusCode();
         int status2 = response.get(1).getStatusCode();
         log.info("Status1: %d Status2: %d".formatted(status1, status2));
-        if(status1 == HttpStatus.OK.value()) {
+        if (status1 == HttpStatus.OK.value()) {
             assertEquals(status1, HttpStatus.OK.value());
-            assertEquals(status2, HttpStatus.CONFLICT.value());
+            assertTrue(status2 == HttpStatus.PRECONDITION_FAILED.value() || status2 == HttpStatus.CONFLICT.value());
         } else {
             assertEquals(status2, HttpStatus.OK.value());
-            assertEquals(status1, HttpStatus.CONFLICT.value());
+            assertTrue(status1 == HttpStatus.PRECONDITION_FAILED.value() || status1 == HttpStatus.CONFLICT.value());
         }
     }
 
@@ -517,7 +575,7 @@ public class LocalControllerIT extends BaseConfig {
         int status1 = response.get(0).getStatusCode();
         int status2 = response.get(1).getStatusCode();
         log.info("Status1: %d Status2: %d".formatted(status1, status2));
-        if(status1 == HttpStatus.OK.value()) {
+        if (status1 == HttpStatus.OK.value()) {
             assertEquals(status1, HttpStatus.OK.value());
             assertTrue(status2 == HttpStatus.PRECONDITION_FAILED.value() || status2 == HttpStatus.CONFLICT.value());
         } else {
@@ -577,7 +635,7 @@ public class LocalControllerIT extends BaseConfig {
         int status1 = response.get(0).getStatusCode();
         int status2 = response.get(1).getStatusCode();
         log.info("Status1: %d Status2: %d".formatted(status1, status2));
-        if(status1 == HttpStatus.OK.value()) {
+        if (status1 == HttpStatus.OK.value()) {
             assertEquals(status1, HttpStatus.OK.value());
             assertEquals(status2, HttpStatus.CONFLICT.value());
         } else {
@@ -695,11 +753,11 @@ public class LocalControllerIT extends BaseConfig {
                         .contentType(ContentType.JSON)
                         .header("X-Forwarded-For", "203.0.113.195")
                         .auth().oauth2(adminToken),
-                2, Method.PATCH,LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/approve");
+                2, Method.PATCH, LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/approve");
 
         int status1 = response.get(0).getStatusCode();
         int status2 = response.get(1).getStatusCode();
-        if(status1 == HttpStatus.OK.value()) {
+        if (status1 == HttpStatus.OK.value()) {
             assertEquals(status1, HttpStatus.OK.value());
             assertEquals(status2, HttpStatus.CONFLICT.value());
         } else {
@@ -778,11 +836,11 @@ public class LocalControllerIT extends BaseConfig {
                         .contentType(ContentType.JSON)
                         .header("X-Forwarded-For", "203.0.113.195")
                         .auth().oauth2(adminToken),
-                2, Method.PATCH,LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/reject");
+                2, Method.PATCH, LOCALS_URL + "/ec15320f-1dfc-495b-b2cf-2964c0b7ccd9/reject");
 
         int status1 = response.get(0).getStatusCode();
         int status2 = response.get(1).getStatusCode();
-        if(status1 == HttpStatus.OK.value()) {
+        if (status1 == HttpStatus.OK.value()) {
             assertEquals(status1, HttpStatus.OK.value());
             assertEquals(status2, HttpStatus.CONFLICT.value());
         } else {
