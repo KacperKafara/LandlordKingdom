@@ -37,7 +37,10 @@ const UpdateFixedFeeSchema = (t: TFunction) =>
         /^\d+(\.\d{1,2})?$/,
         t("updateOwnLocalFixedFeeForm.rentalFeeNotValid")
       )
-      .refine((value) => parseFloat(value) <= 10000, {
+      .refine((value) => parseFloat(value) > 0, {
+        message: t("updateOwnLocalFixedFeeForm.rentalFeeCannotBeZero"),
+      })
+      .refine((value) => parseFloat(value) <= 1000000, {
         message: t("updateOwnLocalFixedFeeForm.rentalFeeTooLarge"),
       }),
     marginFee: z
@@ -47,10 +50,14 @@ const UpdateFixedFeeSchema = (t: TFunction) =>
         /^\d+(\.\d{1,2})?$/,
         t("updateOwnLocalFixedFeeForm.marginFeeNotValid")
       )
-      .refine((value) => parseFloat(value) <= 10000, {
+      .refine((value) => parseFloat(value) > 0, {
+        message: t("updateOwnLocalFixedFeeForm.marginFeeCannotBeZero"),
+      })
+      .refine((value) => parseFloat(value) <= 1000000, {
         message: t("updateOwnLocalFixedFeeForm.marginFeeTooLarge"),
       }),
   });
+
 type UpdateOwnLocalFixedFee = z.infer<ReturnType<typeof UpdateFixedFeeSchema>>;
 
 interface Props {

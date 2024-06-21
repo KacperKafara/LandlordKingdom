@@ -770,8 +770,10 @@ const updateOwnLocalFixedFeeForm = {
   updateFixedFee: "Zaktualizuj stałą opłatę",
   updateFixedFeeTitle: "Potwierdź aktualizację",
   updateFixedFeeDescription: "Czy na pewno chcesz zaktualizować stałą opłatę?",
-  rentalFeeTooLarge: "Opłata za wynajem nie może przekroczyć 10 000.",
-  marginFeeTooLarge: "Marża nie może przekroczyć 10 000.",
+  rentalFeeTooLarge: "Opłata za wynajem nie może przekroczyć 1 000 000.",
+  marginFeeTooLarge: "Marża nie może przekroczyć 1 000 000.",
+  rentalFeeCannotBeZero: "Opłata za wynajem nie może wynosić 0.",
+  marginFeeCannotBeZero: "Marża nie może wynosić 0.",
 };
 
 const changeFixedFee = {

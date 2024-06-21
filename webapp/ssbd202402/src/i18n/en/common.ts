@@ -763,8 +763,10 @@ const updateOwnLocalFixedFeeForm = {
   updateFixedFee: "Update Fixed Fee",
   updateFixedFeeTitle: "Confirm Update",
   updateFixedFeeDescription: "Are you sure you want to update the fixed fee?",
-  rentalFeeTooLarge: "Rental fee cannot exceed 10,000.",
-  marginFeeTooLarge: "Margin fee cannot exceed 10,000.",
+  rentalFeeTooLarge: "Rental fee cannot exceed 1,000,000.",
+  marginFeeTooLarge: "Margin fee cannot exceed 1,000,000.",
+  rentalFeeCannotBeZero: "Rental fee cannot be zero.",
+  marginFeeCannotBeZero: "Margin fee cannot be zero.",
 };
 
 const changeFixedFee = {
