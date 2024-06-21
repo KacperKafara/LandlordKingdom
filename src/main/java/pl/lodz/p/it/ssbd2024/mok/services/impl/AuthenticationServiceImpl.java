@@ -48,10 +48,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final VerificationTokenService verificationTokenService;
     private final UserService userService;
 
-    @Value("${login.maxAttempts}")
+    @Value("${login.maxAttempts:3}")
     private int maxLoginAttempts;
 
-    @Value("${login.timeOut}")
+    @Value("${login.timeOut:86400}")
     private int loginTimeOut;
 
     @Transactional(propagation = Propagation.MANDATORY)

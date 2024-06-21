@@ -47,7 +47,7 @@ db:
 
 login:
   maxAttempts: 3
-  timeOut: 300
+  timeOut: 86400
 
 mail:
   host: smtp.gmail.com

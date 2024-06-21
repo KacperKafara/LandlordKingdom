@@ -13,6 +13,7 @@ import pl.lodz.p.it.ssbd2024.mok.authRepositories.*;
 import pl.lodz.p.it.ssbd2024.mok.repositories.*;
 import pl.lodz.p.it.ssbd2024.mok.services.impl.JwtService;
 import pl.lodz.p.it.ssbd2024.mok.services.EmailService;
+import pl.lodz.p.it.ssbd2024.mol.repositories.*;
 import pl.lodz.p.it.ssbd2024.util.Encoders;
 import pl.lodz.p.it.ssbd2024.util.SignVerifier;
 
@@ -117,5 +118,90 @@ public class MockConfig {
     @Bean
     AuthAdministratorRepository authAdministratorRepository() {
         return Mockito.mock(AuthAdministratorRepository.class);
+    }
+
+    @Bean
+    ThemeRepository themeRepository() {
+        return Mockito.mock(ThemeRepository.class);
+    }
+
+    @Bean
+    AccountActivateTokenRepository accountActivateTokenRepository() {
+        return Mockito.mock(AccountActivateTokenRepository.class);
+    }
+
+    @Bean
+    AddressRepository addressRepository() {
+        return Mockito.mock(AddressRepository.class);
+    }
+
+    @Bean
+    ApplicationRepository applicationRepository() {
+        return Mockito.mock(ApplicationRepository.class);
+    }
+
+    @Bean
+    FixedFeeRepository fixedFeeRepository() {
+        return Mockito.mock(FixedFeeRepository.class);
+    }
+
+    @Bean
+    LocalRepository localRepository() {
+        return Mockito.mock(LocalRepository.class);
+    }
+
+    @Bean
+    OwnerMolRepository ownerMolRepository() {
+        return Mockito.mock(OwnerMolRepository.class);
+    }
+
+    @Bean
+    PaymentRepository paymentRepository() {
+        return Mockito.mock(PaymentRepository.class);
+    }
+
+    @Bean
+    RentRepository rentRepository() {
+        return Mockito.mock(RentRepository.class);
+    }
+
+    @Bean
+    RoleRequestRepository roleRequestRepository() {
+        return Mockito.mock(RoleRequestRepository.class);
+    }
+
+    @Bean
+    TenantMolRepository tenantMolRepository() {
+        return Mockito.mock(TenantMolRepository.class);
+    }
+
+    @Bean
+    UserMolRepository userMolRepository() {
+        return Mockito.mock(UserMolRepository.class);
+    }
+
+    @Bean
+    VariableFeeRepository variableFeeRepository() {
+        return Mockito.mock(VariableFeeRepository.class);
+    }
+
+    @Bean
+    RoleRequestMOKRepository roleRequestMOKRepository() {
+        return Mockito.mock(RoleRequestMOKRepository.class);
+    }
+
+    @Bean
+    TimezoneRepository timezoneRepository() {
+        return Mockito.mock(TimezoneRepository.class);
+    }
+
+    @Bean
+    UserFilterRepository userFilterRepository() {
+        return Mockito.mock(UserFilterRepository.class);
+    }
+
+    @Bean
+    ImageRepository imageRepository() {
+        return Mockito.mock(ImageRepository.class);
     }
 }
