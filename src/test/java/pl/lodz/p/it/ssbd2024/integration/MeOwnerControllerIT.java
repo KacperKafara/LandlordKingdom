@@ -466,7 +466,7 @@ public class MeOwnerControllerIT extends BaseConfig{
 
     @Test
     public void editLocal_dataNotValid_returnBadRequest() {
-        EditLocalRequest editLocalRequest = new EditLocalRequest(UUID.fromString("3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0"), "afds", "nbl", "ARCHIVED");
+        EditLocalRequest editLocalRequest = new EditLocalRequest(UUID.fromString("3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0"), "", "nbl", "ARCHIVED");
 
         String etag = given()
                 .contentType(ContentType.JSON)
@@ -496,10 +496,20 @@ public class MeOwnerControllerIT extends BaseConfig{
         BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
         SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
 
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/a51f1e3e-e0e6-4a7d-80e5-16e245554c77")
+                .then()
+                .extract()
+                .header("ETag");
+
         Response response = given()
                 .contentType(ContentType.JSON)
                 .auth().oauth2(ownerToken)
                 .body(setFixedFeeRequest)
+                .header("If-Match", etag.substring(1, etag.length()-1))
                 .when()
                 .patch(ME_URL + "/locals/a51f1e3e-e0e6-4a7d-80e5-16e245554c77/fixed-fee")
                 .then()
@@ -520,10 +530,20 @@ public class MeOwnerControllerIT extends BaseConfig{
         BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
         SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
 
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0")
+                .then()
+                .extract()
+                .header("ETag");
+
         Response response = given()
                 .contentType(ContentType.JSON)
                 .auth().oauth2(ownerToken)
                 .body(setFixedFeeRequest)
+                .header("If-Match", etag.substring(1, etag.length()-1))
                 .when()
                 .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
                 .then()
@@ -544,10 +564,20 @@ public class MeOwnerControllerIT extends BaseConfig{
         BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
         SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
 
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0")
+                .then()
+                .extract()
+                .header("ETag");
+
         given()
                 .contentType(ContentType.JSON)
                 .auth().oauth2(adminToken)
                 .body(setFixedFeeRequest)
+                .header("If-Match", etag.substring(1, etag.length()-1))
                 .when()
                 .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0/fixed-fee")
                 .then()
@@ -561,10 +591,20 @@ public class MeOwnerControllerIT extends BaseConfig{
         BigDecimal newMarginFee = BigDecimal.valueOf(600.30);
         SetFixedFeeRequest setFixedFeeRequest = new SetFixedFeeRequest(newRentalFee, newMarginFee);
 
+        String etag = given()
+                .contentType(ContentType.JSON)
+                .auth().oauth2(ownerToken)
+                .when()
+                .get(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4d0")
+                .then()
+                .extract()
+                .header("ETag");
+
         given()
                 .contentType(ContentType.JSON)
                 .auth().oauth2(ownerToken)
                 .body(setFixedFeeRequest)
+                .header("If-Match", etag.substring(1, etag.length()-1))
                 .when()
                 .patch(ME_URL + "/locals/3db8f4a7-a268-41a8-84f8-5e1a1dc4b4f1/fixed-fee")
                 .then()

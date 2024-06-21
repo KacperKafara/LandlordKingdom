@@ -53,7 +53,7 @@ public class UserControllerIT extends BaseConfig {
                 .then()
                 .assertThat()
                 .statusCode(HttpStatus.OK.value())
-                .body("size()", is(6));
+                .body("size()", is(30));
     }
 
     @Test
