@@ -1,9 +1,11 @@
 package pl.lodz.p.it.ssbd2024.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pl.lodz.p.it.ssbd2024.util.ValidEndDate;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -38,10 +40,12 @@ public class Rent extends AbstractEntity {
 
     @Column(name = "end_date", nullable = false)
     @Setter
+    @ValidEndDate
     private LocalDate endDate;
 
     @Column(name = "balance", nullable = false, precision = 10, scale = 2)
     @Setter
+    @DecimalMax(value = "99999999999999999")
     private BigDecimal balance;
 
     @OneToMany(mappedBy = "rent", fetch = FetchType.EAGER)
