@@ -815,6 +815,7 @@ const ownerRentDetails = {
   summary: "Razem",
   showLocalDetails: "Pokaż szczegóły lokalu",
   archivalRents: "Archiwalne wynajmy",
+  rentNotFound: "Nie znaleziono wynajmu",
 };
 
 const breadcrumbs = {

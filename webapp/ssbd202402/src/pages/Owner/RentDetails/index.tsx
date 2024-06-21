@@ -35,13 +35,25 @@ const OwnerRentDetailsPage: FC = () => {
           path === "/owner/current-rents"
             ? t("ownerRentDetails.rents")
             : t("ownerRentDetails.archivalRents")
-        } ${data?.local.name}` ?? "",
-      path: `${path}/rent/${id}`,
+        } ${data?.local.name ?? "Not found"}` ?? "",
+      path: `${path}/rent/${id ?? ""}`,
     },
   ]);
   if (isLoading) {
     return <LoadingData />;
   }
+
+  if (!data) {
+    return (
+      <div className="flex flex-col">
+        {breadcrumbs}
+        <div className="mt-2 text-center text-2xl">
+          {t("ownerRentDetails.rentNotFound")}
+        </div>
+      </div>
+    );
+  }
+
   const isFutureEndDate = data?.endDate && new Date(data.endDate) > new Date();
   return (
     <div className="flex flex-col">

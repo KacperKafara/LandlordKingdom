@@ -808,6 +808,7 @@ const ownerRentDetails = {
   summary: "Total",
   showLocalDetails: "Show local details",
   archivalRents: "Archival rents",
+  rentNotFound: "Rent not found",
 };
 
 const tenantApplications = {
