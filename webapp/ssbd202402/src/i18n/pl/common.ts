@@ -455,7 +455,7 @@ const errors = {
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
   rentEnded: "Wynajem zakończony",
   variableFeeAlreadyExists: "Opłata zmienna już istnieje",
-  paymentAlreadyExists: "Opłata stała już istnieje",
+  paymentAlreadyExists: "Płatność za obecny okres rozliczeniowy została wprowadzona",
   dateParsingError: "Błąd parsowania daty",
   rollback: "Operacja została cofnięta",
   unexpectedRollback: "Nieoczekiwane cofnięcie operacji",

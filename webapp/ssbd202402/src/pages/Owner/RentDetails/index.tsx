@@ -99,6 +99,7 @@ const OwnerRentDetailsPage: FC = () => {
             id={id!}
             startDate={data!.startDate}
             endDate={data!.endDate}
+            isTenant={false}
           />
         </TabsContent>
         <TabsContent value="variableFees">

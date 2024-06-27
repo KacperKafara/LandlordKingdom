@@ -451,7 +451,7 @@ const errors = {
   rentEnded: "Rent has already ended",
   dateParsingError: "Date parsing error",
   variableFeeAlreadyExists: "Variable fee already exists",
-  paymentAlreadyExists: "Fixed fee already exists",
+  paymentAlreadyExists: "Payment for current week already exists",
   roleRequestAlreadyExists: "Role request already exists",
   rollback: "Rollback",
   transaction: "Transaction",
