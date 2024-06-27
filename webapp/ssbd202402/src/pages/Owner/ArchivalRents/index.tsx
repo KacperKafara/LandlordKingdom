@@ -32,6 +32,7 @@ const ArchivalOwnerRentsPage: FC = () => {
     pageNumber: pageNumber,
     pageSize: pageSize,
   });
+  const rents = rentsPage?.rents;
   const navigate = useNavigate();
   return (
     <div className="flex flex-col justify-center">
@@ -47,7 +48,7 @@ const ArchivalOwnerRentsPage: FC = () => {
       )}
       <div className="flex w-full justify-center">
         <ul className="flex flex-wrap gap-2 py-4">
-          {rentsPage?.rents.map((rent) => (
+          {rents?.map((rent) => (
             <li key={rent.id} className="w-full min-w-[31rem] flex-1">
               <Card>
                 <CardHeader>
