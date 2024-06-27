@@ -32,7 +32,7 @@ public class RentMapper {
         );
     }
 
-    public static List<RentForOwnerResponse> rentForOwnerResponseList(List<Rent> rentList) {
+    public static List<RentForOwnerResponse> rentForOwnerResponseList(Page<Rent> rentList) {
         return rentList.stream().map(RentMapper::rentForOwnerResponse).toList();
     }
 
