@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -55,16 +55,23 @@ export const ChangeEndDate: FC<Props> = ({ startDate, endDate, id }) => {
   const { language } = useLanguageStore();
   const { t } = useTranslation();
   const { mutate, isPending } = useMutateEndDate();
-
+  const [isOpen, setOpen] = useState(false);
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema(t)),
   });
 
   function onSubmit(data: FormSchemaType) {
-    mutate({ id, newDate: format(data.newDate, "yyyy-MM-dd") });
+    mutate(
+      { id, newDate: format(data.newDate, "yyyy-MM-dd") },
+      {
+        onSuccess: () => {
+          setOpen(false);
+        },
+      }
+    );
   }
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button className="flex-1" variant="default">
           {t("changeEndDate.buttonText")}

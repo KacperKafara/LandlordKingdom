@@ -534,7 +534,7 @@ const leaveLocal = {
   buttonText: "Opuść lokal",
   dialogTitle: "Czy na pewno chcesz opuścić lokal?",
   dialogDescription:
-    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
+    "Nie możesz cofnąć tej operacji.",
 };
 
 const tenantRents = {
@@ -641,7 +641,7 @@ const ownLocalDetails = {
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
   leaveLocal: "Opuść lokal",
   leaveLocalDescription:
-    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+    "Nie możesz cofnąć tej operacji. Ta operacja może być wokonana tylko na lokalu w stanie Nieaktywnym",
   showApplications: "Przeglądaj aplikacje",
   state: "Stan lokalu",
   uploadImage: "Dodaj zdjęcie",

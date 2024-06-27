@@ -545,7 +545,7 @@ const leaveLocal = {
   buttonText: "Leave local",
   dialogTitle: "Are you sure you want to continue?",
   dialogDescription:
-    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
+    "You cannot undo this operation.",
 };
 
 const currentTenantRents = {
@@ -663,7 +663,7 @@ const ownLocalDetails = {
     "Changes to the fixed fees will be effective from the next billing period.",
   leaveLocal: "Leave local",
   leaveLocalDescription:
-    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
+    "This operation cannot be undone. You can leave local only in Inactive state.",
   showApplications: "Show applications",
   state: "Local state",
   uploadImage: "Upload image",
