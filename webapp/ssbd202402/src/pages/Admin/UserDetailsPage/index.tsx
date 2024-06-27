@@ -94,7 +94,7 @@ const UserDetailsPage: FC = () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <RefreshQueryButton queryKeys={["meData"]} />
+            <RefreshQueryButton queryKeys={["user"]} />
           </div>
           <div>
             <CardHeader className="items-center">
