@@ -1,4 +1,5 @@
 import { InputWithText } from "@/components/InputWithText";
+import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,7 +19,7 @@ import {
 import { useCreateVariableFee } from "@/data/rent/useCreateVariableFee";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFunction } from "i18next";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -43,6 +44,7 @@ const CreateVariableFeeDialogComponent: FC<CreateVariableFeeDialogProps> = ({
   rentId,
 }) => {
   const { t } = useTranslation();
+  const [isOpen, setOpen] = useState(false);
   const form = useForm<CreateVariableFeeForm>({
     resolver: zodResolver(getCreateVariableFeeSchema(t)),
     values: {
@@ -50,16 +52,22 @@ const CreateVariableFeeDialogComponent: FC<CreateVariableFeeDialogProps> = ({
       amount: 0,
     },
   });
-  const { createVariableFee } = useCreateVariableFee();
+  const { createVariableFee, isPending } = useCreateVariableFee();
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    await createVariableFee(values);
+    await createVariableFee(values, {
+      onSuccess: () => {
+        setOpen(false);
+      },
+    });
   });
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{t("createVariableFeeDialog.title")}</Button>
+        <Button onClick={() => setOpen(true)}>
+          {t("createVariableFeeDialog.title")}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -85,9 +93,12 @@ const CreateVariableFeeDialogComponent: FC<CreateVariableFeeDialogProps> = ({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="self-end">
-              {t("createVariableFeeDialog.title")}
-            </Button>
+            <LoadingButton
+              className="self-end"
+              type="submit"
+              text={t("createVariableFeeDialog.title")}
+              isLoading={isPending}
+            />
           </form>
         </Form>
       </DialogContent>

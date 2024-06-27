@@ -581,6 +581,8 @@ const roleRequestDialog = {
   alreadyPlacedRequest: "You already placed a request for role at: ",
   howDoesItWork: "How does this work?",
   requestRoleButton: "Request role",
+  succesTitle: "Role request created",
+  succesDescription: "We will review your request and get back to you soon",
 };
 
 const localDetails = {

@@ -521,6 +521,9 @@ const roleRequestDialog = {
   alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: ",
   howDoesItWork: "Jak to działa?",
   requestRoleButton: "Złóż wniosek",
+  successTitle: "Wniosek o rolę został złożony",
+  successDescription:
+    "Rozpatrzymy Twoją prośbę i wkrótce damy ci znać o wyniku",
 };
 
 const leaveLocal = {

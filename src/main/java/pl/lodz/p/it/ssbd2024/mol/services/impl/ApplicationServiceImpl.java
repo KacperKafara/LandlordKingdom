@@ -94,7 +94,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         Rent rent = new Rent(local, tenant, owner, currentDate, endDate, BigDecimal.ZERO.subtract(rentalFee.add(marginFee)));
         rent = rentRepository.saveAndFlush(rent);
 
-        FixedFee fixedFee = new FixedFee(local.getRentalFee(), local.getMarginFee(), currentDate, rent);
+        FixedFee fixedFee = new FixedFee(rentalFee, marginFee, currentDate, rent);
         fixedFeeRepository.saveAndFlush(fixedFee);
 
         for (Application appl : restApplications) {

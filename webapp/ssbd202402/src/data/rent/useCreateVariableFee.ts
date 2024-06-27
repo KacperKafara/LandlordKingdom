@@ -15,7 +15,7 @@ export const useCreateVariableFee = () => {
   const { api } = useAxiosPrivate();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ rentId, amount }: CreateVariableFeeRequest) => {
       await api.post(`/me/rents/${rentId}/variable-fee`, { amount });
     },
@@ -38,5 +38,5 @@ export const useCreateVariableFee = () => {
     },
   });
 
-  return { createVariableFee: mutateAsync };
+  return { createVariableFee: mutateAsync, isPending };
 };

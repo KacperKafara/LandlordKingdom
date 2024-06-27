@@ -1,6 +1,7 @@
 import { useToast } from "@/components/ui/use-toast.ts";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import useAxiosPrivate from "../useAxiosPrivate";
+import { t } from "i18next";
 
 export const useCreateRoleRequest = () => {
   const { api } = useAxiosPrivate();
@@ -15,8 +16,8 @@ export const useCreateRoleRequest = () => {
       queryClient.invalidateQueries({ queryKey: ["role-request"] });
       toast({
         variant: "success",
-        title: "Role request created",
-        description: "We will review your request and get back to you soon",
+        title: t("roleRequestDialog.successTitle"),
+        description: t("roleRequestDialog.successDescription"),
       });
     },
   });
