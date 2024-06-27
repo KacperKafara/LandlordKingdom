@@ -14,12 +14,11 @@ services:
       - my_network
     volumes:
       - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./initDb.sql:/docker-entrypoint-initdb.d/init2.sql
 
   tomcat:
     build:
       context: ..
-      dockerfile: DockerfileTomcat
+      dockerfile: docker-ssbd02/DockerfileTomcat
     container_name: ssbd02-tomcat
     restart: always
     environment:
@@ -34,20 +33,23 @@ services:
       - /etc/ssbd02/privateJwt-key.pem:/etc/ssbd02/privateJwt-key.pem
       - /etc/ssbd02/privateRefresh-key.pem:/etc/ssbd02/privateRefresh-key.pem
 
-#  nginx:
-#    build:
-#      context: ..
-#      dockerfile: DockerfileNginx
-#    container_name: ssbd02-nginx
-#    restart: always
-#    ports:
-#      - "3000:80"
-#    networks:
-#      - my_network
-#    depends_on:
-#      - tomcat
-#    volumes:
-#      - ./nginx.conf:/etc/nginx/nginx.conf
+  nginx:
+    build:
+      context: ..
+      dockerfile: docker-ssbd02/DockerfileNginx
+    container_name: ssbd02-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - my_network
+    depends_on:
+      - tomcat
+    volumes:
+      - /home/student/fullchain.pem:/etc/letsencrypt/live/team-2.proj-sum.it.p.lodz.pl/fullchain.pem
+      - /home/student/privkey.pem:/etc/letsencrypt/live/team-2.proj-sum.it.p.lodz.pl/privkey.pem
+      - ./nginx.conf:/etc/nginx/nginx.conf
 
 
 networks:
