@@ -21,12 +21,13 @@ type RentFixedFeesProps = {
   id: string;
   startDate: string;
   endDate: string;
+  isTenant: boolean;
 };
 
 export const RentFixedFees: FC<RentFixedFeesProps> = ({
   id,
   startDate,
-  endDate,
+  endDate, isTenant = false,
 }) => {
   const [pageNumber, setPageNumber] = useState(0);
   const [pageSize, setPageSize] = useState(10);
@@ -81,15 +82,26 @@ export const RentFixedFees: FC<RentFixedFeesProps> = ({
                     {t("ownerRentDetails.number")}
                   </TableHead>
                   <TableHead>{t("ownerRentDetails.date")}</TableHead>
-                  <TableHead className="text-right">
-                    {t("ownerRentDetails.margin")}
-                  </TableHead>
-                  <TableHead className="w-48 text-right">
-                    {t("ownerRentDetails.rental")}
-                  </TableHead>
-                  <TableHead className="w-48 text-right">
-                    {t("ownerRentDetails.summary")}
-                  </TableHead>
+                    {isTenant && (
+                        <TableHead className="w-48 text-right">
+                            {t("ownerRentDetails.amount")}
+                        </TableHead>
+                    )
+                    }
+                  {!isTenant && (
+                      <>
+                        <TableHead className="text-right">
+                          {t("ownerRentDetails.margin")}
+                        </TableHead>
+                        <TableHead className="w-48 text-right">
+                          {t("ownerRentDetails.rental")}
+                        </TableHead>
+                        <TableHead className="w-48 text-right">
+                          {t("ownerRentDetails.summary")}
+                        </TableHead>
+                      </>
+                  )
+                  }
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -97,15 +109,25 @@ export const RentFixedFees: FC<RentFixedFeesProps> = ({
                   <TableRow key={fee.date}>
                     <TableCell>{index + 1 + pageSize * pageNumber}</TableCell>
                     <TableCell>{fee.date}</TableCell>
-                    <TableCell className="text-right">
-                      {toLocaleFixed(fee.marginFee)}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {toLocaleFixed(fee.rentalFee)}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      {toLocaleFixed(fee.rentalFee + fee.marginFee)}
-                    </TableCell>
+                    {isTenant && (
+                        <TableCell className="text-right">
+                          {toLocaleFixed(fee.rentalFee + fee.marginFee)}
+                        </TableCell>
+                    )
+                    }
+                    {!isTenant && (
+                        <>
+                          <TableCell className="text-right">
+                            {toLocaleFixed(fee.marginFee)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {toLocaleFixed(fee.rentalFee)}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            {toLocaleFixed(fee.rentalFee + fee.marginFee)}
+                          </TableCell>
+                        </>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

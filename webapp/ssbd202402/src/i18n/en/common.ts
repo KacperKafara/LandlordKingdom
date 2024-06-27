@@ -829,6 +829,8 @@ const breadcrumbs = {
   locals: "Locals",
   local: "Local",
   report: "Report",
+  currentRents: "Current rents",
+  archivalRents: "Archival rents",
 };
 
 const createVariableFeeDialog = {

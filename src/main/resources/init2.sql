@@ -18,7 +18,7 @@ VALUES
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
 VALUES
     ('1a3c1633-e786-4442-9314-9101445202a5', 'lilia.malinowski@mail.com', null, 'Lilia', 'Malinowski'),
-    ('b92efb2f-fc9e-48ab-a4e3-8bbffbf0115f', 'martyna.przybysz@mail.com', null, 'Martyna', 'Przybysz'),
+    ('b92efb2f-fc9e-48ab-a4e3-8bbffbf0115f', 'kozakonrad72@gmail.com', null, 'Martyna', 'Przybysz'),
     ('0aabaf48-7ddd-4ab8-aa80-7d61c2134d96', 'nadzieja.słowik@mail.com', null, 'Nadzieja', 'Słowik'),
     ('d33ba50f-01b7-49b5-8873-fbf03c0f73e0', 'wilfryd.michałek@mail.com', null, 'Wilfryd', 'Michałek'),
     ('1a5ca23e-d1b2-4798-bc5f-60b9269e0e49', 'wilhelmina.paszkowski@mail.com', null, 'Wilhelmina', 'Paszkowski'),
@@ -29,7 +29,7 @@ VALUES
     ('6e97f7b6-7660-4ef7-9320-1bfe82f295d4', 'gilbert.drabik@mail.com', null, 'Gilbert', 'Drabik'),
     ('f1034937-d423-464a-8186-36737b7940d9', 'sylwia.gil@mail.com', null, 'Sylwia', 'Gil'),
     ('843221ef-121f-4f36-bc81-05a15349b1cd', 'maksymilian.rogala@mail.com', null, 'Maksymilian', 'Rogala'),
-    ('9d3f2530-f0ec-478f-87ef-4ad07fa65a02', 'hugo.kaniewski@mail.com', null, 'Hugo', 'Kaniewski');
+    ('9d3f2530-f0ec-478f-87ef-4ad07fa65a02', 'konradkoza@interia.eu', null, 'Hugo', 'Kaniewski');
 
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES

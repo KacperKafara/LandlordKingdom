@@ -327,7 +327,7 @@ INSERT INTO public.users (id, login, password, blocked, verified, login_attempts
 VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'admin2', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
         false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
-VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'kozakonrad72@gmail.com', null, 'Admin', 'Admin');
+VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'admin2@mail.com', null, 'Admin', 'Admin');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES ('2dbe6d57-54ca-4662-96b4-149d72a8ab44', 'e872ce90-734b-49a9-8949-dde4753b8864', 'ADMINISTRATOR', true, 0, NOW(),
         NOW(), null, null);

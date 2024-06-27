@@ -74,6 +74,7 @@ const RentDetailsPage: FC = () => {
               id={id!}
               startDate={rent.startDate}
               endDate={rent.endDate}
+              isTenant={true}
             />
           )}
         </TabsContent>
