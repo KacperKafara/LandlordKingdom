@@ -72,7 +72,7 @@ const OwnLocalDetailsPage: FC = () => {
                 </TabsTrigger>
               </TabsList>
               <Button asChild>
-                <NavLink to="report">Report</NavLink>
+                <NavLink to="report">{t("ownerLocals.report")}</NavLink>
               </Button>
             </div>
             <TabsContent value="basic">

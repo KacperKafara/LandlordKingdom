@@ -120,9 +120,13 @@ public class MeOwnerController {
 
     @GetMapping("/owner/rents/archival")
     @PreAuthorize("hasRole('OWNER')")
-    public ResponseEntity<List<RentForOwnerResponse>> getArchivalRents() {
+    public ResponseEntity<RentForOwnerResponsePage> getArchivalRents(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "6") int size
+    ) {
         UUID userId = UUID.fromString(((Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getSubject());
-        return ResponseEntity.ok(RentMapper.rentForOwnerResponseList(rentService.getArchivalOwnerRents(userId)));
+        Pageable pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(RentMapper.rentForOwnerResponsePage(rentService.getArchivalOwnerRents(userId, pageable)));
     }
 
     @PostMapping("/rents/{id}/payment")

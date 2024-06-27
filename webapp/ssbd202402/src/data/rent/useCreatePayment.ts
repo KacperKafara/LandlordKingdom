@@ -15,7 +15,7 @@ export const useCreatePayment = () => {
   const { api } = useAxiosPrivate();
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const { mutateAsync } = useMutation({
+  const { mutateAsync, isPending } = useMutation({
     mutationFn: async ({ rentId, amount }: CreatePaymentRequest) => {
       await api.post(`/me/rents/${rentId}/payment`, { amount });
     },
@@ -38,5 +38,5 @@ export const useCreatePayment = () => {
     },
   });
 
-  return { createPayment: mutateAsync };
+  return { createPayment: mutateAsync, isPending };
 };

@@ -6,17 +6,32 @@ import { AxiosError } from "axios";
 import { ErrorCode } from "@/@types/errorCode";
 import { OwnerArchivalRent } from "@/types/mol/OwnerCurrentRent";
 
+interface OwnRentsRequest {
+  pageNumber: number;
+  pageSize: number;
+}
 
 
-export const useGetOwnerArchivalRents = () => {
+type OwnerArchivalRentsPage = {
+  rents: OwnerArchivalRent[];
+  pages: number;
+}
+
+
+export const useGetOwnerArchivalRents = (request: OwnRentsRequest) => {
   const { api } = useAxiosPrivate();
   const { t } = useTranslation();
 
   return useQuery({
-    queryKey: ["ownerArchivalRents"],
+    queryKey: ["ownerArchivalRents", request.pageNumber, request.pageSize],
     queryFn: async () => {
       try {
-        const response = await api.get<OwnerArchivalRent[]>("/me/owner/rents/archival");
+        const response = await api.get<OwnerArchivalRentsPage>("/me/owner/rents/archival", {
+          params: {
+            page: request.pageNumber,
+            size: request.pageSize,
+          },
+        });
         return response.data;
       } catch (error) {
         const axiosError = error as AxiosError;

@@ -1,6 +1,5 @@
 import { FC } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -18,6 +17,7 @@ import { useAddLocal } from "@/data/mol/useAddLocal.ts";
 import { TFunction } from "i18next";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { InputWithText } from "@/components/InputWithText";
+import LoadingButton from "@/components/LoadingButton";
 
 const addLocalSchema = (t: TFunction) =>
   z.object({
@@ -59,7 +59,7 @@ type AddLocalFormData = z.infer<ReturnType<typeof addLocalSchema>>;
 
 const AddLocalForm: FC = () => {
   const { t } = useTranslation();
-  const { addLocal } = useAddLocal();
+  const { addLocal, isPending } = useAddLocal();
   const form = useForm<AddLocalFormData>({
     resolver: zodResolver(addLocalSchema(t)),
     values: {
@@ -85,7 +85,11 @@ const AddLocalForm: FC = () => {
   ]);
 
   const onSubmit: SubmitHandler<AddLocalFormData> = async (data) => {
-    await addLocal(data);
+    await addLocal(data, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   };
 
   return (
@@ -257,8 +261,8 @@ const AddLocalForm: FC = () => {
                       <FormControl>
                         <textarea
                           {...field}
-                          rows={20}
-                          className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                          rows={4}
+                          className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                         />
                       </FormControl>
                       <FormMessage />
@@ -268,9 +272,12 @@ const AddLocalForm: FC = () => {
               </div>
 
               <div className="col-span-1 md:col-span-2">
-                <Button type="submit" className="w-full">
-                  {t("addLocalPage.formSubmit")}
-                </Button>
+                <LoadingButton
+                  isLoading={isPending}
+                  type="submit"
+                  className="w-full"
+                  text={t("addLocalPage.formSubmit")}
+                />
               </div>
             </form>
           </Form>

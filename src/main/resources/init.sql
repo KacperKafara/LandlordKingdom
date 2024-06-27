@@ -65,7 +65,7 @@ VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', 'tenant',
         '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null,
         null, true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
-VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', '242352@edu.p.lodz.pl', null, 'Tenant', 'Tenant');
+VALUES ('05854132-8b7c-440e-9ef2-8fe46a7962dc', 'tenant@mail.com', null, 'Tenant', 'Tenant');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES ('4b329d71-2a92-4e90-8f0b-f673e4f79529', '05854132-8b7c-440e-9ef2-8fe46a7962dc', 'TENANT', true, 0, NOW(), NOW(),
         null, null);
@@ -195,7 +195,7 @@ VALUES
 
 INSERT INTO locals (margin_fee, rental_fee, size, state, created_at, modified_at, version, address_id, created_by, id, modified_by, owner_id, name, description)
 VALUES
-    (10.50, 1000.00, 50, 3, '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, '550e8400-e29b-41d4-a716-446655440000', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440002', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local A', 'Description of Local A'),
+    (10.50, 1000.00, 50, 3, '2023-01-01 12:00:00', '2023-01-01 12:00:00', 1, '550e8400-e29b-41d4-a716-446655440000', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440002', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Uczta filozofów', 'Pięciu filozofów bije się o widelce?'),
     (12.00, 1200.00, 60, 2, '2023-01-02 13:00:00', '2023-01-02 13:00:00', 1, '550e8400-e29b-41d4-a716-446655440005', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440007', null, '397cf3c5-f369-4783-9892-6fc781fd2b0d', 'Local B', 'Description of Local B'),
     (15.00, 1500.00, 70, 4, '2023-01-03 14:00:00', '2023-01-03 14:00:00', 1, '550e8400-e29b-41d4-a716-446655440010', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440012', null, null, 'Local C', 'Description of Local C'),
     (20.00, 2000.00, 80, 1, '2023-01-04 15:00:00', '2023-01-04 15:00:00', 1, '550e8400-e29b-41d4-a716-446655440015', '397cf3c5-f369-4783-9892-6fc781fd2b0d', '550e8400-e29b-41d4-a716-446655440017', null, null, 'Local D', 'Description of Local D'),
@@ -327,7 +327,7 @@ INSERT INTO public.users (id, login, password, blocked, verified, login_attempts
 VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'admin2', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
         false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true);
 INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
-VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'kozakonrad72@gmail.com', null, 'Admin', 'Admin');
+VALUES ('e872ce90-734b-49a9-8949-dde4753b8864', 'admin2@mail.com', null, 'Admin', 'Admin');
 INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES ('2dbe6d57-54ca-4662-96b4-149d72a8ab44', 'e872ce90-734b-49a9-8949-dde4753b8864', 'ADMINISTRATOR', true, 0, NOW(),
         NOW(), null, null);

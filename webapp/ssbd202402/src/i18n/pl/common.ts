@@ -455,7 +455,7 @@ const errors = {
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
   rentEnded: "Wynajem zakończony",
   variableFeeAlreadyExists: "Opłata zmienna już istnieje",
-  paymentAlreadyExists: "Opłata stała już istnieje",
+  paymentAlreadyExists: "Płatność za obecny okres rozliczeniowy została wprowadzona",
   dateParsingError: "Błąd parsowania daty",
   rollback: "Operacja została cofnięta",
   unexpectedRollback: "Nieoczekiwane cofnięcie operacji",
@@ -487,6 +487,7 @@ const ownerLocals = {
   all: "Wszystkie",
   noLocalsFoundForThisState:
     "Aktualnie nie posiadasz żadnych lokali w tym stanie",
+  report: "Raport",
 };
 
 const allLocals = {
@@ -521,6 +522,9 @@ const roleRequestDialog = {
   alreadyPlacedRequest: "Już złożyłeś wniosek o rolę o godzinie: ",
   howDoesItWork: "Jak to działa?",
   requestRoleButton: "Złóż wniosek",
+  successTitle: "Wniosek o rolę został złożony",
+  successDescription:
+    "Rozpatrzymy Twoją prośbę i wkrótce damy ci znać o wyniku",
 };
 
 const leaveLocal = {
@@ -530,7 +534,7 @@ const leaveLocal = {
   buttonText: "Opuść lokal",
   dialogTitle: "Czy na pewno chcesz opuścić lokal?",
   dialogDescription:
-    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem",
+    "Nie możesz cofnąć tej operacji.",
 };
 
 const tenantRents = {
@@ -637,7 +641,7 @@ const ownLocalDetails = {
     "Zmiany opłat stałych będą obowiązywać od następnego okresu rozliczeniowego.",
   leaveLocal: "Opuść lokal",
   leaveLocalDescription:
-    "Nie możesz cofnąć tej operacji. Aby odzyskać lokal będziesz musiał skontaktować się z administratorem. Ta operacja nie może być wokonana na wynajętym lokalu",
+    "Nie możesz cofnąć tej operacji. Ta operacja może być wokonana tylko na lokalu w stanie Nieaktywnym",
   showApplications: "Przeglądaj aplikacje",
   state: "Stan lokalu",
   uploadImage: "Dodaj zdjęcie",

@@ -34,7 +34,7 @@ const CurrentOwnerRentsPage: FC = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative pt-2">
+    <div className="flex flex-col justify-center">
       <div className="flex flex-row items-center justify-between">
         {breadCrumbs}
         <RefreshQueryButton queryKeys={["ownerCurrentRents"]} />

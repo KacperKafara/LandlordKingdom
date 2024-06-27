@@ -7,16 +7,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.lodz.p.it.ssbd2024.model.Local;
 import pl.lodz.p.it.ssbd2024.model.LocalState;
 import pl.lodz.p.it.ssbd2024.model.Rent;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,7 +41,7 @@ public interface RentRepository extends JpaRepository<Rent, UUID> {
 
     @PreAuthorize("hasRole('OWNER')")
     @Query("SELECT r FROM Rent r WHERE r.owner.user.id = :userId AND r.endDate < CURRENT_DATE")
-    List<Rent> findArchivalRentsByOwnerUserId(UUID userId);
+    Page<Rent> findArchivalRentsByOwnerUserId(UUID userId, Pageable pageable);
 
     @PreAuthorize("hasRole('OWNER')")
     Optional<Rent> findByOwnerIdAndId(UUID ownerId, UUID rentId);

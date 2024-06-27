@@ -451,7 +451,7 @@ const errors = {
   rentEnded: "Rent has already ended",
   dateParsingError: "Date parsing error",
   variableFeeAlreadyExists: "Variable fee already exists",
-  paymentAlreadyExists: "Fixed fee already exists",
+  paymentAlreadyExists: "Payment for current week already exists",
   roleRequestAlreadyExists: "Role request already exists",
   rollback: "Rollback",
   transaction: "Transaction",
@@ -481,6 +481,7 @@ const ownerLocals = {
   localState: "Local state",
   all: "All",
   noLocalsFoundForThisState: "Currently you have no locals in this state",
+  report: "Report",
 };
 
 const allLocals = {
@@ -544,7 +545,7 @@ const leaveLocal = {
   buttonText: "Leave local",
   dialogTitle: "Are you sure you want to continue?",
   dialogDescription:
-    "You cannot undo this operation. If you leave the local, you will have to contact an Administrator to regain access to this local.",
+    "You cannot undo this operation.",
 };
 
 const currentTenantRents = {
@@ -581,6 +582,8 @@ const roleRequestDialog = {
   alreadyPlacedRequest: "You already placed a request for role at: ",
   howDoesItWork: "How does this work?",
   requestRoleButton: "Request role",
+  succesTitle: "Role request created",
+  succesDescription: "We will review your request and get back to you soon",
 };
 
 const localDetails = {
@@ -660,7 +663,7 @@ const ownLocalDetails = {
     "Changes to the fixed fees will be effective from the next billing period.",
   leaveLocal: "Leave local",
   leaveLocalDescription:
-    "You cannot undone this operation. If you leave local you will have to contact an Administrator to regain access to this local. You cannot leave local that is already rented.",
+    "This operation cannot be undone. You can leave local only in Inactive state.",
   showApplications: "Show applications",
   state: "Local state",
   uploadImage: "Upload image",
@@ -826,6 +829,8 @@ const breadcrumbs = {
   locals: "Locals",
   local: "Local",
   report: "Report",
+  currentRents: "Current rents",
+  archivalRents: "Archival rents",
 };
 
 const createVariableFeeDialog = {

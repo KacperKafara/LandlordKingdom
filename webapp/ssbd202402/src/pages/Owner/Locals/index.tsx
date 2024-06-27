@@ -68,7 +68,7 @@ const Locals: FC = () => {
             <div className="flex gap-3">
               <Button
                 className="mt-3 w-fit"
-                onClick={() => navigate("/owner/addLocalForm")}
+                onClick={() => navigate("/owner/add-local")}
               >
                 {t("ownerLocals.addFirstLocal")}
               </Button>
@@ -86,7 +86,7 @@ const Locals: FC = () => {
         {breadCrumbs}
         <div className="flex flex-row gap-4">
           <Button asChild className="self-end">
-            <NavLink to="report">Report</NavLink>
+            <NavLink to="report">{t("ownerLocals.report")}</NavLink>
           </Button>
           <RefreshQueryButton queryKeys={["ownLocals"]} />
         </div>

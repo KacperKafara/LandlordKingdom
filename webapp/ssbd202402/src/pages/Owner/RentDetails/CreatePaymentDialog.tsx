@@ -1,4 +1,5 @@
 import { InputWithText } from "@/components/InputWithText";
+import LoadingButton from "@/components/LoadingButton";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,7 +19,7 @@ import {
 import { useCreatePayment } from "@/data/rent/useCreatePayment";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { TFunction } from "i18next";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
@@ -49,6 +50,7 @@ const CreatePaymentDialogComponent: FC<CreatePaymentDialogProps> = ({
   rentId,
 }) => {
   const { t } = useTranslation();
+  const [isOpen, setOpen] = useState(false);
   const form = useForm<CreatePaymentForm>({
     resolver: zodResolver(getCreatePaymentSchema(t)),
     values: {
@@ -56,16 +58,22 @@ const CreatePaymentDialogComponent: FC<CreatePaymentDialogProps> = ({
       amount: 0,
     },
   });
-  const { createPayment } = useCreatePayment();
+  const { createPayment, isPending } = useCreatePayment();
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    await createPayment(values);
+    await createPayment(values, {
+      onSuccess: () => {
+        setOpen(false);
+      },
+    });
   });
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>{t("createPaymentDialog.title")}</Button>
+        <Button onClick={() => setOpen(true)}>
+          {t("createPaymentDialog.title")}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -91,9 +99,12 @@ const CreatePaymentDialogComponent: FC<CreatePaymentDialogProps> = ({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="self-end">
-              {t("createPaymentDialog.title")}
-            </Button>
+            <LoadingButton
+              className="self-end"
+              type="submit"
+              text={t("createPaymentDialog.title")}
+              isLoading={isPending}
+            />
           </form>
         </Form>
       </DialogContent>
