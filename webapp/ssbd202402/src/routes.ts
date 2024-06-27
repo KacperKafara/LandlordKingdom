@@ -6,7 +6,6 @@ import AccountLayout from "./Layouts/AccountLayout";
 import loadable from "@loadable/component";
 import LocalsPage from "./pages/Admin/Locals";
 import OwnLocalsPage from "./pages/Owner/Locals";
-import addLocalForm from "./pages/Owner/addLocalForm";
 import OwnerPage from "./pages/Owner";
 import TenantPage from "./pages/Tenant";
 import AdminPage from "./pages/Admin";
@@ -60,6 +59,8 @@ const AllLocalsReportPage = loadable(
   () => import("./pages/Owner/AllLocalsReport")
 );
 
+const AddLocalPage = loadable(() => import("./pages/Owner/addLocalForm"));
+
 const AdminRoutes: RouteObject[] = [
   { index: true, Component: AdminPage },
   {
@@ -92,7 +93,7 @@ const OwnerRoutes: RouteObject[] = [
       },
     ],
   },
-  { path: "addLocalForm", Component: addLocalForm },
+  { path: "add-local", Component: AddLocalPage },
   {
     path: "current-rents",
     children: [

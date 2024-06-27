@@ -68,7 +68,7 @@ const Locals: FC = () => {
             <div className="flex gap-3">
               <Button
                 className="mt-3 w-fit"
-                onClick={() => navigate("/owner/addLocalForm")}
+                onClick={() => navigate("/owner/add-local")}
               >
                 {t("ownerLocals.addFirstLocal")}
               </Button>
