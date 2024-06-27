@@ -481,6 +481,7 @@ const ownerLocals = {
   localState: "Local state",
   all: "All",
   noLocalsFoundForThisState: "Currently you have no locals in this state",
+  report: "Report",
 };
 
 const allLocals = {

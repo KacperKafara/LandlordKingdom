@@ -487,6 +487,7 @@ const ownerLocals = {
   all: "Wszystkie",
   noLocalsFoundForThisState:
     "Aktualnie nie posiadasz żadnych lokali w tym stanie",
+  report: "Raport",
 };
 
 const allLocals = {

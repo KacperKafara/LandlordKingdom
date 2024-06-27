@@ -100,7 +100,7 @@ export const PageChangerComponent: FC<PageChangerProps> = ({
             className="h-8 px-2"
             onClick={() => setPageNumber(pageNumber + 1)}
             variant="outline"
-            disabled={pageNumber === totalPages - 1}
+            disabled={pageNumber >= totalPages - 1}
           >
             <FaAngleRight />
           </Button>
@@ -108,7 +108,7 @@ export const PageChangerComponent: FC<PageChangerProps> = ({
             className="h-8 px-2"
             onClick={() => setPageNumber(totalPages - 1)}
             variant="outline"
-            disabled={pageNumber === totalPages - 1}
+            disabled={pageNumber >= totalPages - 1}
           >
             <FaAngleDoubleRight />
           </Button>
