@@ -820,6 +820,8 @@ const ownerRentDetails = {
   showLocalDetails: "Pokaż szczegóły lokalu",
   archivalRents: "Archiwalne wynajmy",
   rentNotFound: "Nie znaleziono wynajmu",
+  marginFee: "Marża",
+  rentalFee: "Opłata za wynajem",
 };
 
 const breadcrumbs = {

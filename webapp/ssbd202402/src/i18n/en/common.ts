@@ -544,8 +544,7 @@ const leaveLocal = {
   errorTitle: "Error",
   buttonText: "Leave local",
   dialogTitle: "Are you sure you want to continue?",
-  dialogDescription:
-    "You cannot undo this operation.",
+  dialogDescription: "You cannot undo this operation.",
 };
 
 const currentTenantRents = {
@@ -812,6 +811,8 @@ const ownerRentDetails = {
   showLocalDetails: "Show local details",
   archivalRents: "Archival rents",
   rentNotFound: "Rent not found",
+  marginFee: "Margin fee",
+  rentalFee: "Rental fee",
 };
 
 const tenantApplications = {

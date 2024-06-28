@@ -51,11 +51,11 @@ const RentInformationCardComponent = ({ rent }: RentInformationCardProps) => {
             value={getAddressString(rent?.local.address)}
           />
           <DataField
-            label="Margin Fee"
+            label={t("ownerRentDetails.marginFee")}
             value={toLocaleFixed(rent?.local?.marginFee ?? 0.0)}
           />
           <DataField
-            label="Rental Fee"
+            label={t("ownerRentDetails.rentalFee")}
             value={toLocaleFixed(rent?.local?.rentFee ?? 0.0)}
           />
           <h2 className="col-span-2 pt-4 text-xl font-semibold">
