@@ -329,8 +329,8 @@ const addLocalPage = {
   city: "Miasto",
   zip: "Kod pocztowy",
   country: "Kraj",
-  marginFee: "Opłata stała",
-  rentalFee: "Cena wynajmu",
+  marginFee: "Marża właściciela",
+  rentalFee: "Koszty wynajmu",
   formSubmit: "Zgłoś formularz",
   wrong: {
     name: "Niepoprawna nazwa lokalu",
@@ -455,7 +455,8 @@ const errors = {
   addressAlreadyAssigned: "Adres jest już przypisany do innej nieruchomości",
   rentEnded: "Wynajem zakończony",
   variableFeeAlreadyExists: "Opłata zmienna już istnieje",
-  paymentAlreadyExists: "Płatność za obecny okres rozliczeniowy została wprowadzona",
+  paymentAlreadyExists:
+    "Płatność za obecny okres rozliczeniowy została wprowadzona",
   dateParsingError: "Błąd parsowania daty",
   rollback: "Operacja została cofnięta",
   unexpectedRollback: "Nieoczekiwane cofnięcie operacji",
@@ -533,8 +534,7 @@ const leaveLocal = {
   errorTitle: "Błąd",
   buttonText: "Opuść lokal",
   dialogTitle: "Czy na pewno chcesz opuścić lokal?",
-  dialogDescription:
-    "Nie możesz cofnąć tej operacji.",
+  dialogDescription: "Nie możesz cofnąć tej operacji.",
 };
 
 const tenantRents = {
@@ -851,7 +851,7 @@ const createVariableFeeDialog = {
 const rentDetailsPage = {
   rentDetails: "Szczegóły wynajmu",
   localDetails: "Szczegóły lokalu",
-  ownerDetails: "Informacje o właściciela",
+  ownerDetails: "Informacje o właścicielu",
   labels: {
     startDate: "Data rozpoczęcia",
     endDate: "Data zakończenia",
