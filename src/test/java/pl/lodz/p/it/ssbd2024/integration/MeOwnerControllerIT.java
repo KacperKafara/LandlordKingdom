@@ -176,7 +176,7 @@ public class MeOwnerControllerIT extends BaseConfig{
 
     @Test
     public void changeRentEndDate_endDateChanged_returnOk(){
-        String newEndDate = "2024-07-21";
+        String newEndDate = "2124-09-10";
         SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
 
         given()
@@ -300,7 +300,7 @@ public class MeOwnerControllerIT extends BaseConfig{
 
     @Test
     public void changeRentEndDate_raceCondition_returnOkAndBadRequest(){
-        String newEndDate = "2024-07-21";
+        String newEndDate = "2124-09-10";
         SetEndDateRequest setEndDateRequest = new SetEndDateRequest(newEndDate);
         try {
             List<Response> response = ConcurrentRequestUtil.runConcurrentRequests(

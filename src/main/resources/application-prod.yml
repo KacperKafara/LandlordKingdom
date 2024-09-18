@@ -9,8 +9,8 @@ jws:
 
 oauth2:
   client:
-    id: 257952787210-936ggdjbdpketkkrfvrbf8ii3buvdu5s.apps.googleusercontent.com
-    secret: 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
+    id: 646977083886-0hbur7doj5r5p6jmcs0k2qd3akhk5cns.apps.googleusercontent.com
+    secret: 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
   auth:
     url: https://accounts.google.com/o/oauth2/v2/auth
   token:
