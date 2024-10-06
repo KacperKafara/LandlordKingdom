@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Timezone {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id", updatable = false, nullable = false)
+    @Column(columnDefinition = "BINARY(16)", name = "id", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "name", nullable = false, updatable = false, length = 50)

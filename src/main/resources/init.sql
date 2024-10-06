@@ -1,51 +1,53 @@
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.users TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.personal_data TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.google_auth TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.administrators TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.tenants TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.owners TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.access_levels TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.old_passwords TO ssbd02mok;
-GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02mok;
-GRANT SELECT ON TABLE public.timezones TO ssbd02mok;
-GRANT SELECT ON TABLE public.themes TO ssbd02mok;
-GRANT SELECT, INSERT, UPDATE ON TABLE public.user_filters TO ssbd02mok;
-GRANT SELECT, DELETE ON TABLE public.role_requests TO ssbd02mok;
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.users TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.personal_data TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.google_auth TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.administrators TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.tenants TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.owners TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.access_levels TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.old_passwords TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, DELETE ON ssbd02.tokens TO 'ssbd02mok'@'%';
+GRANT SELECT ON ssbd02.timezones TO 'ssbd02mok'@'%';
+GRANT SELECT ON ssbd02.themes TO 'ssbd02mok'@'%';
+GRANT SELECT, INSERT, UPDATE ON ssbd02.user_filters TO 'ssbd02mok'@'%';
+GRANT SELECT, DELETE ON ssbd02.role_requests TO 'ssbd02mok'@'%';
 
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.locals TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.addresses TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.applications TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.fixed_fees TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.payments TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.rents TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.role_requests TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE, UPDATE ON TABLE public.variable_fees TO ssbd02mol;
-GRANT SELECT ON TABLE public.users TO ssbd02mol;
-GRANT SELECT ON TABLE public.personal_data TO ssbd02mol;
-GRANT SELECT ON TABLE public.google_auth TO ssbd02mol;
-GRANT SELECT ON TABLE public.timezones TO ssbd02mol;
-GRANT SELECT ON TABLE public.themes TO ssbd02mol;
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.locals TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.addresses TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.applications TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.fixed_fees TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.payments TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.rents TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.role_requests TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE, UPDATE ON ssbd02.variable_fees TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.users TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.personal_data TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.google_auth TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.timezones TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.themes TO 'ssbd02mol'@'%';
 
-GRANT SELECT, INSERT, UPDATE ON TABLE public.users TO ssbd02auth;
-GRANT SELECT ON TABLE public.personal_data TO ssbd02auth;
-GRANT SELECT, INSERT, UPDATE ON TABLE public.google_auth TO ssbd02auth;
-GRANT SELECT ON TABLE public.timezones TO ssbd02auth;
-GRANT SELECT ON TABLE public.themes TO ssbd02auth;
-GRANT SELECT ON TABLE public.administrators TO ssbd02auth;
-GRANT SELECT ON TABLE public.tenants TO ssbd02auth;
-GRANT SELECT ON TABLE public.owners TO ssbd02auth;
-GRANT SELECT ON TABLE public.access_levels TO ssbd02auth;
-GRANT SELECT, INSERT, DELETE ON TABLE public.tokens TO ssbd02auth;
+GRANT SELECT, INSERT, UPDATE ON ssbd02.users TO 'ssbd02auth'@'%';
+GRANT SELECT ON ssbd02.personal_data TO 'ssbd02auth'@'%';
+GRANT SELECT, INSERT, UPDATE ON ssbd02.google_auth TO 'ssbd02auth'@'%';
+GRANT SELECT ON ssbd02.timezones TO 'ssbd02auth'@'%';
+GRANT SELECT ON ssbd02.themes TO 'ssbd02auth'@'%';
+GRANT SELECT ON ssbd02.administrators TO 'ssbd02auth'@'%';
+GRANT SELECT ON ssbd02.tenants TO 'ssbd02auth'@'%';
+GRANT SELECT ON ssbd02.owners TO 'ssbd02auth'@'%';
+GRANT SELECT ON ssbd02.access_levels TO 'ssbd02auth'@'%';
+GRANT SELECT, INSERT, DELETE ON ssbd02.tokens TO 'ssbd02auth'@'%';
 
-GRANT SELECT ON TABLE public.tenants TO ssbd02mol;
-GRANT SELECT ON TABLE public.personal_data TO ssbd02mol;
-GRANT SELECT ON TABLE public.users TO ssbd02mol;
-GRANT SELECT ON TABLE public.themes TO ssbd02mol;
-GRANT SELECT ON TABLE public.timezones TO ssbd02mol;
-GRANT SELECT ON TABLE public.google_auth TO ssbd02mol;
-GRANT SELECT, INSERT ON TABLE public.owners TO ssbd02mol;
-GRANT SELECT, INSERT, UPDATE ON TABLE public.access_levels TO ssbd02mol;
-GRANT SELECT, INSERT, DELETE ON TABLE public.images TO ssbd02mol;
+GRANT SELECT ON ssbd02.tenants TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.personal_data TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.users TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.themes TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.timezones TO 'ssbd02mol'@'%';
+GRANT SELECT ON ssbd02.google_auth TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT ON ssbd02.owners TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, UPDATE ON ssbd02.access_levels TO 'ssbd02mol'@'%';
+GRANT SELECT, INSERT, DELETE ON ssbd02.images TO 'ssbd02mol'@'%';
+
+FLUSH PRIVILEGES;
 
 INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
                           modified_at, created_by, modified_by, active)
@@ -90,12 +92,12 @@ INSERT INTO public.owners (id)
 VALUES ('397cf3c5-f369-4783-9892-6fc781fd2b0d');
 
 INSERT INTO public.themes
-    (id, type)
+(id, type)
 VALUES (gen_random_uuid(), 'light'),
        (gen_random_uuid(), 'dark');
 
 INSERT INTO public.timezones
-    (id, name)
+(id, name)
 VALUES (gen_random_uuid(), 'Pacific/Midway'),
        (gen_random_uuid(), 'Pacific/Honolulu'),
        (gen_random_uuid(), 'America/Juneau'),
@@ -332,4 +334,3 @@ VALUES ('2dbe6d57-54ca-4662-96b4-149d72a8ab44', 'e872ce90-734b-49a9-8949-dde4753
         NOW(), null, null);
 INSERT INTO public.administrators (id)
 VALUES ('2dbe6d57-54ca-4662-96b4-149d72a8ab44');
-

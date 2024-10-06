@@ -12,7 +12,7 @@ public class Theme {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id", updatable = false, nullable = false)
+    @Column(columnDefinition = "BINARY(16)", name = "id", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "type", nullable = false, updatable = false, length = 50)

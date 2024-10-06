@@ -3,6 +3,7 @@ package pl.lodz.p.it.ssbd2024.config.datasources;
 import com.atomikos.jdbc.AtomikosNonXADataSourceBean;
 import jakarta.persistence.EntityManagerFactory;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +14,7 @@ import java.util.Properties;
 
 @Configuration
 @RequiredArgsConstructor
+@Slf4j
 public class DataSourceAdmin {
 
     private final JpaVendorAdapter jpaVendorAdapter;
@@ -40,9 +42,8 @@ public class DataSourceAdmin {
         dataSource.setUser(username);
         dataSource.setPassword(password);
         dataSource.setDefaultIsolationLevel(transactionIsolation);
-        dataSource.setMaxIdleTime(10);
-        dataSource.setMinPoolSize(0);
-        dataSource.setMaxPoolSize(1);
+        dataSource.setMaxPoolSize(20);
+        dataSource.setBorrowConnectionTimeout(60);
         dataSource.setLocalTransactionMode(true);
         return dataSource;
     }
@@ -50,15 +51,14 @@ public class DataSourceAdmin {
     @Bean
     public EntityManagerFactory entityManagerFactoryAdmin() {
         AtomikosNonXADataSourceBean dataSource = dataSource();
-
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02admin");
         em.setPackagesToScan("pl.lodz.p.it.ssbd2024.model");
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
-        properties.put("hibernate.hbm2ddl.auto", "create-drop");
-        properties.put("jakarta.persistence.sql-load-script-source", "init.sql, init2.sql");
+        properties.put("hibernate.hbm2ddl.auto", "create");
+        properties.put("jakarta.persistence.sql-load-script-source", "init.sql");
         properties.put("hibernate.hbm2ddl.import_files_sql_extractor", "org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();

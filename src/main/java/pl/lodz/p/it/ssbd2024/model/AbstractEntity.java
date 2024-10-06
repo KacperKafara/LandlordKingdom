@@ -16,7 +16,7 @@ import static pl.lodz.p.it.ssbd2024.util.UserFromContext.getCurrentUserId;
 public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "uuid", name = "id", updatable = false, nullable = false)
+    @Column(columnDefinition = "BINARY(16)", name = "id", updatable = false, nullable = false)
     private UUID id;
 
     @Column(name = "version", nullable = false)

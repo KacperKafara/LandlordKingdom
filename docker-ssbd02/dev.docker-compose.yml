@@ -1,18 +1,24 @@
 services:
   db:
-    image: postgres:16.2-alpine
+    image: mysql:9.0.1
     container_name: ssbd02-db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      MYSQL_USER: postgres
+      MYSQL_ROOT_PASSWORD: postgres
+      MYSQL_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "3306:3306"
     networks:
       - my_network
     volumes:
       - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
-      - ./initDb.sql:/docker-entrypoint-initdb.d/init2.sql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 100
+      start_period: 30s
 
   tomcat:
     build:
@@ -27,7 +33,8 @@ services:
     environment:
       - ACTIVE_PROFILE=dev
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ./privateJwt-key.pem:/etc/ssbd02/privateJwt-key.pem
       - ./privateRefresh-key.pem:/etc/ssbd02/privateRefresh-key.pem

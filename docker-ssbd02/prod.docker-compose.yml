@@ -2,14 +2,15 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:16.2-alpine
+    image: mysql:9.0.1
     container_name: ssbd02-db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      MYSQL_USER: postgres
+      MYSQL_ROOT_PASSWORD: postgres
+      MYSQL_PASSWORD: postgres
     ports:
-      - "5432:5432"
+      - "3306:3306"
     networks:
       - my_network
     volumes:
