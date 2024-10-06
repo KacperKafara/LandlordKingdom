@@ -2,7 +2,10 @@ package pl.lodz.p.it.ssbd2024.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
 
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,6 +19,7 @@ import static pl.lodz.p.it.ssbd2024.util.UserFromContext.getCurrentUserId;
 public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @JdbcTypeCode(Types.VARCHAR)
     @Column(name = "id", updatable = false, nullable = false, columnDefinition = "char(36)")
     private UUID id;
 
@@ -33,10 +37,12 @@ public abstract class AbstractEntity {
     private LocalDateTime modifiedAt;
 
     @Column(name = "created_by", updatable = false, columnDefinition = "char(36)")
+    @JdbcTypeCode(Types.VARCHAR)
     @ToString.Exclude
     private UUID createdBy;
 
     @Column(name = "modified_by", columnDefinition = "char(36)")
+    @JdbcTypeCode(Types.VARCHAR)
     @Setter
     @ToString.Exclude
     private UUID modifiedBy;

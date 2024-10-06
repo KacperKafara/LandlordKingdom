@@ -13,8 +13,8 @@ import org.dbunit.operation.DatabaseOperation;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.Network;
-import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -23,7 +23,6 @@ import org.testcontainers.utility.MountableFile;
 import java.io.FileInputStream;
 import java.nio.file.Paths;
 import java.sql.*;
-import java.time.Duration;
 
 @Testcontainers
 public class BaseConfig {
@@ -35,7 +34,7 @@ public class BaseConfig {
     public static String baseUrl;
 
     @Container
-    static final PostgreSQLContainer<?> postgres;
+    static final MySQLContainer<?> postgres;
 
     @Container
     static final GenericContainer<?> smtp;
@@ -46,10 +45,10 @@ public class BaseConfig {
     public static IDatabaseConnection connection;
 
     static {
-        postgres = new PostgreSQLContainer<>("postgres:16.2-alpine")
+        postgres = new MySQLContainer<>("mysql:9.0.1")
                 .withNetwork(network)
                 .withNetworkAliases("testdb")
-                .withExposedPorts(5432)
+                .withExposedPorts(3306)
                 .withUsername("postgres")
                 .withPassword("postgres")
                 .withCopyFileToContainer(MountableFile.forClasspathResource("initTest.sql"), "/docker-entrypoint-initdb.d/init.sql")
@@ -71,7 +70,7 @@ public class BaseConfig {
                 .dependsOn(postgres)
                 .dependsOn(smtp)
                 .withEnv("ACTIVE_PROFILE", "dev")
-                .withEnv("DB.URL", "jdbc:postgresql://testdb:5432/ssbd02")
+                .withEnv("DB.URL", "jdbc:mysql://testdb:3306/ssbd02?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true")
                 .withEnv("MAIL.PORT", "25")
                 .withEnv("MAIL.HOST", "smtp4test")
                 .withCopyToContainer(war, "/usr/local/tomcat/webapps/ssbd02.war")
@@ -85,11 +84,11 @@ public class BaseConfig {
 
     @BeforeEach
     public void setup() throws Exception {
-        int postgresPort = postgres.getMappedPort(5432);
+        int postgresPort = postgres.getMappedPort(3306);
 
         baseUrl = "http://" + tomcat.getHost() + ":" + tomcat.getMappedPort(8080) + "/ssbd02";
 
-        String jdbcUrl = String.format("jdbc:postgresql://localhost:%d/ssbd02?loggerLevel=OFF", postgresPort);
+        String jdbcUrl = String.format("jdbc:mysql://localhost:%d/ssbd02?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true", postgresPort);
         Connection jdbcConnection = DriverManager.getConnection(jdbcUrl, postgres.getUsername(), postgres.getPassword());
 
         connection = new DatabaseConnection(jdbcConnection);
