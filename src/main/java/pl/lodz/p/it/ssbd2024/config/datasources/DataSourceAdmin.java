@@ -58,7 +58,7 @@ public class DataSourceAdmin {
         em.setJpaVendorAdapter(jpaVendorAdapter);
         Properties properties = PublicProperties.getProperties();
         properties.put("hibernate.hbm2ddl.auto", "create");
-        properties.put("jakarta.persistence.sql-load-script-source", "init.sql init2.sql");
+        properties.put("jakarta.persistence.sql-load-script-source", "init.sql");
         properties.put("hibernate.hbm2ddl.import_files_sql_extractor", "org.hibernate.tool.schema.internal.script.MultiLineSqlScriptExtractor");
         em.setJpaProperties(properties);
         em.afterPropertiesSet();

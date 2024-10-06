@@ -1,4 +1,4 @@
-INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
+INSERT INTO users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
                           modified_at, created_by, modified_by, active)
 VALUES
     ('1a3c1633-e786-4442-9314-9101445202a5', 'lilia.malinowski', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true),
@@ -15,7 +15,7 @@ VALUES
     ('843221ef-121f-4f36-bc81-05a15349b1cd', 'maksymilian.rogala', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true),
     ('9d3f2530-f0ec-478f-87ef-4ad07fa65a02', 'hugo.kaniewski', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true);
 
-INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
+INSERT INTO personal_data (user_id, email, temp_email, first_name, last_name)
 VALUES
     ('1a3c1633-e786-4442-9314-9101445202a5', '242396@edu.p.lodz.pl', null, 'Lilia', 'Malinowski'),
     ('b92efb2f-fc9e-48ab-a4e3-8bbffbf0115f', 'kozakonrad72@gmail.com', null, 'Martyna', 'Przybysz'),
@@ -31,7 +31,7 @@ VALUES
     ('843221ef-121f-4f36-bc81-05a15349b1cd', 'maksymilian.rogala@mail.com', null, 'Maksymilian', 'Rogala'),
     ('9d3f2530-f0ec-478f-87ef-4ad07fa65a02', 'konradkoza@interia.eu', null, 'Hugo', 'Kaniewski');
 
-INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
+INSERT INTO access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES
     ('98059a16-1119-4b93-aaeb-247cd43e3845', '1a3c1633-e786-4442-9314-9101445202a5', 'OWNER', true, 0, NOW(), NOW(), null, null),
     ('9a262260-c6a3-448d-b1af-91645e4180e3', 'b92efb2f-fc9e-48ab-a4e3-8bbffbf0115f', 'OWNER', true, 0, NOW(), NOW(), null, null),
@@ -47,13 +47,13 @@ VALUES
     ('e5248ae1-bcb8-46ca-899f-bdcd567bc677', '843221ef-121f-4f36-bc81-05a15349b1cd', 'TENANT', true, 0, NOW(), NOW(), null, null),
     ('e53df750-6b6b-4f4d-8f11-6a617837e37b', '9d3f2530-f0ec-478f-87ef-4ad07fa65a02', 'TENANT', true, 0, NOW(), NOW(), null, null);
 
-INSERT INTO public.owners (id)
+INSERT INTO owners (id)
 VALUES
     ('98059a16-1119-4b93-aaeb-247cd43e3845'),
     ('9a262260-c6a3-448d-b1af-91645e4180e3'),
     ('0a9c494a-2698-4062-a2d7-c465c74f7176');
 
-INSERT INTO public.tenants (id)
+INSERT INTO tenants (id)
 VALUES
     ('bb000ec1-4539-43ec-b16c-54542bcbb900'),
     ('0b5f6817-b6bc-4767-b013-4cd46085934a'),
@@ -66,7 +66,7 @@ VALUES
     ('e5248ae1-bcb8-46ca-899f-bdcd567bc677'),
     ('e53df750-6b6b-4f4d-8f11-6a617837e37b');
 
-INSERT INTO public.addresses (created_at, modified_at, version, number, zip, created_by, id, modified_by, city, country, street)
+INSERT INTO addresses (created_at, modified_at, version, number, zip, created_by, id, modified_by, city, country, street)
 VALUES
     (NOW(), NOW(), 0, '4191', '57-175', null, '16f6ca25-9263-4483-a815-0fe040395f33', null, 'Pionki', 'Polska', 'al. Ptak'),
     (NOW(), NOW(), 0, '14403', '14-235', null, 'e790908a-ddf2-4af6-9f6e-885e31b2367a', null, 'Otmuchów', 'Polska', 'al. Buczkowski'),
@@ -92,7 +92,7 @@ VALUES
     (123.00, 411.00, 72, 2, NOW(), NOW(), 1, '8d6cea94-6e3f-4b71-9804-045d6f0e18e0', null, '7d6ca85f-84d7-47fe-bfbf-3fbcf7eaa93c', null, '98059a16-1119-4b93-aaeb-247cd43e3845', 'Klub muzyczny Nocny Ptak', 'Popularny klub muzyczny z regularnymi koncertami na żywo i imprezami tematycznymi.'),
     (401.00, 159.00, 38, 3, NOW(), NOW(), 1, '99fa7f04-13aa-410f-90ec-1b0f0afc9285', null, '1a22b980-40aa-4e60-a97e-7d84d54ebd82', null, '0a9c494a-2698-4062-a2d7-c465c74f7176', 'Centrum Medyczne Zdrowie', 'Kompleksowe centrum medyczne oferujące szeroki zakres usług zdrowotnych, w tym konsultacje specjalistów, badania diagnostyczne i rehabilitację.');
 
-INSERT INTO public.rents (balance, end_date, start_date, created_at, modified_at, version, created_by, id, local_id, modified_by, owner_id, tenant_id)
+INSERT INTO rents (balance, end_date, start_date, created_at, modified_at, version, created_by, id, local_id, modified_by, owner_id, tenant_id)
 VALUES
     (0.00, '2019-09-22', '2019-06-17', NOW(), NOW(), 0, null, '2300d87f-e253-4c59-a650-c39b8195c8fd', '7d6ca85f-84d7-47fe-bfbf-3fbcf7eaa93c', null, '98059a16-1119-4b93-aaeb-247cd43e3845', 'f5d5967a-b2d1-46e0-8125-5a14e1f3f842'),
     (0.00, '2020-02-23', '2019-10-22', NOW(), NOW(), 0, null, 'abc6e0d0-a6d4-41c9-b191-0ccab5c1be5c', '7d6ca85f-84d7-47fe-bfbf-3fbcf7eaa93c', null, '98059a16-1119-4b93-aaeb-247cd43e3845', 'fd6edb90-9c11-47ef-bb3c-16579ba93054'),
@@ -116,7 +116,7 @@ VALUES
     (0.00, '2020-04-26', '2019-12-20', NOW(), NOW(), 0, null, 'c5eb570e-4d68-4778-b7db-34fcaad6e30b', 'b7aa7958-0cae-41eb-9e78-b2bb099bd69e', null, '9a262260-c6a3-448d-b1af-91645e4180e3', '3c0eb2aa-6051-4ff2-872b-074582388462');
 
 
-INSERT INTO public.payments (amount, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+INSERT INTO payments (amount, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
 VALUES
     (633.00, '2019-06-18', NOW(), NOW(), 0, null, 'ecd8b505-b555-4912-b169-458526e94b02', null, '2300d87f-e253-4c59-a650-c39b8195c8fd'),
     (641.00, '2019-06-25', NOW(), NOW(), 0, null, '3e9bfbc6-80af-45db-a6e8-fbf6a808a286', null, '2300d87f-e253-4c59-a650-c39b8195c8fd'),
@@ -365,7 +365,7 @@ VALUES
     (3606.00, '2020-04-25', NOW(), NOW(), 0, null, '1e29fa8b-dd80-47b4-8a8b-6dc3b243a32a', null, 'c5eb570e-4d68-4778-b7db-34fcaad6e30b');
 
 
-INSERT INTO public.fixed_fees (margin_fee, rental_fee, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+INSERT INTO fixed_fees (margin_fee, rental_fee, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
 VALUES
     (123.00, 411.00, '2019-06-23', NOW(), NOW(), 0, null, '6e4235c9-9876-4479-ba1a-88cfa3310748', null, '2300d87f-e253-4c59-a650-c39b8195c8fd'),
     (123.00, 411.00, '2019-06-30', NOW(), NOW(), 0, null, '75edd330-e1ab-41e5-85ff-c182e17c6b2c', null, '2300d87f-e253-4c59-a650-c39b8195c8fd'),
@@ -614,7 +614,7 @@ VALUES
     (1529.00, 1329.00, '2020-04-26', NOW(), NOW(), 0, null, '38f40214-3657-4a0b-add8-3d96a3c5703d', null, 'c5eb570e-4d68-4778-b7db-34fcaad6e30b');
 
 
-INSERT INTO public.variable_fees (amount, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
+INSERT INTO variable_fees (amount, date, created_at, modified_at, version, created_by, id, modified_by, rent_id)
 VALUES
     (99.00, '2019-06-17', NOW(), NOW(), 0, null, '1d6cf000-7aea-49cf-a3db-2f125b5e098c', null, '2300d87f-e253-4c59-a650-c39b8195c8fd'),
     (107.00, '2019-06-24', NOW(), NOW(), 0, null, '68919358-2b32-4da5-ae95-72b45eb1c937', null, '2300d87f-e253-4c59-a650-c39b8195c8fd'),
@@ -862,7 +862,7 @@ VALUES
     (742.00, '2020-04-17', NOW(), NOW(), 0, null, 'f4356b9d-89e4-48fd-9d9b-ad3ee205a7f3', null, 'c5eb570e-4d68-4778-b7db-34fcaad6e30b'),
     (748.00, '2020-04-24', NOW(), NOW(), 0, null, '6515288d-4f26-4c90-81e3-5cff71214f61', null, 'c5eb570e-4d68-4778-b7db-34fcaad6e30b');
 
-INSERT INTO public.users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
+INSERT INTO users (id, login, password, blocked, verified, login_attempts, version, language, created_at,
                           modified_at, created_by, modified_by, active)
 VALUES
     ('78bbdc5a-fd28-419f-bba2-32b76bfddb1a', 'waleria.bartkowiak', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true),
@@ -876,7 +876,7 @@ VALUES
     ('01f95f95-03b7-4f41-bb62-8a4f1dabd810', 'elwira.radomski', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true),
     ('d5ee5c92-0560-458b-8915-79cf5d9913a9', 'teresa.stolarski', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.', false, true, 0, 1, 'PL', NOW(), NOW(), null, null, true);
 
-INSERT INTO public.personal_data (user_id, email, temp_email, first_name, last_name)
+INSERT INTO personal_data (user_id, email, temp_email, first_name, last_name)
 VALUES
     ('78bbdc5a-fd28-419f-bba2-32b76bfddb1a', 'waleria.bartkowiak@mail.com', null, 'Waleria', 'Bartkowiak'),
     ('5262ad35-5d8d-4ad9-9a45-d87e90f44eff', 'ruta.zdunek@mail.com', null, 'Ruta', 'Zdunek'),
@@ -889,7 +889,7 @@ VALUES
     ('01f95f95-03b7-4f41-bb62-8a4f1dabd810', 'elwira.radomski@mail.com', null, 'Elwira', 'Radomski'),
     ('d5ee5c92-0560-458b-8915-79cf5d9913a9', 'teresa.stolarski@mail.com', null, 'Teresa', 'Stolarski');
 
-INSERT INTO public.access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
+INSERT INTO access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES
     ('caa64c15-17e7-4330-9798-fba991ac8ae4', '78bbdc5a-fd28-419f-bba2-32b76bfddb1a', 'TENANT', true, 0, NOW(), NOW(), null, null),
     ('5b1623a5-b5ac-4fbe-9466-45d96ab770ab', '5262ad35-5d8d-4ad9-9a45-d87e90f44eff', 'TENANT', true, 0, NOW(), NOW(), null, null),
@@ -902,7 +902,7 @@ VALUES
     ('96cfd9d7-8eb4-4691-8069-18640cec62d8', '01f95f95-03b7-4f41-bb62-8a4f1dabd810', 'TENANT', true, 0, NOW(), NOW(), null, null),
     ('db5f8e35-b05d-4264-b472-63b77f885c3b', 'd5ee5c92-0560-458b-8915-79cf5d9913a9', 'TENANT', true, 0, NOW(), NOW(), null, null);
 
-INSERT INTO public.tenants (id)
+INSERT INTO tenants (id)
 VALUES
     ('caa64c15-17e7-4330-9798-fba991ac8ae4'),
     ('5b1623a5-b5ac-4fbe-9466-45d96ab770ab'),
@@ -915,7 +915,7 @@ VALUES
     ('96cfd9d7-8eb4-4691-8069-18640cec62d8'),
     ('db5f8e35-b05d-4264-b472-63b77f885c3b');
 
-INSERT INTO public.role_requests (id, tenant_id, request_date, created_at, modified_at, version, created_by, modified_by)
+INSERT INTO role_requests (id, tenant_id, request_date, created_at, modified_at, version, created_by, modified_by)
 VALUES
     ('fbd0053f-26e3-4f05-a96b-66c996e0d972', 'caa64c15-17e7-4330-9798-fba991ac8ae4', NOW(), NOW(), NOW(), 0, null, null),
     ('922a6b08-5c42-4c81-af89-98af73a4b805', '5b1623a5-b5ac-4fbe-9466-45d96ab770ab', NOW(), NOW(), NOW(), 0, null, null),

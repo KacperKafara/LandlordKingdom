@@ -16,7 +16,7 @@ import static pl.lodz.p.it.ssbd2024.util.UserFromContext.getCurrentUserId;
 public abstract class AbstractEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition = "BINARY(16)", name = "id", updatable = false, nullable = false)
+    @Column(name = "id", updatable = false, nullable = false, columnDefinition = "char(36)")
     private UUID id;
 
     @Column(name = "version", nullable = false)
@@ -32,11 +32,11 @@ public abstract class AbstractEntity {
     @ToString.Exclude
     private LocalDateTime modifiedAt;
 
-    @Column(name = "created_by", updatable = false)
+    @Column(name = "created_by", updatable = false, columnDefinition = "char(36)")
     @ToString.Exclude
     private UUID createdBy;
 
-    @Column(name = "modified_by")
+    @Column(name = "modified_by", columnDefinition = "char(36)")
     @Setter
     @ToString.Exclude
     private UUID modifiedBy;
