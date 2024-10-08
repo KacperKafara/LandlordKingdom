@@ -1,5 +1,5 @@
 app:
-  url: https://team-2.proj-sum.it.p.lodz.pl
+  url: https://tua202402.pl
 
 otp:
   secret: 26Etz0ZMoBmiX7F9lHvb
@@ -16,7 +16,7 @@ oauth2:
   token:
     url: https://oauth2.googleapis.com/token
   redirect:
-    url: https://team-2.proj-sum.it.p.lodz.pl/auth/google/callback
+    url: https://tua202402.pl/auth/google/callback
 
 jwt:
   privateKeyFilePath: /etc/ssbd02/privateJwt-key.pem
@@ -29,8 +29,8 @@ refreshToken:
   expiration: 24
 
 db:
-  driverClassName: org.postgresql.Driver
-  url: jdbc:postgresql://db:5432/ssbd02
+  driverClassName: com.mysql.cj.jdbc.Driver
+  url: jdbc:mysql://db:3306/ssbd02?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
   defaultTransactionIsolation: 2
   admin:
     username: ssbd02admin
@@ -53,7 +53,7 @@ mail:
   host: smtp.gmail.com
   port: 587
   username: landlordkingdomssbd02@gmail.com
-  password: xbig gjqb fhsu ziqz
+  password: vzdh smno lcki spth
   smtp:
     auth: true
     starttls:
@@ -70,4 +70,4 @@ account:
   deactivateAccountAfterDays: 31
 
 transaction:
-  timeout: 8
+  timeout: 60

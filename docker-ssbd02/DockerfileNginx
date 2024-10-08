@@ -1,5 +1,5 @@
 FROM node:20.13.1 as build
-ENV VITE_BACKEND_URL=https://team-2.proj-sum.it.p.lodz.pl/api/v1/
+ENV VITE_BACKEND_URL=https://tua202402.pl/api/v1/
 WORKDIR /usr/src/app
 COPY ../webapp/ssbd202402/package.json webapp/ssbd202402/yarn.lock ./
 RUN yarn

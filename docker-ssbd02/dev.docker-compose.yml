@@ -15,10 +15,6 @@ services:
       - ./initDb.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
-      interval: 30s
-      timeout: 10s
-      retries: 100
-      start_period: 30s
 
   tomcat:
     build:

@@ -54,7 +54,7 @@ INSERT INTO users (id, login, password, blocked, verified, login_attempts, versi
 VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'admin', '$2a$12$bOPVAvWOC2f9gJoF37IeE.N9Ij15GfWeVlvHzDPTOJk66NimJMJ4.',
         false, true, 0, 1, 'EN', NOW(), NOW(), null, null, true);
 INSERT INTO personal_data (user_id, email, temp_email, first_name, last_name)
-VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ssbdkontotestowe@int.pl', null, 'Admin', 'Admin');
+VALUES ('d42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'kacperkafara18@gmail.com', null, 'Admin', 'Admin');
 INSERT INTO access_levels (id, user_id, level, active, version, created_at, modified_at, created_by, modified_by)
 VALUES ('22f34716-3b77-4e63-809d-35f9a4758011', 'd42d399a-59cd-4895-a48c-4a3b2a9e46d1', 'ADMINISTRATOR', true, 0, NOW(),
         NOW(), null, null);

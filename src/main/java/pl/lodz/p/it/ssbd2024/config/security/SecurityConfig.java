@@ -59,7 +59,7 @@ public class SecurityConfig {
     CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration cors = new CorsConfiguration();
-            cors.setAllowedOrigins(List.of("https://team-2.proj-sum.it.p.lodz.pl", "http://localhost:3000"));
+            cors.setAllowedOrigins(List.of("https://tua202402.pl", "http://localhost:3000"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
             cors.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE, HttpHeaders.IF_MATCH));
             cors.addExposedHeader(HttpHeaders.ETAG);
