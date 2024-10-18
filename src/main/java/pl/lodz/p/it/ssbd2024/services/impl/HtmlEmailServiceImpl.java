@@ -28,7 +28,6 @@ public class HtmlEmailServiceImpl implements HtmlEmailService {
     @Override
     @PreAuthorize("permitAll()")
     public void sendHtmlEmail(String to, String subject, String body) {
-        log.info("eluwina");
         MimeMessage message = mailSender.createMimeMessage();
 
         try {

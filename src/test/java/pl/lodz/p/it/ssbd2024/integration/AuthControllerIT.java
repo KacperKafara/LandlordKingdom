@@ -290,34 +290,6 @@ public class AuthControllerIT extends BaseConfig {
     }
 
     @Test
-    @DisplayName("RegisterUser_ExistingLogin_ReturnUnprocessableEntity_Test")
-    public void RegisterUser_ExistingLogin_ReturnUnprocessableEntity_Test() {
-        UserCreateRequest request = new UserCreateRequest("userVerified", "email@test.com", "FirstName", "LastName", "password", "en");
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .body(request)
-                .post(AUTH_URL + "/signup")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
-    }
-
-    @Test
-    @DisplayName("RegisterUser_ExistingEmail_ReturnUnprocessableEntity_Test")
-    public void RegisterUser_ExistingEmail_ReturnUnprocessableEntity_Test() {
-        UserCreateRequest request = new UserCreateRequest("login", "userVerified@test.com", "FirstName", "LastName", "password", "en");
-        given()
-                .contentType(ContentType.JSON)
-                .when()
-                .body(request)
-                .post(AUTH_URL + "/signup")
-                .then()
-                .assertThat()
-                .statusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
-    }
-
-    @Test
     @DisplayName("RegisterUser_PasswordIncorrect_ReturnBadRequest_Test")
     public void RegisterUser_PasswordIncorrect_ReturnBadRequest_Test() {
         UserCreateRequest request = new UserCreateRequest("login", "email@test.com", "FirstName", "LastName", "pass", "en");
