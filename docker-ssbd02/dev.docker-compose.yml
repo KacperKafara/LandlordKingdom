@@ -39,6 +39,8 @@ services:
     image: nginx:1.21.3
     container_name: ssbd02-nginx
     restart: always
+    depends_on:
+      - tomcat
     ports:
       - "9090:80"
     networks:
@@ -50,6 +52,8 @@ services:
     image: rnwood/smtp4dev
     container_name: smtp4dev
     restart: always
+    depends_on:
+      - tomcat
     ports:
       - "5000:80"
       - "25:25"

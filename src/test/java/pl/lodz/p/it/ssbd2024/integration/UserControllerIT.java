@@ -74,8 +74,8 @@ public class UserControllerIT extends BaseConfig {
                 .body("login", equalTo("user"))
                 .body("email", equalTo("user@test.com"))
                 .body("language", equalTo("en"))
-                .body("lastSuccessfulLogin", equalTo("5/4/24, 3:33 AM"))
-                .body("lastFailedLogin", equalTo("5/4/24, 3:33 AM"))
+                .body("lastSuccessfulLogin", equalTo("5/4/24, 1:33 AM"))
+                .body("lastFailedLogin", equalTo("5/4/24, 1:33 AM"))
                 .body("verified", equalTo(true))
                 .body("blocked", equalTo(false));
     }
