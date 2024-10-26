@@ -32,7 +32,7 @@ spec:
     spec:
       containers:
         - name: backed-app
-          image: landlordkingdom:1.0.2
+          image: landlordkingdom:1.0.0
           ports:
             - containerPort: 8080
           livenessProbe:
