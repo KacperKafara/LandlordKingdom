@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - namespace.yaml
+  - application-secrets.yaml
+  - tls-secrets.yaml
+  - database-secrets.yaml
+  - fe-configmap.yaml
+  - database-statefulset.yaml
+  - application-deployment.yaml
+  - fe-deployment.yaml

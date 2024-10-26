@@ -34,7 +34,8 @@ public class DataSourceAdmin {
     @Value("${db.admin.password}")
     private String password;
 
-    private AtomikosNonXADataSourceBean dataSource() {
+    @Bean
+    public AtomikosNonXADataSourceBean datasourceAdmin() {
         AtomikosNonXADataSourceBean dataSource = new AtomikosNonXADataSourceBean();
         dataSource.setDriverClassName(driverClassName);
         dataSource.setUniqueResourceName("admin");
@@ -50,7 +51,7 @@ public class DataSourceAdmin {
 
     @Bean
     public EntityManagerFactory entityManagerFactoryAdmin() {
-        AtomikosNonXADataSourceBean dataSource = dataSource();
+        AtomikosNonXADataSourceBean dataSource = datasourceAdmin();
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setJtaDataSource(dataSource);
         em.setPersistenceUnitName("ssbd02admin");

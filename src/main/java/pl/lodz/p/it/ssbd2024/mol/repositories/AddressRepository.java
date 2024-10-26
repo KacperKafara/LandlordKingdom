@@ -31,4 +31,8 @@ public interface AddressRepository extends JpaRepository<Address, UUID> {
     @PreAuthorize("hasAnyRole('ADMINISTRATOR', 'OWNER')")
     @Query("SELECT a FROM Address a WHERE a.country = :country AND a.city = :city AND a.street = :street AND a.number = :number AND a.zip = :zip")
     Optional<Address> findByAddress(String country, String city, String street, String number, String zip);
+
+    @PreAuthorize("permitAll()")
+    @Query("SELECT 1")
+    void ping();
 }

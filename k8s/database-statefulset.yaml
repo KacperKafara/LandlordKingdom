@@ -55,7 +55,7 @@ spec:
             exec:
               command: [ "sh", "-c", "mysqladmin ping -p${MYSQL_ROOT_PASSWORD}" ]
             initialDelaySeconds: 30
-            periodSeconds: 10
+            periodSeconds: 2
             timeoutSeconds: 5
           readinessProbe:
             exec:

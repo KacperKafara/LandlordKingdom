@@ -33,13 +33,24 @@ spec:
     spec:
       containers:
         - name: react-frontend
-          image: landlordkingdom-fe:1.0.0
+          image: ghcr.io/kacperkafara/landlordkingdom-fe:1.0.0
           livenessProbe:
             httpGet:
               path: /
-              port: 80
+              port: 443
+              scheme: HTTPS
             initialDelaySeconds: 10
-            periodSeconds: 3
+            periodSeconds: 2
+          readinessProbe:
+            httpGet:
+              path: /api/v1/health/readiness
+              port: 443
+              scheme: HTTPS
+              httpHeaders:
+                - name: X-Application-Status
+                  value: kubernetes
+            initialDelaySeconds: 50
+            periodSeconds: 2
           ports:
             - containerPort: 80
           volumeMounts:
