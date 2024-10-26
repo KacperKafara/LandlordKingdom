@@ -30,7 +30,7 @@ refreshToken:
 
 db:
   driverClassName: com.mysql.cj.jdbc.Driver
-  url: jdbc:mysql://db:3306/ssbd02?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+  url: jdbc:mysql://database.landlord.svc.cluster.local:3306/ssbd02?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
   defaultTransactionIsolation: 2
   admin:
     username: ssbd02admin

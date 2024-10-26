@@ -1,0 +1,123 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: application
+  namespace: landlord
+  labels:
+    app: application
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: application
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application-deployment
+  namespace: landlord
+  labels:
+    app: application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: application
+  template:
+    metadata:
+      labels:
+        app: application
+    spec:
+      containers:
+        - name: backed-app
+          image: landlordkingdom:1.0.2
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /ssbd02/health/liveness
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            periodSeconds: 2
+          env:
+            - name: OTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: otpSecret
+            - name: JWS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: jwsSecret
+            - name: OAUTH2_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: oauth2ClientId
+            - name: OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: oauth2ClientSecret
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: jdbcUrl
+            - name: DB_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: adminUsername
+            - name: DB_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: adminPassword
+            - name: DB_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: authUsername
+            - name: DB_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: authPassword
+            - name: DB_MOK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: mokUsername
+            - name: DB_MOK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: mokPassword
+            - name: DB_MOL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: molUsername
+            - name: DB_MOL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: molPassword
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: application-secrets
+                  key: mailPassword
+          volumeMounts:
+            - name: application-keys
+              mountPath: /etc/ssbd02
+              readOnly: true
+      volumes:
+        - name: application-keys
+          secret:
+            secretName: application-keys
