@@ -34,6 +34,12 @@ spec:
       containers:
         - name: react-frontend
           image: landlordkingdom-fe:1.0.0
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 10
+            periodSeconds: 3
           ports:
             - containerPort: 80
           volumeMounts:
