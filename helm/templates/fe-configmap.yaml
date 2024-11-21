@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.proxy.configmap.name }}
+  namespace: {{ .Values.global.namespace }}
+data:
+  nginx.conf: |
+{{ .Values.proxy.configmap.nginx_config | indent 4 }}

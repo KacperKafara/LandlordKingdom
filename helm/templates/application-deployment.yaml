@@ -1,0 +1,143 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.application.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.application.label }}
+spec:
+  type: {{ .Values.application.service.type }}
+  ports:
+    - port: {{ .Values.application.service.port }}
+      targetPort: {{ .Values.application.service.targetPort }}
+      {{- if .Values.application.service.nodePort }}
+      nodePort: {{ .Values.application.service.nodePort }}
+      {{- end }}
+  selector:
+    app: {{ .Values.application.label }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.application.deployment.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.application.label }}
+spec:
+  {{- if .Values.application.deployment.replicas }}
+  replicas: {{ .Values.application.deployment.replicas }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.application.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.application.label }}
+    spec:
+      containers:
+        - name: {{ .Values.application.deployment.containerName }}
+          image: {{ .Values.application.deployment.image }}:{{ .Values.application.deployment.tag }}
+          ports:
+            - containerPort: {{ .Values.application.deployment.containerPort }}
+          {{  if .Values.application.deployment.probes.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.application.service.port }}
+              path: /ssbd02/health/liveness
+              httpHeaders:
+                - name: X-Application-Status
+                  value: kubernetes
+            initialDelaySeconds: {{ .Values.application.deployment.probes.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.application.deployment.probes.livenessProbe.periodSeconds }}
+          {{- end }}
+          {{  if .Values.application.deployment.probes.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.application.service.port }}
+              path: /ssbd02/health/readiness
+              httpHeaders:
+                - name: X-Application-Status
+                  value: kubernetes
+            initialDelaySeconds: {{ .Values.application.deployment.probes.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.application.deployment.probes.readinessProbe.periodSeconds }}
+          {{- end }}
+          env:
+            - name: OTP_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: otpSecret
+            - name: JWS_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: jwsSecret
+            - name: OAUTH2_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: oauth2ClientId
+            - name: OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: oauth2ClientSecret
+            - name: DB_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: jdbcUrl
+            - name: DB_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: adminUsername
+            - name: DB_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: adminPassword
+            - name: DB_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: authUsername
+            - name: DB_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: authPassword
+            - name: DB_MOK_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: mokUsername
+            - name: DB_MOK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: mokPassword
+            - name: DB_MOL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: molUsername
+            - name: DB_MOL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: molPassword
+            - name: MAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.application.applicationSecrets.name }}
+                  key: mailPassword
+          volumeMounts:
+            - name: {{ .Values.application.applicationKeys.name }}
+              mountPath: /etc/ssbd02
+              readOnly: true
+      volumes:
+        - name: {{ .Values.application.applicationKeys.name }}
+          secret:
+            secretName: {{ .Values.application.applicationKeys.name }}

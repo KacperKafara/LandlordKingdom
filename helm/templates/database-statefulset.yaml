@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.database.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.database.label }}
+spec:
+  type: {{  .Values.database.service.type }}
+  ports:
+    - port: {{ .Values.database.service.port }}
+      targetPort: {{ .Values.database.service.targetPort }}
+      {{- if .Values.database.service.nodePort }}
+      nodePort: {{ .Values.database.service.nodePort }}
+      {{- end }}
+  selector:
+    app: {{ .Values.database.label }}
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.database.name }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  serviceName: {{ .Values.database.name }}
+  replicas: {{ .Values.database.statefulSet.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.database.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.database.label }}
+    spec:
+      containers:
+        - name: {{ .Values.database.label }}
+          image: {{ .Values.database.statefulSet.image }}:{{ .Values.database.statefulSet.tag }}
+          ports:
+            - containerPort: {{ .Values.database.statefulSet.containerPort }}
+          env:
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret.name }}
+                  key: user
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret.name }}
+                  key: root-password
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.database.secret.name }}
+                  key: password
+          {{- if .Values.database.statefulSet.livenessProbe.enabled }}
+          livenessProbe:
+            exec:
+              command: [ "sh", "-c", "mysqladmin ping -p${MYSQL_ROOT_PASSWORD}" ]
+            initialDelaySeconds: {{ .Values.database.statefulSet.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.database.statefulSet.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.database.statefulSet.livenessProbe.timeoutSeconds }}
+          {{- end }}
+          {{- if .Values.database.statefulSet.readinessProbe.enabled }}
+          readinessProbe:
+            exec:
+              command: [ "sh", "-c", "mysql -h 127.0.0.1 -e \"SELECT 'true' WHERE 1=1\" -u root -p${MYSQL_ROOT_PASSWORD}" ]
+            initialDelaySeconds: {{ .Values.database.statefulSet.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.database.statefulSet.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.database.statefulSet.readinessProbe.timeoutSeconds }}
+          {{- end }}
+          volumeMounts:
+            - name: database-storage
+              mountPath: /var/lib/mysql
+              subPath: mysql
+            - name: init-data
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: database-storage
+          persistentVolumeClaim:
+            claimName: database-storage
+        - name: init-data
+          secret:
+            secretName: {{ .Values.database.secret.name }}
+  volumeClaimTemplates:
+    - metadata:
+        name: database-storage
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

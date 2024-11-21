@@ -1,0 +1,186 @@
+global:
+  label: landlord-kingdom
+  namespace: landlord
+
+namespace:
+  create: false
+
+
+database:
+  label: database
+  name: database
+  service:
+    type: ClusterIP
+    port: 3306
+    targetPort: 3306
+  statefulSet:
+    replicas: 1
+    image: mysql
+    tag: 9.0.1
+    containerPort: 3306
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 2
+      timeoutSeconds: 5
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 10
+      periodSeconds: 2
+      timeoutSeconds: 1
+  secret:
+    name: database-secrets
+    existingSecret: true
+
+application:
+  name: application
+  label: application
+  service:
+    type: ClusterIP
+    port: 8080
+    targetPort: 8080
+  deployment:
+    name: application-deployment
+    replicas: 1
+    containerName: backend-app
+    image: ghcr.io/kacperkafara/landlordkingdom
+    tag: 1.0.0
+    containerPort: 8080
+    probes:
+      livenessProbe:
+        enabled: true
+        initialDelaySeconds: 30
+        periodSeconds: 2
+      readinessProbe:
+        enabled: true
+        initialDelaySeconds: 40
+        periodSeconds: 2
+  applicationSecrets:
+    name: application-secrets
+    existingSecret: true
+  applicationKeys:
+    name: application-keys
+    existingSecret: true
+
+
+proxy:
+  label: react-frontend
+  service:
+    name: fe-service
+    type: NodePort
+    port: 443
+    targetPort: 443
+    nodePort: 443
+  deployment:
+    containerName: react-frontend
+    containerPort: 80
+    name: fe-deployment
+    replicas: 2
+    image: ghcr.io/kacperkafara/landlordkingdom-fe
+    tag: 1.0.0
+    probes:
+      livenessProbe:
+        enabled: true
+        httpGet:
+          path: /
+          scheme: HTTPS
+        initialDelaySeconds: 10
+        periodSeconds: 2
+      readinessProbe:
+        enabled: true
+        httpGet:
+          path: /api/v1/health/readiness
+          scheme: HTTPS
+          httpHeaders:
+            - name: X-Application-Status
+              value: kubernetes
+        initialDelaySeconds: 50
+        periodSeconds: 2
+  tls:
+    secret:
+      name: tls-secret
+      existingSecret: true
+  configmap:
+    name: nginx-config
+    nginx_config: |
+      user nginx;
+      worker_processes auto;
+      error_log /var/log/nginx/error.log notice;
+      pid /run/nginx.pid;
+    
+      include /usr/share/nginx/modules/*.conf;
+      
+      events {
+        worker_connections 1024;
+      }
+    
+    
+      http {
+        map $http_upgrade $connection_upgrade {
+          default upgrade;
+          '' close;
+        }
+        log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+        '$status $body_bytes_sent "$http_referer" '
+        '"$http_user_agent" "$http_x_forwarded_for"';
+      
+        access_log  /var/log/nginx/access.log  main;
+      
+        sendfile            on;
+        tcp_nopush          on;
+        keepalive_timeout   65;
+        types_hash_max_size 4096;
+        
+        include             /etc/nginx/mime.types;
+        default_type        application/octet-stream;
+        
+        # Load modular configuration files from the /etc/nginx/conf.d directory.
+        # See http://nginx.org/en/docs/ngx_core_module.html#include
+        # for more information.
+        include /etc/nginx/conf.d/*.conf;
+        
+        server {
+          listen       80;
+          listen       [::]:80;
+          server_name  _;
+          return 301 https://$host$request_uri;
+        }
+        
+        # Settings for a TLS enabled server.
+        server {
+          listen       443 ssl http2;
+          listen       [::]:443 ssl http2;
+          server_name  tua202402.pl;
+          
+          ssl_certificate "/etc/cert/tua202402.pl.crt";
+          ssl_certificate_key "/etc/cert/tua202402.pl.key";
+          ssl_session_cache shared:SSL:1m;
+          ssl_session_timeout  10m;
+          ssl_ciphers HIGH:!aNULL:!MD5;
+          ssl_prefer_server_ciphers on;
+          
+          # Load configuration files for the default server block.
+          include /etc/nginx/default.d/*.conf;
+          
+          error_page 404 /404.html;
+          location = /404.html {
+          }
+          
+          error_page 500 502 503 504 /50x.html;
+          location = /50x.html {
+          }
+          
+          location /api/v1 {
+            proxy_pass http://application.landlord.svc.cluster.local:8080/ssbd02;
+            proxy_set_header Host $http_host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+          }
+          
+          root /usr/share/nginx/html;
+          location / {
+            try_files $uri $uri /index.html;
+          }
+        }
+      }

@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.proxy.service.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.proxy.label }}
+spec:
+  type: {{ .Values.proxy.service.type }}
+  ports:
+    - port: {{ .Values.proxy.service.port }}
+      targetPort: {{ .Values.proxy.service.targetPort }}
+      {{- if .Values.proxy.service.nodePort }}
+      nodePort: {{ .Values.proxy.service.nodePort }}
+      {{- end }}
+  selector:
+    app: {{ .Values.proxy.label }}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.proxy.deployment.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.proxy.label }}
+spec:
+  {{- if .Values.proxy.deployment.replicas }}
+  replicas: {{ .Values.proxy.deployment.replicas }}
+  {{- end }}
+  selector:
+    matchLabels:
+      app: {{ .Values.proxy.label }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.proxy.label }}
+    spec:
+      containers:
+        - name: {{ .Values.proxy.deployment.containerName }}
+          image: {{ .Values.proxy.deployment.image }}:{{ .Values.proxy.deployment.tag }}
+          {{- if .Values.proxy.deployment.probes.livenessProbe.enabled }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.proxy.deployment.probes.livenessProbe.httpGet.path }}
+              port: {{ .Values.proxy.service.port }}
+              scheme: {{ .Values.proxy.deployment.probes.livenessProbe.httpGet.scheme }}
+            initialDelaySeconds: {{ .Values.proxy.deployment.probes.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.deployment.probes.livenessProbe.periodSeconds }}
+          {{- end }}
+          {{- if .Values.proxy.deployment.probes.readinessProbe.enabled }}
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.proxy.deployment.probes.readinessProbe.httpGet.path }}
+              port: {{ .Values.proxy.service.port }}
+              scheme: {{ .Values.proxy.deployment.probes.readinessProbe.httpGet.scheme }}
+              httpHeaders:
+                {{- range .Values.proxy.deployment.probes.readinessProbe.httpGet.httpHeaders }}
+                - name: {{ .name }}
+                  value: {{ .value }}
+                {{- end }}
+            initialDelaySeconds: {{ .Values.proxy.deployment.probes.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.proxy.deployment.probes.readinessProbe.periodSeconds }}
+          {{- end }}
+          ports:
+            - containerPort: {{ .Values.proxy.deployment.containerPort }}
+          volumeMounts:
+            - mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+              name: {{ .Values.proxy.configmap.name }}
+            - mountPath: /etc/cert
+              name: {{ .Values.proxy.tls.secret.name }}
+      volumes:
+        - name: {{ .Values.proxy.configmap.name }}
+          configMap:
+            name: {{ .Values.proxy.configmap.name }}
+        - name: {{ .Values.proxy.tls.secret.name }}
+          secret:
+            secretName: {{ .Values.proxy.tls.secret.name }}
