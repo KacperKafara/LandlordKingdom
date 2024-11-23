@@ -18,7 +18,8 @@ import pl.lodz.p.it.ssbd2024.config.datasources.DataSourceMol;
         DataSourceMol.class,
         DataSourceAuth.class,
         ToolConfig.class,
-        MailSenderConfig.class
+        MailSenderConfig.class,
+        PrometheusConfig.class,
 })
 @ComponentScan({
         "pl.lodz.p.it.ssbd2024.aspects",

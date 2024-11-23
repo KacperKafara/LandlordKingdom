@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.controllers;
 
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,10 +19,12 @@ import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
 public class LivenessReadinessController {
 
     private final AddressRepository addressRepository;
+    private final PrometheusMeterRegistry prometheusMeterRegistry;
 
     @GetMapping("/liveness")
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> liveness(@RequestHeader("X-Application-Status") String header) {
+        prometheusMeterRegistry.counter("liveness_check_total").increment();
         if (!header.equals("kubernetes")) {
             return ResponseEntity.status(503).build();
         }
@@ -32,6 +35,7 @@ public class LivenessReadinessController {
     @PreAuthorize("permitAll()")
     @Transactional(propagation = Propagation.REQUIRED)
     public ResponseEntity<Void> readiness(@RequestHeader("X-Application-Status") String header) {
+        prometheusMeterRegistry.counter("readiness_check_total").increment();
         if (!header.equals("kubernetes")) {
             return ResponseEntity.status(503).build();
         }
@@ -46,7 +50,7 @@ public class LivenessReadinessController {
     @GetMapping("/hpa")
     @PreAuthorize("permitAll()")
     public ResponseEntity<Void> hpa(@RequestParam("duration") int durationInSeconds) {
-        long endTime = System.currentTimeMillis() + (durationInSeconds * 1000);
+        long endTime = System.currentTimeMillis() + (durationInSeconds * 1000L);
         
         while (System.currentTimeMillis() < endTime) {
             double result = 0.0;
