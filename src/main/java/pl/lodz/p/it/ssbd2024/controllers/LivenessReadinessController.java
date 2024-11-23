@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.lodz.p.it.ssbd2024.mol.repositories.AddressRepository;
@@ -40,5 +41,20 @@ public class LivenessReadinessController {
         } catch (Exception e) {
             return ResponseEntity.status(503).build();
         }
+    }
+
+    @GetMapping("/hpa")
+    @PreAuthorize("permitAll()")
+    public ResponseEntity<Void> hpa(@RequestParam("duration") int durationInSeconds) {
+        long endTime = System.currentTimeMillis() + (durationInSeconds * 1000);
+        
+        while (System.currentTimeMillis() < endTime) {
+            double result = 0.0;
+            for (long i = 0; i < 1_000_000L; i++) {
+                result += Math.sin(i) * Math.cos(i);
+            }
+        }
+
+        return ResponseEntity.ok().build();
     }
 }

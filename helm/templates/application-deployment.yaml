@@ -40,6 +40,10 @@ spec:
           image: {{ .Values.application.deployment.image }}:{{ .Values.application.deployment.tag }}
           ports:
             - containerPort: {{ .Values.application.deployment.containerPort }}
+          resources:
+            requests:
+              cpu: {{ .Values.application.deployment.resources.requests.cpu | default "50m" }}
+              memory: {{ .Values.application.deployment.resources.requests.memory | default "64Mi" }}
           {{  if .Values.application.deployment.probes.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
@@ -141,3 +145,27 @@ spec:
         - name: {{ .Values.application.applicationKeys.name }}
           secret:
             secretName: {{ .Values.application.applicationKeys.name }}
+---
+{{- if .Values.application.hpa.enabled | default true }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ .Values.application.hpa.name | default .Values.application.deployment.name }}
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app: {{ .Values.application.label }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ .Values.application.deployment.name }}
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+{{- end }}

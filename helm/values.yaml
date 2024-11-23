@@ -3,7 +3,7 @@ global:
   namespace: landlord
 
 namespace:
-  create: false
+  create: true
 
 
 database:
@@ -30,9 +30,28 @@ database:
       timeoutSeconds: 1
   secret:
     name: database-secrets
-    existingSecret: true
+    existingSecret: false
+    data:
+      user: postgres
+      password: postgres
+      root-password: postgres
+      init.sql: |
+        CREATE DATABASE ssbd02;
+        CREATE USER 'ssbd02admin'@'%' IDENTIFIED BY 'adminP@ssw0rd';
+        CREATE USER 'ssbd02mok'@'%' IDENTIFIED BY 'mokP@ssw0rd';
+        CREATE USER 'ssbd02mol'@'%' IDENTIFIED BY 'molP@ssw0rd';
+        CREATE USER 'ssbd02auth'@'%' IDENTIFIED BY 'authP@ssw0rd';
+        USE ssbd02;
+
+        GRANT RELOAD ON *.* TO 'ssbd02admin'@'%';
+        GRANT ALL PRIVILEGES ON ssbd02.* TO 'ssbd02admin'@'%' WITH GRANT OPTION;
+        GRANT ALL PRIVILEGES ON ssbd02.* TO 'ssbd02admin'@'localhost' WITH GRANT OPTION;
+
+        FLUSH PRIVILEGES;
 
 application:
+  hpa:
+    enabled: true
   name: application
   label: application
   service:
@@ -46,6 +65,10 @@ application:
     image: ghcr.io/kacperkafara/landlordkingdom
     tag: 1.0.0
     containerPort: 8080
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
     probes:
       livenessProbe:
         enabled: true
@@ -57,11 +80,84 @@ application:
         periodSeconds: 2
   applicationSecrets:
     name: application-secrets
-    existingSecret: true
+    existingSecret: false
+    data:
+      adminUsername: ssbd02admin
+      adminPassword: adminP@ssw0rd
+      authUsername: ssbd02auth
+      authPassword: authP@ssw0rd
+      mokUsername: ssbd02mok
+      mokPassword: mokP@ssw0rd
+      molUsername: ssbd02mol
+      molPassword: molP@ssw0rd
+      jdbcUrl: jdbc:mysql://database.landlord.svc.cluster.local:3306/ssbd02?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      mailPassword: vzdh smno lcki spth
+      oauth2ClientId: 646977083886-0hbur7doj5r5p6jmcs0k2qd3akhk5cns.apps.googleusercontent.com
+      oauth2ClientSecret: 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
+      otpSecret: 26Etz0ZMoBmiX7F9lHvb
+      jwsSecret: 6f97ca1e5fdf4a418bf0ad0badd33dd716f63e7f593a4b7f9e4b4304316fd09a
   applicationKeys:
     name: application-keys
-    existingSecret: true
-
+    existingSecret: false
+    data:
+      privateJwt-key.pem: |
+        -----BEGIN PRIVATE KEY-----
+        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCuRgX1AVy5w21+
+        LxIR3+8WPBBujfbu5ee5GJ7uj382rIuzZI0wJXxjmSZw8clukUpdOgOpsYzIxlMW
+        k5GsrDsXmNPSEo31HR+VecCnuRXw9HFp3InBlrAoNCCUL+5HuLPrr03B8wgJwOwt
+        I9ign/cZ5IhnbXpbjAk/huyif53raztzzCQ9nUNcwpBOz6PNJ36UWbyuhFXt98LJ
+        gwf8N4N4fnyczCCkZajHBN0r17/BiU/YbamKa5qCCVk5X5I/gsPiAXFKcWvxWOZV
+        PjRe+Gz5vdSA5fy8z2GMXlmS+rv/cqKX8LJORFGZsffSdf6eJlHwMt3lNCa9TUS7
+        Ec9ZQ88NAgMBAAECggEABN3vQiei1YxD5Ut+u3GPzYTpZ5D+5a6VgVmS7LIkuRvp
+        /d1PxRmy5twq0uopuDUGCOL7IbTT6/J/9QgzgAlCUDckKUB75u3EiUnga76zQmqt
+        NSnjzfx9mG3WQBUzmBysJ6eaahF1tsIExoDzBo9ZGQfFGHBaA67+PiAwQRyDxkSJ
+        P5fN3o0gZLm3iCkoxd9cB/m88PGq0ahcJBzKOJSJuF76zhdbAqwpkVnHMEGqkf/T
+        wYSwvFpZLF5RTewmp1ljkJkwqob7XNahkBiIKj6YtwpkJjBQQXplzeMcHYGUtc30
+        B5vEGkrgCzz0puFiGtHRCUzKkl8MuLNLsVumA8ANWQKBgQDt8zm/IpZvQdGSS3xX
+        LApGLhO3UUSYuFerA3xd/qed34sqAUkFRixdI+5bR6SqHrbFRJ921ztmQ6OFZ15f
+        gaKu/4JRazvUTdtWV8BrQ3h2p6IC2eMGy4JrzgYgUghHbCqg/nbRW67RRfWdvYXm
+        Lkd/KztwSbdmDaSG3koFfD47eQKBgQC7fkGxvY7chKs68bW1UZ0TkQBpWNPuZhnP
+        Lx092lkhTOb9Rp9huDT+6mi2IOyUF31b2M381+SQmT7iTGYI9H09RkJiGw2+jE7B
+        Fp65TFkwPk1OlN5SdjokhpU1E4gEjd+Uj5vWhNuZjt3U4IQd3RYOywFOmmLl/zVu
+        tWTP7U63NQKBgQDojvM9b1x/2GAvDz+zIwPXm2kBnZfheymTppCCfUTs83Jb1226
+        jd8GGPv4kojJC8OuAWepCqqvRCQpWeHOjjClwGtpj9ilooJgXNte+k5eCXA6QSG1
+        nmkVXAJ4zDPzOjBfsNQHwgeV2T44sOaRFWIjU+l/0UxBncvTVKYbvlZEYQKBgFdX
+        r77fMWglHadt5lo7VNNCn1B0IvZR9gAAULz5tL/AlXKzrZfWOknuZS1DFTK/5pQc
+        4YjCAiYiXZsKQBY33wfmbRJKzBJSRnXI1dQ4buv8egL7cr4zeU5+q494M8r7VIZe
+        iBhc9/gHB+wdUy6eSaJGi6tUXHIMe5XBRt9eC2dpAoGBAJRz0jh3aFVpjbGLmPoV
+        ThCSDNohI9WgVFdyP3O/lusv5d5ELjMJcifEvKZN0Rf8idoemuSq2ETHS+O4a/Gb
+        6jSKuhcdBU5zyIMmE59iYZOS11aAdcKKjqqfvDZnH10zJdyLLFgO2GFXC6J79bfA
+        JSQ5OQY+Nx6Di2zlOyY1fuoz
+        -----END PRIVATE KEY-----
+      privateRefresh-key.pem: |
+        -----BEGIN PRIVATE KEY-----
+        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCg0BhSPqB7AB12
+        Z0TA/MtoGxtTUJViT0cjwQJNhH8rdNVtZ0MuHrbME4J1hsC9tSXw66v/cF+eE0Bl
+        AstacEnsEOM8Y/BtVaVlphKyN9s8yh//xCifEii54aJZnGfBHXpy4jJ2lX7xohwv
+        8hwi1WxthNZ9dIGk7yQegg33UsMqM0TudTbKoGXutW1cMRgtyA8b0d2fSAxQoTwG
+        hlT3pAy+CSbvTs9IyXDQ7hii6oDn254wmkTER9UBNUArD0bsI3oRDn8pWOsbiFxz
+        smFNJ90oT9U8NKo3o4owDZ1+B/pHG7GMXOSQnCnkzn7oyslD0+AS8qMBc0TfeKjV
+        0A07Cs/VAgMBAAECggEAG8iQJyd8TPvyWypQ2eHjF6+1OyH9STCmuxHl3rQxT3X+
+        SMpSNEXosZ3+SGVZZ/1D2pmxC+8jiflMAxemQBAN6XvqcpzWpWEqdAMrEEDvvxMx
+        z5vZo8/8ms7VoJNR5q674NzdOJkwBznJkmwLOeZzNwHAGAk4u+D4NdAk7xHMt73B
+        PwEn3CvVYy6UFbcpu4cVQG8oUg3IBD00IfTncWAvpm9aHEXh7Rzy9MD8Sa5c34y/
+        6p5YYAA19vOKKmWlJbMmxh+OsRLbMP7TAx9YBkMJxG80joBDMe3D78MZVrVudf6+
+        +hYkhUtRd6rZx4B8SaN4XvDkGbeqAXWRIYQDU2BC0QKBgQDPP2rK92EIlCEkuU50
+        17wxu1K1ivEZ+FqHvtMwtTOdl66T+sLwsx24fqcLVK6oCXv4c9Ofxp/BK9vmJgtK
+        3kh5Tyt9Aw9xOsPYNY5MPxUwgApc5t34vO/7y5ViM5BaLV3D+/nuEfxwp3K4FyRD
+        wfR6NWyZes1qsjfiXo9/WJQ9JQKBgQDGpFfSW1n2lp0M1WOUj++kWC8lyod0E6nD
+        qvLFs26haFybnJ/aBIWGjbrrFSRK6YRqqBDGaTOeFIrEcume/1+C4/xHTY1+9+zH
+        KujHvt2GXQRLDD22DxwsN2WpUWb5tW5MafzPuJS6wq8tlmE2L21vblvaVnpy1RG8
+        BisSwyRA8QKBgQCe1GlR17jDzFKCRIn+Pf/61ScT/sG8N3uaIQLVh2lhU4f13O5d
+        bchPRrFam7GnEm2yAYKkJqL0dlp2zZ1F6Yj9f1FC43+INZM2NgUyJf5lRxuqCzz+
+        jj4VaPa5Ze8xTSdZNdlbPOmMpKfksceXLiPhLORn05duN9tgXzv2SrqBCQKBgB/l
+        JYDOUDyq5F66KLoi/myaCD/+LA+0VI7pdP/PltTt5+jIllYwYaxAN6Ili+VHZ46k
+        m8TwAWzBiaKPfPmdsZ1XtBtS1YRslKVKO4RPHkzDxLu0JHiGJpTm9DjirDEuM56r
+        af+EeMUgG3arbcKAjQbWZoNBXXnwwl85clMZ6ElRAoGBALoYU0za4V7drmZIxxD6
+        49WT+DpuOTuhaqleDqmHhr+pSH5OOwkYZkZqOnibeOEJbzbWkX9m0DUzEn92HGCY
+        aaVkLuEPhMUpPBDI9eQTj74h4YVtXmoGkibPhhTTsYrJJE9/lBOYNLRhnTknm43b
+        u57+MMfV5YjGJc69Dzer4Lex
+        -----END PRIVATE KEY-----
 
 proxy:
   label: react-frontend
@@ -99,7 +195,62 @@ proxy:
   tls:
     secret:
       name: tls-secret
-      existingSecret: true
+      existingSecret: false
+      cert: |
+        -----BEGIN CERTIFICATE-----
+        MIID+TCCAuECFE4bV9Wp/UydXqj/2r4HSCKU13/FMA0GCSqGSIb3DQEBCwUAMIG4
+        MQswCQYDVQQGEwJQTDEWMBQGA1UECAwNw4XCgcODwrNkemtpZTEWMBQGA1UEBwwN
+        w4XCgcODwrNkw4XCujEiMCAGA1UECgwZUG9saXRlY2huaWthIMOFwoHDg8KzZHpr
+        YTEOMAwGA1UECwwFRlRJTVMxFTATBgNVBAMMDHR1YTIwMjQwMi5wbDEuMCwGCSqG
+        SIb3DQEJARYfbGFuZGxvcmRraW5nZG9tc3NiZDAyQGdtYWlsLmNvbTAeFw0yNDEw
+        MDgwODQ0MzZaFw0yNTEwMDgwODQ0MzZaMIG4MQswCQYDVQQGEwJQTDEWMBQGA1UE
+        CAwNw4XCgcODwrNkemtpZTEWMBQGA1UEBwwNw4XCgcODwrNkw4XCujEiMCAGA1UE
+        CgwZUG9saXRlY2huaWthIMOFwoHDg8KzZHprYTEOMAwGA1UECwwFRlRJTVMxFTAT
+        BgNVBAMMDHR1YTIwMjQwMi5wbDEuMCwGCSqGSIb3DQEJARYfbGFuZGxvcmRraW5n
+        ZG9tc3NiZDAyQGdtYWlsLmNvbTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoC
+        ggEBANdz/tDTZWCI2bWksU+kahdJ/+7EGSCvVuFXaGTyzBUbO7lMY9wUFqP0SLo7
+        dH7wNn2vHVPfyKYZwePeQDFbVI+DDMZ+urS7sdwOiUJ17l3HRvAj8KkYv8APhpcq
+        tPde0yenNmlAjochEXzVFhRnT6bMYoxYiLHw2nmPzK396bQdClVYL7QAMtefZNEE
+        9Ght11JQlamJW4sNVWCRRstOxBjIuXlGaqTy18p6IYfh43J0mk971pxJLiiP3Z8g
+        bEd/HVRYzaeoJhZFVoemVy/sWOeEFos4q84Lc2pGWgZc/tlIVSwxZ66O/tviuNVZ
+        ZndBEpAX/oUKyZ6wXfdR/VC5MuMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA0eht
+        VYSzM2Re7JDdxgGdKp8UI0qSeRC3V4evxn3sMDpvw4LwyXLe1Z3WfGrB9ichgyiN
+        2l7mUpIERmP1CyQjIGwRCnlrbJK8WEQysiUG6ReHpSyG2bN0ux4uaM3UeF1ec6VA
+        RROXFoMd4Bf9xlheJc1HlWu0PjXnm+DXVak62R2lekNX8wQgt07kMVs8z57ucOj9
+        fnwxMO2h22TWUMAYNTuPB9rJ6EdqGDSqjHTLTGC1bZBZ5aifnKqxbjBbdSgpYMsz
+        0De9DJBC7bIsbfSXDt2+dlKu0905MXI2HNdaZLTbnGZRX/J2r9A9p5HdZMc5KXAx
+        mnjWhBLp8ul66TZDdA==
+        -----END CERTIFICATE-----
+      key: |
+        -----BEGIN PRIVATE KEY-----
+        MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDXc/7Q02VgiNm1
+        pLFPpGoXSf/uxBkgr1bhV2hk8swVGzu5TGPcFBaj9Ei6O3R+8DZ9rx1T38imGcHj
+        3kAxW1SPgwzGfrq0u7HcDolCde5dx0bwI/CpGL/AD4aXKrT3XtMnpzZpQI6HIRF8
+        1RYUZ0+mzGKMWIix8Np5j8yt/em0HQpVWC+0ADLXn2TRBPRobddSUJWpiVuLDVVg
+        kUbLTsQYyLl5Rmqk8tfKeiGH4eNydJpPe9acSS4oj92fIGxHfx1UWM2nqCYWRVaH
+        plcv7FjnhBaLOKvOC3NqRloGXP7ZSFUsMWeujv7b4rjVWWZ3QRKQF/6FCsmesF33
+        Uf1QuTLjAgMBAAECggEAY9drBBaSahPA3738NO36A+TU5y6UfmMCndZFmFIzZKyE
+        FrBhrkDY5Q11Dmgy6ggjGEcoDhAsCVzyTshVcwnhu8d9Chb8Kni4SUOrM9M2rNqF
+        8w6UnafMZBJNyouN5PxaWYvRWSEDa3dVhUWxv67IaIFaQbNdVShJ9f8/WHnL7RyW
+        VpuxmWMthhUsGMM5s6N38Hhopo9B0U9ABUwBcjg65mgbcBA0HjckvNRxqJmyUb0o
+        wSs6pdTGI8BsRb89ExQ54HlIVPB7H/5SY+8d3TSmf8pX/jSDQeMHPK138QsL1Cuh
+        fnxO7tha2LXwSsD6tF+lb5stHIcHWjF71kOq4BEpUQKBgQDuWxIqMa9qR312zcHE
+        CJlqN3ZuVL2a4nZIbNUsa+EYqXWcNZWLr2m3pzWfHrFF0RlhsoMC3ZHb2TW/yudE
+        Amwzs8YqG0iASrl3BmxJhDS5ZlePuwN6aInaRMBzNQID5ghTWc8nhvFv+T30Z8Wx
+        +I5gLi22Xk1wo+ZfHNzjBNzKrwKBgQDnZuk2X5jL21EQtWXLya0MN9z1qD9Zi7O3
+        UmnK2SJnHizQBCdAYdv6bMulHT8oNsNNiDgQ2VdHCzzqvt4LtVvnJKJpbzN+ef0K
+        5aQ/keb3A7zffFTOwK0IostfDM7PMQZnU8sMqI6ft93KvoWdn4CPfb5oytdphk4R
+        EBsrKEWYDQKBgEc8usIXlWi7MxlFx4qSU1+2cdPpyb03v8hHlrKvD1hylS75qNdV
+        ts/nzpPe9XZ7Vw2m75b0p7pAQdsvhk0COFp/eVNuUg3dx252Yfja5XMfzj2r1A9K
+        nSC5+Za1GgQWRRi8N7iFkTU5FbYtKZ3WPp8qTgk6SATJR3nXw4CqHF8LAoGBAM7t
+        +nNDPbJfJ7kXXjbE3NjmQ9PyZuQ+x7GSI0Tgs6EfHNfQPwGWAU+KZvn6k3X0suXs
+        gKaglSnU5N7PXGWAAvVKj2pVpOjfUeeiwCSQ5sfSMd5woq5ZIuNsIQ2YuIATyTQx
+        fIyPVyuBEvexNG9mKWMoAVRYwBV/ouQjUQhg9QspAoGBALz1xklLKpoviC79rJnF
+        rndfHyg+F5dLiHqtY6MgY2wMsDpniQk7HlfUPADzouSbxLvfPvagcfAplJoU+a3n
+        U1t9Ez6ZGiR1gHP1gTFhlFu1/EJnwj6iSqsRvh5QI+B1e7HytmwzuChRl2h7R+UK
+        oIbAVdiiI4pB2459RJyLV0Ud
+        -----END PRIVATE KEY-----
+
   configmap:
     name: nginx-config
     nginx_config: |
