@@ -8,7 +8,8 @@ metadata:
 spec:
   type: {{ .Values.proxy.service.type }}
   ports:
-    - port: {{ .Values.proxy.service.port }}
+    - name: https
+      port: {{ .Values.proxy.service.port }}
       targetPort: {{ .Values.proxy.service.targetPort }}
       {{- if .Values.proxy.service.nodePort }}
       nodePort: {{ .Values.proxy.service.nodePort }}
