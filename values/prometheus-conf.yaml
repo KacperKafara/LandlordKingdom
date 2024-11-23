@@ -1,0 +1,13 @@
+prometheus:
+  additionalServiceMonitors:
+    - name: application-metrics
+      selector:
+        matchLabels:
+          app: application
+      namespaceSelector:
+        matchNames:
+          - landlord
+      endpoints:
+        - port: http
+          interval: 20s
+          path: /ssbd02/prometheus
