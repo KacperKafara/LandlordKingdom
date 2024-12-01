@@ -4,8 +4,8 @@ curl -k https://tua202402.pl/api/v1/health/hpa\?duration\=60
 
 helm repo add kube-logging https://kube-logging.github.io/helm-charts
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install --wait --create-namespace --namespace logging logging-operator oci://ghcr.io/kube-logging/helm-charts/logging-operator --version 4.11.2-dev.1
-helm install --create-namespace --namespace logging elasticsearch bitnami/elasticsearch --version 21.3.26 --set global.kibanaEnabled=true
+helm install --create-namespace --namespace logging logging-operator oci://ghcr.io/kube-logging/helm-charts/logging-operator --version 4.11.2-dev.1
+helm install --create-namespace --namespace logging elasticsearch bitnami/elasticsearch --version 21.3.26 --set global.kibanaEnabled=true --set master.resourcesPreset=large --set data.resourcePreset=large --set coordinating.resourcesPreset=large --set ingest.resourcesPreset=large --set coordinating.heapSize=378m
 helm install --namespace logging logging-operator-logging kube-logging/logging-operator-logging --version 4.2.2 -f logging-operator-logging-conf.yaml
 
 2
