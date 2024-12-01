@@ -2,6 +2,8 @@ package pl.lodz.p.it.ssbd2024.mok.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +22,6 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import pl.lodz.p.it.ssbd2024.exceptions.*;
 import pl.lodz.p.it.ssbd2024.exceptions.VerificationTokenUsedException;
-import pl.lodz.p.it.ssbd2024.exceptions.handlers.ErrorCodes;
-import pl.lodz.p.it.ssbd2024.messages.UserExceptionMessages;
 import pl.lodz.p.it.ssbd2024.messages.VerificationTokenMessages;
 import pl.lodz.p.it.ssbd2024.model.User;
 import pl.lodz.p.it.ssbd2024.mok.dto.*;
@@ -47,6 +47,7 @@ public class AuthController {
     private final UserService userService;
     private final AuthenticationService authenticationService;
     private final HttpServletRequest servletRequest;
+    private final PrometheusMeterRegistry prometheusMeterRegistry;
     private final JwtService jwtService;
 
     @Value("${oauth2.auth.url}")
@@ -64,6 +65,7 @@ public class AuthController {
     @Value("${oauth2.token.url}")
     private String oAuthTokenUri;
 
+    @Timed(value = "signup.time", description = "Timer for signup method")
     @PostMapping("/signup")
     public ResponseEntity<Void> registerUser(@RequestBody @Valid UserCreateRequest newUserData) {
         try {
@@ -104,6 +106,7 @@ public class AuthController {
     public ResponseEntity<AuthenticationResponse> verify2faCode(@RequestBody @Valid Verify2FATokenRequest request) {
         try {
             Map<String, String> authResponse = authenticationService.verifyOTP(request.token(), request.login(), servletRequest.getHeader("X-Forwarded-For"));
+            prometheusMeterRegistry.counter("login_process_success_total").increment();
             return ResponseEntity.ok(new AuthenticationResponse(authResponse.get("token"), authResponse.get("refreshToken"), authResponse.get("theme")));
         } catch (VerificationTokenUsedException | VerificationTokenExpiredException | LoginNotMatchToOTPException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage(), e);

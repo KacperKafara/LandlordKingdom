@@ -1,10 +1,12 @@
 package pl.lodz.p.it.ssbd2024.exceptions.handlers;
 
 import com.atomikos.icatch.RollbackException;
+import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
@@ -28,8 +30,10 @@ import pl.lodz.p.it.ssbd2024.messages.ExceptionMessages;
 import java.sql.SQLException;
 
 @Slf4j
+@RequiredArgsConstructor
 @ControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionsHandler {
+    private final PrometheusMeterRegistry prometheusMeterRegistry;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     ResponseEntity<ExceptionResponse> handleConstraintViolationException(MethodArgumentNotValidException e) {
@@ -37,6 +41,7 @@ public class GlobalExceptionsHandler {
         for (FieldError error : e.getFieldErrors()) {
             sb.append(error.getDefaultMessage()).append(", ");
         }
+        prometheusMeterRegistry.counter("application_bad_request_total").increment();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ExceptionMessages.VALIDATION_ERROR + sb, ErrorCodes.VALIDATION_ERROR));
     }
 
@@ -46,29 +51,34 @@ public class GlobalExceptionsHandler {
         for (ConstraintViolation<?> error : e.getConstraintViolations()) {
             sb.append(error.getMessage()).append(", ");
         }
+        prometheusMeterRegistry.counter("application_bad_request_total").increment();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ExceptionResponse(ExceptionMessages.VALIDATION_ERROR + sb, ErrorCodes.VALIDATION_ERROR));
     }
 
     @ExceptionHandler(TemplateInputException.class)
     ResponseEntity<ExceptionResponse> handleEmailTemplateException(TemplateInputException e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TEMPLATE_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(GenericJDBCException.class)
     ResponseEntity<ExceptionResponse> handleJDBCException(GenericJDBCException e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(JwtValidationException.class)
     ResponseEntity<ExceptionResponse> handleJwtValidationException(JwtValidationException e) {
+        prometheusMeterRegistry.counter("application_unauthorized_total").increment();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ExceptionResponse(ExceptionMessages.INVALID_TOKEN, ErrorCodes.JWT_TOKEN_INVALID));
     }
 
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<ExceptionResponse> handleResponseStatusException(ResponseStatusException e) {
         if (e.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
+            prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT, ErrorCodes.INTERNAL_SERVER_ERROR));
         }
 
@@ -80,57 +90,67 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     ResponseEntity<ExceptionResponse> handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException e) {
+        prometheusMeterRegistry.counter("application_unsupported_media_type_total").increment();
         return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(new ExceptionResponse(ExceptionMessages.MEDIA_NOT_SUPPORTED, ErrorCodes.INVALID_DATA));
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     ResponseEntity<ExceptionResponse> handleAccessDeniedException(AccessDeniedException e) {
+        prometheusMeterRegistry.counter("application_forbidden_total").increment();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ExceptionResponse(ExceptionMessages.ACCESS_DENIED, ErrorCodes.ACCESS_DENIED));
     }
 
     @ExceptionHandler(Exception.class)
     ResponseEntity<ExceptionResponse> handleException(Exception e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(OptimisticLockException.class)
     ResponseEntity<ExceptionResponse> handleOptimisticLockException(OptimisticLockException e) {
+        prometheusMeterRegistry.counter("application_conflict_total").increment();
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionResponse(ExceptionMessages.OPTIMISTIC_LOCK, ErrorCodes.OPTIMISTIC_LOCK));
     }
 
     @ExceptionHandler(PersistenceException.class)
     ResponseEntity<ExceptionResponse> handlePersistenceException(PersistenceException e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.PERSISTENCE_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(SQLException.class)
     ResponseEntity<ExceptionResponse> handleSQLException(SQLException e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.JDBC_ERROR, ErrorCodes.INTERNAL_SERVER_ERROR));
     }
 
     @ExceptionHandler(RollbackException.class)
     ResponseEntity<ExceptionResponse> handleRollbackException(RollbackException e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.ROLLBACK, ErrorCodes.ROLLBACK));
     }
 
     @ExceptionHandler(UnexpectedRollbackException.class)
     ResponseEntity<ExceptionResponse> handleUnexpectedRollbackException(UnexpectedRollbackException e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNEXPECTED_ROLLBACK, ErrorCodes.UNEXPECTED_ROLLBACK));
     }
 
     @ExceptionHandler(TransactionException.class)
     ResponseEntity<ExceptionResponse> handleTransactionException(TransactionException e) {
         log.error("Uncaught exception", e);
+        prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.TRANSACTION, ErrorCodes.TRANSACTION));
     }
 
     @ExceptionHandler(NotFoundException.class)
     ResponseEntity<ExceptionResponse> handleNotFoundException(NotFoundException e) {
+        prometheusMeterRegistry.counter("application_not_found_total").increment();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ExceptionResponse(e.getMessage(), e.getCode()));
     }
 }
