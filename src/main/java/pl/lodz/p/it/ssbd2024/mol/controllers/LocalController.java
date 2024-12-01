@@ -1,5 +1,6 @@
 package pl.lodz.p.it.ssbd2024.mol.controllers;
 
+import io.micrometer.core.annotation.Timed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Scope;
@@ -140,6 +141,7 @@ public class LocalController {
     }
 
     @GetMapping
+    @Timed(value = "all_locals_method_duration_seconds", description = "Timer for all locals method")
     @PreAuthorize("hasRole('ADMINISTRATOR')")
     public ResponseEntity<GetAllLocalsFiltered> getAllLocals(
             @RequestParam(defaultValue = "0") int page,

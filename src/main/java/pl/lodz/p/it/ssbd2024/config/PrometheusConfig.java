@@ -1,5 +1,7 @@
 package pl.lodz.p.it.ssbd2024.config;
 
+import io.micrometer.core.aop.TimedAspect;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry;
 import io.prometheus.metrics.model.registry.PrometheusRegistry;
 import io.micrometer.core.instrument.Clock;
@@ -16,5 +18,10 @@ public class PrometheusConfig {
                 new PrometheusRegistry(),
                 Clock.SYSTEM
         );
+    }
+
+    @Bean
+    public TimedAspect timedAspect(MeterRegistry registry) {
+        return new TimedAspect(registry);
     }
 }
