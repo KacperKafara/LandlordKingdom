@@ -77,6 +77,14 @@ public class GlobalExceptionsHandler {
 
     @ExceptionHandler(ResponseStatusException.class)
     ResponseEntity<ExceptionResponse> handleResponseStatusException(ResponseStatusException e) {
+        if (e.getStatusCode().value() >= 400 && e.getStatusCode().value() < 500) {
+            prometheusMeterRegistry.counter("application_client_error_total").increment();
+        }
+
+        if (e.getStatusCode().value() >= 500 && e.getStatusCode().value() < 600) {
+            prometheusMeterRegistry.counter("application_server_error_total").increment();
+        }
+
         if (e.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR)) {
             prometheusMeterRegistry.counter("application_internal_server_error_total").increment();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ExceptionResponse(ExceptionMessages.UNCAUGHT, ErrorCodes.INTERNAL_SERVER_ERROR));
