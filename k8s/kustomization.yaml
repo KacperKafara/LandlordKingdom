@@ -1,11 +1,38 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+configMapGenerator:
+  - files:
+    - configs/nginx.conf
+    name: nginx-config
+    namespace: landlord
+
+secretGenerator:
+  - files:
+      - secrets/tua202402.pl.crt
+      - secrets/tua202402.pl.key
+    name: application-certs
+    namespace: landlord
+  - envs:
+      - secrets/application.env
+    name: application-secrets
+    namespace: landlord
+  - files:
+      - secrets/privateJwt-key.pem
+      - secrets/privateRefresh-key.pem
+    name: application-keys
+    namespace: landlord
+  - files:
+      - secrets/init.sql
+    envs:
+      - secrets/db.env
+    name: database-secrets
+    namespace: landlord
+
+generatorOptions:
+  disableNameSuffixHash: true
+
 resources:
   - namespace.yaml
-  - application-secrets.yaml
-  - tls-secrets.yaml
-  - database-secrets.yaml
-  - fe-configmap.yaml
   - database-statefulset.yaml
   - application-deployment.yaml
   - fe-deployment.yaml
